@@ -1,0 +1,43 @@
+.container-main {
+  width: 100%;
+}
+.layout-container {
+  width: 100%;
+  display: flex;
+}
+@media only screen and (min-width: 1440px) {
+  .layout-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+@media only screen and (min-width: 2000px) {
+  .layout-container {
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1439px) {
+  .layout-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .layout-container {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 1024px) and (orientation: portrait) {
+  .layout-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+@media only screen and (min-width: 481px) and (max-width: 1024px) and (orientation: landscape) {
+  .layout-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
