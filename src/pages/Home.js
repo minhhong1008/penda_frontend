@@ -171,7 +171,7 @@ function Home() {
   const list = [
     {
       img: ava1,
-      Title: "Soft UI Shopify Version",
+      Title: "Phòng nhân sự",
       bud: "$14,000",
       progress: <Progress percent={60} size="small" />,
       member: (
@@ -193,7 +193,7 @@ function Home() {
     },
     {
       img: ava2,
-      Title: "Progress Track",
+      Title: "Phòng kế toán",
       bud: "$3,000",
       progress: <Progress percent={10} size="small" />,
       member: (
@@ -209,7 +209,7 @@ function Home() {
     },
     {
       img: ava3,
-      Title: "Fix Platform Errors",
+      Title: "Phòng kinh doanh",
       bud: "Not Set",
       progress: <Progress percent={100} size="small" status="active" />,
       member: (
@@ -228,7 +228,7 @@ function Home() {
     },
     {
       img: ava4,
-      Title: "Launch new Mobile App",
+      Title: "Phòng sản xuất",
       bud: "$20,600",
       progress: <Progress percent={100} size="small" status="active" />,
       member: (
@@ -244,7 +244,7 @@ function Home() {
     },
     {
       img: ava5,
-      Title: "Add the New Landing Page",
+      Title: "Phòng nâng cấp và phục hồi tài khoản",
       bud: "$4,000",
       progress: <Progress percent={80} size="small" />,
       member: (
@@ -264,10 +264,31 @@ function Home() {
         </div>
       ),
     },
-
+    {
+      img: ava1,
+      Title: "Ban thanh tra kiển soát",
+      bud: "$4,000",
+      progress: <Progress percent={80} size="small" />,
+      member: (
+        <div className="avatar-group mt-2">
+          <Tooltip placement="bottom" title="Ryan Tompson">
+            <img className="tootip-img" src={team1} alt="" />
+          </Tooltip>
+          <Tooltip placement="bottom" title="Romina Hadid">
+            <img className="tootip-img" src={team2} alt="" />
+          </Tooltip>
+          <Tooltip placement="bottom" title="Alexander Smith">
+            <img className="tootip-img" src={team3} alt="" />
+          </Tooltip>
+          <Tooltip placement="bottom" title="Jessica Doe">
+            <img className="tootip-img" src={team4} alt="" />
+          </Tooltip>
+        </div>
+      ),
+    },
     {
       img: ava6,
-      Title: "Redesign Online Store",
+      Title: "Ban giám đốc",
       bud: "$2,000",
       progress: (
         <Progress
@@ -292,30 +313,30 @@ function Home() {
 
   const timelineList = [
     {
-      title: "$2,400 - Redesign store",
-      time: "09 JUN 7:20 PM",
+      title: "Cài đặt thiết bị",
+      time: "01/11-30/11",
       color: "green",
     },
     {
-      title: "New order #3654323",
-      time: "08 JUN 12:20 PM",
+      title: "Đăng nhập Gmail",
+      time: "1/12-10/12",
       color: "green",
     },
     {
-      title: "Company server payments",
-      time: "04 JUN 3:10 PM",
+      title: "Tạo ebay,etsy buyer",
+      time: "11/12-15/12",
     },
     {
-      title: "New card added for order #4826321",
-      time: "02 JUN 2:45 PM",
+      title: "Xác minh địa chỉ, thông tin",
+      time: "15/12-25/12",
     },
     {
-      title: "Unlock folders for development",
-      time: "18 MAY 1:30 PM",
+      title: "Tạo Seller ",
+      time: "1/1-20/1",
     },
     {
-      title: "New order #46282344",
-      time: "14 MAY 3:30 PM",
+      title: "Đăng sản phẩm",
+      time: "20/1-30/1",
       color: "gray",
     },
   ];

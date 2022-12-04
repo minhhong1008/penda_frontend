@@ -35,19 +35,18 @@ const SignIn = () => {
 
   React.useEffect(() => {
     if (authUser.profile !== null) {
-        history.push('/');
+      history.push("/HomePage");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [authUser])
-
+  }, [authUser]);
 
   const onFinish = (values) => {
     const userLogin = {
       email: values.email,
       password: values.password,
       remember: remember,
-    }
-    dispatch(loginAction(userLogin))
+    };
+    dispatch(loginAction(userLogin));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -59,7 +58,10 @@ const SignIn = () => {
   }
   return (
     <Spin tip="Loading..." spinning={loading}>
-      <Layout className="layout-default layout-signin" style={{ height: '100vh' }}>
+      <Layout
+        className="layout-default layout-signin"
+        style={{ height: "100vh" }}
+      >
         <Content className="signin">
           <Row gutter={[24, 0]} justify="space-around">
             <Col
@@ -177,14 +179,10 @@ const SignIn = () => {
               <Link to="#">{<GithubOutlined />}</Link>
             </Menu.Item>
           </Menu>
-          <p className="copyright">
-            {" "}
-            Copyright © 2021 Muse by <a href="#pablo">Creative Tim</a>.{" "}
-          </p>
         </Footer>
       </Layout>
     </Spin>
   );
-}
+};
 
 export default SignIn;

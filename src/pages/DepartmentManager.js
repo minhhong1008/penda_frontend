@@ -16,6 +16,11 @@ const DepartmentManager = () => {
       key: "name",
     },
     {
+      title: "TÊN1312321 PHÒNG BAN",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
       title: "SỐ NHÂN VIÊN",
       dataIndex: "employees_number",
       key: "employees_number",

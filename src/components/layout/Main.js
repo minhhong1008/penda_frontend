@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
+import SideBarProduct from "../sidebar/SideBarProducts";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -22,7 +23,6 @@ function Main({ children }) {
 
   let { pathname } = useLocation();
   pathname = pathname.replace("/", "");
-
   useEffect(() => {
     if (pathname === "rtl") {
       setPlacement("left");
@@ -81,7 +81,9 @@ function Main({ children }) {
         }`}
         style={{ background: sidenavType }}
       >
-        <Sidenav color={sidenavColor} />
+        {pathname.split("/")[0] == "products" ? (
+          <SideBarProduct color={sidenavColor}></SideBarProduct>
+        ) : null}
       </Sider>
       <Layout>
         {fixed ? (

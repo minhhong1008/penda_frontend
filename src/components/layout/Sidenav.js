@@ -150,130 +150,140 @@ function Sidenav({ color }) {
 
   return (
     <>
-      <div className="brand">
-        <img src={logo} alt="" />
-        <span>Muse Dashboard</span>
-      </div>
-      <hr />
-      <Menu theme="light" mode="inline">
-        <Menu.Item key="1">
-          <NavLink to="/dashboard">
-            <span
-              className="icon"
-              style={{
-                background: page === "dashboard" ? color : "",
-              }}
-            >
-              {dashboard}
-            </span>
-            <span className="label">Trang Chủ</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <NavLink to="/tables">
-            <span
-              className="icon"
-              style={{
-                background: page === "tables" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Tables</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="10">
-          <NavLink to="/personnel-management">
-            <span
-              className="icon"
-              style={{
-                background: page === "personnel-management" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Quản Lý Nhân Sự</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="11">
-          <NavLink to="/department-management">
-            <span
-              className="icon"
-              style={{
-                background: page === "department-management" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Quản Lý Phòng Ban</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <NavLink to="/billing">
-            <span
-              className="icon"
-              style={{
-                background: page === "billing" ? color : "",
-              }}
-            >
-              {billing}
-            </span>
-            <span className="label">Billing</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <NavLink to="/rtl">
-            <span
-              className="icon"
-              style={{
-                background: page === "rtl" ? color : "",
-              }}
-            >
-              {rtl}
-            </span>
-            <span className="label">RTL</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
-          Tài Khoản
-        </Menu.Item>
-        <Menu.Item key="6">
-          <NavLink to="/profile">
-            <span
-              className="icon"
-              style={{
-                background: page === "profile" ? color : "",
-              }}
-            >
-              {profile}
-            </span>
-            <span className="label">Thông Tin Cá Nhân</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="9">
-          <NavLink to="/log-out">
-            <span className="icon">{signup}</span>
-            <span className="label">Đăng Xuất</span>
-          </NavLink>
-        </Menu.Item>
-      </Menu>
-      <div className="aside-footer">
-        <div
-          className="footer-box"
-          style={{
-            background: color,
-          }}
-        >
-          <span className="icon" style={{ color }}>
-            {dashboard}
-          </span>
-          <h6>Need Help?</h6>
-          <p>Please check our docs</p>
-          <Button type="primary" className="ant-btn-sm ant-btn-block">
-            DOCUMENTATION
-          </Button>
-        </div>
-      </div>
+      {page == "HomePage" ? null : (
+        <Menu theme="light" mode="inline">
+          <Menu.Item key="1">
+            <NavLink to="/dashboard">
+              <span
+                className="icon"
+                style={{
+                  background: page === "dashboard" ? color : "",
+                }}
+              >
+                {dashboard}
+              </span>
+              <span className="label">Trang Chủ</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <NavLink to="/tables">
+              <span
+                className="icon"
+                style={{
+                  background: page === "tables" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Tables</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="10">
+            <NavLink to="/personnel-management">
+              <span
+                className="icon"
+                style={{
+                  background: page === "personnel-management" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Quản Lý Nhân Sự</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="11">
+            <NavLink to="/department-management">
+              <span
+                className="icon"
+                style={{
+                  background: page === "department-management" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Quản Lý Phòng Ban</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="232">
+            <NavLink to="/account-management">
+              <span
+                className="icon"
+                style={{
+                  background: page === "account-management" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+
+              <span className="label">Quản Lý Account</span>
+            </NavLink>
+          </Menu.Item>
+
+          <Menu.Item key="233">
+            <NavLink to="/accounts/account">
+              <span
+                className="icon"
+                style={{
+                  background: page === "accounts/account" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+
+              <span className="label">Account</span>
+            </NavLink>
+          </Menu.Item>
+
+          <Menu.Item key="3">
+            <NavLink to="/billing">
+              <span
+                className="icon"
+                style={{
+                  background: page === "billing" ? color : "",
+                }}
+              >
+                {billing}
+              </span>
+              <span className="label">Billing</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <NavLink to="/rtl">
+              <span
+                className="icon"
+                style={{
+                  background: page === "rtl" ? color : "",
+                }}
+              >
+                {rtl}
+              </span>
+              <span className="label">RTL</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item className="menu-item-header" key="5">
+            Tài Khoản
+          </Menu.Item>
+          <Menu.Item key="6">
+            <NavLink to="/profile">
+              <span
+                className="icon"
+                style={{
+                  background: page === "profile" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Thông Tin Cá Nhân</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="9">
+            <NavLink to="/log-out">
+              <span className="icon">{signup}</span>
+              <span className="label">Đăng Xuất</span>
+            </NavLink>
+          </Menu.Item>
+        </Menu>
+      )}
     </>
   );
 }

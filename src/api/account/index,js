@@ -1,0 +1,6 @@
+import axiosClient from "../axiosClient.js";
+
+export const postAccountProfile = (payload) => {
+  const url = `/account/create`;
+  return axiosClient.post(url, payload);
+};
