@@ -8,46 +8,176 @@ import {
   Input,
   DatePicker,
   Select,
-  Collapse,
-  Space,
+  Modal,
+  Avatar,
+  List,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-//import { postetsyInfo, getetsyInfo } from "../../api/Etsy/index";
+import {
+  postetsyInfo,
+  getetsyInfo,
+  updateetsyInfo,
+} from "../../api/etsy/index";
+import { showError, showSuccess } from "../../utils";
+
 const etsy_info = () => {
   const [etsyData, setetsyData] = useState({
-    etsy_id: "hahahah",
+    etsy_id: "ET_1000",
   });
-
+  const [dateData, setDateData] = useState();
+  const [info, setInfo] = useState();
+  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [noteValue, setNoteValue] = useState("");
   let { id } = useParams();
   const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
   const { Option } = Select;
   const onFinish = async (values) => {
-    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-    //values.status = values.status.join(",");
-    const data = await postetsyInfo(values);
-    console.log(data);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    const newValue = {
+      ...info,
+      ...values,
+      etsy_processing: values?.etsy_processing
+        ? values.etsy_processing.join(",")
+        : "",
+      etsy_type: values?.etsy_type ? values.etsy_type.join(",") : "",
+      etsy_sell_status: values?.etsy_sell_status
+        ? values.etsy_sell_status.join(",")
+        : "",
+      etsy_owner: values?.etsy_owner ? values.etsy_owner.join(",") : "",
+      etsy_employee: values?.etsy_employee
+        ? values.etsy_employee.join(",")
+        : "",
+      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      etsy_date_start: dateData?.etsy_date_start
+        ? moment(dateData.etsy_date_start).format("MM-DD-YYYY")
+        : "",
+      etsy_date_verify: dateData?.etsy_date_verify
+        ? moment(dateData.etsy_date_verify).format("MM-DD-YYYY")
+        : "",
+      etsy_note: noteValue,
+    };
+    const response = await updateetsyInfo(newValue, id);
+    if (response.status == 200) {
+      showSuccess("Sửa thành công");
+    } else {
+      showError("Sửa không thành công");
+    }
   };
 
+  const onFinishDate = (values) => {
+    setDateData(values);
+  };
   const getInfoetsy = async () => {
     const { data } = await getetsyInfo(id);
-    let newData = {};
-    //newData.status = data.status.split(",");
-    newData.etsy_id = data.etsy_id;
-    newData.passport = data.passport;
-    newData.birth_date = data.birth_date;
-    console.log(newData);
-    setetsyData(newData);
+    const newData = {
+      ...data,
+      etsy_employee: data.etsy_employee.split(","),
+      etsy_processing: data.etsy_processing.split(","),
+      etsy_type: data.etsy_type.split(","),
+      etsy_sell_status: data.etsy_sell_status.split(","),
+      etsy_owner: data.etsy_owner.split(","),
+    };
+    form.setFieldsValue(newData);
+    infoForm.setFieldsValue(newData);
+    dateForm.setFieldsValue({
+      etsy_date_start: moment(data.etsy_date_start),
+      etsy_date_verify: moment(data.etsy_date_verify)
+    });
+    setNoteValue(data.etsy_note)
+    setSelectListInfo(data.list_view.split(","));
+  };
+  const onFinishInfo = (values) => {
+    setInfo(values);
   };
 
   useEffect(() => {
     getInfoetsy();
   }, []);
 
+  const listInfo = [
+    {
+      title: "INFO",
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "MAIL",
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "M_101|mingdepzai@gmail.com|170988876@|live",
+    },
+    {
+      title: "SIM",
+      thumbnail:
+        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
+      value: "S_101|0588965555|Viettel|Live",
+    },
+    {
+      title: "BANK",
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
+      value: "I_101|ACB|76668888|Live",
+    },
+    {
+      title: "CARD",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "C_101|42616565465456|7/26|345",
+    },
+    {
+      title: "EBAY",
+      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
+      value: "EB_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "ETSY",
+      thumbnail:
+        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
+      value: "ET_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "AMAZON",
+      thumbnail:
+        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
+      value: "AM_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "SHOPEE",
+      thumbnail:
+        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
+      value: "PE_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "PC06|E_88888|live",
+    },
+  ];
+
+  const listDate = [
+    {
+      title: "Ngày tạo",
+      value: "etsy_date_start",
+    },
+    {
+      title: "Ngày verify",
+      value: "etsy_date_verify",
+    },
+  ];
+
+  const changeSelectListInfo = (values) => {
+    setSelectListInfo(values);
+    localStorage.setItem("esty_select", values);
+  };
+
+  const handleChangeNote = (e) => {
+    setNoteValue(e.target.value);
+  };
   return (
     <Card
       title={id}
@@ -58,7 +188,7 @@ const etsy_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN etsy">
+              <Card title="THÔNG TIN ETSY">
                 <Form
                   form={form}
                   name="basic"
@@ -67,10 +197,10 @@ const etsy_info = () => {
                   autoComplete="off"
                 >
                   <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={6}>
                       <Form.Item
-                        label="etsy User"
-                        name="etsy_user"
+                        label="etsy id"
+                        name="etsy_id"
                         rules={[
                           {
                             required: true,
@@ -81,13 +211,24 @@ const etsy_info = () => {
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={10}>
+                      <Form.Item label="etsy User" name="etsy_user">
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
                       <Form.Item label="etsy Pass" name="etsy_password">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
-
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item label="etsy chi tiết" name="etsy_detail">
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
                   <Form.Item label="Tiến trình" name="etsy_processing">
                     <Select
                       mode="multiple"
@@ -114,26 +255,24 @@ const etsy_info = () => {
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Loại etsy" name="etsy_types">
+                  <Form.Item label="Loại etsy" name="etsy_type">
                     <Select
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
                     >
-                      <Option value="etsy Buyer" label="Buyer">
-                        <div className="demo-option-label-item">etsy Buyer</div>
-                      </Option>
-                      <Option value="etsy Seller" label="Seller">
-                        <div className="demo-option-label-item">
-                          etsy Seller
-                        </div>
-                      </Option>
                       <Option value="VN" label="VN">
                         <div className="demo-option-label-item">VN</div>
                       </Option>
                       <Option value="US" label="US">
                         <div className="demo-option-label-item">US</div>
+                      </Option>
+                      <Option value="etsy Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="etsy Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
                       </Option>
                       <Option value="Gỡ Suspended" label="Gỡ Suspended">
                         <div className="demo-option-label-item">
@@ -216,6 +355,19 @@ const etsy_info = () => {
                           Phòng Kinh doanh
                         </div>
                       </Option>
+                      <Option
+                        value="Phòng nâng cấp và phục hồi tài khoản"
+                        label="Phòng nâng cấp và phục hồi tài khoản"
+                      >
+                        <div className="demo-option-label-item">
+                          Phòng nâng cấp và phục hồi tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                        <div className="demo-option-label-item">
+                          Kho lưu trữ
+                        </div>
+                      </Option>
                     </Select>
                   </Form.Item>
 
@@ -237,41 +389,6 @@ const etsy_info = () => {
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Quy trình" name="etsy_outline">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Chrome" label="Chrome">
-                        <div className="demo-option-label-item">Chrome</div>
-                      </Option>
-                      <Option value="Firefox" label="Firefox">
-                        <div className="demo-option-label-item">Firefox</div>
-                      </Option>
-                      <Option value="Eagle" label="Eagle">
-                        <div className="demo-option-label-item">Eagle</div>
-                      </Option>
-                      <Option value="Đấu giá" label="Đấu giá">
-                        <div className="demo-option-label-item">Đấu giá</div>
-                      </Option>
-                      <Option value="Fix giá" label="Fix giá">
-                        <div className="demo-option-label-item">Fix giá</div>
-                      </Option>
-                      <Option value="Quy trình 1" label="Quy trình 1">
-                        <div className="demo-option-label-item">
-                          Quy trình 1
-                        </div>
-                      </Option>
-                      <Option value="Quy trình 2" label="Quy trình 2">
-                        <div className="demo-option-label-item">
-                          Quy trình 2
-                        </div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-
                   <Row gutter={16}>
                     <Col span={12}>
                       <Form.Item label="Trạng thái" name="etsy_status">
@@ -283,10 +400,21 @@ const etsy_info = () => {
                           <Option value="Live" label="Live">
                             <div className="demo-option-label-item">Live</div>
                           </Option>
+                          <Option value="Error" label="Error">
+                            <div className="demo-option-label-item">Error</div>
+                          </Option>
                           <Option value="Suspended" label="Suspended">
                             <div className="demo-option-label-item">
                               Suspended
                             </div>
+                          </Option>
+                          <Option value="Disable" label="Disable">
+                            <div className="demo-option-label-item">
+                              Disable
+                            </div>
+                          </Option>
+                          <Option value="Die" label="Die">
+                            <div className="demo-option-label-item">Die</div>
                           </Option>
                         </Select>
                       </Form.Item>
@@ -298,20 +426,20 @@ const etsy_info = () => {
                           style={{ width: "100%" }}
                           optionLabelProp="label"
                         >
-                          <Option value="Lớp 1" label="Lớp 1">
-                            <div className="demo-option-label-item">Lớp 1</div>
+                          <Option value="Lớp 1" label="Lớp 1 New">
+                            <div className="demo-option-label-item">
+                              Lớp 1 New
+                            </div>
                           </Option>
                           <Option value="Lớp 2" label="Lớp 2">
                             <div className="demo-option-label-item">Lớp 2</div>
                           </Option>
-
                           <Option value="Lớp 3" label="Lớp 3">
                             <div className="demo-option-label-item">Lớp 3</div>
                           </Option>
                           <Option value="Lớp 4" label="Lớp 4">
                             <div className="demo-option-label-item">Lớp 4</div>
                           </Option>
-
                           <Option value="Lớp 5" label="Lớp 5">
                             <div className="demo-option-label-item">Lớp 5</div>
                           </Option>
@@ -320,6 +448,35 @@ const etsy_info = () => {
                           </Option>
                           <Option value="Lớp 7" label="Lớp 7">
                             <div className="demo-option-label-item">Lớp 7</div>
+                          </Option>
+                          <Option value="Lớp 8" label="Lớp 8 Upseller">
+                            <div className="demo-option-label-item">
+                              Lớp 8 Upseller
+                            </div>
+                          </Option>
+                          <Option value="Lớp 9" label="Lớp 9">
+                            <div className="demo-option-label-item">Lớp 9</div>
+                          </Option>
+                          <Option value="Lớp 10" label="Lớp 10">
+                            <div className="demo-option-label-item">Lớp 10</div>
+                          </Option>
+                          <Option value="Lớp 11" label="Lớp 11">
+                            <div className="demo-option-label-item">Lớp 11</div>
+                          </Option>
+                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
+                            <div className="demo-option-label-item">
+                              Lớp 12 Chuyển
+                            </div>
+                          </Option>
+                          <Option value="Lớp 20" label="Lớp 20 etsy error">
+                            <div className="demo-option-label-item">
+                              Lớp 20 etsy error
+                            </div>
+                          </Option>
+                          <Option value="Lớp 21" label="Lớp 21 etsy die">
+                            <div className="demo-option-label-item">
+                              Lớp 21 etsy die
+                            </div>
                           </Option>
                         </Select>
                       </Form.Item>
@@ -330,163 +487,83 @@ const etsy_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-                <Form>
-                  <Form.Item label="Tài nguyên" name="etsy_material">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Info" label="Info">
-                        <div className="demo-option-label-item">Info</div>
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionLabelProp="label"
+                  onChange={changeSelectListInfo}
+                  value={selectListInfo}
+                >
+                  {listInfo.map((item) => {
+                    return (
+                      <Option
+                        value={item.title.toLocaleLowerCase() + "_id"}
+                        label={item.title}
+                      >
+                        <div className="demo-option-label-item">
+                          {item.title}
+                        </div>
                       </Option>
-                      <Option value="Phone" label="Phone">
-                        <div className="demo-option-label-item">Phone</div>
-                      </Option>
-                      <Option value="Mail" label="Mail">
-                        <div className="demo-option-label-item">Mail</div>
-                      </Option>
-                      <Option value="Bank" label="Bank">
-                        <div className="demo-option-label-item">Bank</div>
-                      </Option>
-                      <Option value="Doc" label="Doc">
-                        <div className="demo-option-label-item">Doc</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Info" name="info_etsy">
-                        <Input size="small" placeholder="Phùng Văn Minh" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày sinh" name="info_birthday">
-                        <Input size="small" placeholder="17/08/1984" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Trạng thái" name="Info_status">
-                        <Input size="small" placeholder="Đã sử dụng" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Phone" name="phone_etsy">
-                        <Input size="small" placeholder="09833333333" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Hạn dử dụng" name="phone_datelimit">
-                        <Input size="small" placeholder="17/12/2022" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Trạng thái" name="phone_status">
-                        <Input size="small" placeholder="Khóa 1 chiều" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Mail" name="mail_etsy">
-                        <Input
-                          size="small"
-                          placeholder="phungvanminh@gmail.com"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Password" name="mail_password">
-                        <Input size="small" placeholder="vanminh@123" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Trạng thái" name="mail_status">
-                        <Input size="small" placeholder="Live" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Bank" name="bank_etsy">
-                        <Input size="small" placeholder="Payoneer" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Number" name="bank_number">
-                        <Input
-                          size="small"
-                          placeholder="4046 4825 4281 2969|01-26|304|Nguyen Thi Hoai"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Trạng thái" name="bank_status">
-                        <Input size="small" placeholder="Đã sử dụng" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Device" name="device_etsy">
-                        <Input size="small" placeholder="PC06" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="etsy Vbox" name="device_vbox">
-                        <Input size="small" placeholder="E_88888" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Trạng thái" name="device_status">
-                        <Input size="small" placeholder="Đang hoạt động" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="etsy Limit" name="etsy_limit">
-                        <Input placeholder="1000" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="etsy Sold" name="etsy_sold">
-                        <Input placeholder="150" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="etsy Listed" name="etsy_listed">
-                        <Input placeholder="600" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Phí Order" name="etsy_fees">
-                        <Input placeholder="25%" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Handing time" name="etsy_handing_time">
-                        <Input placeholder="10" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Lợi nhuận" name="etsy_profit">
-                        <Input placeholder="2.5" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
+                    );
+                  })}
+                </Select>
+                <Form
+                  onFinish={onFinishInfo}
+                  initialValues={info}
+                  form={infoForm}
+                  name="info"
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listInfo}
+                    renderItem={(item) => (
+                      <>
+                        {selectListInfo.indexOf(
+                          item.title.toLocaleLowerCase() + "_id"
+                        ) != -1 ? (
+                          <List.Item>
+                            <div className="custom_info_item">
+                              <div className="meta_data">
+                                <Avatar
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    window.open(
+                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
+                                        "_class/table/" +
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ]}`
+                                    )
+                                  }
+                                  src={item.thumbnail}
+                                />
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    window.open(
+                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
+                                        "_class/table/" +
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ]}`
+                                    )
+                                  }
+                                >
+                                  {item.title}
+                                </a>
+                              </div>
+                              <Form.Item
+                                name={item.title.toLocaleLowerCase() + "_id"}
+                              >
+                                <Input onChange={() => infoForm.submit()} />
+                              </Form.Item>
+                            </div>
+                          </List.Item>
+                        ) : null}
+                      </>
+                    )}
+                  />
                 </Form>
               </Card>
             </Col>
@@ -499,133 +576,24 @@ const etsy_info = () => {
             <Col span={12}>
               <Card title="THỜI GIAN">
                 <Form
-                  form={form}
-                  name="basic"
-                  onFinish={onFinish}
-                  initialValues={etsyData}
-                  autoComplete="off"
+                  form={dateForm}
+                  onFinish={onFinishDate}
+                  name="date"
+                  initialValues={dateData}
                 >
                   <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày tạo" name="etsydate_creat">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày verify" name="etsydate_verify">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày seller" name="etsydate_seller">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 1" name="etsydate_list1">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 2" name="etsydate_list2">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 3" name="etsydate_list3">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 4" name="etsydate_list4">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 5" name="etsydate_list5">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày list 6" name="etsydate_list6">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày suspend" name="etsydate_suspended">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày chat" name="etsydate_contact">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày khôi phục" name="etsydate_restore">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <br></br>
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày lên lớp" name="etsydate_class">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-
-                    <Col span={8}>
-                      <Form.Item
-                        label="YC seller"
-                        name="etsydate_request_upseller"
-                      >
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        label="YC list 1"
-                        name="etsydate_request_list1"
-                      >
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item
-                        label="YC list 2"
-                        name="etsydate_request_list2"
-                      >
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        label="YC list 3"
-                        name="etsydate_request_list3"
-                      >
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        label="YC list 4"
-                        name="etsydate_request_list4"
-                      >
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
+                    {listDate.map((item, index) => {
+                      return (
+                        <Col span={8} key={index}>
+                          <Form.Item label={item.title} name={item.value}>
+                            <DatePicker
+                              format="MM-DD-YYYY"
+                              onChange={() => dateForm.submit()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      );
+                    })}
                   </Row>
                 </Form>
               </Card>
@@ -633,19 +601,21 @@ const etsy_info = () => {
 
             <Col span={12}>
               <Card title="LỊCH SỬ">
-                <Row gutter={16}>
-                  <Form.Item name="etsy_note" label="Ghi chú">
-                    <Input.TextArea />
-                  </Form.Item>
+                <Row>
+                  <Col span={24}>
+                    <Input.TextArea
+                      value={noteValue}
+                      rows={4}
+                      onChange={handleChangeNote}
+                    />
+                  </Col>
                 </Row>
 
                 <span>
-                  Lớp 1 => Lớp 2 | Thế Minh Hồng, 2022-11-24 00:01:42 57 => etsy
-                  VN | Thế Minh Hồng, 2022-11-25 16:12:36 Bùi Thị Ngát (T) =>
-                  Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:27:43 Khắc Liêm =>
-                  Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:28:05 Lớp 2 => Lớp 1
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
+                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
+                  [;Ctrl + K, Ctrl + ];
                 </span>
               </Card>
             </Col>

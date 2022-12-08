@@ -41,3 +41,23 @@
     padding-right: 10%;
   }
 }
+
+
+
+.custom_info_item {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+}
+
+.custom_info_item > .meta_data {
+  display: flex;
+  flex-direction: column;
+  min-width: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom_info_item > .ant-form-item {
+  width: 100% !important;
+}

@@ -1,660 +1,442 @@
 import {
-    Button,
-    Card,
-    Tabs,
-    Row,
-    Col,
-    Form,
-    Input,
-    DatePicker,
-    Select,
-    Collapse,
-    Space,
-  } from "antd";
-  import React, { useEffect, useState } from "react";
-  import { useParams } from "react-router-dom";
-  import moment from "moment";
-  import { postDeviceInfo, getDeviceInfo } from "../../api/device/index";
-  const Device_info = () => {
-    const [deviceData, setDeviceData] = useState({
-        device_id: "hahahah",
-    });
-     
-    let { id } = useParams();
-    const [form] = Form.useForm();
-    const { Option } = Select;
-    const onFinish = async (values) => {
-      values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-      //values.status = values.status.join(",");
-      const data = await postDeviceInfo(values);
-      console.log(data);
-    };
-    const onFinishFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
-    };
-  
-    const getInfoDevice = async () => {
-      const { data } = await getDeviceInfo(id);
-      let newData = {};
-      //newData.status = data.status.split(",");
-      newData.device_id = data.device_id;
-      newData.passport = data.passport;
-      newData.birth_date = data.birth_date;
-      console.log(newData);
-      setDeviceData(newData);
-    };
-  
-    useEffect(() => {
-      getInfoDevice();
-    }, []);
-  
-    return (
-      <Card
-        title={id}
-        extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
-      >
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
-          <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card title="THÔNG TIN device">
-                  <Form
-                    form={form}
-                    name="basic"
-                    onFinish={onFinish}
-                    initialValues={deviceData}
-                    autoComplete="off"
-                  >
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item
-                          label="device User"
-                          name="device_user"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Hãy nhập device id!",
-                            },
-                          ]}
-                        >
-                          <Input size="small" placeholder="input here" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="device Pass" name="device_password">
-                          <Input size="small" placeholder="input here" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Form.Item label="Tiến trình" name="device_processing">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                        //status="warning"
-                      >
-                        <Option value="Mail" label="Mail">
-                          <div className="demo-option-label-item">Mail</div>
-                        </Option>
-                        <Option value="Buyer" label="Buyer">
-                          <div className="demo-option-label-item">Buyer</div>
-                        </Option>
-                        <Option value="Verify" label="Verify">
-                          <div className="demo-option-label-item">Verify</div>
-                        </Option>
-                        <Option value="Seller" label="Seller">
-                          <div className="demo-option-label-item">Seller</div>
-                        </Option>
-                        <Option value="List" label="List">
-                          <div className="demo-option-label-item">List</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Form.Item label="Loại device" name="device_types">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="device Buyer" label="Buyer">
-                          <div className="demo-option-label-item">device Buyer</div>
-                        </Option>
-                        <Option value="device Seller" label="Seller">
-                          <div className="demo-option-label-item">
-                            device Seller
-                          </div>
-                        </Option>
-                        <Option value="VN" label="VN">
-                          <div className="demo-option-label-item">VN</div>
-                        </Option>
-                        <Option value="US" label="US">
-                          <div className="demo-option-label-item">US</div>
-                        </Option>
-                        <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                          <div className="demo-option-label-item">
-                            Gỡ Suspended
-                          </div>
-                        </Option>
-                        <Option value="ADS" label="ADS">
-                          <div className="demo-option-label-item">Quảng cáo</div>
-                        </Option>
-                        <Option value="Above Standard" label="Above Standard">
-                          <div className="demo-option-label-item">
-                            Above Standard
-                          </div>
-                        </Option>
-                        <Option value="Top Rate" label="Top Rate">
-                          <div className="demo-option-label-item">Top Rate</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Form.Item label="TT Bán" name="device_sell_status">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                          <div className="demo-option-label-item">
-                            Chuẩn bị bán
-                          </div>
-                        </Option>
-                        <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
-                          <div className="demo-option-label-item">
-                            Đủ điều kiện bán
-                          </div>
-                        </Option>
-  
-                        <Option value="Bán tài khoản" label="Bán tài khoản">
-                          <div className="demo-option-label-item">
-                            Bán tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Đang giao dịch" label="Đang giao dịch">
-                          <div className="demo-option-label-item">
-                            Đang giao dịch
-                          </div>
-                        </Option>
-  
-                        <Option value="Bán thành công" label="Bán thành công">
-                          <div className="demo-option-label-item">
-                            Bán thành công
-                          </div>
-                        </Option>
-                        <Option value="Bảo hành" label="Bảo hành">
-                          <div className="demo-option-label-item">Bảo hành</div>
-                        </Option>
-                        <Option value="Hết bảo hành" label="Hết bảo hành">
-                          <div className="demo-option-label-item">
-                            Hết bảo hành
-                          </div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Form.Item label="Sở hữu" name="device_owner">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option value="Phòng Kinh doanh" label="Phòng Kinh doanh">
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Form.Item label="Nhân viên" name="device_employee">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                          <div className="demo-option-label-item">
-                            Nguyễn Hoài
-                          </div>
-                        </Option>
-                        <Option value="Khắc Liêm" label="Khắc Liêm">
-                          <div className="demo-option-label-item">Khắc Liêm</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Form.Item label="Quy trình" name="device_outline">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="Chrome" label="Chrome">
-                          <div className="demo-option-label-item">Chrome</div>
-                        </Option>
-                        <Option value="Firefox" label="Firefox">
-                          <div className="demo-option-label-item">Firefox</div>
-                        </Option>
-                        <Option value="Eagle" label="Eagle">
-                          <div className="demo-option-label-item">Eagle</div>
-                        </Option>
-                        <Option value="Đấu giá" label="Đấu giá">
-                          <div className="demo-option-label-item">Đấu giá</div>
-                        </Option>
-                        <Option value="Fix giá" label="Fix giá">
-                          <div className="demo-option-label-item">Fix giá</div>
-                        </Option>
-                        <Option value="Quy trình 1" label="Quy trình 1">
-                          <div className="demo-option-label-item">
-                            Quy trình 1
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 2" label="Quy trình 2">
-                          <div className="demo-option-label-item">
-                            Quy trình 2
-                          </div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item label="Trạng thái" name="device_status">
-                          <Select
-                            //mode="multiple"
-                            style={{ width: "100%" }}
-                            optionLabelProp="label"
-                          >
-                            <Option value="Live" label="Live">
-                              <div className="demo-option-label-item">Live</div>
-                            </Option>
-                            <Option value="Suspended" label="Suspended">
-                              <div className="demo-option-label-item">
-                                Suspended
-                              </div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Lớp device" name="device_class">
-                          <Select
-                            //mode="multiple"
-                            style={{ width: "100%" }}
-                            optionLabelProp="label"
-                          >
-                            <Option value="Lớp 1" label="Lớp 1">
-                              <div className="demo-option-label-item">Lớp 1</div>
-                            </Option>
-                            <Option value="Lớp 2" label="Lớp 2">
-                              <div className="demo-option-label-item">Lớp 2</div>
-                            </Option>
-  
-                            <Option value="Lớp 3" label="Lớp 3">
-                              <div className="demo-option-label-item">Lớp 3</div>
-                            </Option>
-                            <Option value="Lớp 4" label="Lớp 4">
-                              <div className="demo-option-label-item">Lớp 4</div>
-                            </Option>
-  
-                            <Option value="Lớp 5" label="Lớp 5">
-                              <div className="demo-option-label-item">Lớp 5</div>
-                            </Option>
-                            <Option value="Lớp 6" label="Lớp 6">
-                              <div className="demo-option-label-item">Lớp 6</div>
-                            </Option>
-                            <Option value="Lớp 7" label="Lớp 7">
-                              <div className="demo-option-label-item">Lớp 7</div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card title="THÔNG TIN TÀI NGUYÊN">
-                  <Form>
-                    <Form.Item label="Tài nguyên" name="device_material">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionLabelProp="label"
-                      >
-                        <Option value="Info" label="Info">
-                          <div className="demo-option-label-item">Info</div>
-                        </Option>
-                        <Option value="Phone" label="Phone">
-                          <div className="demo-option-label-item">Phone</div>
-                        </Option>
-                        <Option value="Mail" label="Mail">
-                          <div className="demo-option-label-item">Mail</div>
-                        </Option>
-                        <Option value="Bank" label="Bank">
-                          <div className="demo-option-label-item">Bank</div>
-                        </Option>
-                        <Option value="Doc" label="Doc">
-                          <div className="demo-option-label-item">Doc</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Info" name="info_device">
-                          <Input size="small" placeholder="Phùng Văn Minh" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày sinh" name="info_birthday">
-                          <Input size="small" placeholder="17/08/1984" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Trạng thái" name="Info_status">
-                          <Input size="small" placeholder="Đã sử dụng" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Phone" name="phone_device">
-                          <Input size="small" placeholder="09833333333" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Hạn dử dụng" name="phone_datelimit">
-                          <Input size="small" placeholder="17/12/2022" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Trạng thái" name="phone_status">
-                          <Input size="small" placeholder="Khóa 1 chiều" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Mail" name="mail_device">
-                          <Input
-                            size="small"
-                            placeholder="phungvanminh@gmail.com"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Password" name="mail_password">
-                          <Input size="small" placeholder="vanminh@123" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Trạng thái" name="mail_status">
-                          <Input size="small" placeholder="Live" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Bank" name="bank_device">
-                          <Input size="small" placeholder="Payoneer" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Number" name="bank_number">
-                          <Input
-                            size="small"
-                            placeholder="4046 4825 4281 2969|01-26|304|Nguyen Thi Hoai"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Trạng thái" name="bank_status">
-                          <Input size="small" placeholder="Đã sử dụng" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Device" name="device_device">
-                          <Input size="small" placeholder="PC06" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="device Vbox" name="device_vbox">
-                          <Input size="small" placeholder="E_88888" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Trạng thái" name="device_status">
-                          <Input size="small" placeholder="Đang hoạt động" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="device Limit" name="device_limit">
-                          <Input placeholder="1000" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="device Sold" name="device_sold">
-                          <Input placeholder="150" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="device Listed" name="device_listed">
-                          <Input placeholder="600" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Phí Order" name="device_fees">
-                          <Input placeholder="25%" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Handing time" name="device_handing_time">
-                          <Input placeholder="10" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Lợi nhuận" name="device_profit">
-                          <Input placeholder="2.5" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card>
-              </Col>
-            </Row>
-            <br></br>
-          </Tabs.TabPane>
-  
-          <Tabs.TabPane tab="LỊCH SỬ" key="2">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card title="THỜI GIAN">
-                  <Form
-                    form={form}
-                    name="basic"
-                    onFinish={onFinish}
-                    initialValues={deviceData}
-                    autoComplete="off"
-                  >
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày tạo" name="devicedate_creat">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày verify" name="devicedate_verify">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày seller" name="devicedate_seller">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 1" name="devicedate_list1">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 2" name="devicedate_list2">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 3" name="devicedate_list3">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 4" name="devicedate_list4">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 5" name="devicedate_list5">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày list 6" name="devicedate_list6">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-  
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày suspend" name="devicedate_suspended">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày chat" name="devicedate_contact">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Ngày khôi phục" name="devicedate_restore">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <br></br>
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày lên lớp" name="devicedate_class">
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-  
-                      <Col span={8}>
-                        <Form.Item
-                          label="YC seller"
-                          name="devicedate_request_upseller"
-                        >
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label="YC list 1"
-                          name="devicedate_request_list1"
-                        >
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item
-                          label="YC list 2"
-                          name="devicedate_request_list2"
-                        >
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label="YC list 3"
-                          name="devicedate_request_list3"
-                        >
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label="YC list 4"
-                          name="devicedate_request_list4"
-                        >
-                          <DatePicker format={"DD/MM/YYYY"} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card>
-              </Col>
-  
-              <Col span={12}>
-                <Card title="LỊCH SỬ">
-                  <Row gutter={16}>
-                    <Form.Item name="device_note" label="Ghi chú">
-                      <Input.TextArea />
-                    </Form.Item>
-                  </Row>
-  
-                  <span>
-                    Lớp 1 => Lớp 2 | Thế Minh Hồng, 2022-11-24 00:01:42 57 => device
-                    VN | Thế Minh Hồng, 2022-11-25 16:12:36 Bùi Thị Ngát (T) =>
-                    Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:27:43 Khắc Liêm =>
-                    Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:28:05 Lớp 2 => Lớp 1
-                    | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                    2022-11-23 16:50:34
-                  </span>
-                </Card>
-              </Col>
-            </Row>
-          </Tabs.TabPane>
-        </Tabs>
-      </Card>
-    );
+  Button,
+  Card,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Modal,
+  Avatar,
+  List,
+} from "antd";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import moment from "moment";
+import { postdeviceInfo, getdeviceInfo } from "../../api/device/index";
+const device_info = () => {
+  const [deviceData, setdeviceData] = useState({
+    device_id: "D_1000",
+  });
+
+  let { id } = useParams();
+  const [form] = Form.useForm();
+  const { Option } = Select;
+  const onFinish = async (values) => {
+    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
+    //values.status = values.status.join(",");
+    const data = await postdeviceInfo(values);
+    console.log(data);
   };
-  
-  export default Device_info;
- 
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  const getInfodevice = async () => {
+    const { data } = await getdeviceInfo(id);
+    let newData = {};
+    //newData.status = data.status.split(",");
+    newData.device_id = data.device_id;
+    newData.passport = data.passport;
+    newData.birth_date = data.birth_date;
+    console.log(newData);
+    setdeviceData(newData);
+  };
+
+  useEffect(() => {
+    getInfodevice();
+  }, []);
+
+  const listInfo = [
+    {
+      title: "INFO",
+      thumbnail: "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "MAIL",
+      thumbnail: "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "SIM",
+      thumbnail:
+        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "BANK",
+      thumbnail: "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-bank-flat-design-yellow-round-web-icon.jpg",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "CARD",
+      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+    },
+    {
+      title: "EBAY",
+      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
+      value:
+        "G_101|phungvanminh@gdevice.com|phung873458|pc06.penda@gdevice.com|live",
+    },
+    {
+      title: "ETSY",
+      thumbnail:
+        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
+      value: "03885652654|live",
+    },
+    {
+      title: "AMAZON",
+      thumbnail:
+        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
+      value: "PC06|E_88888|live",
+    },
+    {
+      title: "SHOPEE",
+      thumbnail:
+        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
+      value: "PC06|E_88888|live",
+    },
+    {
+      title: "DEVICE",
+      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "PC06|E_88888|live",
+    },
+  ];
+
+  return (
+    <Card
+      title={id}
+      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+    >
+      <Tabs defaultActiveKey="1">
+        <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
+        <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card title="THÔNG TIN device">
+                <Form
+                  form={form}
+                  name="basic"
+                  onFinish={onFinish}
+                  initialValues={deviceData}
+                  autoComplete="off"
+                >
+                  <Row gutter={16}>
+                    <Col span={6}>
+                      <Form.Item
+                        label="device id"
+                        name="device_id"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Hãy nhập device id!",
+                          },
+                        ]}
+                      >
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={10}>
+                      <Form.Item label="device User" name="device_user">
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item label="device Pass" name="device_password">
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item label="Loại device" name="device_types">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      
+                      <Option value="PC" label="PC">
+                        <div className="demo-option-label-item">PC</div>
+                      </Option>
+                      <Option value="Phone" label="Phone">
+                        <div className="demo-option-label-item">Phone</div>
+                      </Option>
+                      <Option value="VPS" label="VPS">
+                        <div className="demo-option-label-item">VPS</div>
+                      </Option>
+                      <Option value="VMW" label="VMW">
+                        <div className="demo-option-label-item">VMW</div>
+                      </Option>
+                      <Option value="Antidetect" label="Antidetect">
+                        <div className="demo-option-label-item">Antidetect</div>
+                      </Option>
+                      <Option value="Gologin" label="Gologin">
+                        <div className="demo-option-label-item">Gologin</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="Sở hữu" name="device_owner">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      <Option value="Phòng sản xuất" label="Phòng sản xuất">
+                        <div className="demo-option-label-item">
+                          Phòng sản xuất
+                        </div>
+                      </Option>
+                      <Option value="Phòng Kinh doanh" label="Phòng Kinh doanh">
+                        <div className="demo-option-label-item">
+                          Phòng Kinh doanh
+                        </div>
+                      </Option>
+                      <Option
+                        value="Phòng nâng cấp và phục hồi tài khoản"
+                        label="Phòng nâng cấp và phục hồi tài khoản"
+                      >
+                        <div className="demo-option-label-item">
+                          Phòng nâng cấp và phục hồi tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                        <div className="demo-option-label-item">
+                          Kho lưu trữ
+                        </div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="Nhân viên" name="device_employee">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
+                        <div className="demo-option-label-item">
+                          Nguyễn Hoài
+                        </div>
+                      </Option>
+                      <Option value="Khắc Liêm" label="Khắc Liêm">
+                        <div className="demo-option-label-item">Khắc Liêm</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item label="Trạng thái" name="device_status">
+                        <Select
+                          //mode="multiple"
+                          style={{ width: "100%" }}
+                          optionLabelProp="label"
+                        >
+                          <Option value="Live" label="Live">
+                            <div className="demo-option-label-item">Live</div>
+                          </Option>
+                          <Option value="Error" label="Error">
+                            <div className="demo-option-label-item">Error</div>
+                          </Option>
+                          <Option value="Suspended" label="Suspended">
+                            <div className="demo-option-label-item">
+                              Suspended
+                            </div>
+                          </Option>
+                          <Option value="Disable" label="Disable">
+                            <div className="demo-option-label-item">
+                              Disable
+                            </div>
+                          </Option>
+                          <Option value="Die" label="Die">
+                            <div className="demo-option-label-item">Die</div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item label="Lớp device" name="device_class">
+                        <Select
+                          //mode="multiple"
+                          style={{ width: "100%" }}
+                          optionLabelProp="label"
+                        >
+                          <Option value="Lớp 1" label="Lớp 1 New">
+                            <div className="demo-option-label-item">
+                              Lớp 1 New
+                            </div>
+                          </Option>
+                          <Option value="Lớp 2" label="Lớp 2">
+                            <div className="demo-option-label-item">Lớp 2</div>
+                          </Option>
+                          <Option value="Lớp 3" label="Lớp 3">
+                            <div className="demo-option-label-item">Lớp 3</div>
+                          </Option>
+                          <Option value="Lớp 4" label="Lớp 4">
+                            <div className="demo-option-label-item">Lớp 4</div>
+                          </Option>
+                          <Option value="Lớp 5" label="Lớp 5">
+                            <div className="demo-option-label-item">Lớp 5</div>
+                          </Option>
+                          <Option value="Lớp 6" label="Lớp 6">
+                            <div className="demo-option-label-item">Lớp 6</div>
+                          </Option>
+                          <Option value="Lớp 7" label="Lớp 7">
+                            <div className="demo-option-label-item">Lớp 7</div>
+                          </Option>
+                          <Option value="Lớp 8" label="Lớp 8 Upseller">
+                            <div className="demo-option-label-item">
+                              Lớp 8 Upseller
+                            </div>
+                          </Option>
+                          <Option value="Lớp 9" label="Lớp 9">
+                            <div className="demo-option-label-item">Lớp 9</div>
+                          </Option>
+                          <Option value="Lớp 10" label="Lớp 10">
+                            <div className="demo-option-label-item">Lớp 10</div>
+                          </Option>
+                          <Option value="Lớp 11" label="Lớp 11">
+                            <div className="demo-option-label-item">Lớp 11</div>
+                          </Option>
+                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
+                            <div className="demo-option-label-item">
+                              Lớp 12 Chuyển
+                            </div>
+                          </Option>
+                          <Option value="Lớp 20" label="Lớp 20 device error">
+                            <div className="demo-option-label-item">
+                              Lớp 20 device error
+                            </div>
+                          </Option>
+                          <Option value="Lớp 21" label="Lớp 21 device die">
+                            <div className="demo-option-label-item">
+                              Lớp 21 device die
+                            </div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Form.Item label="Hiển thị" name="device_view">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      
+                      <Option value="Info" label="Info">
+                        <div className="demo-option-label-item">Info</div>
+                      </Option>
+                      <Option value="Mail" label="Mail">
+                        <div className="demo-option-label-item">Mail</div>
+                      </Option>
+                      <Option value="Sim" label="Sim">
+                        <div className="demo-option-label-item">Sim</div>
+                      </Option>
+                      <Option value="Device" label="Device">
+                        <div className="demo-option-label-item">Device</div>
+                      </Option>
+                      <Option value="Bank" label="Bank">
+                        <div className="demo-option-label-item">Bank</div>
+                      </Option>
+                      <Option value="Payoneer" label="Payoneer">
+                        <div className="demo-option-label-item">Payoneer</div>
+                      </Option>
+                      <Option value="Paypal" label="Paypal">
+                        <div className="demo-option-label-item">Paypal</div>
+                      </Option>
+                      <Option value="Ebay" label="Ebay">
+                        <div className="demo-option-label-item">Ebay</div>
+                      </Option>
+                      <Option value="Etsy" label="Etsy">
+                        <div className="demo-option-label-item">Etsy</div>
+                      </Option>
+                      <Option value="Amazon" label="Amazon">
+                        <div className="demo-option-label-item">Amazon</div>
+                      </Option>
+                      <Option value="Shopee" label="Shopee">
+                        <div className="demo-option-label-item">Shopee</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={listInfo}
+                  renderItem={(item) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<Avatar src={item.thumbnail} />}
+                        title={<a href="https://ant.design">{item.title}</a>}
+                        description={<Input />}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </Card>
+            </Col>
+          </Row>
+          <br></br>
+        </Tabs.TabPane>
+
+        <Tabs.TabPane tab="LỊCH SỬ" key="2">
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card title="THỜI GIAN">
+                <Form
+                  form={form}
+                  name="basic"
+                  onFinish={onFinish}
+                  initialValues={deviceData}
+                  autoComplete="off"
+                >
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <Form.Item label="Ngày tạo" name="devicedate_creat">
+                        <DatePicker format={"DD/MM/YYYY"} />
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item label="Ngày verify" name="devicedate_verify">
+                        <DatePicker format={"DD/MM/YYYY"} />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </Form>
+              </Card>
+            </Col>
+
+            <Col span={12}>
+              <Card title="LỊCH SỬ">
+                <Row gutter={16}>
+                  <Form.Item name="device_note" label="Ghi chú">
+                    <Input.TextArea />
+                  </Form.Item>
+                </Row>
+
+                <span>
+                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
+                  2022-11-23 16:50:34
+                </span>
+              </Card>
+            </Col>
+          </Row>
+        </Tabs.TabPane>
+      </Tabs>
+    </Card>
+  );
+};
+
+export default device_info;

@@ -1,11 +1,11 @@
 import axiosClient from "../axiosClient.js";
 
-export const postDeviceInfo = (payload) => {
+export const postdeviceInfo = (payload) => {
   const url = `/device/create`;
   return axiosClient.post(url, payload);
 };
 
-export const getDeviceInfo = (id) => {
+export const getdeviceInfo = (id) => {
   const url = `/device/get/${id}`;
   return axiosClient.get(url);
 }

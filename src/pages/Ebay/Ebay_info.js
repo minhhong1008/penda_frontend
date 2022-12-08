@@ -30,7 +30,13 @@ const Ebay_info = () => {
   const onFinish = async (values) => {
     let newValues = {
       ...values,
-      ebay_employee: values.ebay_employee.join(","),
+      ebay_processing: values?.ebay_processing ? values.ebay_processing.join(",") : "",
+      ebay_type: values?.ebay_type ? values.ebay_type.join(",") : "",
+      ebay_sell_status: values?.ebay_sell_status ? values.ebay_sell_status.join(",") : "",
+      ebay_owner: values?.ebay_owner ? values.ebay_owner.join(",") : "",
+      ebay_employee: values?.ebay_employee ? values.ebay_employee.join(",") : "",
+      ebay_outline: values?.ebay_outline ? values.ebay_outline.join(",") : "",
+      //ebay_employee: values.ebay_employee.join(","),
     };
     const response = await updateEbayInfo(newValues, id);
     if (response.status == 200) {
@@ -45,7 +51,12 @@ const Ebay_info = () => {
 
   const onFinishEbay = async (values) => {
     // values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
+    values.ebay_processing = values.ebay_processing.join(",");
+    values.ebay_type = values.ebay_type.join(",");
+    values.ebay_sell_status = values.ebay_sell_status.join(",");
+    values.ebay_owner = values.ebay_owner.join(",");
     values.ebay_employee = values.ebay_employee.join(",");
+    values.ebay_outline = values.ebay_outline.join(",");
     const data = await postEbayInfo(values);
     console.log(data);
   };
@@ -75,23 +86,62 @@ const Ebay_info = () => {
   const listInfo = [
     {
       title: "INFO",
-      thumbnail: "https://cdn-icons-png.flaticon.com/512/64/64159.png",
-      value: ""
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
     },
     {
       title: "MAIL",
-      thumbnail: "https://cdn-icons-png.flaticon.com/512/761/761755.png",
-      value: ""
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "M_101|mingdepzai@gmail.com|170988876@|live",
     },
     {
-      title: "PHONE",
-      thumbnail: "https://cdn-icons-png.flaticon.com/512/455/455705.png",
-      value: ""
+      title: "SIM",
+      thumbnail:
+        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
+      value: "S_101|0588965555|Viettel|Live",
     },
     {
       title: "BANK",
-      thumbnail: "https://cdn-icons-png.flaticon.com/512/2830/2830155.png",
-      value: ""
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
+      value: "I_101|ACB|76668888|Live",
+    },
+    {
+      title: "CARD",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "C_101|42616565465456|7/26|345",
+    },
+    {
+      title: "EBAY",
+      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
+      value: "EB_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "ETSY",
+      thumbnail:
+        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
+      value: "ET_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "AMAZON",
+      thumbnail:
+        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
+      value: "AM_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "SHOPEE",
+      thumbnail:
+        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
+      value: "PE_101|shopphungming|phung873458|live",
+    },
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "PC06|E_88888|live",
     },
   ];
 
@@ -121,10 +171,10 @@ const Ebay_info = () => {
                   autoComplete="off"
                 >
                   <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={8}>
                       <Form.Item
-                        label="eBay User"
-                        name="ebay_user"
+                        label="eBay id"
+                        name="ebay_id"
                         rules={[
                           {
                             required: true,
@@ -132,10 +182,17 @@ const Ebay_info = () => {
                           },
                         ]}
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input size="small" placeholder="eBay_1000" />
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+
+                    <Col span={8}>
+                      <Form.Item label="eBay User" name="ebay_user">
+                        <Input size="small" placeholder="minhrau" />
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={8}>
                       <Form.Item label="eBay Pass" name="ebay_password">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
@@ -168,26 +225,24 @@ const Ebay_info = () => {
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Loại eBay" name="ebay_types">
+                  <Form.Item label="Loại eBay" name="ebay_type">
                     <Select
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
                     >
-                      <Option value="eBay Buyer" label="Buyer">
-                        <div className="demo-option-label-item">eBay Buyer</div>
-                      </Option>
-                      <Option value="eBay Seller" label="Seller">
-                        <div className="demo-option-label-item">
-                          eBay Seller
-                        </div>
-                      </Option>
                       <Option value="VN" label="VN">
                         <div className="demo-option-label-item">VN</div>
                       </Option>
                       <Option value="US" label="US">
                         <div className="demo-option-label-item">US</div>
+                      </Option>
+                      <Option value="eBay Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="eBay Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
                       </Option>
                       <Option value="Gỡ Suspended" label="Gỡ Suspended">
                         <div className="demo-option-label-item">
@@ -270,6 +325,19 @@ const Ebay_info = () => {
                           Phòng Kinh doanh
                         </div>
                       </Option>
+                      <Option
+                        value="Phòng nâng cấp và phục hồi tài khoản"
+                        label="Phòng nâng cấp và phục hồi tài khoản"
+                      >
+                        <div className="demo-option-label-item">
+                          Phòng nâng cấp và phục hồi tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                        <div className="demo-option-label-item">
+                          Kho lưu trữ
+                        </div>
+                      </Option>
                     </Select>
                   </Form.Item>
 
@@ -323,6 +391,46 @@ const Ebay_info = () => {
                           Quy trình 2
                         </div>
                       </Option>
+                      <Option value="Quy trình 3" label="Quy trình 3">
+                        <div className="demo-option-label-item">
+                          Quy trình 3
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 4" label="Quy trình 4">
+                        <div className="demo-option-label-item">
+                          Quy trình 4
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 5" label="Quy trình 5">
+                        <div className="demo-option-label-item">
+                          Quy trình 5
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 6" label="Quy trình 6">
+                        <div className="demo-option-label-item">
+                          Quy trình 6
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 7" label="Quy trình 7">
+                        <div className="demo-option-label-item">
+                          Quy trình 7
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 8" label="Quy trình 8">
+                        <div className="demo-option-label-item">
+                          Quy trình 8
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 9" label="Quy trình 9">
+                        <div className="demo-option-label-item">
+                          Quy trình 9
+                        </div>
+                      </Option>
+                      <Option value="Quy trình 10" label="Quy trình 10">
+                        <div className="demo-option-label-item">
+                          Quy trình 10
+                        </div>
+                      </Option>
                     </Select>
                   </Form.Item>
 
@@ -336,6 +444,14 @@ const Ebay_info = () => {
                         >
                           <Option value="Live" label="Live">
                             <div className="demo-option-label-item">Live</div>
+                          </Option>
+                          <Option value="Error" label="Error">
+                            <div className="demo-option-label-item">Error</div>
+                          </Option>
+                          <Option value="Restricted" label="Restricted">
+                            <div className="demo-option-label-item">
+                              Restricted
+                            </div>
                           </Option>
                           <Option value="Suspended" label="Suspended">
                             <div className="demo-option-label-item">
@@ -352,20 +468,20 @@ const Ebay_info = () => {
                           style={{ width: "100%" }}
                           optionLabelProp="label"
                         >
-                          <Option value="Lớp 1" label="Lớp 1">
-                            <div className="demo-option-label-item">Lớp 1</div>
+                          <Option value="Lớp 1" label="Lớp 1 New">
+                            <div className="demo-option-label-item">
+                              Lớp 1 New
+                            </div>
                           </Option>
                           <Option value="Lớp 2" label="Lớp 2">
                             <div className="demo-option-label-item">Lớp 2</div>
                           </Option>
-
                           <Option value="Lớp 3" label="Lớp 3">
                             <div className="demo-option-label-item">Lớp 3</div>
                           </Option>
                           <Option value="Lớp 4" label="Lớp 4">
                             <div className="demo-option-label-item">Lớp 4</div>
                           </Option>
-
                           <Option value="Lớp 5" label="Lớp 5">
                             <div className="demo-option-label-item">Lớp 5</div>
                           </Option>
@@ -374,6 +490,38 @@ const Ebay_info = () => {
                           </Option>
                           <Option value="Lớp 7" label="Lớp 7">
                             <div className="demo-option-label-item">Lớp 7</div>
+                          </Option>
+                          <Option value="Lớp 8" label="Lớp 8 Upseller">
+                            <div className="demo-option-label-item">
+                              Lớp 8 Upseller
+                            </div>
+                          </Option>
+                          <Option value="Lớp 9" label="Lớp 9">
+                            <div className="demo-option-label-item">Lớp 9</div>
+                          </Option>
+                          <Option value="Lớp 10" label="Lớp 10">
+                            <div className="demo-option-label-item">Lớp 10</div>
+                          </Option>
+                          <Option value="Lớp 11" label="Lớp 11">
+                            <div className="demo-option-label-item">Lớp 11</div>
+                          </Option>
+                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
+                            <div className="demo-option-label-item">
+                              Lớp 12 Chuyển
+                            </div>
+                          </Option>
+                          <Option value="Lớp 20" label="Lớp 20 Buyer Suspended">
+                            <div className="demo-option-label-item">
+                              Lớp 20 Buyer Suspended
+                            </div>
+                          </Option>
+                          <Option
+                            value="Lớp 21"
+                            label="Lớp 21 Seller Suspended"
+                          >
+                            <div className="demo-option-label-item">
+                              Lớp 21 Seller Suspended
+                            </div>
                           </Option>
                         </Select>
                       </Form.Item>
@@ -384,15 +532,56 @@ const Ebay_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
+                <Form.Item label="Hiển thị" name="etsy_view">
+                  <Select
+                    mode="multiple"
+                    style={{ width: "100%" }}
+                    placeholder="select one item"
+                    optionLabelProp="label"
+                  >
+                    <Option value="Info" label="Info">
+                      <div className="demo-option-label-item">Info</div>
+                    </Option>
+                    <Option value="Mail" label="Mail">
+                      <div className="demo-option-label-item">Mail</div>
+                    </Option>
+                    <Option value="Sim" label="Sim">
+                      <div className="demo-option-label-item">Sim</div>
+                    </Option>
+                    <Option value="Bank" label="Bank">
+                      <div className="demo-option-label-item">Bank</div>
+                    </Option>
+                    <Option value="Card" label="Card">
+                      <div className="demo-option-label-item">Card</div>
+                    </Option>
+                    <Option value="Payoneer" label="Payoneer">
+                      <div className="demo-option-label-item">Payoneer</div>
+                    </Option>
+                    <Option value="Paypal" label="Paypal">
+                      <div className="demo-option-label-item">Paypal</div>
+                    </Option>
+                    <Option value="Ebay" label="Ebay">
+                      <div className="demo-option-label-item">Ebay</div>
+                    </Option>
+                    <Option value="Etsy" label="Etsy">
+                      <div className="demo-option-label-item">Etsy</div>
+                    </Option>
+                    <Option value="Amazon" label="Amazon">
+                      <div className="demo-option-label-item">Amazon</div>
+                    </Option>
+                    <Option value="Shopee" label="Shopee">
+                      <div className="demo-option-label-item">Shopee</div>
+                    </Option>
+                  </Select>
+                </Form.Item>
+
                 <List
                   itemLayout="horizontal"
                   dataSource={listInfo}
                   renderItem={(item) => (
                     <List.Item>
                       <List.Item.Meta
-                        avatar={
-                          <Avatar src={item.thumbnail} />
-                        }
+                        avatar={<Avatar src={item.thumbnail} />}
                         title={<a href="https://ant.design">{item.title}</a>}
                         description={<Input />}
                       />
@@ -558,7 +747,11 @@ const Ebay_info = () => {
             </Col>
           </Row>
         </Tabs.TabPane>
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+          1. eBay theo user nhân viên 2.
+        </Tabs.TabPane>
       </Tabs>
+
       <Modal
         title="Thêm tài khoản Ebay"
         open={visibleModalAdd}
@@ -637,22 +830,11 @@ const Ebay_info = () => {
                   <Option value="Lớp 2" label="Lớp 2">
                     <div className="demo-option-label-item">Lớp 2</div>
                   </Option>
-
                   <Option value="Lớp 3" label="Lớp 3">
                     <div className="demo-option-label-item">Lớp 3</div>
                   </Option>
                   <Option value="Lớp 4" label="Lớp 4">
                     <div className="demo-option-label-item">Lớp 4</div>
-                  </Option>
-
-                  <Option value="Lớp 5" label="Lớp 5">
-                    <div className="demo-option-label-item">Lớp 5</div>
-                  </Option>
-                  <Option value="Lớp 6" label="Lớp 6">
-                    <div className="demo-option-label-item">Lớp 6</div>
-                  </Option>
-                  <Option value="Lớp 7" label="Lớp 7">
-                    <div className="demo-option-label-item">Lớp 7</div>
                   </Option>
                 </Select>
               </Form.Item>
