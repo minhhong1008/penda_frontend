@@ -78,6 +78,9 @@ import Other_class from "./pages/Other/Other_class";
 import Other_table from "./pages/Other/Other_table";
 import Other_info from "./pages/Other/Other_info";
 
+// Create
+
+import Create from "./pages/Create/Create";
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -340,6 +343,12 @@ const App = () => (
           path="/products/other_class/table/:id"
           exact
           component={Other_info}
+        />
+
+        <Route
+          path="/products/create"
+          exact
+          component={Create}
         />
 
 

@@ -20,10 +20,10 @@ const Etsy_table = () => {
     },
     {
       title: "#",
-      dataIndex: "etsy_user",
-      key: "etsy_user",
+      dataIndex: "etsy_id",
+      key: "etsy_id",
       render: (text, record) => (
-        <a onClick={() => history.push(`table/${encodeURIComponent(record.etsy_user)}`)}>{text}</a>
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.etsy_id)}`)}>{text}</a>
       ),
     },
     {

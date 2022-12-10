@@ -182,7 +182,6 @@ const etsy_info = () => {
 
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
-    localStorage.setItem("etsy_select", values);
   };
 
   const handleChangeNote = (e) => {

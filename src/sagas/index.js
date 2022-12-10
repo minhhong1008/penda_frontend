@@ -5,6 +5,7 @@ import userSaga from "./user";
 import departmentSaga from "./department";
 import ebaySaga from "./ebay";
 import etsySaga from "./esty";
+import bankSaga from "./bank";
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     departmentSaga(),
     ebaySaga(),
     etsySaga(),
+    bankSaga(),
   ])
 }

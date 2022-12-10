@@ -5,6 +5,7 @@ import testReducer from "./testReducer";
 import userReducer from "./userReducer";
 import ebayReducer from "./ebayReducer";
 import etsyReducer from "./etsyReducer";
+import bankReducer from "./bankReducer";
 
 const appReducer = asyncReducers =>
   combineReducers({
@@ -14,6 +15,7 @@ const appReducer = asyncReducers =>
     department: departmentReducer,
     ebay: ebayReducer,
     etsy: etsyReducer,
+    bank: bankReducer,
     ...asyncReducers
   });
 
