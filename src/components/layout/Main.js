@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import SideBarProduct from "../sidebar/SideBarProducts";
+import SideBarBussiness from "../sidebar/SideBarBusiness";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -83,6 +84,9 @@ function Main({ children }) {
       >
         {pathname.split("/")[0] == "products" ? (
           <SideBarProduct color={sidenavColor}></SideBarProduct>
+        ) : null}
+        {pathname.split("/")[0] == "business" ? (
+          <SideBarBussiness color={sidenavColor}></SideBarBussiness>
         ) : null}
       </Sider>
       <Layout>

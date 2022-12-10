@@ -35,10 +35,10 @@ const Ebay_table = () => {
     },
     {
       title: "#",
-      dataIndex: "ebay_user",
-      key: "ebay_user",
+      dataIndex: "ebay_id",
+      key: "ebay_id",
       render: (text, record) => (
-        <a onClick={() => history.push(`table/${encodeURIComponent(record.ebay_user)}`)}>{text}</a>
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.ebay_id)}`)}>{text}</a>
       ),
     },
     {

@@ -23,18 +23,22 @@ import {
 import { showError, showSuccess } from "../../utils";
 
 const etsy_info = () => {
-  const [etsyData, setetsyData] = useState({
-    etsy_id: "ET_1000",
-  });
+  const { Option } = Select;
+
+// Lấy ID từ trên param url
+  let { id } = useParams();
+// Khai báo các kho dữ liệu
+  const [etsyData, setetsyData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
   const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
   const [noteValue, setNoteValue] = useState("");
-  let { id } = useParams();
+// Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
-  const { Option } = Select;
+
+// Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     const newValue = {
       ...info,
@@ -66,10 +70,15 @@ const etsy_info = () => {
       showError("Sửa không thành công");
     }
   };
-
+// Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
   };
+// Hàm gửi dữ liệu từ form info
+  const onFinishInfo = (values) => {
+    setInfo(values);
+  };
+// Hàm gọi dữ liệu về từ database
   const getInfoetsy = async () => {
     const { data } = await getetsyInfo(id);
     const newData = {
@@ -90,10 +99,9 @@ const etsy_info = () => {
     setNoteValue(data.etsy_note);
     setSelectListInfo(data.list_view.split(","));
   };
-  const onFinishInfo = (values) => {
-    setInfo(values);
-  };
 
+ 
+// Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
       {
@@ -103,10 +111,12 @@ const etsy_info = () => {
     [info]
   );
 
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfoetsy();
   }, []);
 
+  // List danh sách các trường trong bảng INFO
   const listInfo = [
     {
       title: "INFO",
@@ -169,6 +179,7 @@ const etsy_info = () => {
     },
   ];
 
+  //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
       title: "Ngày tạo",
@@ -180,13 +191,16 @@ const etsy_info = () => {
     },
   ];
 
+  // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
   };
 
+  // Hàm để thay đổi dữ liệu của note
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);
   };
+
   return (
     <Card
       title={id}

@@ -1,8 +1,23 @@
-import {Button,Card,Tabs,Row,Col,Form,Input,DatePicker,Select,Modal,Avatar,List,} from "antd";
+import {
+  Button,
+  Card,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Modal,
+  Avatar,
+  List,
+  Upload,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { postInfoInfo, getInfoInfo } from "../../api/info/index";
+import { PlusOutlined } from "@ant-design/icons";
 const Info_info = () => {
   const [infoData, setInfoData] = useState({
     info_id: "hahahah",
@@ -36,10 +51,90 @@ const Info_info = () => {
     getInfoInfo();
   }, []);
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url:
+        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-2",
+      name: "image.png",
+      status: "done",
+      url:
+        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-3",
+      name: "image.png",
+      status: "done",
+      url:
+        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-4",
+      name: "image.png",
+      status: "done",
+      url:
+        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-xxx",
+      percent: 50,
+      name: "image.png",
+      status: "uploading",
+      url:
+        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
+    },
+    {
+      uid: "-5",
+      name: "image.png",
+      status: "error",
+    },
+  ]);
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
   const listInfo = [
     {
       title: "MAIL",
-      thumbnail: "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
       value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
     },
     {
@@ -50,12 +145,14 @@ const Info_info = () => {
     },
     {
       title: "ETSY",
-      thumbnail: "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
+      thumbnail:
+        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
       value: "03885652654|live",
     },
     {
       title: "PAYONEER",
-      thumbnail: "https://www.clipartkey.com/mpngs/m/130-1300370_payoneer-logo-circle.png",
+      thumbnail:
+        "https://www.clipartkey.com/mpngs/m/130-1300370_payoneer-logo-circle.png",
       value: "ACB|788888888|Phung Van Minh|live",
     },
     {
@@ -66,12 +163,14 @@ const Info_info = () => {
     },
     {
       title: "AMAZON",
-      thumbnail: "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
+      thumbnail:
+        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
       value: "PC06|E_88888|live",
     },
     {
       title: "SHOPEE",
-      thumbnail: "https://www.kibrispdr.org/data/1065/download-logo-shopee-ico-8.jpg",
+      thumbnail:
+        "https://www.kibrispdr.org/data/1065/download-logo-shopee-ico-8.jpg",
       value: "PC06|E_88888|live",
     },
   ];
@@ -155,18 +254,20 @@ const Info_info = () => {
                   </Row>
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="Đặc điểm nhận dạng" name="info_identifying">
-                        <Input size="small" placeholder="Nốt ruồi c: 2cm dưới mép trái" />
+                      <Form.Item
+                        label="Đặc điểm nhận dạng"
+                        name="info_identifying"
+                      >
+                        <Input
+                          size="small"
+                          placeholder="Nốt ruồi c: 2cm dưới mép trái"
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item
-                        label="Có giá trị đến"
-                        name="infodate_expiry"
-                       
-                      >
+                      <Form.Item label="Có giá trị đến" name="infodate_expiry">
                         <Input size="small" placeholder="25/7/2041" />
                       </Form.Item>
                     </Col>
@@ -346,6 +447,21 @@ const Info_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col span={24}>
+                      <Form.Item name="info_image">
+                        <Upload
+                          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                          listType="picture-card"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                        >
+                          {fileList.length >= 8 ? null : uploadButton}
+                        </Upload>
+                      </Form.Item>
+                    </Col>
+                  </Row>
                 </Form>
               </Card>
             </Col>
@@ -402,6 +518,15 @@ const Info_info = () => {
           </Row>
         </Tabs.TabPane>
       </Tabs>
+      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+        <img
+          alt="example"
+          style={{
+            width: '100%',
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </Card>
   );
 };
