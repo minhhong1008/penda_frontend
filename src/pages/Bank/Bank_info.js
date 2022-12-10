@@ -15,34 +15,82 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { postbankInfo, getbankInfo } from "../../api/bank/index";
+import {
+  postbankInfo,
+  getbankInfo,
+  updatebankInfo,
+} from "../../api/bank/index";
+import { showError, showSuccess } from "../../utils";
+
 const bank_info = () => {
   const [bankData, setbankData] = useState({
-    bank_id: "D_1000",
+    bank_id: "ET_1000",
   });
-
+  const [dateData, setDateData] = useState();
+  const [info, setInfo] = useState();
+  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [noteValue, setNoteValue] = useState("");
   let { id } = useParams();
   const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
   const { Option } = Select;
   const onFinish = async (values) => {
-    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-    //values.status = values.status.join(",");
-    const data = await postbankInfo(values);
-    console.log(data);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    const newValue = {
+      ...info,
+      ...values,
+      bank_processing: values?.bank_processing
+        ? values.bank_processing.join(",")
+        : "",
+      bank_type: values?.bank_type ? values.bank_type.join(",") : "",
+      bank_sell_status: values?.bank_sell_status
+        ? values.bank_sell_status.join(",")
+        : "",
+      bank_owner: values?.bank_owner ? values.bank_owner.join(",") : "",
+      bank_employee: values?.bank_employee
+        ? values.bank_employee.join(",")
+        : "",
+      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      bank_date_start: dateData?.bank_date_start
+        ? moment(dateData.bank_date_start).format("MM-DD-YYYY")
+        : "",
+      bank_date_verify: dateData?.bank_date_verify
+        ? moment(dateData.bank_date_verify).format("MM-DD-YYYY")
+        : "",
+      bank_note: noteValue,
+    };
+    const response = await updatebankInfo(newValue, id);
+    if (response.status == 200) {
+      showSuccess("Sửa thành công");
+    } else {
+      showError("Sửa không thành công");
+    }
   };
 
+  const onFinishDate = (values) => {
+    setDateData(values);
+  };
   const getInfobank = async () => {
     const { data } = await getbankInfo(id);
-    let newData = {};
-    //newData.status = data.status.split(",");
-    newData.bank_id = data.bank_id;
-    newData.passport = data.passport;
-    newData.birth_date = data.birth_date;
-    console.log(newData);
-    setbankData(newData);
+    const newData = {
+      ...data,
+      bank_employee: data.bank_employee.split(","),
+      bank_processing: data.bank_processing.split(","),
+      bank_type: data.bank_type.split(","),
+      bank_sell_status: data.bank_sell_status.split(","),
+      bank_owner: data.bank_owner.split(","),
+    };
+    form.setFieldsValue(newData);
+    infoForm.setFieldsValue(newData);
+    dateForm.setFieldsValue({
+      bank_date_start: moment(data.bank_date_start),
+      bank_date_verify: moment(data.bank_date_verify)
+    });
+    setNoteValue(data.bank_note)
+    setSelectListInfo(data.list_view.split(","));
+  };
+  const onFinishInfo = (values) => {
+    setInfo(values);
   };
 
   useEffect(() => {
@@ -52,61 +100,84 @@ const bank_info = () => {
   const listInfo = [
     {
       title: "INFO",
-      thumbnail: "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
       value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
     },
     {
       title: "MAIL",
-      thumbnail: "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "M_101|mingdepzai@gmail.com|170988876@|live",
     },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "S_101|0588965555|Viettel|Live",
     },
     {
       title: "BANK",
-      thumbnail: "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-bank-flat-design-yellow-round-web-icon.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-bank-flat-design-yellow-round-web-icon.jpg",
+      value: "",
     },
     {
       title: "CARD",
-      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value:
-        "G_101|phungvanminh@gbank.com|phung873458|pc06.penda@gbank.com|live",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "03885652654|live",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
         "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
-      title: "bank",
-      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "PC06|E_88888|live",
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
     },
   ];
 
+  const listDate = [
+    {
+      title: "Ngày tạo",
+      value: "bank_date_start",
+    },
+    {
+      title: "Ngày verify",
+      value: "bank_date_verify",
+    },
+  ];
+
+  const changeSelectListInfo = (values) => {
+    setSelectListInfo(values);
+    localStorage.setItem("esty_select", values);
+  };
+
+  const handleChangeNote = (e) => {
+    setNoteValue(e.target.value);
+  };
   return (
     <Card
       title={id}
@@ -153,40 +224,116 @@ const bank_info = () => {
                   </Row>
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item
-                        label="Bank chi tiết"
-                        name="bank_detail"
-                       
-                      >
+                      <Form.Item label="bank chi tiết" name="bank_detail">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Form.Item label="Loại bank" name="bank_types">
+                  <Form.Item label="Tiến trình" name="bank_processing">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      <Option value="Mail" label="Mail">
+                        <div className="demo-option-label-item">Mail</div>
+                      </Option>
+                      <Option value="Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="Verify" label="Verify">
+                        <div className="demo-option-label-item">Verify</div>
+                      </Option>
+                      <Option value="Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
+                      </Option>
+                      <Option value="List" label="List">
+                        <div className="demo-option-label-item">List</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="Loại bank" name="bank_type">
                     <Select
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
                     >
-                      
-                      <Option value="PC" label="PC">
-                        <div className="demo-option-label-item">PC</div>
+                      <Option value="VN" label="VN">
+                        <div className="demo-option-label-item">VN</div>
                       </Option>
-                      <Option value="Phone" label="Phone">
-                        <div className="demo-option-label-item">Phone</div>
+                      <Option value="US" label="US">
+                        <div className="demo-option-label-item">US</div>
                       </Option>
-                      <Option value="VPS" label="VPS">
-                        <div className="demo-option-label-item">VPS</div>
+                      <Option value="bank Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
                       </Option>
-                      <Option value="VMW" label="VMW">
-                        <div className="demo-option-label-item">VMW</div>
+                      <Option value="bank Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
                       </Option>
-                      <Option value="Antidetect" label="Antidetect">
-                        <div className="demo-option-label-item">Antidetect</div>
+                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
+                        <div className="demo-option-label-item">
+                          Gỡ Suspended
+                        </div>
                       </Option>
-                      <Option value="Gologin" label="Gologin">
-                        <div className="demo-option-label-item">Gologin</div>
+                      <Option value="ADS" label="ADS">
+                        <div className="demo-option-label-item">Quảng cáo</div>
+                      </Option>
+                      <Option value="Above Standard" label="Above Standard">
+                        <div className="demo-option-label-item">
+                          Above Standard
+                        </div>
+                      </Option>
+                      <Option value="Top Rate" label="Top Rate">
+                        <div className="demo-option-label-item">Top Rate</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="TT Bán" name="bank_sell_status">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
+                        <div className="demo-option-label-item">
+                          Chuẩn bị bán
+                        </div>
+                      </Option>
+                      <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
+                        <div className="demo-option-label-item">
+                          Đủ điều kiện bán
+                        </div>
+                      </Option>
+
+                      <Option value="Bán tài khoản" label="Bán tài khoản">
+                        <div className="demo-option-label-item">
+                          Bán tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Đang giao dịch" label="Đang giao dịch">
+                        <div className="demo-option-label-item">
+                          Đang giao dịch
+                        </div>
+                      </Option>
+
+                      <Option value="Bán thành công" label="Bán thành công">
+                        <div className="demo-option-label-item">
+                          Bán thành công
+                        </div>
+                      </Option>
+                      <Option value="Bảo hành" label="Bảo hành">
+                        <div className="demo-option-label-item">Bảo hành</div>
+                      </Option>
+                      <Option value="Hết bảo hành" label="Hết bảo hành">
+                        <div className="demo-option-label-item">
+                          Hết bảo hành
+                        </div>
                       </Option>
                     </Select>
                   </Form.Item>
@@ -340,62 +487,84 @@ const bank_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-              <Form.Item label="Hiển thị" name="bank_view">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      
-                      <Option value="Info" label="Info">
-                        <div className="demo-option-label-item">Info</div>
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionLabelProp="label"
+                  onChange={changeSelectListInfo}
+                  value={selectListInfo}
+                >
+                  {listInfo.map((item) => {
+                    return (
+                      <Option
+                        value={item.title.toLocaleLowerCase() + "_id"}
+                        label={item.title}
+                      >
+                        <div className="demo-option-label-item">
+                          {item.title}
+                        </div>
                       </Option>
-                      <Option value="Mail" label="Mail">
-                        <div className="demo-option-label-item">Mail</div>
-                      </Option>
-                      <Option value="Sim" label="Sim">
-                        <div className="demo-option-label-item">Sim</div>
-                      </Option>
-                      <Option value="bank" label="bank">
-                        <div className="demo-option-label-item">bank</div>
-                      </Option>
-                      <Option value="Bank" label="Bank">
-                        <div className="demo-option-label-item">Bank</div>
-                      </Option>
-                      <Option value="Payoneer" label="Payoneer">
-                        <div className="demo-option-label-item">Payoneer</div>
-                      </Option>
-                      <Option value="Paypal" label="Paypal">
-                        <div className="demo-option-label-item">Paypal</div>
-                      </Option>
-                      <Option value="Ebay" label="Ebay">
-                        <div className="demo-option-label-item">Ebay</div>
-                      </Option>
-                      <Option value="Etsy" label="Etsy">
-                        <div className="demo-option-label-item">Etsy</div>
-                      </Option>
-                      <Option value="Amazon" label="Amazon">
-                        <div className="demo-option-label-item">Amazon</div>
-                      </Option>
-                      <Option value="Shopee" label="Shopee">
-                        <div className="demo-option-label-item">Shopee</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-                <List
-                  itemLayout="horizontal"
-                  dataSource={listInfo}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src={item.thumbnail} />}
-                        title={<a href="https://ant.design">{item.title}</a>}
-                        description={<Input />}
-                      />
-                    </List.Item>
-                  )}
-                />
+                    );
+                  })}
+                </Select>
+                <Form
+                  onFinish={onFinishInfo}
+                  initialValues={info}
+                  form={infoForm}
+                  name="info"
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listInfo}
+                    renderItem={(item) => (
+                      <>
+                        {selectListInfo.indexOf(
+                          item.title.toLocaleLowerCase() + "_id"
+                        ) != -1 ? (
+                          <List.Item>
+                            <div className="custom_info_item">
+                              <div className="meta_data">
+                                <Avatar
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    window.open(
+                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
+                                        "_class/table/" +
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ]}`
+                                    )
+                                  }
+                                  src={item.thumbnail}
+                                />
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    window.open(
+                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
+                                        "_class/table/" +
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ]}`
+                                    )
+                                  }
+                                >
+                                  {item.title}
+                                </a>
+                              </div>
+                              <Form.Item
+                                name={item.title.toLocaleLowerCase() + "_id"}
+                              >
+                                <Input onChange={() => infoForm.submit()} />
+                              </Form.Item>
+                            </div>
+                          </List.Item>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </Form>
               </Card>
             </Col>
           </Row>
@@ -407,23 +576,24 @@ const bank_info = () => {
             <Col span={12}>
               <Card title="THỜI GIAN">
                 <Form
-                  form={form}
-                  name="basic"
-                  onFinish={onFinish}
-                  initialValues={bankData}
-                  autoComplete="off"
+                  form={dateForm}
+                  onFinish={onFinishDate}
+                  name="date"
+                  initialValues={dateData}
                 >
                   <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày tạo" name="bankdate_creat">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày verify" name="bankdate_verify">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
+                    {listDate.map((item, index) => {
+                      return (
+                        <Col span={8} key={index}>
+                          <Form.Item label={item.title} name={item.value}>
+                            <DatePicker
+                              format="MM-DD-YYYY"
+                              onChange={() => dateForm.submit()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      );
+                    })}
                   </Row>
                 </Form>
               </Card>
@@ -431,15 +601,21 @@ const bank_info = () => {
 
             <Col span={12}>
               <Card title="LỊCH SỬ">
-                <Row gutter={16}>
-                  <Form.Item name="bank_note" label="Ghi chú">
-                    <Input.TextArea />
-                  </Form.Item>
+                <Row>
+                  <Col span={24}>
+                    <Input.TextArea
+                      value={noteValue}
+                      rows={4}
+                      onChange={handleChangeNote}
+                    />
+                  </Col>
                 </Row>
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
+                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
+                  [;Ctrl + K, Ctrl + ];
                 </span>
               </Card>
             </Col>

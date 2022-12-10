@@ -12,7 +12,7 @@ import {
   Avatar,
   List,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import {
@@ -84,14 +84,24 @@ const etsy_info = () => {
     infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
       etsy_date_start: moment(data.etsy_date_start),
-      etsy_date_verify: moment(data.etsy_date_verify)
+      etsy_date_verify: moment(data.etsy_date_verify),
     });
-    setNoteValue(data.etsy_note)
+    setInfo(data);
+    setNoteValue(data.etsy_note);
     setSelectListInfo(data.list_view.split(","));
   };
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
+  const viewInfo = useCallback(
+    (type, id) => {
+      {
+        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      }
+    },
+    [info]
+  );
 
   useEffect(() => {
     getInfoetsy();
@@ -102,60 +112,60 @@ const etsy_info = () => {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "",
     },
     {
       title: "MAIL",
       thumbnail:
         "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "M_101|mingdepzai@gmail.com|170988876@|live",
+      value: "",
     },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "S_101|0588965555|Viettel|Live",
+      value: "",
     },
     {
       title: "BANK",
       thumbnail:
         "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
-      value: "I_101|ACB|76668888|Live",
+      value: "",
     },
     {
       title: "CARD",
       thumbnail:
         "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
-      value: "C_101|42616565465456|7/26|345",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value: "EB_101|shopphungming|phung873458|live",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "ET_101|shopphungming|phung873458|live",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "AM_101|shopphungming|phung873458|live",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
         "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "PE_101|shopphungming|phung873458|live",
+      value: "",
     },
     {
       title: "DEVICE",
       thumbnail:
         "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "PC06|E_88888|live",
+      value: "",
     },
   ];
 
@@ -172,7 +182,7 @@ const etsy_info = () => {
 
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
-    localStorage.setItem("esty_select", values);
+    localStorage.setItem("etsy_select", values);
   };
 
   const handleChangeNote = (e) => {
@@ -528,12 +538,11 @@ const etsy_info = () => {
                                 <Avatar
                                   style={{ cursor: "pointer" }}
                                   onClick={() =>
-                                    window.open(
-                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
-                                        "_class/table/" +
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ]}`
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
                                     )
                                   }
                                   src={item.thumbnail}
@@ -541,12 +550,11 @@ const etsy_info = () => {
                                 <a
                                   href="#"
                                   onClick={() =>
-                                    window.open(
-                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
-                                        "_class/table/" +
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ]}`
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
                                     )
                                   }
                                 >

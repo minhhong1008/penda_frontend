@@ -348,7 +348,7 @@ const Info_info = () => {
                   </Row>
                 </Form>
               </Card>
-            </Col>5
+            </Col>
 
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">

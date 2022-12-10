@@ -11,7 +11,6 @@ const Etsy_table = () => {
   const { etsys } = useSelector((state) => state.etsy);
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
-
   const history = useHistory();
   const columns = [
     {
