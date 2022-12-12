@@ -108,7 +108,7 @@ const Bank_class = () => {
   ];
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN THEO LỚP BANK VN">
+      <Card title="BẢNG TÀI KHOẢN THEO LỚP ETSY VN">
         <Card type="inner">
           <Table columns={columns} dataSource={data}></Table>
         </Card>

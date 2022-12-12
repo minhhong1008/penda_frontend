@@ -9,3 +9,24 @@ export const getsimInfo = (id) => {
   const url = `/sim/get/${id}`;
   return axiosClient.get(url);
 }
+
+export const getListsim = (payload) => {
+  let queryString = genQueryString(payload);
+  const url = `/sim/list?${queryString}`;
+  return axiosClient.get(url);
+}
+
+
+export const updatesimInfo = (payload, id) => {
+  const url = `/sim/update?id=${id}`;
+  return axiosClient.put(url, payload);
+}
+
+const genQueryString = function(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}

@@ -119,6 +119,12 @@ const etsy_info = () => {
   // List danh sách các trường trong bảng INFO
   const listInfo = [
     {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
+    {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
@@ -139,7 +145,7 @@ const etsy_info = () => {
     {
       title: "BANK",
       thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
       value: "",
     },
     {
@@ -172,9 +178,21 @@ const etsy_info = () => {
       value: "",
     },
     {
-      title: "DEVICE",
+      title: "FACKEBOOK",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
       value: "",
     },
   ];

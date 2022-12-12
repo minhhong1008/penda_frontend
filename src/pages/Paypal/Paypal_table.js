@@ -1,70 +1,147 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
+import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getListpaypalActions } from "../../actions/paypalActions";
 
 const Paypal_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { paypals } = useSelector((state) => state.paypal);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "paypal_id",
+      key: "paypal_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.paypal_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "paypal_user",
+      key: "paypal_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "paypal_device",
+      key: "paypal_device",
     },
     {
       title: "Lớp",
-      dataIndex: "paypal_vn",
-      key: "paypal_vn",
+      dataIndex: "paypal_class",
+      key: "paypal_class",
     },
     {
       title: "Limit",
-      dataIndex: "paypal_us",
-      key: "paypal_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "paypal_42496",
-      count_account: "Lớp 1",
-      paypal_vn: "0",
-      paypal_us: "0",
+      dataIndex: "paypal_limit",
+      key: "paypal_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        paypal_vn: "334",
-        paypal_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
-        count_account: "334",
-        paypal_vn: "334",
-        paypal_us: "0",
-      },
+      title: "active",
+      dataIndex: "paypal_active",
+      key: "paypal_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "paypaldate_sine",
+      key: "paypaldate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "paypaldate_upseller",
+      key: "paypaldate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "paypal_status",
+      key: "paypal_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "paypal_employee",
+      key: "paypal_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "paypaldate_class",
+      key: "paypaldate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "paypal_note",
+      key: "paypal_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListpaypalActions({
+        paypal_employee: newValue,
+      })
+    );
+  }
+
+  const getListpaypal = () => {
+    dispatch(
+      getListpaypalActions({
+        paypal_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListpaypal();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc paypal">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "paypal_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "paypal_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "paypal_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={paypals}></Table>
       </Card>
     </div>
   );

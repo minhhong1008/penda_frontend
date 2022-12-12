@@ -79,8 +79,9 @@ import Other_table from "./pages/Other/Other_table";
 import Other_info from "./pages/Other/Other_info";
 
 // Create
-
 import Create from "./pages/Create/Create";
+import Tools_list from "./pages/Tools/tools_list";
+import CCCD from "./pages/Tools/cccd/cccd";
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -351,6 +352,17 @@ const App = () => (
           component={Create}
         />
 
+        <Route
+          path="/products/tools"
+          exact
+          component={Tools_list}
+        />
+
+        <Route
+          path="/products/cccd"
+          exact
+          component={CCCD}
+        />
 
         <Route exact path="/rtl" component={Rtl} />
         <Route exact path="/profile" component={Profile} />

@@ -17,7 +17,7 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListEbayActions } from "../../actions/ebayActions";
+import { getListebayActions } from "../../actions/ebayActions";
 
 const Ebay_table = () => {
   const queryString = window.location.search;
@@ -101,7 +101,7 @@ const Ebay_table = () => {
   const handleChangeFilter = (values) => {
     let newValue = values.join(',');
     dispatch(
-      getListEbayActions({
+      getListebayActions({
         ebay_employee: newValue,
       })
     );
@@ -109,7 +109,7 @@ const Ebay_table = () => {
 
   const getListEbay = () => {
     dispatch(
-      getListEbayActions({
+      getListebayActions({
         ebay_class: class_name,
       })
     );

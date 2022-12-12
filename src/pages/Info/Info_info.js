@@ -13,167 +13,207 @@ import {
   List,
   Upload,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { postInfoInfo, getInfoInfo } from "../../api/info/index";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  postinfoInfo,
+  getinfoInfo,
+  updateinfoInfo,
+} from "../../api/info/index";
+import { showError, showSuccess } from "../../utils";
+import { PlusOutlined } from '@ant-design/icons';
+
+
 const Info_info = () => {
-  const [infoData, setInfoData] = useState({
-    info_id: "hahahah",
-  });
-
-  let { id } = useParams();
-  const [form] = Form.useForm();
   const { Option } = Select;
+
+  // Lấy ID từ trên param url
+  let { id } = useParams();
+  // Khai báo các kho dữ liệu
+  const [infoData, setinfoData] = useState({});
+  const [dateData, setDateData] = useState();
+  const [info, setInfo] = useState();
+  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [noteValue, setNoteValue] = useState("");
+  // Khai báo kho dữ liệu của các form
+  const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
+
+  // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
-    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-    //values.status = values.status.join(",");
-    const data = await postInfoInfo(values);
-    console.log(data);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  const getInfoInfo = async () => {
-    const { data } = await getInfoInfo(id);
-    let newData = {};
-    //newData.status = data.status.split(",");
-    newData.info_id = data.info_id;
-    newData.passport = data.passport;
-    newData.birth_date = data.birth_date;
-    console.log(newData);
-    setInfoData(newData);
-  };
-
-  useEffect(() => {
-    getInfoInfo();
-  }, []);
-
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url:
-        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-2",
-      name: "image.png",
-      status: "done",
-      url:
-        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-3",
-      name: "image.png",
-      status: "done",
-      url:
-        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-4",
-      name: "image.png",
-      status: "done",
-      url:
-        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-xxx",
-      percent: 50,
-      name: "image.png",
-      status: "uploading",
-      url:
-        "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-5",
-      name: "image.png",
-      status: "error",
-    },
-  ]);
-  const handleCancel = () => setPreviewOpen(false);
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+    const newValue = {
+      ...info,
+      ...values,
+     
+      info_type: values?.info_type ? values.info_type.join(",") : "",
+      
+      info_owner: values?.info_owner ? values.info_owner.join(",") : "",
+      info_employee: values?.info_employee
+        ? values.info_employee.join(",")
+        : "",
+      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      info_date_start: dateData?.info_date_start
+        ? moment(dateData.info_date_start).format("MM-DD-YYYY")
+        : "",
+      info_date_verify: dateData?.info_date_verify
+        ? moment(dateData.info_date_verify).format("MM-DD-YYYY")
+        : "",
+      info_note: noteValue,
+    };
+    const response = await updateinfoInfo(newValue, id);
+    if (response.status == 200) {
+      showSuccess("Sửa thành công");
+    } else {
+      showError("Sửa không thành công");
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
   };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
+  // Hàm gể gửi dữ liệu date
+  const onFinishDate = (values) => {
+    setDateData(values);
+  };
+  // Hàm gửi dữ liệu từ form info
+  const onFinishInfo = (values) => {
+    setInfo(values);
+  };
+  // Hàm gọi dữ liệu về từ database
+  const getInfoinfo = async () => {
+    const { data } = await getinfoInfo(id);
+    const newData = {
+      ...data,
+      info_employee: data.info_employee.split(","),
+      info_type: data.info_type.split(","),
+      info_owner: data.info_owner.split(","),
+    };
+    form.setFieldsValue(newData);
+    infoForm.setFieldsValue(newData);
+    dateForm.setFieldsValue({
+      info_date_start: moment(data.info_date_start),
+      info_date_verify: moment(data.info_date_verify),
+    });
+    setInfo(data);
+    setNoteValue(data.info_note);
+    setSelectListInfo(data.list_view.split(","));
+  };
+
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      {
+        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      }
+    },
+    [info]
   );
 
-  const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
+  useEffect(() => {
+    getInfoinfo();
+  }, []);
 
+  // List danh sách các trường trong bảng INFO
   const listInfo = [
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
+    {
+      title: "INFO",
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "",
+    },
     {
       title: "MAIL",
       thumbnail:
         "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "",
+    },
+    {
+      title: "SIM",
+      thumbnail:
+        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
+      value: "",
+    },
+    {
+      title: "BANK",
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+      value: "",
+    },
+    {
+      title: "CARD",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value:
-        "G_101|phungvanminh@gmail.com|phung873458|pc06.penda@gmail.com|live",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "03885652654|live",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://www.clipartkey.com/mpngs/m/130-1300370_payoneer-logo-circle.png",
-      value: "ACB|788888888|Phung Van Minh|live",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png",
-      value: "4256598896565654|2/26|456|live",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
-        "https://www.kibrispdr.org/data/1065/download-logo-shopee-ico-8.jpg",
-      value: "PC06|E_88888|live",
+        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
+      value: "",
+    },
+    {
+      title: "FACKEBOOK",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
+      value: "",
     },
   ];
+
+  //  List danh sách các trường trong bảng DATE
+  const listDate = [
+    {
+      title: "Ngày tạo",
+      value: "info_date_start",
+    },
+    {
+      title: "Ngày verify",
+      value: "info_date_verify",
+    },
+  ];
+
+  // Hàm để thay đổi dữ liệu của select list info
+  const changeSelectListInfo = (values) => {
+    setSelectListInfo(values);
+  };
+
+  // Hàm để thay đổi dữ liệu của note
+  const handleChangeNote = (e) => {
+    setNoteValue(e.target.value);
+  };
 
   return (
     <Card
@@ -448,7 +488,7 @@ const Info_info = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col span={24}>
+                    {/* <Col span={24}>
                       <Form.Item name="info_image">
                         <Upload
                           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -460,7 +500,7 @@ const Info_info = () => {
                           {fileList.length >= 8 ? null : uploadButton}
                         </Upload>
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                   </Row>
                 </Form>
               </Card>
@@ -468,19 +508,82 @@ const Info_info = () => {
 
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-                <List
-                  itemLayout="horizontal"
-                  dataSource={listInfo}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src={item.thumbnail} />}
-                        title={<a href="https://ant.design">{item.title}</a>}
-                        description={<Input />}
-                      />
-                    </List.Item>
-                  )}
-                />
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionLabelProp="label"
+                  onChange={changeSelectListInfo}
+                  value={selectListInfo}
+                >
+                  {listInfo.map((item) => {
+                    return (
+                      <Option
+                        value={item.title.toLocaleLowerCase() + "_id"}
+                        label={item.title}
+                      >
+                        <div className="demo-option-label-item">
+                          {item.title}
+                        </div>
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <Form
+                  onFinish={onFinishInfo}
+                  initialValues={info}
+                  form={infoForm}
+                  name="info"
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listInfo}
+                    renderItem={(item) => (
+                      <>
+                        {selectListInfo.indexOf(
+                          item.title.toLocaleLowerCase() + "_id"
+                        ) != -1 ? (
+                          <List.Item>
+                            <div className="custom_info_item">
+                              <div className="meta_data">
+                                <Avatar
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                  src={item.thumbnail}
+                                />
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                >
+                                  {item.title}
+                                </a>
+                              </div>
+                              <Form.Item
+                                name={item.title.toLocaleLowerCase() + "_id"}
+                              >
+                                <Input onChange={() => infoForm.submit()} />
+                              </Form.Item>
+                            </div>
+                          </List.Item>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </Form>
               </Card>
             </Col>
           </Row>
@@ -492,41 +595,66 @@ const Info_info = () => {
             <Col span={12}>
               <Card title="THỜI GIAN">
                 <Form
-                  form={form}
-                  name="basic"
-                  onFinish={onFinish}
-                  initialValues={infoData}
-                  autoComplete="off"
-                ></Form>
+                  form={dateForm}
+                  onFinish={onFinishDate}
+                  name="date"
+                  initialValues={dateData}
+                >
+                  <Row gutter={16}>
+                    {listDate.map((item, index) => {
+                      return (
+                        <Col span={8} key={index}>
+                          <Form.Item label={item.title} name={item.value}>
+                            <DatePicker
+                              format="MM-DD-YYYY"
+                              onChange={() => dateForm.submit()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      );
+                    })}
+                  </Row>
+                </Form>
               </Card>
             </Col>
 
             <Col span={12}>
               <Card title="LỊCH SỬ">
-                <Row gutter={16}>
-                  <Form.Item name="info_note" label="Ghi chú">
-                    <Input.TextArea />
-                  </Form.Item>
+                <Row>
+                  <Col span={24}>
+                    <Input.TextArea
+                      value={noteValue}
+                      rows={4}
+                      onChange={handleChangeNote}
+                    />
+                  </Col>
                 </Row>
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
+                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
+                  [;Ctrl + K, Ctrl + ];
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
       </Tabs>
-      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+      {/* <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
         <img
           alt="example"
           style={{
-            width: '100%',
+            width: "100%",
           }}
           src={previewImage}
         />
-      </Modal>
+      </Modal> */}
     </Card>
   );
 };

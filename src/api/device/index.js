@@ -9,3 +9,24 @@ export const getdeviceInfo = (id) => {
   const url = `/device/get/${id}`;
   return axiosClient.get(url);
 }
+
+export const getListdevice = (payload) => {
+  let queryString = genQueryString(payload);
+  const url = `/device/list?${queryString}`;
+  return axiosClient.get(url);
+}
+
+
+export const updatedeviceInfo = (payload, id) => {
+  const url = `/device/update?id=${id}`;
+  return axiosClient.put(url, payload);
+}
+
+const genQueryString = function(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}

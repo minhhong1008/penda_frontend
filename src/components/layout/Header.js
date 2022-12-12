@@ -263,7 +263,7 @@ function Header({
         <Col span={24} md={6}>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to="/products">Products</NavLink>
             </Breadcrumb.Item>
             <Breadcrumb.Item style={{ textTransform: "capitalize" }}>
               {name.replace("/", "")}
@@ -387,7 +387,7 @@ function Header({
                     <Button type="black" size="large">
                       FREE DOWNLOAD
                     </Button>
-                    <Button size="large">VIEW DOCUMENTATION</Button>
+                    <Button size="large">VIEW</Button>
                   </ButtonContainer>
                 </div>
                 <div className="viewstar">

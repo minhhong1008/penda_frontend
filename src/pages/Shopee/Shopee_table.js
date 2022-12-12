@@ -1,70 +1,147 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
+import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getListshopeeActions } from "../../actions/shopeeActions";
 
 const Shopee_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { shopees } = useSelector((state) => state.shopee);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "shopee_id",
+      key: "shopee_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.shopee_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "shopee_user",
+      key: "shopee_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "shopee_device",
+      key: "shopee_device",
     },
     {
       title: "Lớp",
-      dataIndex: "shopee_vn",
-      key: "shopee_vn",
+      dataIndex: "shopee_class",
+      key: "shopee_class",
     },
     {
       title: "Limit",
-      dataIndex: "shopee_us",
-      key: "shopee_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "shopee_42496",
-      count_account: "Lớp 1",
-      shopee_vn: "0",
-      shopee_us: "0",
+      dataIndex: "shopee_limit",
+      key: "shopee_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        shopee_vn: "334",
-        shopee_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... shopee...",
-        count_account: "334",
-        shopee_vn: "334",
-        shopee_us: "0",
-      },
+      title: "active",
+      dataIndex: "shopee_active",
+      key: "shopee_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "shopeedate_sine",
+      key: "shopeedate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "shopeedate_upseller",
+      key: "shopeedate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "shopee_status",
+      key: "shopee_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "shopee_employee",
+      key: "shopee_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "shopeedate_class",
+      key: "shopeedate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "shopee_note",
+      key: "shopee_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListshopeeActions({
+        shopee_employee: newValue,
+      })
+    );
+  }
+
+  const getListshopee = () => {
+    dispatch(
+      getListshopeeActions({
+        shopee_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListshopee();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc shopee">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "shopee_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "shopee_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "shopee_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={shopees}></Table>
       </Card>
     </div>
   );

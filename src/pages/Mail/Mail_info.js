@@ -12,92 +12,212 @@ import {
   Avatar,
   List,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { postmailInfo, getmailInfo } from "../../api/mail/index";
+import {
+  postmailInfo,
+  getmailInfo,
+  updatemailInfo,
+} from "../../api/mail/index";
+import { showError, showSuccess } from "../../utils";
+
 const mail_info = () => {
-  const [mailData, setmailData] = useState({
-    mail_id: "M_1000",
-  });
-
-  let { id } = useParams();
-  const [form] = Form.useForm();
   const { Option } = Select;
-  const onFinish = async (values) => {
-    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-    //values.status = values.status.join(",");
-    const data = await postmailInfo(values);
-    console.log(data);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
 
+// Lấy ID từ trên param url
+  let { id } = useParams();
+// Khai báo các kho dữ liệu
+  const [mailData, setmailData] = useState({});
+  const [dateData, setDateData] = useState();
+  const [info, setInfo] = useState();
+  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [noteValue, setNoteValue] = useState("");
+// Khai báo kho dữ liệu của các form
+  const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
+
+// Hàm để gửi dữ liệu đi
+  const onFinish = async (values) => {
+    const newValue = {
+      ...info,
+      ...values,
+      mail_processing: values?.mail_processing
+        ? values.mail_processing.join(",")
+        : "",
+      mail_type: values?.mail_type ? values.mail_type.join(",") : "",
+      mail_sell_status: values?.mail_sell_status
+        ? values.mail_sell_status.join(",")
+        : "",
+      mail_owner: values?.mail_owner ? values.mail_owner.join(",") : "",
+      mail_employee: values?.mail_employee
+        ? values.mail_employee.join(",")
+        : "",
+      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      mail_date_start: dateData?.mail_date_start
+        ? moment(dateData.mail_date_start).format("MM-DD-YYYY")
+        : "",
+      mail_date_verify: dateData?.mail_date_verify
+        ? moment(dateData.mail_date_verify).format("MM-DD-YYYY")
+        : "",
+      mail_note: noteValue,
+    };
+    const response = await updatemailInfo(newValue, id);
+    if (response.status == 200) {
+      showSuccess("Sửa thành công");
+    } else {
+      showError("Sửa không thành công");
+    }
+  };
+// Hàm gể gửi dữ liệu date
+  const onFinishDate = (values) => {
+    setDateData(values);
+  };
+// Hàm gửi dữ liệu từ form info
+  const onFinishInfo = (values) => {
+    setInfo(values);
+  };
+// Hàm gọi dữ liệu về từ database
   const getInfomail = async () => {
     const { data } = await getmailInfo(id);
-    let newData = {};
-    //newData.status = data.status.split(",");
-    newData.mail_id = data.mail_id;
-    newData.passport = data.passport;
-    newData.birth_date = data.birth_date;
-    console.log(newData);
-    setmailData(newData);
+    const newData = {
+      ...data,
+      mail_employee: data.mail_employee.split(","),
+      mail_processing: data.mail_processing.split(","),
+      mail_type: data.mail_type.split(","),
+      mail_sell_status: data.mail_sell_status.split(","),
+      mail_owner: data.mail_owner.split(","),
+    };
+    form.setFieldsValue(newData);
+    infoForm.setFieldsValue(newData);
+    dateForm.setFieldsValue({
+      mail_date_start: moment(data.mail_date_start),
+      mail_date_verify: moment(data.mail_date_verify),
+    });
+    setInfo(data);
+    setNoteValue(data.mail_note);
+    setSelectListInfo(data.list_view.split(","));
   };
 
+ 
+// Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      {
+        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      }
+    },
+    [info]
+  );
+
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfomail();
   }, []);
 
+  // List danh sách các trường trong bảng INFO
   const listInfo = [
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
+    {
+      title: "INFO",
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "",
+    },
+    {
+      title: "MAIL",
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "",
+    },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "",
+    },
+    {
+      title: "BANK",
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+      value: "",
+    },
+    {
+      title: "CARD",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value:
-        "G_101|phungvanminh@gmail.com|phung873458|pc06.penda@gmail.com|live",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "03885652654|live",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://www.clipartkey.com/mpngs/m/130-1300370_payoneer-logo-circle.png",
-      value: "ACB|788888888|Phung Van Minh|live",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://icons.iconarchive.com/icons/martz90/circle-addon1/512/paypal-icon.png",
-      value: "4256598896565654|2/26|456|live",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
         "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
-      title: "DEVICE",
-      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "PC06|E_88888|live",
+      title: "FACKEBOOK",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
+      value: "",
     },
   ];
+
+  //  List danh sách các trường trong bảng DATE
+  const listDate = [
+    {
+      title: "Ngày tạo",
+      value: "mail_date_start",
+    },
+    {
+      title: "Ngày verify",
+      value: "mail_date_verify",
+    },
+  ];
+
+  // Hàm để thay đổi dữ liệu của select list info
+  const changeSelectListInfo = (values) => {
+    setSelectListInfo(values);
+  };
+
+  // Hàm để thay đổi dữ liệu của note
+  const handleChangeNote = (e) => {
+    setNoteValue(e.target.value);
+  };
 
   return (
     <Card
@@ -109,7 +229,7 @@ const mail_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN mail">
+              <Card title="THÔNG TIN ETSY">
                 <Form
                   form={form}
                   name="basic"
@@ -143,47 +263,118 @@ const mail_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
-
                   <Row gutter={16}>
-                    <Col span={12}>
-                      <Form.Item label="mail recover" name="mail_recover">
-                        <Input size="small" placeholder="input here" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item label="mail forward" name="mail_forward">
+                    <Col span={24}>
+                      <Form.Item label="mail chi tiết" name="mail_detail">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
+                  <Form.Item label="Tiến trình" name="mail_processing">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      <Option value="Mail" label="Mail">
+                        <div className="demo-option-label-item">Mail</div>
+                      </Option>
+                      <Option value="Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="Verify" label="Verify">
+                        <div className="demo-option-label-item">Verify</div>
+                      </Option>
+                      <Option value="Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
+                      </Option>
+                      <Option value="List" label="List">
+                        <div className="demo-option-label-item">List</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
 
-                  <Form.Item label="Loại mail" name="mail_types">
+                  <Form.Item label="Loại mail" name="mail_type">
                     <Select
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
                     >
-                      <Option value="Gmail" label="Gmail">
-                        <div className="demo-option-label-item">Gmail</div>
-                      </Option>
-                      <Option value="Hotmail" label="Hotmail">
-                        <div className="demo-option-label-item">Hotmail</div>
-                      </Option>
                       <Option value="VN" label="VN">
                         <div className="demo-option-label-item">VN</div>
                       </Option>
                       <Option value="US" label="US">
                         <div className="demo-option-label-item">US</div>
                       </Option>
-                      <Option value="New" label="New">
-                        <div className="demo-option-label-item">New</div>
+                      <Option value="mail Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
                       </Option>
-                      <Option value="verify" label="verify">
-                        <div className="demo-option-label-item">verify</div>
+                      <Option value="mail Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
                       </Option>
-                      <Option value="trust" label="trust">
-                        <div className="demo-option-label-item">trust</div>
+                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
+                        <div className="demo-option-label-item">
+                          Gỡ Suspended
+                        </div>
+                      </Option>
+                      <Option value="ADS" label="ADS">
+                        <div className="demo-option-label-item">Quảng cáo</div>
+                      </Option>
+                      <Option value="Above Standard" label="Above Standard">
+                        <div className="demo-option-label-item">
+                          Above Standard
+                        </div>
+                      </Option>
+                      <Option value="Top Rate" label="Top Rate">
+                        <div className="demo-option-label-item">Top Rate</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="TT Bán" name="mail_sell_status">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
+                        <div className="demo-option-label-item">
+                          Chuẩn bị bán
+                        </div>
+                      </Option>
+                      <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
+                        <div className="demo-option-label-item">
+                          Đủ điều kiện bán
+                        </div>
+                      </Option>
+
+                      <Option value="Bán tài khoản" label="Bán tài khoản">
+                        <div className="demo-option-label-item">
+                          Bán tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Đang giao dịch" label="Đang giao dịch">
+                        <div className="demo-option-label-item">
+                          Đang giao dịch
+                        </div>
+                      </Option>
+
+                      <Option value="Bán thành công" label="Bán thành công">
+                        <div className="demo-option-label-item">
+                          Bán thành công
+                        </div>
+                      </Option>
+                      <Option value="Bảo hành" label="Bảo hành">
+                        <div className="demo-option-label-item">Bảo hành</div>
+                      </Option>
+                      <Option value="Hết bảo hành" label="Hết bảo hành">
+                        <div className="demo-option-label-item">
+                          Hết bảo hành
+                        </div>
                       </Option>
                     </Select>
                   </Form.Item>
@@ -318,14 +509,14 @@ const mail_info = () => {
                               Lớp 12 Chuyển
                             </div>
                           </Option>
-                          <Option value="Lớp 20" label="Lớp 20 Mail error">
+                          <Option value="Lớp 20" label="Lớp 20 mail error">
                             <div className="demo-option-label-item">
-                              Lớp 20 Mail error
+                              Lớp 20 mail error
                             </div>
                           </Option>
-                          <Option value="Lớp 21" label="Lớp 21 Mail die">
+                          <Option value="Lớp 21" label="Lớp 21 mail die">
                             <div className="demo-option-label-item">
-                              Lớp 21 Mail die
+                              Lớp 21 mail die
                             </div>
                           </Option>
                         </Select>
@@ -337,19 +528,82 @@ const mail_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-                <List
-                  itemLayout="horizontal"
-                  dataSource={listInfo}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src={item.thumbnail} />}
-                        title={<a href="https://ant.design">{item.title}</a>}
-                        description={<Input />}
-                      />
-                    </List.Item>
-                  )}
-                />
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionLabelProp="label"
+                  onChange={changeSelectListInfo}
+                  value={selectListInfo}
+                >
+                  {listInfo.map((item) => {
+                    return (
+                      <Option
+                        value={item.title.toLocaleLowerCase() + "_id"}
+                        label={item.title}
+                      >
+                        <div className="demo-option-label-item">
+                          {item.title}
+                        </div>
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <Form
+                  onFinish={onFinishInfo}
+                  initialValues={info}
+                  form={infoForm}
+                  name="info"
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listInfo}
+                    renderItem={(item) => (
+                      <>
+                        {selectListInfo.indexOf(
+                          item.title.toLocaleLowerCase() + "_id"
+                        ) != -1 ? (
+                          <List.Item>
+                            <div className="custom_info_item">
+                              <div className="meta_data">
+                                <Avatar
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                  src={item.thumbnail}
+                                />
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                >
+                                  {item.title}
+                                </a>
+                              </div>
+                              <Form.Item
+                                name={item.title.toLocaleLowerCase() + "_id"}
+                              >
+                                <Input onChange={() => infoForm.submit()} />
+                              </Form.Item>
+                            </div>
+                          </List.Item>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </Form>
               </Card>
             </Col>
           </Row>
@@ -361,23 +615,24 @@ const mail_info = () => {
             <Col span={12}>
               <Card title="THỜI GIAN">
                 <Form
-                  form={form}
-                  name="basic"
-                  onFinish={onFinish}
-                  initialValues={mailData}
-                  autoComplete="off"
+                  form={dateForm}
+                  onFinish={onFinishDate}
+                  name="date"
+                  initialValues={dateData}
                 >
                   <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày tạo" name="maildate_creat">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày verify" name="maildate_verify">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
+                    {listDate.map((item, index) => {
+                      return (
+                        <Col span={8} key={index}>
+                          <Form.Item label={item.title} name={item.value}>
+                            <DatePicker
+                              format="MM-DD-YYYY"
+                              onChange={() => dateForm.submit()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      );
+                    })}
                   </Row>
                 </Form>
               </Card>
@@ -385,15 +640,21 @@ const mail_info = () => {
 
             <Col span={12}>
               <Card title="LỊCH SỬ">
-                <Row gutter={16}>
-                  <Form.Item name="mail_note" label="Ghi chú">
-                    <Input.TextArea />
-                  </Form.Item>
+                <Row>
+                  <Col span={24}>
+                    <Input.TextArea
+                      value={noteValue}
+                      rows={4}
+                      onChange={handleChangeNote}
+                    />
+                  </Col>
                 </Row>
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
+                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
+                  [;Ctrl + K, Ctrl + ];
                 </span>
               </Card>
             </Col>

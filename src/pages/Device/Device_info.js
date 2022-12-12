@@ -12,100 +12,212 @@ import {
   Avatar,
   List,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { postdeviceInfo, getdeviceInfo } from "../../api/device/index";
+import {
+  postdeviceInfo,
+  getdeviceInfo,
+  updatedeviceInfo,
+} from "../../api/device/index";
+import { showError, showSuccess } from "../../utils";
+
 const device_info = () => {
-  const [deviceData, setdeviceData] = useState({
-    device_id: "D_1000",
-  });
-
-  let { id } = useParams();
-  const [form] = Form.useForm();
   const { Option } = Select;
-  const onFinish = async (values) => {
-    values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
-    //values.status = values.status.join(",");
-    const data = await postdeviceInfo(values);
-    console.log(data);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
 
+// Lấy ID từ trên param url
+  let { id } = useParams();
+// Khai báo các kho dữ liệu
+  const [deviceData, setdeviceData] = useState({});
+  const [dateData, setDateData] = useState();
+  const [info, setInfo] = useState();
+  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [noteValue, setNoteValue] = useState("");
+// Khai báo kho dữ liệu của các form
+  const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
+
+// Hàm để gửi dữ liệu đi
+  const onFinish = async (values) => {
+    const newValue = {
+      ...info,
+      ...values,
+      device_processing: values?.device_processing
+        ? values.device_processing.join(",")
+        : "",
+      device_type: values?.device_type ? values.device_type.join(",") : "",
+      device_sell_status: values?.device_sell_status
+        ? values.device_sell_status.join(",")
+        : "",
+      device_owner: values?.device_owner ? values.device_owner.join(",") : "",
+      device_employee: values?.device_employee
+        ? values.device_employee.join(",")
+        : "",
+      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      device_date_start: dateData?.device_date_start
+        ? moment(dateData.device_date_start).format("MM-DD-YYYY")
+        : "",
+      device_date_verify: dateData?.device_date_verify
+        ? moment(dateData.device_date_verify).format("MM-DD-YYYY")
+        : "",
+      device_note: noteValue,
+    };
+    const response = await updatedeviceInfo(newValue, id);
+    if (response.status == 200) {
+      showSuccess("Sửa thành công");
+    } else {
+      showError("Sửa không thành công");
+    }
+  };
+// Hàm gể gửi dữ liệu date
+  const onFinishDate = (values) => {
+    setDateData(values);
+  };
+// Hàm gửi dữ liệu từ form info
+  const onFinishInfo = (values) => {
+    setInfo(values);
+  };
+// Hàm gọi dữ liệu về từ database
   const getInfodevice = async () => {
     const { data } = await getdeviceInfo(id);
-    let newData = {};
-    //newData.status = data.status.split(",");
-    newData.device_id = data.device_id;
-    newData.passport = data.passport;
-    newData.birth_date = data.birth_date;
-    console.log(newData);
-    setdeviceData(newData);
+    const newData = {
+      ...data,
+      device_employee: data.device_employee.split(","),
+      device_processing: data.device_processing.split(","),
+      device_type: data.device_type.split(","),
+      device_sell_status: data.device_sell_status.split(","),
+      device_owner: data.device_owner.split(","),
+    };
+    form.setFieldsValue(newData);
+    infoForm.setFieldsValue(newData);
+    dateForm.setFieldsValue({
+      device_date_start: moment(data.device_date_start),
+      device_date_verify: moment(data.device_date_verify),
+    });
+    setInfo(data);
+    setNoteValue(data.device_note);
+    setSelectListInfo(data.list_view.split(","));
   };
 
+ 
+// Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      {
+        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      }
+    },
+    [info]
+  );
+
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfodevice();
   }, []);
 
+  // List danh sách các trường trong bảng INFO
   const listInfo = [
     {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
+    {
       title: "INFO",
-      thumbnail: "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "",
     },
     {
       title: "MAIL",
-      thumbnail: "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "",
     },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "",
     },
     {
       title: "BANK",
-      thumbnail: "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-bank-flat-design-yellow-round-web-icon.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+      value: "",
     },
     {
       title: "CARD",
-      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value:
-        "G_101|phungvanminh@gdevice.com|phung873458|pc06.penda@gdevice.com|live",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "03885652654|live",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
         "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "PC06|E_88888|live",
+      value: "",
     },
     {
-      title: "DEVICE",
-      thumbnail: "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "PC06|E_88888|live",
+      title: "FACKEBOOK",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
+      value: "",
     },
   ];
+
+  //  List danh sách các trường trong bảng DATE
+  const listDate = [
+    {
+      title: "Ngày tạo",
+      value: "device_date_start",
+    },
+    {
+      title: "Ngày verify",
+      value: "device_date_verify",
+    },
+  ];
+
+  // Hàm để thay đổi dữ liệu của select list info
+  const changeSelectListInfo = (values) => {
+    setSelectListInfo(values);
+  };
+
+  // Hàm để thay đổi dữ liệu của note
+  const handleChangeNote = (e) => {
+    setNoteValue(e.target.value);
+  };
 
   return (
     <Card
@@ -117,7 +229,7 @@ const device_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN device">
+              <Card title="THÔNG TIN DEVICE">
                 <Form
                   form={form}
                   name="basic"
@@ -151,31 +263,118 @@ const device_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
-                  <Form.Item label="Loại device" name="device_types">
+                  <Row gutter={16}>
+                    <Col span={24}>
+                      <Form.Item label="device chi tiết" name="device_detail">
+                        <Input size="small" placeholder="input here" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Form.Item label="Tiến trình" name="device_processing">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      <Option value="Mail" label="Mail">
+                        <div className="demo-option-label-item">Mail</div>
+                      </Option>
+                      <Option value="Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="Verify" label="Verify">
+                        <div className="demo-option-label-item">Verify</div>
+                      </Option>
+                      <Option value="Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
+                      </Option>
+                      <Option value="List" label="List">
+                        <div className="demo-option-label-item">List</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="Loại device" name="device_type">
                     <Select
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
                     >
-                      
-                      <Option value="PC" label="PC">
-                        <div className="demo-option-label-item">PC</div>
+                      <Option value="VN" label="VN">
+                        <div className="demo-option-label-item">VN</div>
                       </Option>
-                      <Option value="Phone" label="Phone">
-                        <div className="demo-option-label-item">Phone</div>
+                      <Option value="US" label="US">
+                        <div className="demo-option-label-item">US</div>
                       </Option>
-                      <Option value="VPS" label="VPS">
-                        <div className="demo-option-label-item">VPS</div>
+                      <Option value="device Buyer" label="Buyer">
+                        <div className="demo-option-label-item">Buyer</div>
                       </Option>
-                      <Option value="VMW" label="VMW">
-                        <div className="demo-option-label-item">VMW</div>
+                      <Option value="device Seller" label="Seller">
+                        <div className="demo-option-label-item">Seller</div>
                       </Option>
-                      <Option value="Antidetect" label="Antidetect">
-                        <div className="demo-option-label-item">Antidetect</div>
+                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
+                        <div className="demo-option-label-item">
+                          Gỡ Suspended
+                        </div>
                       </Option>
-                      <Option value="Gologin" label="Gologin">
-                        <div className="demo-option-label-item">Gologin</div>
+                      <Option value="ADS" label="ADS">
+                        <div className="demo-option-label-item">Quảng cáo</div>
+                      </Option>
+                      <Option value="Above Standard" label="Above Standard">
+                        <div className="demo-option-label-item">
+                          Above Standard
+                        </div>
+                      </Option>
+                      <Option value="Top Rate" label="Top Rate">
+                        <div className="demo-option-label-item">Top Rate</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+
+                  <Form.Item label="TT Bán" name="device_sell_status">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                    >
+                      <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
+                        <div className="demo-option-label-item">
+                          Chuẩn bị bán
+                        </div>
+                      </Option>
+                      <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
+                        <div className="demo-option-label-item">
+                          Đủ điều kiện bán
+                        </div>
+                      </Option>
+
+                      <Option value="Bán tài khoản" label="Bán tài khoản">
+                        <div className="demo-option-label-item">
+                          Bán tài khoản
+                        </div>
+                      </Option>
+                      <Option value="Đang giao dịch" label="Đang giao dịch">
+                        <div className="demo-option-label-item">
+                          Đang giao dịch
+                        </div>
+                      </Option>
+
+                      <Option value="Bán thành công" label="Bán thành công">
+                        <div className="demo-option-label-item">
+                          Bán thành công
+                        </div>
+                      </Option>
+                      <Option value="Bảo hành" label="Bảo hành">
+                        <div className="demo-option-label-item">Bảo hành</div>
+                      </Option>
+                      <Option value="Hết bảo hành" label="Hết bảo hành">
+                        <div className="demo-option-label-item">
+                          Hết bảo hành
+                        </div>
                       </Option>
                     </Select>
                   </Form.Item>
@@ -329,62 +528,82 @@ const device_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-              <Form.Item label="Hiển thị" name="device_view">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      
-                      <Option value="Info" label="Info">
-                        <div className="demo-option-label-item">Info</div>
+                <Select
+                  mode="multiple"
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionLabelProp="label"
+                  onChange={changeSelectListInfo}
+                  value={selectListInfo}
+                >
+                  {listInfo.map((item) => {
+                    return (
+                      <Option
+                        value={item.title.toLocaleLowerCase() + "_id"}
+                        label={item.title}
+                      >
+                        <div className="demo-option-label-item">
+                          {item.title}
+                        </div>
                       </Option>
-                      <Option value="Mail" label="Mail">
-                        <div className="demo-option-label-item">Mail</div>
-                      </Option>
-                      <Option value="Sim" label="Sim">
-                        <div className="demo-option-label-item">Sim</div>
-                      </Option>
-                      <Option value="Device" label="Device">
-                        <div className="demo-option-label-item">Device</div>
-                      </Option>
-                      <Option value="Bank" label="Bank">
-                        <div className="demo-option-label-item">Bank</div>
-                      </Option>
-                      <Option value="Payoneer" label="Payoneer">
-                        <div className="demo-option-label-item">Payoneer</div>
-                      </Option>
-                      <Option value="Paypal" label="Paypal">
-                        <div className="demo-option-label-item">Paypal</div>
-                      </Option>
-                      <Option value="Ebay" label="Ebay">
-                        <div className="demo-option-label-item">Ebay</div>
-                      </Option>
-                      <Option value="Etsy" label="Etsy">
-                        <div className="demo-option-label-item">Etsy</div>
-                      </Option>
-                      <Option value="Amazon" label="Amazon">
-                        <div className="demo-option-label-item">Amazon</div>
-                      </Option>
-                      <Option value="Shopee" label="Shopee">
-                        <div className="demo-option-label-item">Shopee</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-                <List
-                  itemLayout="horizontal"
-                  dataSource={listInfo}
-                  renderItem={(item) => (
-                    <List.Item>
-                      <List.Item.Meta
-                        avatar={<Avatar src={item.thumbnail} />}
-                        title={<a href="https://ant.design">{item.title}</a>}
-                        description={<Input />}
-                      />
-                    </List.Item>
-                  )}
-                />
+                    );
+                  })}
+                </Select>
+                <Form
+                  onFinish={onFinishInfo}
+                  initialValues={info}
+                  form={infoForm}
+                  name="info"
+                >
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listInfo}
+                    renderItem={(item) => (
+                      <>
+                        {selectListInfo.indexOf(
+                          item.title.toLocaleLowerCase() + "_id"
+                        ) != -1 ? (
+                          <List.Item>
+                            <div className="custom_info_item">
+                              <div className="meta_data">
+                                <Avatar
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                  src={item.thumbnail}
+                                />
+                                <a
+                                  href="#"
+                                  onClick={() =>
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
+                                    )
+                                  }
+                                >
+                                  {item.title}
+                                </a>
+                              </div>
+                              <Form.Item
+                                name={item.title.toLocaleLowerCase() + "_id"}
+                              >
+                                <Input onChange={() => infoForm.submit()} />
+                              </Form.Item>
+                            </div>
+                          </List.Item>
+                        ) : null}
+                      </>
+                    )}
+                  />
+                </Form>
               </Card>
             </Col>
           </Row>
@@ -396,23 +615,24 @@ const device_info = () => {
             <Col span={12}>
               <Card title="THỜI GIAN">
                 <Form
-                  form={form}
-                  name="basic"
-                  onFinish={onFinish}
-                  initialValues={deviceData}
-                  autoComplete="off"
+                  form={dateForm}
+                  onFinish={onFinishDate}
+                  name="date"
+                  initialValues={dateData}
                 >
                   <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Ngày tạo" name="devicedate_creat">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày verify" name="devicedate_verify">
-                        <DatePicker format={"DD/MM/YYYY"} />
-                      </Form.Item>
-                    </Col>
+                    {listDate.map((item, index) => {
+                      return (
+                        <Col span={8} key={index}>
+                          <Form.Item label={item.title} name={item.value}>
+                            <DatePicker
+                              format="MM-DD-YYYY"
+                              onChange={() => dateForm.submit()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      );
+                    })}
                   </Row>
                 </Form>
               </Card>
@@ -420,15 +640,21 @@ const device_info = () => {
 
             <Col span={12}>
               <Card title="LỊCH SỬ">
-                <Row gutter={16}>
-                  <Form.Item name="device_note" label="Ghi chú">
-                    <Input.TextArea />
-                  </Form.Item>
+                <Row>
+                  <Col span={24}>
+                    <Input.TextArea
+                      value={noteValue}
+                      rows={4}
+                      onChange={handleChangeNote}
+                    />
+                  </Col>
                 </Row>
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
+                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
+                  [;Ctrl + K, Ctrl + ];
                 </span>
               </Card>
             </Col>

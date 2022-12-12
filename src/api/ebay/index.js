@@ -1,22 +1,23 @@
 import axiosClient from "../axiosClient.js";
 
-export const postEbayInfo = (payload) => {
+export const postebayInfo = (payload) => {
   const url = `/ebay/create`;
   return axiosClient.post(url, payload);
 };
 
-export const getEbayInfo = (id) => {
+export const getebayInfo = (id) => {
   const url = `/ebay/get/${id}`;
   return axiosClient.get(url);
 }
 
-export const getListEbay = (payload) => {
+export const getListebay = (payload) => {
   let queryString = genQueryString(payload);
   const url = `/ebay/list?${queryString}`;
   return axiosClient.get(url);
 }
 
-export const updateEbayInfo = (payload, id) => {
+
+export const updateebayInfo = (payload, id) => {
   const url = `/ebay/update?id=${id}`;
   return axiosClient.put(url, payload);
 }

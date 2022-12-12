@@ -1,70 +1,147 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
+import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getListsimActions } from "../../actions/simActions";
 
 const Sim_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { sims } = useSelector((state) => state.sim);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "sim_id",
+      key: "sim_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.sim_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "sim_user",
+      key: "sim_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "sim_device",
+      key: "sim_device",
     },
     {
       title: "Lớp",
-      dataIndex: "sim_vn",
-      key: "sim_vn",
+      dataIndex: "sim_class",
+      key: "sim_class",
     },
     {
       title: "Limit",
-      dataIndex: "sim_us",
-      key: "sim_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "sim_42496",
-      count_account: "Lớp 1",
-      sim_vn: "0",
-      sim_us: "0",
+      dataIndex: "sim_limit",
+      key: "sim_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        sim_vn: "334",
-        sim_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... sim...",
-        count_account: "334",
-        sim_vn: "334",
-        sim_us: "0",
-      },
+      title: "active",
+      dataIndex: "sim_active",
+      key: "sim_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "simdate_sine",
+      key: "simdate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "simdate_upseller",
+      key: "simdate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "sim_status",
+      key: "sim_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "sim_employee",
+      key: "sim_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "simdate_class",
+      key: "simdate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "sim_note",
+      key: "sim_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListsimActions({
+        sim_employee: newValue,
+      })
+    );
+  }
+
+  const getListsim = () => {
+    dispatch(
+      getListsimActions({
+        sim_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListsim();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc sim">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "sim_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "sim_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "sim_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={sims}></Table>
       </Card>
     </div>
   );

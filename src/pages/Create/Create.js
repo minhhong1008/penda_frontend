@@ -7,55 +7,84 @@ const Create = () => {
 
   const [noteValue, setNoteValue] = useState("");
   const [selectListInfo, setSelectListInfo] = useState(["info"]);
+
   const listInfo = [
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
     {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+      value: "",
     },
     {
       title: "MAIL",
       thumbnail:
         "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
+      value: "",
     },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
+      value: "",
     },
     {
       title: "BANK",
       thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+      value: "",
     },
     {
       title: "CARD",
       thumbnail:
         "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+      value: "",
     },
     {
       title: "EBAY",
       thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
+      value: "",
     },
     {
       title: "ETSY",
       thumbnail:
         "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
+      value: "",
     },
     {
       title: "AMAZON",
       thumbnail:
         "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
+      value: "",
     },
     {
       title: "SHOPEE",
       thumbnail:
-        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
+        "https://i.pinimg.com/originals/90/b2/65/90b26573e0f822d9bb987d05ce396cbc.png",
+      value: "",
     },
     {
-      title: "DEVICE",
+      title: "FACKEBOOK",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
+      value: "",
     },
   ];
 
@@ -70,32 +99,26 @@ const Create = () => {
   const onFinish = async (values) => {
     let newValue = {
       ...values,
-      processing: values?.processing
-        ? values.processing.join(",")
-        : "",
+     
+      processing: values?.processing ? values.processing.join(",") : "",
       type: values?.type ? values.type.join(",") : "",
-      sell_status: values?.sell_status
-        ? values.sell_status.join(",")
-        : "",
+      sell_status: values?.sell_status ? values.sell_status.join(",") : "",
       owner: values?.owner ? values.owner.join(",") : "",
-      employee: values?.employee
-        ? values.employee.join(",")
-        : "",
+      employee: values?.employee ? values.employee.join(",") : "",
       data: noteValue,
     };
-    console.log(selectListInfo);
+   
     const { data } = createData(newValue, selectListInfo);
-    console.log(data);
   };
 
   return (
     <Card
-      title="Nhập thông tin"
+      title="NHẬP SỐ LIỆU ĐẦU VÀO"
       extra={<Button onClick={() => form.submit()}>Tạo</Button>}
     >
       <Row gutter={16}>
         <Col span={12}>
-          <Card title="THÔNG TIN ETSY">
+          <Card title="THÔNG TIN ITEM">
             <Form
               form={form}
               name="form-create"
@@ -127,11 +150,13 @@ const Create = () => {
               <br></br>
               <Row gutter={16}>
                 <Col span={24}>
-                  <Form.Item label="etsy chi tiết" name="detail">
+                  <Form.Item label="chi tiết" name="detail">
                     <Input size="small" placeholder="input here" />
                   </Form.Item>
                 </Col>
               </Row>
+
+            
               <Form.Item label="Tiến trình" name="processing">
                 <Select
                   mode="multiple"
@@ -157,7 +182,7 @@ const Create = () => {
                 </Select>
               </Form.Item>
 
-              <Form.Item label="Loại etsy" name="type">
+              <Form.Item label="Loại item" name="type">
                 <Select
                   mode="multiple"
                   style={{ width: "100%" }}
@@ -170,24 +195,13 @@ const Create = () => {
                   <Option value="US" label="US">
                     <div className="demo-option-label-item">US</div>
                   </Option>
-                  <Option value="etsy Buyer" label="Buyer">
+                  <Option value="Buyer" label="Buyer">
                     <div className="demo-option-label-item">Buyer</div>
                   </Option>
-                  <Option value="etsy Seller" label="Seller">
+                  <Option value="Seller" label="Seller">
                     <div className="demo-option-label-item">Seller</div>
                   </Option>
-                  <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                    <div className="demo-option-label-item">Gỡ Suspended</div>
-                  </Option>
-                  <Option value="ADS" label="ADS">
-                    <div className="demo-option-label-item">Quảng cáo</div>
-                  </Option>
-                  <Option value="Above Standard" label="Above Standard">
-                    <div className="demo-option-label-item">Above Standard</div>
-                  </Option>
-                  <Option value="Top Rate" label="Top Rate">
-                    <div className="demo-option-label-item">Top Rate</div>
-                  </Option>
+                  
                 </Select>
               </Form.Item>
 
@@ -201,28 +215,7 @@ const Create = () => {
                   <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
                     <div className="demo-option-label-item">Chuẩn bị bán</div>
                   </Option>
-                  <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
-                    <div className="demo-option-label-item">
-                      Đủ điều kiện bán
-                    </div>
-                  </Option>
-
-                  <Option value="Bán tài khoản" label="Bán tài khoản">
-                    <div className="demo-option-label-item">Bán tài khoản</div>
-                  </Option>
-                  <Option value="Đang giao dịch" label="Đang giao dịch">
-                    <div className="demo-option-label-item">Đang giao dịch</div>
-                  </Option>
-
-                  <Option value="Bán thành công" label="Bán thành công">
-                    <div className="demo-option-label-item">Bán thành công</div>
-                  </Option>
-                  <Option value="Bảo hành" label="Bảo hành">
-                    <div className="demo-option-label-item">Bảo hành</div>
-                  </Option>
-                  <Option value="Hết bảo hành" label="Hết bảo hành">
-                    <div className="demo-option-label-item">Hết bảo hành</div>
-                  </Option>
+                  
                 </Select>
               </Form.Item>
 
@@ -282,6 +275,9 @@ const Create = () => {
                       <Option value="Live" label="Live">
                         <div className="demo-option-label-item">Live</div>
                       </Option>
+                      <Option value="Active" label="Active">
+                        <div className="demo-option-label-item">Active</div>
+                      </Option>
                       <Option value="Error" label="Error">
                         <div className="demo-option-label-item">Error</div>
                       </Option>
@@ -298,7 +294,7 @@ const Create = () => {
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item label="Lớp etsy" name="class">
+                  <Form.Item label="Lớp item" name="class">
                     <Select
                       //mode="multiple"
                       style={{ width: "100%" }}
@@ -322,38 +318,6 @@ const Create = () => {
                       <Option value="Lớp 6" label="Lớp 6">
                         <div className="demo-option-label-item">Lớp 6</div>
                       </Option>
-                      <Option value="Lớp 7" label="Lớp 7">
-                        <div className="demo-option-label-item">Lớp 7</div>
-                      </Option>
-                      <Option value="Lớp 8" label="Lớp 8 Upseller">
-                        <div className="demo-option-label-item">
-                          Lớp 8 Upseller
-                        </div>
-                      </Option>
-                      <Option value="Lớp 9" label="Lớp 9">
-                        <div className="demo-option-label-item">Lớp 9</div>
-                      </Option>
-                      <Option value="Lớp 10" label="Lớp 10">
-                        <div className="demo-option-label-item">Lớp 10</div>
-                      </Option>
-                      <Option value="Lớp 11" label="Lớp 11">
-                        <div className="demo-option-label-item">Lớp 11</div>
-                      </Option>
-                      <Option value="Lớp 12" label="Lớp 12 Chuyển">
-                        <div className="demo-option-label-item">
-                          Lớp 12 Chuyển
-                        </div>
-                      </Option>
-                      <Option value="Lớp 20" label="Lớp 20 etsy error">
-                        <div className="demo-option-label-item">
-                          Lớp 20 etsy error
-                        </div>
-                      </Option>
-                      <Option value="Lớp 21" label="Lớp 21 etsy die">
-                        <div className="demo-option-label-item">
-                          Lớp 21 etsy die
-                        </div>
-                      </Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -364,6 +328,8 @@ const Create = () => {
         <Col span={12}>
           <Input.TextArea
             value={noteValue}
+            placeholder=" user item|password item 
+            user item|password item"
             onChange={handleChangeNote}
             rows={24}
           ></Input.TextArea>

@@ -9,7 +9,7 @@ const Paypal_class = () => {
       title: "Lớp",
       dataIndex: "class",
       key: "class",
-      render: (text) => <a onClick={() => history.push("paypal_class/table")}>{text}</a>,
+      render: (text) => <a onClick={() => history.push(`paypal_class/table?class=${encodeURIComponent(text)}`)}>{text}</a>,
     },
     {
       title: "Nội dung",
@@ -35,7 +35,7 @@ const Paypal_class = () => {
   const data = [
     {
       key: "1",
-      class: "Lớp 1 new",
+      class: "Lớp 1",
       content: "Setup máy",
       count_account: "334",
       paypal_vn: "334",
@@ -57,10 +57,58 @@ const Paypal_class = () => {
         paypal_vn: "334",
         paypal_us: "0",
       },
+      {
+        key: "4",
+        class: "Lớp 4",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
+      {
+        key: "5",
+        class: "Lớp 5",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
+      {
+        key: "6",
+        class: "Lớp 6",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
+      {
+        key: "7",
+        class: "Lớp 7",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
+      {
+        key: "8",
+        class: "Lớp 8",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
+      {
+        key: "9",
+        class: "Lớp 9 UpSeller",
+        content: "Dang nhap Gmail forword, , doc báo dan trí... paypal...",
+        count_account: "334",
+        paypal_vn: "334",
+        paypal_us: "0",
+      },
   ];
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN THEO LỚP paypal VN">
+      <Card title="BẢNG TÀI KHOẢN THEO LỚP PAYPAL VN">
         <Card type="inner">
           <Table columns={columns} dataSource={data}></Table>
         </Card>

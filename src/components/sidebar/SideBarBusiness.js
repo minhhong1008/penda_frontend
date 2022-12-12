@@ -57,40 +57,40 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="1">
-            <NavLink to="/products/ebay_class">
+            <NavLink to="/business/ebay_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/ebay_class" ? color : "",
+                  background: page === "business/ebay_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Ebay</span>
+              <span className="label">Order Ebay</span>
             </NavLink>
           </Menu.Item>
 
           <Menu.Item key="2">
-            <NavLink to="/products/etsy_class">
+            <NavLink to="/business/etsy_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/etsy_class" ? color : "",
+                  background: page === "business/etsy_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Etsy</span>
+              <span className="label">Order Etsy</span>
             </NavLink>
           </Menu.Item>
 
                  
           <Menu.Item key="3">
-            <NavLink to="/products/amazon_class">
+            <NavLink to="/business/amazon_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/amazon_class" ? color : "",
+                  background: page === "business/amazon_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -100,11 +100,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="4">
-            <NavLink to="/products/shopee_class">
+            <NavLink to="/business/shopee_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/shopee_class" ? color : "",
+                  background: page === "business/shopee_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -114,11 +114,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="5">
-            <NavLink to="/products/payoneer_class">
+            <NavLink to="/business/payoneer_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/payoneer_class" ? color : "",
+                  background: page === "business/payoneer_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -128,11 +128,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="6">
-            <NavLink to="/products/paypal_class">
+            <NavLink to="/business/paypal_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/paypal_class" ? color : "",
+                  background: page === "business/paypal_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -142,11 +142,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="7">
-            <NavLink to="/products/bank_class">
+            <NavLink to="/business/bank_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/bank_class" ? color : "",
+                  background: page === "business/bank_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -157,11 +157,11 @@ const SideBarBusiness = ({ color }) => {
 
 
           <Menu.Item key="8">
-            <NavLink to="/products/info_class">
+            <NavLink to="/business/info_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/info_class" ? color : "",
+                  background: page === "business/info_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -172,11 +172,11 @@ const SideBarBusiness = ({ color }) => {
 
 
           <Menu.Item key="9">
-            <NavLink to="/products/mail_class">
+            <NavLink to="/business/mail_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/mail_class" ? color : "",
+                  background: page === "business/mail_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -188,11 +188,11 @@ const SideBarBusiness = ({ color }) => {
 
 
           <Menu.Item key="10">
-            <NavLink to="/products/sim_class">
+            <NavLink to="/business/sim_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/sim_class" ? color : "",
+                  background: page === "business/sim_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -202,11 +202,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="11">
-            <NavLink to="/products/device_class">
+            <NavLink to="/business/device_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/device_class" ? color : "",
+                  background: page === "business/device_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -216,11 +216,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
           
           <Menu.Item key="12">
-            <NavLink to="/products/facekbook_class">
+            <NavLink to="/business/facekbook_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/facekbook_class" ? color : "",
+                  background: page === "business/facekbook_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -231,11 +231,11 @@ const SideBarBusiness = ({ color }) => {
           
           
           <Menu.Item key="13">
-            <NavLink to="/products/tiktok_class">
+            <NavLink to="/business/tiktok_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/tiktok_class" ? color : "",
+                  background: page === "business/tiktok_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -245,11 +245,11 @@ const SideBarBusiness = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="14">
-            <NavLink to="/products/other_class">
+            <NavLink to="/business/other_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/other_class" ? color : "",
+                  background: page === "business/other_class" ? color : "",
                 }}
               >
                 {dashboard}

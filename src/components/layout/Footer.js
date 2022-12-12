@@ -10,12 +10,12 @@ function Footer() {
       <Row className="just">
         <Col xs={24} md={12} lg={12}>
           <div className="copyright">
-            © 2021, made with
+            © 2023, made with
             {<HeartFilled />} by
             <a href="#pablo" className="font-weight-bold" target="_blank">
-              Creative Tim
+              Penda.vn
             </a>
-            for a better web.
+            
           </div>
         </Col>
         <Col xs={24} md={12} lg={12}>
@@ -23,16 +23,16 @@ function Footer() {
             <ul>
               <li className="nav-item">
                 <a
-                  href="#pablo"
+                  href="http://localhost:3000/Penda.vn"
                   className="nav-link text-muted"
                   target="_blank"
                 >
-                  Creative Tim
+                  Penda.vn
                 </a>
               </li>
               <li className="nav-item">
                 <a
-                  href="#pablo"
+                  href="http://localhost:3000/company"
                   className="nav-link text-muted"
                   target="_blank"
                 >
@@ -50,7 +50,7 @@ function Footer() {
               </li>
               <li className="nav-item">
                 <a
-                  href="#pablo"
+                  href="http://localhost:3000/sign-in"
                   className="nav-link pe-0 text-muted"
                   target="_blank"
                 >

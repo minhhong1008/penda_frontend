@@ -324,11 +324,11 @@ const SideBarProducts = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="12">
-            <NavLink to="/products/facekbook_class">
+            <NavLink to="/products/facebook_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "products/facekbook_class" ? color : "",
+                  background: page === "products/facebook_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -376,6 +376,20 @@ const SideBarProducts = ({ color }) => {
                 {profile}
               </span>
               <span className="label">Nhập liệu</span>
+            </NavLink>
+          </Menu.Item>
+
+          <Menu.Item key="95">
+            <NavLink to="/products/tools">
+              <span
+                className="icon"
+                style={{
+                  background: page === "products/tools" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Tool</span>
             </NavLink>
           </Menu.Item>
 

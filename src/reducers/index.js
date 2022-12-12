@@ -5,7 +5,18 @@ import testReducer from "./testReducer";
 import userReducer from "./userReducer";
 import ebayReducer from "./ebayReducer";
 import etsyReducer from "./etsyReducer";
+import shopeeReducer from "./shopeeReducer";
+import amazonReducer from "./amazonReducer";
+import payoneerReducer from "./payoneerReducer";
+import paypalReducer from "./paypalReducer";
 import bankReducer from "./bankReducer";
+import infoReducer from "./infoReducer";
+import mailReducer from "./mailReducer";
+import simReducer from "./simReducer";
+import deviceReducer from "./deviceReducer";
+import facebookReducer from "./facebookReducer";
+import tiktokReducer from "./tiktokReducer";
+
 
 const appReducer = asyncReducers =>
   combineReducers({
@@ -15,7 +26,17 @@ const appReducer = asyncReducers =>
     department: departmentReducer,
     ebay: ebayReducer,
     etsy: etsyReducer,
+    shopee: shopeeReducer,
     bank: bankReducer,
+    info: infoReducer,
+    amazon: amazonReducer,
+    payoneer: payoneerReducer,
+    paypal: paypalReducer,
+    mail: mailReducer,
+    sim: simReducer,
+    device: deviceReducer,
+    facebook: facebookReducer,
+    tiktok: tiktokReducer,
     ...asyncReducers
   });
 

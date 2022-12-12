@@ -1,73 +1,165 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
-import { useHistory } from "react-router-dom";
+import {
+  Button,
+  Card,
+  Table,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Collapse,
+  Space,
+  TreeSelect,
+} from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { getListpayoneerActions } from "../../actions/payoneerActions";
 
 const Payoneer_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { payoneers } = useSelector((state) => state.payoneer);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "payoneer_id",
+      key: "payoneer_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.payoneer_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "payoneer_user",
+      key: "payoneer_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "payoneer_device",
+      key: "payoneer_device",
     },
     {
       title: "Lớp",
-      dataIndex: "payoneer_vn",
-      key: "payoneer_vn",
+      dataIndex: "payoneer_class",
+      key: "payoneer_class",
     },
     {
       title: "Limit",
-      dataIndex: "payoneer_us",
-      key: "payoneer_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "payoneer_42496",
-      count_account: "Lớp 1",
-      payoneer_vn: "0",
-      payoneer_us: "0",
+      dataIndex: "payoneer_limit",
+      key: "payoneer_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        payoneer_vn: "334",
-        payoneer_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... payoneer...",
-        count_account: "334",
-        payoneer_vn: "334",
-        payoneer_us: "0",
-      },
+      title: "active",
+      dataIndex: "payoneer_active",
+      key: "payoneer_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "payoneerdate_sine",
+      key: "payoneerdate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "payoneerdate_upseller",
+      key: "payoneerdate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "payoneer_status",
+      key: "payoneer_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "payoneer_employee",
+      key: "payoneer_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "payoneerdate_class",
+      key: "payoneerdate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "payoneer_note",
+      key: "payoneer_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListpayoneerActions({
+        payoneer_employee: newValue,
+      })
+    );
+  }
+
+  const getListPayoneer = () => {
+    dispatch(
+      getListpayoneerActions({
+        payoneer_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListPayoneer();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc payoneer">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "payoneer_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "payoneer_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "payoneer_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={payoneers}></Table>
       </Card>
     </div>
   );
 };
 
-export default Payoneer_table
+export default Payoneer_table;

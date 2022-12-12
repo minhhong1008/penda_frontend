@@ -1,70 +1,147 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
+import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { getListmailActions } from "../../actions/mailActions";
 
 const Mail_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { mails } = useSelector((state) => state.mail);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "mail_id",
+      key: "mail_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.mail_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "mail_user",
+      key: "mail_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "mail_device",
+      key: "mail_device",
     },
     {
       title: "Lớp",
-      dataIndex: "mail_vn",
-      key: "mail_vn",
+      dataIndex: "mail_class",
+      key: "mail_class",
     },
     {
       title: "Limit",
-      dataIndex: "mail_us",
-      key: "mail_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "mail_42496",
-      count_account: "Lớp 1",
-      mail_vn: "0",
-      mail_us: "0",
+      dataIndex: "mail_limit",
+      key: "mail_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        mail_vn: "334",
-        mail_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... mail...",
-        count_account: "334",
-        mail_vn: "334",
-        mail_us: "0",
-      },
+      title: "active",
+      dataIndex: "mail_active",
+      key: "mail_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "maildate_sine",
+      key: "maildate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "maildate_upseller",
+      key: "maildate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "mail_status",
+      key: "mail_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "mail_employee",
+      key: "mail_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "maildate_class",
+      key: "maildate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "mail_note",
+      key: "mail_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListmailActions({
+        mail_employee: newValue,
+      })
+    );
+  }
+
+  const getListmail = () => {
+    dispatch(
+      getListmailActions({
+        mail_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListmail();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc mail">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "mail_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "mail_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "mail_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={mails}></Table>
       </Card>
     </div>
   );

@@ -12,7 +12,7 @@ import {
   Avatar,
   List,
 } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import {
@@ -23,18 +23,22 @@ import {
 import { showError, showSuccess } from "../../utils";
 
 const bank_info = () => {
-  const [bankData, setbankData] = useState({
-    bank_id: "ET_1000",
-  });
+  const { Option } = Select;
+
+// Lấy ID từ trên param url
+  let { id } = useParams();
+// Khai báo các kho dữ liệu
+  const [bankData, setbankData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
   const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
   const [noteValue, setNoteValue] = useState("");
-  let { id } = useParams();
+// Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
-  const { Option } = Select;
+
+// Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     const newValue = {
       ...info,
@@ -66,10 +70,15 @@ const bank_info = () => {
       showError("Sửa không thành công");
     }
   };
-
+// Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
   };
+// Hàm gửi dữ liệu từ form info
+  const onFinishInfo = (values) => {
+    setInfo(values);
+  };
+// Hàm gọi dữ liệu về từ database
   const getInfobank = async () => {
     const { data } = await getbankInfo(id);
     const newData = {
@@ -84,42 +93,59 @@ const bank_info = () => {
     infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
       bank_date_start: moment(data.bank_date_start),
-      bank_date_verify: moment(data.bank_date_verify)
+      bank_date_verify: moment(data.bank_date_verify),
     });
-    setNoteValue(data.bank_note)
+    setInfo(data);
+    setNoteValue(data.bank_note);
     setSelectListInfo(data.list_view.split(","));
   };
-  const onFinishInfo = (values) => {
-    setInfo(values);
-  };
 
+ 
+// Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      {
+        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      }
+    },
+    [info]
+  );
+
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfobank();
   }, []);
 
+  // List danh sách các trường trong bảng INFO
   const listInfo = [
+    {
+      title: "DEVICE",
+      thumbnail:
+        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+      value: "",
+    },
     {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "I_101|Phùng Văn Minh|17/08/1984|026084888888|Bắc Giang",
+      value: "",
     },
     {
       title: "MAIL",
       thumbnail:
         "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "M_101|mingdepzai@gmail.com|170988876@|live",
+      value: "",
     },
     {
       title: "SIM",
       thumbnail:
         "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "S_101|0588965555|Viettel|Live",
+      value: "",
     },
     {
       title: "BANK",
       thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-bank-flat-design-yellow-round-web-icon.jpg",
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
       value: "",
     },
     {
@@ -152,13 +178,26 @@ const bank_info = () => {
       value: "",
     },
     {
-      title: "DEVICE",
+      title: "FACKEBOOK",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
+        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
+      value: "",
+    },
+    {
+      title: "TIKTOK",
+      thumbnail:
+        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
+      value: "",
+    },
+    {
+      title: "OTHER",
+      thumbnail:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
       value: "",
     },
   ];
 
+  //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
       title: "Ngày tạo",
@@ -170,14 +209,16 @@ const bank_info = () => {
     },
   ];
 
+  // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
-    localStorage.setItem("esty_select", values);
   };
 
+  // Hàm để thay đổi dữ liệu của note
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);
   };
+
   return (
     <Card
       title={id}
@@ -188,7 +229,7 @@ const bank_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN bank">
+              <Card title="THÔNG TIN ETSY">
                 <Form
                   form={form}
                   name="basic"
@@ -528,12 +569,11 @@ const bank_info = () => {
                                 <Avatar
                                   style={{ cursor: "pointer" }}
                                   onClick={() =>
-                                    window.open(
-                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
-                                        "_class/table/" +
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ]}`
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
                                     )
                                   }
                                   src={item.thumbnail}
@@ -541,12 +581,11 @@ const bank_info = () => {
                                 <a
                                   href="#"
                                   onClick={() =>
-                                    window.open(
-                                      `http://localhost:3000/products/${item.title.toLocaleLowerCase() +
-                                        "_class/table/" +
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ]}`
+                                    viewInfo(
+                                      item.title.toLocaleLowerCase(),
+                                      info[
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      ].split("|")[0]
                                     )
                                   }
                                 >

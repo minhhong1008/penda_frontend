@@ -1,73 +1,165 @@
 //import React from 'react'
-import { Card, Space, Table, Tag } from "antd";
-import React from "react";
-import { useHistory } from "react-router-dom";
+import {
+  Button,
+  Card,
+  Table,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Collapse,
+  Space,
+  TreeSelect,
+} from "antd";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import { getListamazonActions } from "../../actions/amazonActions";
 
-const Amazon_table = () => {
+const Amzon_table = () => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const { amazons } = useSelector((state) => state.amazon);
+  const class_name = urlParams.get("class");
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const columns = [
     {
       title: "STT",
-      dataIndex: "class",
-      key: "class",
-      render: (text) => <a onClick={() => history.push("table/E_42496")}>{text}</a>,
+      key: "index",
+      render: (text, record, index) => index + 1,
     },
     {
       title: "#",
-      dataIndex: "content",
-      key: "content",
+      dataIndex: "amazon_id",
+      key: "amazon_id",
+      render: (text, record) => (
+        <a onClick={() => history.push(`table/${encodeURIComponent(record.amazon_id)}`)}>{text}</a>
+      ),
     },
     {
       title: "Tài khoản",
-      dataIndex: "count_account",
-      key: "count_account",
+      dataIndex: "amazon_user",
+      key: "amazon_user",
+    },
+    {
+      title: "Thiết bị",
+      dataIndex: "amazon_device",
+      key: "amazon_device",
     },
     {
       title: "Lớp",
-      dataIndex: "amazon_vn",
-      key: "amazon_vn",
+      dataIndex: "amazon_class",
+      key: "amazon_class",
     },
     {
       title: "Limit",
-      dataIndex: "amazon_us",
-      key: "amazon_us",
-    },
-  ];
-  const data = [
-    {
-      key: "1",
-      class: "E_42496",
-      content: "amazon_42496",
-      count_account: "Lớp 1",
-      amazon_vn: "0",
-      amazon_us: "0",
+      dataIndex: "amazon_limit",
+      key: "amazon_limit",
     },
     {
-        key: "2",
-        class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
-        count_account: "334",
-        amazon_vn: "334",
-        amazon_us: "0",
-      },
-      {
-        key: "3",
-        class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... amazon...",
-        count_account: "334",
-        amazon_vn: "334",
-        amazon_us: "0",
-      },
+      title: "active",
+      dataIndex: "amazon_active",
+      key: "amazon_active",
+    },
+    {
+      title: "Ngày tạo",
+      dataIndex: "amazondate_sine",
+      key: "amazondate_sine",
+    },
+    {
+      title: "Ngày UpSeller",
+      dataIndex: "amazondate_upseller",
+      key: "amazondate_upseller",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "amazon_status",
+      key: "amazon_status",
+    },
+    {
+      title: "Nhân viên",
+      dataIndex: "amazon_employee",
+      key: "amazon_employee",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      dataIndex: "amazondate_class",
+      key: "amazondate_class",
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "amazon_note",
+      key: "amazon_note",
+    },
   ];
+
+  const handleChangeFilter = (values) => {
+    let newValue = values.join(',');
+    dispatch(
+      getListamazonActions({
+        amazon_employee: newValue,
+      })
+    );
+  }
+
+  const getListAmzon = () => {
+    dispatch(
+      getListamazonActions({
+        amazon_class: class_name,
+      })
+    );
+  };
+
+  useEffect(() => {
+    getListAmzon();
+  }, [class_name]);
+
   return (
     <div>
-      <Card title="BẢNG TÀI KHOẢN">
-        <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
-        </Card>
+      <Form.Item label="Lọc eBay">
+        <TreeSelect
+          mode="multiple"
+          onChange={handleChangeFilter}
+          multiple
+          optionLabelProp="label"
+          treeData={[
+            {
+              title: "Lớp",
+              value: "amazon_class",
+              children: [
+                { title: "Lớp 1", value: "Lớp 1" },
+                { title: "Lớp 2", value: "Lớp 2" },
+              ],
+            },
+            {
+              title: "Thiết bị",
+              value: "amazon_device",
+              children: [
+                { title: "PC06", value: "PC06" },
+                { title: "PC07", value: "PC07" },
+              ],
+            },
+            {
+              title: "Nhân viên",
+              value: "amazon_employee",
+              children: [
+                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                { title: "Khắc Liêm", value: "Khắc Liêm" },
+              ],
+            },
+          ]}
+        />
+      </Form.Item>
+      <Card type="inner">
+        <Table columns={columns} dataSource={amazons}></Table>
       </Card>
     </div>
   );
 };
 
-export default Amazon_table
+export default Amzon_table;
