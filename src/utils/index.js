@@ -1,5 +1,10 @@
 import Swal from "sweetalert2";
 
+export const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text);
+  showSuccess("Copy: " + text);
+}
+
 export const createActionTypes = (base, actions = []) =>
   actions.reduce((acc, type) => {
     acc[type] = `${base}_${type}`;
@@ -13,7 +18,7 @@ export const showSuccess = ( message ) => {
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 1000,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -30,9 +35,9 @@ export const showSuccess = ( message ) => {
 export const showError = ( message ) => {
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top-end',
+    position: 'top-start',
     showConfirmButton: false,
-    timer: 3000,
+    timer: 1000,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer)

@@ -7,3 +7,7 @@ export const registerApi = (payload) => {
 export const loginApi = (payload) => {
   return axiosClient.post('/signin', payload);
 };
+
+export const verifyToken = (payload) => {
+  return axiosClient.post('/verify', payload)
+}

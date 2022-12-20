@@ -42,8 +42,8 @@ const SignIn = () => {
 
   const onFinish = (values) => {
     const userLogin = {
-      email: values.email,
-      password: values.password,
+      users_mail: values.users_mail,
+      users_password: values.users_password,
       remember: remember,
     };
     dispatch(loginAction(userLogin));
@@ -82,7 +82,7 @@ const SignIn = () => {
                 <Form.Item
                   className="username"
                   label="Email"
-                  name="email"
+                  name="users_mail"
                   rules={[
                     {
                       required: true,
@@ -96,7 +96,7 @@ const SignIn = () => {
                 <Form.Item
                   className="username"
                   label="Mật khẩu"
-                  name="password"
+                  name="users_password"
                   rules={[
                     {
                       required: true,

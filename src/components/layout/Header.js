@@ -247,13 +247,27 @@ function Header({
   const { Title, Text } = Typography;
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
-  const user = useSelector(state => state.auth);
-  
+  const user = useSelector((state) => state.auth);
+
   useEffect(() => window.scrollTo(0, 0));
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
-
+  const renderBrecrums = () => {
+    let brc = [];
+    let data_name = name.split("/");
+    let brecrum = "";
+    let param = new URL(location.href).searchParams.get("class");
+    data_name.map((item, index) => {
+      brecrum = brecrum + "/" + item;
+      brc.push(
+        <Breadcrumb.Item key={index}>
+          <NavLink to={item == 'table' ? brecrum + "?class=" + encodeURIComponent(param) : brecrum}>{item}</NavLink>
+        </Breadcrumb.Item>
+      );
+    });
+    return brc;
+  };
   return (
     <>
       <div className="setting-drwer" onClick={showDrawer}>
@@ -261,22 +275,7 @@ function Header({
       </div>
       <Row gutter={[24, 0]}>
         <Col span={24} md={6}>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <NavLink to="/products">Products</NavLink>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item style={{ textTransform: "capitalize" }}>
-              {name.replace("/", "")}
-            </Breadcrumb.Item>
-          </Breadcrumb>
-          <div className="ant-page-header-heading">
-            <span
-              className="ant-page-header-heading-title"
-              style={{ textTransform: "capitalize" }}
-            >
-              {subName.replace("/", "")}
-            </span>
-          </div>
+          <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col>
         <Col span={24} md={18} className="header-control">
           <Badge size="small" count={4}>
@@ -409,7 +408,7 @@ function Header({
           </Drawer>
           <Link to="/sign-in" className="btn-sign-in">
             {profile}
-            <span>{ user.profile ? user.profile.name : '' }</span>
+            <span>{user.profile ? user.profile.users_name : ""}</span>
           </Link>
           <Input
             className="header-search"

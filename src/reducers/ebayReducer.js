@@ -10,8 +10,8 @@ function ebayReducer(state = initialState, action) {
     case GET_LIST_EBAY_SUCCESS: {
       return {
         ...state,
-        ebays: action.payload
-      }
+        ebays: action.payload,
+      };
     }
     default: {
       return state;

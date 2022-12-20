@@ -6,12 +6,17 @@ import {
   REGISTER_SUCCESS,
   REGISTER_REQUEST,
   LOGIN_REQUEST,
+  GET_ROLE_SUCCESS,
 } from "../actions/authActions.js";
 import { getUser } from "../utils/index.js";
 
 const initialState = {
   profile: JSON.parse(getUser()),
   isLogin: false,
+  users_name: "",
+  users_function: "",
+  users_owner: "",
+  manage_view: "",
   loading: false,
   message: "",
 };
@@ -33,6 +38,8 @@ function authReducer(state = initialState, action) {
     case LOGIN_SUCCESS: {
       return {
         profile: action.payload,
+        users_function: action.payload.users_function,
+        users_name: action.payload.users_name,
         isLogin: true,
         loading: false,
         message: "",
@@ -71,6 +78,16 @@ function authReducer(state = initialState, action) {
         message: action.payload,
         loading: false,
       };
+    }
+
+    case GET_ROLE_SUCCESS: {
+      return {
+        ...state,
+        users_function: action.payload.users_function,
+        users_name: action.payload.users_name,
+        users_owner: action.payload.users_owner,
+        manage_view: action.payload.manage_view,
+      }
     }
     default: {
       return state;

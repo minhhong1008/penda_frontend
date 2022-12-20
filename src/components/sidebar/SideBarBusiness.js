@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -53,213 +53,119 @@ const SideBarBusiness = ({ color }) => {
       {page == "HomePage" ? null : (
         <Menu theme="light" mode="inline">
           <Menu.Item className="menu-item-header" key="1">
-            Tài Khoản
+            Đơn hàng
           </Menu.Item>
 
           <Menu.Item key="1">
-            <NavLink to="/business/ebay_class">
+            <NavLink to="/business/ebayorder_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/ebay_class" ? color : "",
+                  background: page === "business/ebayorder_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Order Ebay</span>
+              <span className="label">Ebay Order</span>
             </NavLink>
           </Menu.Item>
 
           <Menu.Item key="2">
-            <NavLink to="/business/etsy_class">
+            <NavLink to="/business/etsyorder_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/etsy_class" ? color : "",
+                  background: page === "business/etsyorder_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Order Etsy</span>
+              <span className="label">Etsy Order</span>
             </NavLink>
           </Menu.Item>
 
-                 
+          <Menu.Item className="menu-item-header" key="1">
+            Sản phẩm
+          </Menu.Item>
+
           <Menu.Item key="3">
-            <NavLink to="/business/amazon_class">
+            <NavLink to="/business/ebayitem_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/amazon_class" ? color : "",
+                  background: page === "business/ebayitem_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Amazon</span>
+              <span className="label">Ebay Item</span>
             </NavLink>
           </Menu.Item>
 
           <Menu.Item key="4">
-            <NavLink to="/business/shopee_class">
+            <NavLink to="/business/etsyitem_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/shopee_class" ? color : "",
+                  background: page === "business/etsyitem_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Shopee</span>
+              <span className="label">Etsy Item</span>
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="5">
-            <NavLink to="/business/payoneer_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/payoneer_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Payoneer</span>
-            </NavLink>
+          <Menu.Item className="menu-item-header" key="1">
+            Tài khoản
           </Menu.Item>
 
           <Menu.Item key="6">
-            <NavLink to="/business/paypal_class">
+            <NavLink to="/products/ebay_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/paypal_class" ? color : "",
+                  background: page === "products/ebay_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Paypal</span>
+              <span className="label">Ebay</span>
             </NavLink>
           </Menu.Item>
-
-          <Menu.Item key="7">
-            <NavLink to="/business/bank_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/bank_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Bank</span>
-            </NavLink>
-          </Menu.Item>
-
-
-          <Menu.Item key="8">
-            <NavLink to="/business/info_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/info_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Info</span>
-            </NavLink>
-          </Menu.Item>
-
-
-          <Menu.Item key="9">
-            <NavLink to="/business/mail_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/mail_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Mail</span>
-            </NavLink>
-          </Menu.Item>
-
-
 
           <Menu.Item key="10">
-            <NavLink to="/business/sim_class">
+            <NavLink to="/products/etsy_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/sim_class" ? color : "",
+                  background: page === "products/etsy_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Sim</span>
+              <span className="label">Etsy</span>
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="11">
-            <NavLink to="/business/device_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/device_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Device</span>
-            </NavLink>
+          <Menu.Item className="menu-item-header" key="1">
+            Khách hàng
           </Menu.Item>
-          
-          <Menu.Item key="12">
-            <NavLink to="/business/facekbook_class">
+
+          <Menu.Item key="5">
+            <NavLink to="/business/customer_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "business/facekbook_class" ? color : "",
+                  background: page === "business/customer_class" ? color : "",
                 }}
               >
                 {dashboard}
               </span>
-              <span className="label">Facebook</span>
-            </NavLink>
-          </Menu.Item>
-          
-          
-          <Menu.Item key="13">
-            <NavLink to="/business/tiktok_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/tiktok_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Tiktok</span>
+              <span className="label">Khách hàng</span>
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="14">
-            <NavLink to="/business/other_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "business/other_class" ? color : "",
-                }}
-              >
-                {dashboard}
-              </span>
-              <span className="label">Other</span>
-            </NavLink>
-          </Menu.Item>
-          
-         
-        
           <Menu.Item key="20">
             <NavLink to="/log-out">
               <span className="icon">{signup}</span>
@@ -270,6 +176,6 @@ const SideBarBusiness = ({ color }) => {
       )}
     </>
   );
-}
+};
 
-export default SideBarBusiness
+export default SideBarBusiness;

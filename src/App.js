@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "antd/dist/antd.css";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { compose } from "recompose";
@@ -43,6 +43,10 @@ import Payoneer_info from "./pages/Payoneer/Payoneer_info";
 import Paypal_class from "./pages/Paypal/Paypal_class";
 import Paypal_table from "./pages/Paypal/Paypal_table";
 import Paypal_info from "./pages/Paypal/Paypal_info";
+// Pingpong
+import Pingpong_class from "./pages/Pingpong/Pingpong_class";
+import Pingpong_table from "./pages/Pingpong/Pingpong_table";
+import Pingpong_info from "./pages/Pingpong/Pingpong_info";
 // Bank
 import Bank_class from "./pages/Bank/Bank_class";
 import Bank_table from "./pages/Bank/Bank_table";
@@ -63,6 +67,10 @@ import Sim_info from "./pages/Sim/Sim_info";
 import Device_class from "./pages/Device/Device_class";
 import Device_table from "./pages/Device/Device_table";
 import Device_info from "./pages/Device/Device_info";
+// Device
+import Proxy_class from "./pages/Proxy/Proxy_class";
+import Proxy_table from "./pages/Proxy/Proxy_table";
+import Proxy_info from "./pages/Proxy/Proxy_info";
 // Facebook
 import Facebook_class from "./pages/Facebook/Facebook_class";
 import Facebook_table from "./pages/Facebook/Facebook_table";
@@ -83,292 +91,368 @@ import Create from "./pages/Create/Create";
 import Tools_list from "./pages/Tools/tools_list";
 import CCCD from "./pages/Tools/cccd/cccd";
 
+// User
+import Users_class from "./pages/Users/Users_class";
+import Users_table from "./pages/Users/Users_table";
+import Users_info from "./pages/Users/Users_info";
+
+// Ebayorder
+import Ebayorder_class from "./pages/Ebayorder/Ebayorder_class";
+import Ebayorder_table from "./pages/Ebayorder/Ebayorder_table";
+import Ebayorder_info from "./pages/Ebayorder/Ebayorder_info";
+
+// Etsyorder
+import Etsyorder_class from "./pages/Etsyorder/Etsyorder_class";
+import Etsyorder_table from "./pages/Etsyorder/Etsyorder_table";
+import Etsyorder_info from "./pages/Etsyorder/Etsyorder_info";
+
+// Ebayorder
+import Ebayitem_class from "./pages/Ebayitem/Ebayitem_class";
+import Ebayitem_table from "./pages/Ebayitem/Ebayitem_table";
+import Ebayitem_info from "./pages/Ebayitem/Ebayitem_info";
+
+// Etsyitem
+import Etsyitem_class from "./pages/Etsyitem/Etsyitem_class";
+import Etsyitem_table from "./pages/Etsyitem/Etsyitem_table";
+import Etsyitem_info from "./pages/Etsyitem/Etsyitem_info";
+import { getToken } from "./utils";
+import { verifyToken } from "./api/auth";
+import { useDispatch } from "react-redux";
+import { getRoleAction } from "./actions/authActions";
+
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
 // Quay lại file vừa tạo để sửa giao diện
-const App = () => (
-  <div className="App">
-    <Switch>
-      <Route path="/sign-up" exact component={SignUp} />
-      <Route path="/sign-in" exact component={SignIn} />
-      <Route path="/log-out" exact component={LogOut} />
-      <Main>
-        <Route exact path="/HomePage" component={HomePage} />
-        <Route exact path="/tables" component={Tables} />
-        <Route exact path="/billing" component={Billing} />
-        <Route
-          path="/personnel-management"
-          exact
-          component={PersonnelManager}
-        />
-        <Route
-          path="/department-management"
-          exact
-          component={DepartmentManager}
-        />
-        <Route
-          path="/account-management"
-          exact
-          component={AccountManager}
-        />
-        <Route
-          path="/Accounts/account"
-          exact
-          component={Account}
-        />
 
-        {/* Ebay */}
-        <Route
-          path="/products/ebay_class"
-          exact
-          component={Ebay_class}
-        />
-        <Route
-          path="/products/ebay_class/table"
-          exact
-          component={Ebay_table}
-        />
-        <Route
-          path="/products/ebay_class/table/:id"
-          exact
-          component={Ebay_info}
-        />
+const App = () => {
+  const dispatch = useDispatch();
+  const verify = async () => {
+    let token = getToken();
+    dispatch(getRoleAction(token))
+    // let response = await verifyToken({
+    //   token: token,
+    // });
+    // console.log(response);
+  };
 
+  useEffect(() => {
+    verify();
+  }, []);
+  return (
+    <div className="App">
+      <Switch>
+        <Route path="/sign-up" exact component={SignUp} />
+        <Route path="/sign-in" exact component={SignIn} />
+        <Route path="/log-out" exact component={LogOut} />
+        <Main>
+          <Route exact path="/HomePage" component={HomePage} />
+          <Route exact path="/tables" component={Tables} />
+          <Route exact path="/billing" component={Billing} />
+          <Route
+            path="/personnel-management"
+            exact
+            component={PersonnelManager}
+          />
+          <Route
+            path="/department-management"
+            exact
+            component={DepartmentManager}
+          />
+          <Route path="/account-management" exact component={AccountManager} />
+          <Route path="/Accounts/account" exact component={Account} />
 
-        {/* Etsy */}
-        <Route
-          path="/products/etsy_class"
-          exact
-          component={Etsy_class}
-        />
-        <Route
-          path="/products/etsy_class/table"
-          exact
-          component={Etsy_table}
-        />
-        <Route
-          path="/products/etsy_class/table/:id"
-          exact
-          component={Etsy_info}
-        />
+          {/* Ebay */}
+          <Route path="/products/ebay_class" exact component={Ebay_class} />
+          <Route
+            path="/products/ebay_class/table"
+            exact
+            component={Ebay_table}
+          />
+          <Route
+            path="/products/ebay_class/table/:id"
+            exact
+            component={Ebay_info}
+          />
 
-        {/* Amazon */}
-        <Route
-          path="/products/amazon_class"
-          exact
-          component={Amazon_class}
-        />
-        <Route
-          path="/products/amazon_class/table"
-          exact
-          component={Amazon_table}
-        />
-        <Route
-          path="/products/amazon_class/table/:id"
-          exact
-          component={Amazon_info}
-        />
-        {/* Shopee */}
-        <Route
-          path="/products/shopee_class"
-          exact
-          component={Shopee_class}
-        />
-        <Route
-          path="/products/shopee_class/table"
-          exact
-          component={Shopee_table}
-        />
-        <Route
-          path="/products/shopee_class/table/:id"
-          exact
-          component={Shopee_info}
-        />
-        {/* Payoneer */}
-        <Route
-          path="/products/payoneer_class"
-          exact
-          component={Payoneer_class}
-        />
-        <Route
-          path="/products/payoneer_class/table"
-          exact
-          component={Payoneer_table}
-        />
-        <Route
-          path="/products/payoneer_class/table/:id"
-          exact
-          component={Payoneer_info}
-        />
-        {/* Paypal */}
-        <Route
-          path="/products/paypal_class"
-          exact
-          component={Paypal_class}
-        />
-        <Route
-          path="/products/paypal_class/table"
-          exact
-          component={Paypal_table}
-        />
-        <Route
-          path="/products/paypal_class/table/:id"
-          exact
-          component={Paypal_info}
-        />
-        {/* Bank */}
-        <Route
-          path="/products/bank_class"
-          exact
-          component={Bank_class}
-        />
-        <Route
-          path="/products/bank_class/table"
-          exact
-          component={Bank_table}
-        />
-        <Route
-          path="/products/bank_class/table/:id"
-          exact
-          component={Bank_info}
-        />
-        {/* Info */}
-        <Route
-          path="/products/info_class"
-          exact
-          component={Info_class}
-        />
-        <Route
-          path="/products/info_class/table"
-          exact
-          component={Info_table}
-        />
-        <Route
-          path="/products/info_class/table/:id"
-          exact
-          component={Info_info}
-        />
-        {/* Mail */}
-        <Route
-          path="/products/mail_class"
-          exact
-          component={Mail_class}
-        />
-        <Route
-          path="/products/mail_class/table"
-          exact
-          component={Mail_table}
-        />
-        <Route
-          path="/products/mail_class/table/:id"
-          exact
-          component={Mail_info}
-        />
-        {/* Sim */}
-        <Route
-          path="/products/sim_class"
-          exact
-          component={Sim_class}
-        />
-        <Route
-          path="/products/sim_class/table"
-          exact
-          component={Sim_table}
-        />
-        <Route
-          path="/products/sim_class/table/:id"
-          exact
-          component={Sim_info}
-        />
-        {/* Device */}
-        <Route
-          path="/products/device_class"
-          exact
-          component={Device_class}
-        />
-        <Route
-          path="/products/device_class/table"
-          exact
-          component={Device_table}
-        />
-        <Route
-          path="/products/device_class/table/:id"
-          exact
-          component={Device_info}
-        />
-        {/* Facebook */}
-        <Route
-          path="/products/facebook_class"
-          exact
-          component={Facebook_class}
-        />
-        <Route
-          path="/products/facebook_class/table"
-          exact
-          component={Facebook_table}
-        />
-        <Route
-          path="/products/facebook_class/table/:id"
-          exact
-          component={Facebook_info}
-        />
+          {/* Etsy */}
+          <Route path="/products/etsy_class" exact component={Etsy_class} />
+          <Route
+            path="/products/etsy_class/table"
+            exact
+            component={Etsy_table}
+          />
+          <Route
+            path="/products/etsy_class/table/:id"
+            exact
+            component={Etsy_info}
+          />
 
-        {/*Tiktok */}
-        <Route
-          path="/products/tiktok_class"
-          exact
-          component={Tiktok_class}
-        />
-        <Route
-          path="/products/tiktok_class/table"
-          exact
-          component={Tiktok_table}
-        />
-        <Route
-          path="/products/tiktok_class/table/:id"
-          exact
-          component={Tiktok_info}
-        />
-        {/* Other */}
-        <Route
-          path="/products/other_class"
-          exact
-          component={Other_class}
-        />
-        <Route
-          path="/products/other_class/table"
-          exact
-          component={Other_table}
-        />
-        <Route
-          path="/products/other_class/table/:id"
-          exact
-          component={Other_info}
-        />
+          {/* Amazon */}
+          <Route path="/products/amazon_class" exact component={Amazon_class} />
+          <Route
+            path="/products/amazon_class/table"
+            exact
+            component={Amazon_table}
+          />
+          <Route
+            path="/products/amazon_class/table/:id"
+            exact
+            component={Amazon_info}
+          />
+          {/* Shopee */}
+          <Route path="/products/shopee_class" exact component={Shopee_class} />
+          <Route
+            path="/products/shopee_class/table"
+            exact
+            component={Shopee_table}
+          />
+          <Route
+            path="/products/shopee_class/table/:id"
+            exact
+            component={Shopee_info}
+          />
+          {/* Payoneer */}
+          <Route
+            path="/products/payoneer_class"
+            exact
+            component={Payoneer_class}
+          />
+          <Route
+            path="/products/payoneer_class/table"
+            exact
+            component={Payoneer_table}
+          />
+          <Route
+            path="/products/payoneer_class/table/:id"
+            exact
+            component={Payoneer_info}
+          />
+          {/* Paypal */}
+          <Route path="/products/paypal_class" exact component={Paypal_class} />
+          <Route
+            path="/products/paypal_class/table"
+            exact
+            component={Paypal_table}
+          />
+          <Route
+            path="/products/paypal_class/table/:id"
+            exact
+            component={Paypal_info}
+          />
+          {/* Pingpong */}
+          <Route path="/products/pingpong_class" exact component={Pingpong_class} />
+          <Route
+            path="/products/pingpong_class/table"
+            exact
+            component={Pingpong_table}
+          />
+          <Route
+            path="/products/pingpong_class/table/:id"
+            exact
+            component={Pingpong_info}
+          />
+          {/* Bank */}
+          <Route path="/products/bank_class" exact component={Bank_class} />
+          <Route
+            path="/products/bank_class/table"
+            exact
+            component={Bank_table}
+          />
+          <Route
+            path="/products/bank_class/table/:id"
+            exact
+            component={Bank_info}
+          />
+          {/* Info */}
+          <Route path="/products/info_class" exact component={Info_class} />
+          <Route
+            path="/products/info_class/table"
+            exact
+            component={Info_table}
+          />
+          <Route
+            path="/products/info_class/table/:id"
+            exact
+            component={Info_info}
+          />
+          {/* Mail */}
+          <Route path="/products/mail_class" exact component={Mail_class} />
+          <Route
+            path="/products/mail_class/table"
+            exact
+            component={Mail_table}
+          />
+          <Route
+            path="/products/mail_class/table/:id"
+            exact
+            component={Mail_info}
+          />
+          {/* Sim */}
+          <Route path="/products/sim_class" exact component={Sim_class} />
+          <Route path="/products/sim_class/table" exact component={Sim_table} />
+          <Route
+            path="/products/sim_class/table/:id"
+            exact
+            component={Sim_info}
+          />
+          {/* Device */}
+          <Route path="/products/device_class" exact component={Device_class} />
+          <Route
+            path="/products/device_class/table"
+            exact
+            component={Device_table}
+          />
+          <Route
+            path="/products/device_class/table/:id"
+            exact
+            component={Device_info}
+          />
+          {/* Proxy */}
+          <Route path="/products/proxy_class" exact component={Proxy_class} />
+          <Route
+            path="/products/proxy_class/table"
+            exact
+            component={Proxy_table}
+          />
+          <Route
+            path="/products/proxy_class/table/:id"
+            exact
+            component={Proxy_info}
+          />
+          {/* Facebook */}
+          <Route
+            path="/products/facebook_class"
+            exact
+            component={Facebook_class}
+          />
+          <Route
+            path="/products/facebook_class/table"
+            exact
+            component={Facebook_table}
+          />
+          <Route
+            path="/products/facebook_class/table/:id"
+            exact
+            component={Facebook_info}
+          />
 
-        <Route
-          path="/products/create"
-          exact
-          component={Create}
-        />
+          {/*Tiktok */}
+          <Route path="/products/tiktok_class" exact component={Tiktok_class} />
+          <Route
+            path="/products/tiktok_class/table"
+            exact
+            component={Tiktok_table}
+          />
+          <Route
+            path="/products/tiktok_class/table/:id"
+            exact
+            component={Tiktok_info}
+          />
+          {/* Other */}
+          <Route path="/products/other_class" exact component={Other_class} />
+          <Route
+            path="/products/other_class/table"
+            exact
+            component={Other_table}
+          />
+          <Route
+            path="/products/other_class/table/:id"
+            exact
+            component={Other_info}
+          />
 
-        <Route
-          path="/products/tools"
-          exact
-          component={Tools_list}
-        />
+          <Route path="/products/create" exact component={Create} />
 
-        <Route
-          path="/products/cccd"
-          exact
-          component={CCCD}
-        />
+          <Route path="/products/tools" exact component={Tools_list} />
 
-        <Route exact path="/rtl" component={Rtl} />
-        <Route exact path="/profile" component={Profile} />
-      </Main>
-    </Switch>
-  </div>
-);
+          <Route path="/products/cccd" exact component={CCCD} />
+          {/*---------------------------------quản trị nhân sự-------------------------------- */}
+          {/*Users */}
+          <Route path="/personnel/users_class" exact component={Users_class} />
+          <Route
+            path="/personnel/users_class/table"
+            exact
+            component={Users_table}
+          />
+          <Route
+            path="/personnel/users_class/table/:id"
+            exact
+            component={Users_info}
+          />
+
+          {/*---------------------------------Business-------------------------------- */}
+          {/* Ebayorder */}
+          <Route
+            path="/business/ebayorder_class"
+            exact
+            component={Ebayorder_class}
+          />
+          <Route
+            path="/business/ebayorder_class/table"
+            exact
+            component={Ebayorder_table}
+          />
+          <Route
+            path="/business/ebayorder_class/table/:id"
+            exact
+            component={Ebayorder_info}
+          />
+          {/* Etsyorder */}
+          <Route
+            path="/business/etsyorder_class"
+            exact
+            component={Etsyorder_class}
+          />
+          <Route
+            path="/business/etsyorder_class/table"
+            exact
+            component={Etsyorder_table}
+          />
+          <Route
+            path="/business/etsyorder_class/table/:id"
+            exact
+            component={Etsyorder_info}
+          />
+
+          {/* Ebayitem */}
+          <Route
+            path="/business/ebayitem_class"
+            exact
+            component={Ebayitem_class}
+          />
+          <Route
+            path="/business/ebayitem_class/table"
+            exact
+            component={Ebayitem_table}
+          />
+          <Route
+            path="/business/ebayitem_class/table/:id"
+            exact
+            component={Ebayitem_info}
+          />
+          {/* Etsyitem */}
+          <Route
+            path="/business/etsyitem_class"
+            exact
+            component={Etsyitem_class}
+          />
+          <Route
+            path="/business/etsyitem_class/table"
+            exact
+            component={Etsyitem_table}
+          />
+          <Route
+            path="/business/etsyitem_class/table/:id"
+            exact
+            component={Etsyitem_info}
+          />
+
+          <Route exact path="/rtl" component={Rtl} />
+          <Route exact path="/profile" component={Profile} />
+        </Main>
+      </Switch>
+    </div>
+  );
+};
 
 export default compose(withRouter)(App);

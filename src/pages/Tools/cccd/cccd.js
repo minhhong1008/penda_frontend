@@ -31,32 +31,32 @@ function CCCD() {
     const arr = [img3, img4];
     var rand = arr[Math.floor(Math.random() * arr.length)];
     setFinger1(rand);
-  }
+  };
 
   const renderFinger2 = () => {
     const arr = [img3, img4];
     var rand = arr[Math.floor(Math.random() * arr.length)];
     setFinger2(rand);
-  }
+  };
 
   useEffect(() => {
-    renderBackground()
-    renderFinger1()
-    renderFinger2()
-  }, [])
+    renderBackground();
+    renderFinger1();
+    renderFinger2();
+  }, []);
 
   const [card, setCard] = useState({
-    card_id: "000000000000",
-    name: "NGUYEN VAN A",
-    birth_date: "01/01/1999",
-    date: "27/07/2017",
-    expiry: "01/01/2004",
+    card_id: "004183886158",
+    name: "PHUNG VAN MINH",
+    birth_date: "10/05/2000",
+    date: "27/04/2021",
+    expiry: "10/05/2025",
     id:
       "IDVNM0810028357026081042835<<98105026M4105028VNM<<<<<<<<<<<6CU<<TUAN<<ANH<<<<<<<<<<<<<<<<<",
     identification: "Sẹo chấm cánh mũi trái",
     nationality: "Việt Nam",
     origin: "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
-    residence: "192 Ngọa Long",
+    residence: "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
     gender: "Nam",
     img: "",
   });
@@ -66,6 +66,10 @@ function CCCD() {
   });
   const [fileUrl, setFileUrl] = useState("");
   const onFinish = (values) => {
+    // let expiry = values.expiry.split("/");
+    // console.log(expiry);
+    // let exp = expiry[1] + "/" + expiry[0] + "/" + expiry[2];
+    // values.expiry = exp;
     setCard(values);
   };
   const onFinishFailed = () => {};
@@ -105,6 +109,10 @@ function CCCD() {
     for (var i = 0; i < space; i++) {
       strSpace += "<";
     }
+    let birth_date_array = card.birth_date.split("/");
+    let str_birth_date = birth_date_array[2].slice(2, 4) + birth_date_array[1] + birth_date_array[0];
+    let expiry_array = card.expiry.split("/");
+    let str_expiry = expiry_array[2].slice(2, 4) + expiry_array[1] + expiry_array[0];
     let str =
       "IDVNM" +
       card.card_id.slice(3) +
@@ -112,10 +120,10 @@ function CCCD() {
       card.card_id +
       "<<" +
       Math.floor(Math.random() * 10) +
-      moment(card.birth_date).format("YYMMDD") +
+      str_birth_date +
       Math.floor(Math.random() * 10) +
-      "M" +
-      moment(card.expiry).format("YYMMDD") +
+      (card.gender == "Nam" ? "M" : "F") +
+      str_expiry +
       Math.floor(Math.random() * 10) +
       "VNM<<<<<<<<<<<" +
       Math.floor(Math.random() * 10) +
@@ -344,7 +352,7 @@ function CCCD() {
               <div className="name">{card.name}</div>
               <div className="birth_date">{card.birth_date}</div>
               <div className="gender">{card.gender}</div>
-              <div className="nationality">{card.nationality}</div>
+              <div className="nationality">{"Việt Nam"}</div>
               <div className="origin">{card.origin}</div>
               <div className="residence">{card.residence}</div>
               <div className="expiry">{card.expiry}</div>

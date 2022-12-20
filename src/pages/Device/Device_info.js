@@ -14,35 +14,40 @@ import {
 } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { copyToClipboard } from "../../utils/index";
 import moment from "moment";
+import { getUser } from "../../utils/index";
 import {
   postdeviceInfo,
   getdeviceInfo,
   updatedeviceInfo,
 } from "../../api/device/index";
 import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
 
 const device_info = () => {
   const { Option } = Select;
-
-// Lấy ID từ trên param url
+  const { users_function, users_name } = useSelector((state) => state.auth);
+  // Lấy ID từ trên param url
   let { id } = useParams();
-// Khai báo các kho dữ liệu
+  // Khai báo các kho dữ liệu
   const [deviceData, setdeviceData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
   const [noteValue, setNoteValue] = useState("");
-// Khai báo kho dữ liệu của các form
+
+  // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
 
-// Hàm để gửi dữ liệu đi
+  // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     const newValue = {
       ...info,
       ...values,
+      device_plan: values?.device_plan ? values.device_plan.join(",") : "",
       device_processing: values?.device_processing
         ? values.device_processing.join(",")
         : "",
@@ -55,10 +60,11 @@ const device_info = () => {
         ? values.device_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-      device_date_start: dateData?.device_date_start
+
+      devicedate_start: dateData?.device_date_start
         ? moment(dateData.device_date_start).format("MM-DD-YYYY")
         : "",
-      device_date_verify: dateData?.device_date_verify
+      devicedate_verify: dateData?.device_date_verify
         ? moment(dateData.device_date_verify).format("MM-DD-YYYY")
         : "",
       device_note: noteValue,
@@ -70,24 +76,29 @@ const device_info = () => {
       showError("Sửa không thành công");
     }
   };
-// Hàm gể gửi dữ liệu date
+  // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
   };
-// Hàm gửi dữ liệu từ form info
+  // Hàm gửi dữ liệu từ form info
   const onFinishInfo = (values) => {
     setInfo(values);
   };
-// Hàm gọi dữ liệu về từ database
+  // Hàm gọi dữ liệu về từ database
   const getInfodevice = async () => {
     const { data } = await getdeviceInfo(id);
     const newData = {
       ...data,
-      device_employee: data.device_employee.split(","),
-      device_processing: data.device_processing.split(","),
-      device_type: data.device_type.split(","),
-      device_sell_status: data.device_sell_status.split(","),
-      device_owner: data.device_owner.split(","),
+      device_plan: data?.device_plan ? data.device_plan.split(",") : "",
+      device_employee: data?.device_employee ? data.device_employee.split(",") : "",
+      device_processing: data?.device_processing
+        ? data.device_processing.split(",")
+        : "",
+      device_type: data?.device_type ? data.device_type.split(",") : "",
+      device_sell_status: data?.device_sell_status
+        ? data.device_sell_status.split(",")
+        : "",
+      device_owner: data?.device_owner ? data.device_owner.split(",") : "",
     };
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
@@ -100,8 +111,7 @@ const device_info = () => {
     setSelectListInfo(data.list_view.split(","));
   };
 
- 
-// Hàm để chuyển trang sang các tài khoản khác
+  // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
       {
@@ -125,6 +135,12 @@ const device_info = () => {
       value: "",
     },
     {
+      title: "PROXY",
+      thumbnail:
+        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
+      value: "",
+    },
+    {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
@@ -145,13 +161,25 @@ const device_info = () => {
     {
       title: "BANK",
       thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-device-flat-design-yellow-round-web-icon.jpg",
       value: "",
     },
     {
-      title: "CARD",
+      title: "PAYONEER",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
+      value: "",
+    },
+    {
+      title: "PAYPAL",
+      thumbnail:
+        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
+      value: "",
+    },
+    {
+      title: "PINGPONG",
+      thumbnail:
+        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
       value: "",
     },
     {
@@ -178,7 +206,7 @@ const device_info = () => {
       value: "",
     },
     {
-      title: "FACKEBOOK",
+      title: "FACEBOOK",
       thumbnail:
         "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
       value: "",
@@ -200,12 +228,114 @@ const device_info = () => {
   //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
+      title: "Ngày giao",
+      value: "devicedate_delivery",
+    },
+    {
       title: "Ngày tạo",
-      value: "device_date_start",
+      value: "devicedate_start",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      value: "devicedate_nextclass",
     },
     {
       title: "Ngày verify",
-      value: "device_date_verify",
+      value: "devicedate_verify",
+    },
+    {
+      title: "Ngày Seller",
+      value: "devicedate_seller",
+    },
+    {
+      title: "Ngày verify Bank",
+      value: "devicedate_verifybank",
+    },
+    {
+      title: "Ngày draft",
+      value: "devicedate_draft",
+    },
+    {
+      title: "Ngày list1",
+      value: "devicedate_list1",
+    },
+    {
+      title: "Ngày list2",
+      value: "devicedate_list2",
+    },
+    {
+      title: "Ngày list3",
+      value: "devicedate_list3",
+    },
+    {
+      title: "Ngày list4",
+      value: "devicedate_list4",
+    },
+    {
+      title: "Ngày list5",
+      value: "devicedate_list5",
+    },
+
+    {
+      title: "Dự kiến seller",
+      value: "devicedate_expectedseller",
+    },
+    {
+      title: "Dự kiến list 1",
+      value: "devicedate_expectedlist1",
+    },
+    {
+      title: "Dự kiến list 2",
+      value: "devicedate_expectedlist2",
+    },
+    {
+      title: "Dự kiến list 3",
+      value: "devicedate_expectedlist3",
+    },
+    {
+      title: "Dự kiến list 4",
+      value: "devicedate_expectedlist4",
+    },
+    {
+      title: "Dự kiến list 5",
+      value: "devicedate_expectedlist5",
+    },
+
+    {
+      title: "Ngày Suspended",
+      value: "devicedate_suspended",
+    },
+    {
+      title: "Ngày check",
+      value: "devicedate_checksus1",
+    },
+    {
+      title: "Ngày gỡ sus 1",
+      value: "devicedate_contact1",
+    },
+    {
+      title: "Ngày gỡ sus 2",
+      value: "devicedate_contact2",
+    },
+    {
+      title: "Ngày gỡ sus 3",
+      value: "devicedate_contact3",
+    },
+    {
+      title: "Ngày gỡ sus 4",
+      value: "devicedate_contact4",
+    },
+    {
+      title: "Ngày gỡ sus 5",
+      value: "devicedate_contact5",
+    },
+    {
+      title: "Ngày check",
+      value: "devicedate_checksus2",
+    },
+    {
+      title: "Ngày check",
+      value: "devicedate_checksus3",
     },
   ];
 
@@ -225,7 +355,7 @@ const device_info = () => {
       extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
     >
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
+        
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
@@ -248,8 +378,15 @@ const device_info = () => {
                             message: "Hãy nhập device id!",
                           },
                         ]}
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("device_id"))
+                        }
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input
+                          disabled={true}
+                          size="small"
+                          placeholder="input here"
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
@@ -270,6 +407,139 @@ const device_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Col span={6}>
+                      <Form.Item label="device profile" name="device_limit">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="device items" name="device_item">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="device Sold" name="device_sold">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="device Feedback" name="device_feedback">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Quy trình"
+                      name="device_plan"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Phone" label="Phone">
+                          <div className="demo-option-label-item">Phone</div>
+                        </Option>
+                        <Option value="PC" label="PC">
+                          <div className="demo-option-label-item">PC</div>
+                        </Option>
+                        <Option value="Antidetect" label="Antidetect">
+                          <div className="demo-option-label-item">
+                            Antidetect
+                          </div>
+                        </Option>
+                        <Option value="Gologin" label="Gologin">
+                          <div className="demo-option-label-item">Gologin</div>
+                        </Option>
+                        <Option value="VPS" label="VPS">
+                          <div className="demo-option-label-item">VPS</div>
+                        </Option>
+                        <Option value="Windows 10" label="Windows 10">
+                          <div className="demo-option-label-item">
+                            Windows 10
+                          </div>
+                        </Option>
+                        <Option value="Windows 11" label="Windows 11">
+                          <div className="demo-option-label-item">
+                            Windows 11
+                          </div>
+                        </Option>
+                        <Option value="MAC" label="MAC">
+                          <div className="demo-option-label-item">MAC</div>
+                        </Option>
+                        <Option value="Ubuntu" label="Ubuntu">
+                          <div className="demo-option-label-item">Ubuntu</div>
+                        </Option>
+                        <Option value="Chrome" label="Chrome">
+                          <div className="demo-option-label-item">Chrome</div>
+                        </Option>
+                        <Option value="Firefox" label="Firefox">
+                          <div className="demo-option-label-item">Firefox</div>
+                        </Option>
+                        <Option value="Eagle" label="Eagle">
+                          <div className="demo-option-label-item">Eagle</div>
+                        </Option>
+                        <Option value="Safari" label="Safari">
+                          <div className="demo-option-label-item">Safari</div>
+                        </Option>
+                        <Option value="USB 4G" label="USB 4G">
+                          <div className="demo-option-label-item">USB 4G</div>
+                        </Option>
+                        <Option value="Proxy 4G" label="Proxy 4G">
+                          <div className="demo-option-label-item">Proxy 4G</div>
+                        </Option>
+                        <Option value="Proxy" label="Proxy">
+                          <div className="demo-option-label-item">Proxy</div>
+                        </Option>
+                        <Option value="Info real" label="Info real">
+                          <div className="demo-option-label-item">
+                            Info real
+                          </div>
+                        </Option>
+                        <Option value="Info gen" label="Info gen">
+                          <div className="demo-option-label-item">Info gen</div>
+                        </Option>
+                        <Option value="Quy trình 1" label="Quy trình 1">
+                          <div className="demo-option-label-item">
+                            Quy trình 1
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 2" label="Quy trình 2">
+                          <div className="demo-option-label-item">
+                            Quy trình 2
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 3" label="Quy trình 3">
+                          <div className="demo-option-label-item">
+                            Quy trình 3
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 4" label="Quy trình 4">
+                          <div className="demo-option-label-item">
+                            Quy trình 4
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 5" label="Quy trình 5">
+                          <div className="demo-option-label-item">
+                            Quy trình 5
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
                   <Form.Item label="Tiến trình" name="device_processing">
                     <Select
                       mode="multiple"
@@ -278,160 +548,273 @@ const device_info = () => {
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="Mail" label="Mail">
-                        <div className="demo-option-label-item">Mail</div>
+                      <Option value="Set device" label="Set device">
+                        <div className="demo-option-label-item">Set device</div>
                       </Option>
-                      <Option value="Buyer" label="Buyer">
-                        <div className="demo-option-label-item">Buyer</div>
+                      <Option value="Cài Windows" label="Cài Windows">
+                        <div className="demo-option-label-item">Cài Windows</div>
                       </Option>
-                      <Option value="Verify" label="Verify">
-                        <div className="demo-option-label-item">Verify</div>
+                      <Option value="Copy tool" label="Copy tool">
+                        <div className="demo-option-label-item">Copy tool</div>
                       </Option>
-                      <Option value="Seller" label="Seller">
-                        <div className="demo-option-label-item">Seller</div>
+                      <Option value="Cài Browser" label="Cài Browser">
+                        <div className="demo-option-label-item">Cài Browser</div>
                       </Option>
-                      <Option value="List" label="List">
-                        <div className="demo-option-label-item">List</div>
+                      <Option value="Check device" label="Check device">
+                        <div className="demo-option-label-item">Check device</div>
                       </Option>
+                      <Option value="Check browser" label="Check browser">
+                        <div className="demo-option-label-item">Check browser</div>
+                      </Option>
+                      <Option value="Active" label="Active">
+                        <div className="demo-option-label-item">Active</div>
+                      </Option>
+                      <Option value="Error" label="Error">
+                        <div className="demo-option-label-item">Error</div>
+                      </Option>
+                      <Option value="Die" label="Die">
+                        <div className="demo-option-label-item">Die</div>
+                      </Option>
+                      
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Loại device" name="device_type">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="VN" label="VN">
-                        <div className="demo-option-label-item">VN</div>
-                      </Option>
-                      <Option value="US" label="US">
-                        <div className="demo-option-label-item">US</div>
-                      </Option>
-                      <Option value="device Buyer" label="Buyer">
-                        <div className="demo-option-label-item">Buyer</div>
-                      </Option>
-                      <Option value="device Seller" label="Seller">
-                        <div className="demo-option-label-item">Seller</div>
-                      </Option>
-                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                        <div className="demo-option-label-item">
-                          Gỡ Suspended
-                        </div>
-                      </Option>
-                      <Option value="ADS" label="ADS">
-                        <div className="demo-option-label-item">Quảng cáo</div>
-                      </Option>
-                      <Option value="Above Standard" label="Above Standard">
-                        <div className="demo-option-label-item">
-                          Above Standard
-                        </div>
-                      </Option>
-                      <Option value="Top Rate" label="Top Rate">
-                        <div className="demo-option-label-item">Top Rate</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item label="TT Bán" name="device_sell_status">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                        <div className="demo-option-label-item">
-                          Chuẩn bị bán
-                        </div>
-                      </Option>
-                      <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
-                        <div className="demo-option-label-item">
-                          Đủ điều kiện bán
-                        </div>
-                      </Option>
-
-                      <Option value="Bán tài khoản" label="Bán tài khoản">
-                        <div className="demo-option-label-item">
-                          Bán tài khoản
-                        </div>
-                      </Option>
-                      <Option value="Đang giao dịch" label="Đang giao dịch">
-                        <div className="demo-option-label-item">
-                          Đang giao dịch
-                        </div>
-                      </Option>
-
-                      <Option value="Bán thành công" label="Bán thành công">
-                        <div className="demo-option-label-item">
-                          Bán thành công
-                        </div>
-                      </Option>
-                      <Option value="Bảo hành" label="Bảo hành">
-                        <div className="demo-option-label-item">Bảo hành</div>
-                      </Option>
-                      <Option value="Hết bảo hành" label="Hết bảo hành">
-                        <div className="demo-option-label-item">
-                          Hết bảo hành
-                        </div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item label="Sở hữu" name="device_owner">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                        <div className="demo-option-label-item">
-                          Phòng sản xuất
-                        </div>
-                      </Option>
-                      <Option value="Phòng Kinh doanh" label="Phòng Kinh doanh">
-                        <div className="demo-option-label-item">
-                          Phòng Kinh doanh
-                        </div>
-                      </Option>
-                      <Option
-                        value="Phòng nâng cấp và phục hồi tài khoản"
-                        label="Phòng nâng cấp và phục hồi tài khoản"
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Loại device" name="device_type">
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
                       >
-                        <div className="demo-option-label-item">
-                          Phòng nâng cấp và phục hồi tài khoản
-                        </div>
-                      </Option>
-                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                        <div className="demo-option-label-item">
-                          Kho lưu trữ
-                        </div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
+                        <Option value="VN" label="VN">
+                          <div className="demo-option-label-item">VN</div>
+                        </Option>
+                        <Option value="US" label="US">
+                          <div className="demo-option-label-item">US</div>
+                        </Option>
+                        <Option value="Phone" label="Phone">
+                          <div className="demo-option-label-item">Phone</div>
+                        </Option>
+                        <Option value="PC" label="PC">
+                          <div className="demo-option-label-item">
+                            PC
+                          </div>
+                        </Option>
+                        <Option value="Antidetect" label="Antidetect">
+                          <div className="demo-option-label-item">Antidetect</div>
+                        </Option>
+                        <Option value="Gologin" label="Gologin">
+                          <div className="demo-option-label-item">
+                            Gologin
+                          </div>
+                        </Option>
+                        <Option value="VPS" label="VPS">
+                          <div className="demo-option-label-item">VPS</div>
+                        </Option>
+                        <Option value="VMW" label="VMW">
+                          <div className="demo-option-label-item">
+                          VMW
+                          </div>
+                        </Option>
+                        <Option value="Windows 10" label="Windows 10">
+                          <div className="demo-option-label-item">
+                          Windows 10
+                          </div>
+                        </Option>
+                        <Option value="Windows 11" label="Windows 11">
+                          <div className="demo-option-label-item">
+                          Windows 11
+                          </div>
+                        </Option>
+                        <Option value="App" label="App">
+                          <div className="demo-option-label-item">
+                          App
+                          </div>
+                        </Option>
+                        <Option value="Chrome" label="Chrome">
+                          <div className="demo-option-label-item">
+                          Chrome
+                          </div>
+                        </Option>
+                        <Option value="Firefox" label="Firefox">
+                          <div className="demo-option-label-item">
+                          Firefox
+                          </div>
+                        </Option>
+                        <Option value="Edge" label="Edge">
+                          <div className="demo-option-label-item">
+                          Edge
+                          </div>
+                        </Option>
+                        <Option value="Safari" label="Safari">
+                          <div className="demo-option-label-item">
+                          Safari
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
 
-                  <Form.Item label="Nhân viên" name="device_employee">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="TT Bán"
+                      name="device_sell_status"
+                      style={{
+                        display:
+                          [
+                            "Tổ phó",
+                            "Chuyên viên",
+                            "Nhân viên",
+                            "Tập sự",
+                            "Thử việc",
+                          ].indexOf(users_function) == -1
+                            ? ""
+                            : "none",
+                      }}
                     >
-                      <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                        <div className="demo-option-label-item">
-                          Nguyễn Hoài
-                        </div>
-                      </Option>
-                      <Option value="Khắc Liêm" label="Khắc Liêm">
-                        <div className="demo-option-label-item">Khắc Liêm</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
+                          <div className="demo-option-label-item">
+                            Chuẩn bị bán
+                          </div>
+                        </Option>
+                        <Option
+                          value="Đủ điều kiện bán"
+                          label="Đủ điều kiện bán"
+                        >
+                          <div className="demo-option-label-item">
+                            Đủ điều kiện bán
+                          </div>
+                        </Option>
+
+                        <Option value="Bán tài khoản" label="Bán tài khoản">
+                          <div className="demo-option-label-item">
+                            Bán tài khoản
+                          </div>
+                        </Option>
+                        <Option value="Đang giao dịch" label="Đang giao dịch">
+                          <div className="demo-option-label-item">
+                            Đang giao dịch
+                          </div>
+                        </Option>
+
+                        <Option value="Bán thành công" label="Bán thành công">
+                          <div className="demo-option-label-item">
+                            Bán thành công
+                          </div>
+                        </Option>
+                        <Option value="Bảo hành" label="Bảo hành">
+                          <div className="demo-option-label-item">Bảo hành</div>
+                        </Option>
+                        <Option value="Hết bảo hành" label="Hết bảo hành">
+                          <div className="demo-option-label-item">
+                            Hết bảo hành
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Sở hữu" name="device_owner">
+                      <Select
+                        disabled={
+                          [
+                            "Trưởng phòng",
+                            "Phó phòng",
+                            "Tổ trưởng",
+                            "Tổ phó",
+                          ].indexOf(users_function) !== -1
+                        }
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
+                          <div className="demo-option-label-item">
+                            Phòng sản xuất
+                          </div>
+                        </Option>
+                        <Option
+                          value="Phòng Kinh doanh"
+                          label="Phòng Kinh doanh"
+                        >
+                          <div className="demo-option-label-item">
+                            Phòng Kinh doanh
+                          </div>
+                        </Option>
+                        <Option
+                          value="Phòng nâng cấp và phục hồi tài khoản"
+                          label="Phòng nâng cấp và phục hồi tài khoản"
+                        >
+                          <div className="demo-option-label-item">
+                            Phòng nâng cấp và phục hồi tài khoản
+                          </div>
+                        </Option>
+                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                          <div className="demo-option-label-item">
+                            Kho lưu trữ
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Nhân viên" name="device_employee">
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
+                          <div className="demo-option-label-item">
+                            Nguyễn Hoài
+                          </div>
+                        </Option>
+                        <Option value="Khắc Liêm" label="Khắc Liêm">
+                          <div className="demo-option-label-item">
+                            Khắc Liêm
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
 
                   <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={8}>
                       <Form.Item label="Trạng thái" name="device_status">
                         <Select
                           //mode="multiple"
@@ -441,18 +824,11 @@ const device_info = () => {
                           <Option value="Live" label="Live">
                             <div className="demo-option-label-item">Live</div>
                           </Option>
+                          <Option value="Active" label="Active">
+                            <div className="demo-option-label-item">Active</div>
+                          </Option>
                           <Option value="Error" label="Error">
                             <div className="demo-option-label-item">Error</div>
-                          </Option>
-                          <Option value="Suspended" label="Suspended">
-                            <div className="demo-option-label-item">
-                              Suspended
-                            </div>
-                          </Option>
-                          <Option value="Disable" label="Disable">
-                            <div className="demo-option-label-item">
-                              Disable
-                            </div>
                           </Option>
                           <Option value="Die" label="Die">
                             <div className="demo-option-label-item">Die</div>
@@ -460,63 +836,133 @@ const device_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
-                      <Form.Item label="Lớp device" name="device_class">
+                    <Col span={8}>
+                      <Form.Item label="PC" name="device_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
                         >
-                          <Option value="Lớp 1" label="Lớp 1 New">
+                          <Option value="PC 1" label="PC 1">
                             <div className="demo-option-label-item">
-                              Lớp 1 New
+                              PC 1
                             </div>
                           </Option>
-                          <Option value="Lớp 2" label="Lớp 2">
-                            <div className="demo-option-label-item">Lớp 2</div>
+                          <Option value="PC 2" label="PC 2">
+                            <div className="demo-option-label-item">PC 2</div>
                           </Option>
-                          <Option value="Lớp 3" label="Lớp 3">
-                            <div className="demo-option-label-item">Lớp 3</div>
+                          <Option value="PC 3" label="PC 3">
+                            <div className="demo-option-label-item">PC 3</div>
                           </Option>
-                          <Option value="Lớp 4" label="Lớp 4">
-                            <div className="demo-option-label-item">Lớp 4</div>
+                          <Option value="PC 4" label="PC 4">
+                            <div className="demo-option-label-item">PC 4</div>
                           </Option>
-                          <Option value="Lớp 5" label="Lớp 5">
-                            <div className="demo-option-label-item">Lớp 5</div>
+                          <Option value="PC 5" label="PC 5">
+                            <div className="demo-option-label-item">PC 5</div>
                           </Option>
-                          <Option value="Lớp 6" label="Lớp 6">
-                            <div className="demo-option-label-item">Lớp 6</div>
+                          <Option value="PC 6" label="PC 6">
+                            <div className="demo-option-label-item">PC 6</div>
                           </Option>
-                          <Option value="Lớp 7" label="Lớp 7">
-                            <div className="demo-option-label-item">Lớp 7</div>
+                          <Option value="PC 7" label="PC 7">
+                            <div className="demo-option-label-item">PC 7</div>
                           </Option>
-                          <Option value="Lớp 8" label="Lớp 8 Upseller">
+                          <Option value="PC 8" label="PC 8 Upseller">
                             <div className="demo-option-label-item">
-                              Lớp 8 Upseller
+                              PC 8 Upseller
                             </div>
                           </Option>
-                          <Option value="Lớp 9" label="Lớp 9">
-                            <div className="demo-option-label-item">Lớp 9</div>
+                          <Option value="PC 9" label="PC 9">
+                            <div className="demo-option-label-item">PC 9</div>
                           </Option>
-                          <Option value="Lớp 10" label="Lớp 10">
-                            <div className="demo-option-label-item">Lớp 10</div>
+                          <Option value="PC 10" label="PC 10">
+                            <div className="demo-option-label-item">PC 10</div>
                           </Option>
-                          <Option value="Lớp 11" label="Lớp 11">
-                            <div className="demo-option-label-item">Lớp 11</div>
+                          <Option value="PC 11" label="PC 11">
+                            <div className="demo-option-label-item">PC 11</div>
                           </Option>
-                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
+                          <Option value="PC 12" label="PC 12">
                             <div className="demo-option-label-item">
-                              Lớp 12 Chuyển
+                              PC 12
                             </div>
                           </Option>
-                          <Option value="Lớp 20" label="Lớp 20 device error">
+                          <Option value="PC 13" label="PC 13">
+                            <div className="demo-option-label-item">PC 13</div>
+                          </Option>
+                          <Option value="PC 14" label="PC 14">
+                            <div className="demo-option-label-item">PC 14</div>
+                          </Option>
+                          <Option value="PC 15" label="PC 15">
+                            <div className="demo-option-label-item">PC 15</div>
+                          </Option>
+                          <Option value="PC 16" label="PC 16">
+                            <div className="demo-option-label-item">PC 16</div>
+                          </Option>
+                          <Option value="PC 17" label="PC 17">
+                            <div className="demo-option-label-item">PC 17</div>
+                          </Option>
+                          <Option value="PC 18" label="PC 18">
+                            <div className="demo-option-label-item">PC 18</div>
+                          </Option>
+                          <Option value="PC 19" label="PC 19">
+                            <div className="demo-option-label-item">PC 19</div>
+                          </Option>
+                          <Option value="PC 20" label="PC 20">
                             <div className="demo-option-label-item">
-                              Lớp 20 device error
+                              PC 20
                             </div>
                           </Option>
-                          <Option value="Lớp 21" label="Lớp 21 device die">
+                          <Option value="PC 21" label="PC 21">
                             <div className="demo-option-label-item">
-                              Lớp 21 device die
+                              PC 21
+                            </div>
+                          </Option>
+                          <Option value="PC 22" label="PC 22">
+                            <div className="demo-option-label-item">
+                              PC 22
+                            </div>
+                          </Option>
+                          <Option
+                            value="PC 23"
+                            label="PC 23"
+                          >
+                            <div className="demo-option-label-item">
+                              PC 23
+                            </div>
+                          </Option>
+                          <Option
+                            value="PC 24"
+                            label="PC 24"
+                          >
+                            <div className="demo-option-label-item">
+                              PC 24
+                            </div>
+                          </Option>
+                          <Option
+                            value="PC 25"
+                            label="PC 25"
+                          >
+                            <div className="demo-option-label-item">
+                              PC 25
+                            </div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item label="Hỗ trợ" name="device_support">
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="select one item"
+                          optionLabelProp="label"
+                        >
+                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
+                            <div className="demo-option-label-item">
+                              Nguyễn Hoài
+                            </div>
+                          </Option>
+                          <Option value="Khắc Liêm" label="Khắc Liêm">
+                            <div className="demo-option-label-item">
+                              Khắc Liêm
                             </div>
                           </Option>
                         </Select>
@@ -528,27 +974,36 @@ const device_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-                <Select
-                  mode="multiple"
-                  style={{ width: "100%" }}
-                  placeholder="select one item"
-                  optionLabelProp="label"
-                  onChange={changeSelectListInfo}
-                  value={selectListInfo}
-                >
-                  {listInfo.map((item) => {
-                    return (
-                      <Option
-                        value={item.title.toLocaleLowerCase() + "_id"}
-                        label={item.title}
-                      >
-                        <div className="demo-option-label-item">
-                          {item.title}
-                        </div>
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {[
+                  "Tổ phó",
+                  "Chuyên viên",
+                  "Nhân viên",
+                  "Tập sự",
+                  "Thử việc",
+                ].indexOf(users_function) == -1 ? (
+                  <Select
+                    mode="multiple"
+                    style={{ width: "100%" }}
+                    placeholder="select one item"
+                    optionLabelProp="label"
+                    onChange={changeSelectListInfo}
+                    value={selectListInfo}
+                  >
+                    {listInfo.map((item) => {
+                      return (
+                        <Option
+                          value={item.title.toLocaleLowerCase() + "_id"}
+                          label={item.title}
+                        >
+                          <div className="demo-option-label-item">
+                            {item.title}
+                          </div>
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : null}
+
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
@@ -652,13 +1107,18 @@ const device_info = () => {
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
-                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
-                  [;Ctrl + K, Ctrl + ];
+                  2022-11-23 16:50:34|;
                 </span>
               </Card>
             </Col>
           </Row>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="HƯỚNG DẪN"  key="3">
+        <p>1. PC là máy thật</p>
+        <p>2. device User: Là tên Antidetect mã DAN_12345, VPS mã DVPS_ip, gologin mã DGO_12345 (các chữ cái viết hoa)</p>
+        <p>3. Thiết bị được tạo trong phần Tool - nhập liệu - chọn DEVICE trong THÔNG TIN ITEM, Bản bên cạnh nhập tên antidetect theo dòng, chọn PC theo lớp ebay </p>
+        
+          
         </Tabs.TabPane>
       </Tabs>
     </Card>

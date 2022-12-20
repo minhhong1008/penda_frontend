@@ -34,7 +34,7 @@ const Info_info = () => {
   const [infoData, setinfoData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
   const [noteValue, setNoteValue] = useState("");
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
@@ -121,6 +121,12 @@ const Info_info = () => {
       value: "",
     },
     {
+      title: "PROXY",
+      thumbnail:
+        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
+      value: "",
+    },
+    {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
@@ -145,9 +151,21 @@ const Info_info = () => {
       value: "",
     },
     {
-      title: "CARD",
+      title: "PAYONEER",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
+      value: "",
+    },
+    {
+      title: "PAYPAL",
+      thumbnail:
+        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
+      value: "",
+    },
+    {
+      title: "PINGPONG",
+      thumbnail:
+        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
       value: "",
     },
     {
@@ -174,7 +192,7 @@ const Info_info = () => {
       value: "",
     },
     {
-      title: "FACKEBOOK",
+      title: "FACEBOOK",
       thumbnail:
         "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
       value: "",
@@ -279,9 +297,14 @@ const Info_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={24}>
+                    <Col span={18}>
                       <Form.Item label="Quê quán........" name="info_origin">
                         <Input size="small" placeholder="I_1000" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="code" name="info_code">
+                        <Input size="small" placeholder="100000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -342,14 +365,15 @@ const Info_info = () => {
                         <div className="demo-option-label-item">Real</div>
                       </Option>
                       <Option value="Fake" label="Fake">
-                        <div className="demo-option-label-item">Fake</div>
+                        <div className="demo-option-label-item">Gen</div>
                       </Option>
-                      <Option value="trust" label="trust">
-                        <div className="demo-option-label-item">trust</div>
+                      <Option value="staff" label="Staff">
+                        <div className="demo-option-label-item">Staff</div>
                       </Option>
-                      <Option value="buy" label="buy">
-                        <div className="demo-option-label-item">buy</div>
+                      <Option value="trust" label="Trust">
+                        <div className="demo-option-label-item">Trust</div>
                       </Option>
+                      
                     </Select>
                   </Form.Item>
 

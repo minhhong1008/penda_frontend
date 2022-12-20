@@ -22,6 +22,12 @@ export const updateebayInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountEbay = () => {
+  const url = `/getebay/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

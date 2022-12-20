@@ -11,6 +11,10 @@ export const REGISTER_ERROR = 'REGISTER_ERROR';
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 
+export const GET_ROLE_REQUEST = 'GET_ROLE_REQUEST';
+export const GET_ROLE_SUCCESS = 'GET_ROLE_SUCCESS';
+export const GET_ROLE_ERROR = 'GET_ROLE_ERROR';
+
 // actions
 
 export const loginAction = ( payload ) => {
@@ -30,5 +34,12 @@ export const registerAction = ( payload ) => {
 export const logoutAction = () => {
     return {
         type: LOG_OUT_REQUEST,
+    }
+}
+
+export const getRoleAction = ( payload ) => {
+    return {
+        type: GET_ROLE_REQUEST,
+        payload: payload,
     }
 }

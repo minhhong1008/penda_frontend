@@ -8,8 +8,10 @@ import {
   LOGIN_ERROR,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
+  GET_ROLE_REQUEST,
+  GET_ROLE_SUCCESS,
 } from "../actions/authActions";
-import { loginApi, registerApi } from "../api/auth/index.js";
+import { loginApi, registerApi, verifyToken } from "../api/auth/index.js";
 import {
   removeToken,
   removeUser,
@@ -48,15 +50,27 @@ function* loginRequest({ payload }) {
 }
 
 function* logoutRequest() {
-  console.log(12312);
   removeToken();
   removeUser();
   showSuccess('Đăng xuất thành công')
   yield put({ type: LOG_OUT_SUCCESS });
 }
 
+function* getRole({ payload }) {
+  try {
+    const response = yield call(verifyToken, {
+      token: payload
+    });
+    const { data } = response;
+    yield put({ type: GET_ROLE_SUCCESS, payload: data });
+  } catch (error) {
+    
+  }
+}
+
 export default function* authSaga() {
   yield takeLatest(REGISTER_REQUEST, registerRequest);
   yield takeLatest(LOGIN_REQUEST, loginRequest);
   yield takeLatest(LOG_OUT_REQUEST, logoutRequest);
+  yield takeLatest(GET_ROLE_REQUEST, getRole);
 }

@@ -14,35 +14,40 @@ import {
 } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { copyToClipboard } from "../../utils/index";
 import moment from "moment";
+import { getUser } from "../../utils/index";
 import {
   postetsyInfo,
   getetsyInfo,
   updateetsyInfo,
 } from "../../api/etsy/index";
 import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
 
 const etsy_info = () => {
   const { Option } = Select;
-
-// Lấy ID từ trên param url
+  const { users_function, users_name } = useSelector((state) => state.auth);
+  // Lấy ID từ trên param url
   let { id } = useParams();
-// Khai báo các kho dữ liệu
+  // Khai báo các kho dữ liệu
   const [etsyData, setetsyData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["info_id"]);
+  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
   const [noteValue, setNoteValue] = useState("");
-// Khai báo kho dữ liệu của các form
+
+  // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
 
-// Hàm để gửi dữ liệu đi
+  // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     const newValue = {
       ...info,
       ...values,
+      etsy_plan: values?.etsy_plan ? values.etsy_plan.join(",") : "",
       etsy_processing: values?.etsy_processing
         ? values.etsy_processing.join(",")
         : "",
@@ -55,10 +60,11 @@ const etsy_info = () => {
         ? values.etsy_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-      etsy_date_start: dateData?.etsy_date_start
+
+      etsydate_start: dateData?.etsy_date_start
         ? moment(dateData.etsy_date_start).format("MM-DD-YYYY")
         : "",
-      etsy_date_verify: dateData?.etsy_date_verify
+      etsydate_verify: dateData?.etsy_date_verify
         ? moment(dateData.etsy_date_verify).format("MM-DD-YYYY")
         : "",
       etsy_note: noteValue,
@@ -70,24 +76,29 @@ const etsy_info = () => {
       showError("Sửa không thành công");
     }
   };
-// Hàm gể gửi dữ liệu date
+  // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
   };
-// Hàm gửi dữ liệu từ form info
+  // Hàm gửi dữ liệu từ form info
   const onFinishInfo = (values) => {
     setInfo(values);
   };
-// Hàm gọi dữ liệu về từ database
+  // Hàm gọi dữ liệu về từ database
   const getInfoetsy = async () => {
     const { data } = await getetsyInfo(id);
     const newData = {
       ...data,
-      etsy_employee: data.etsy_employee.split(","),
-      etsy_processing: data.etsy_processing.split(","),
-      etsy_type: data.etsy_type.split(","),
-      etsy_sell_status: data.etsy_sell_status.split(","),
-      etsy_owner: data.etsy_owner.split(","),
+      etsy_plan: data?.etsy_plan ? data.etsy_plan.split(",") : "",
+      etsy_employee: data?.etsy_employee ? data.etsy_employee.split(",") : "",
+      etsy_processing: data?.etsy_processing
+        ? data.etsy_processing.split(",")
+        : "",
+      etsy_type: data?.etsy_type ? data.etsy_type.split(",") : "",
+      etsy_sell_status: data?.etsy_sell_status
+        ? data.etsy_sell_status.split(",")
+        : "",
+      etsy_owner: data?.etsy_owner ? data.etsy_owner.split(",") : "",
     };
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
@@ -100,8 +111,7 @@ const etsy_info = () => {
     setSelectListInfo(data.list_view.split(","));
   };
 
- 
-// Hàm để chuyển trang sang các tài khoản khác
+  // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
       {
@@ -125,6 +135,12 @@ const etsy_info = () => {
       value: "",
     },
     {
+      title: "PROXY",
+      thumbnail:
+        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
+      value: "",
+    },
+    {
       title: "INFO",
       thumbnail:
         "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
@@ -145,13 +161,25 @@ const etsy_info = () => {
     {
       title: "BANK",
       thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-ebay-flat-design-yellow-round-web-icon.jpg",
+        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
       value: "",
     },
     {
-      title: "CARD",
+      title: "PAYONEER",
       thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/1/0/1089.9-credit-card-icon-iconbunny.jpg",
+        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
+      value: "",
+    },
+    {
+      title: "PAYPAL",
+      thumbnail:
+        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
+      value: "",
+    },
+    {
+      title: "PINGPONG",
+      thumbnail:
+        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
       value: "",
     },
     {
@@ -178,7 +206,7 @@ const etsy_info = () => {
       value: "",
     },
     {
-      title: "FACKEBOOK",
+      title: "FACEBOOK",
       thumbnail:
         "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
       value: "",
@@ -200,12 +228,114 @@ const etsy_info = () => {
   //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
+      title: "Ngày giao",
+      value: "etsydate_delivery",
+    },
+    {
       title: "Ngày tạo",
-      value: "etsy_date_start",
+      value: "etsydate_start",
+    },
+    {
+      title: "Ngày chuyển lớp",
+      value: "etsydate_nextclass",
     },
     {
       title: "Ngày verify",
-      value: "etsy_date_verify",
+      value: "etsydate_verify",
+    },
+    {
+      title: "Ngày Seller",
+      value: "etsydate_seller",
+    },
+    {
+      title: "Ngày verify Bank",
+      value: "etsydate_verifybank",
+    },
+    {
+      title: "Ngày draft",
+      value: "etsydate_draft",
+    },
+    {
+      title: "Ngày list1",
+      value: "etsydate_list1",
+    },
+    {
+      title: "Ngày list2",
+      value: "etsydate_list2",
+    },
+    {
+      title: "Ngày list3",
+      value: "etsydate_list3",
+    },
+    {
+      title: "Ngày list4",
+      value: "etsydate_list4",
+    },
+    {
+      title: "Ngày list5",
+      value: "etsydate_list5",
+    },
+
+    {
+      title: "Dự kiến seller",
+      value: "etsydate_expectedseller",
+    },
+    {
+      title: "Dự kiến list 1",
+      value: "etsydate_expectedlist1",
+    },
+    {
+      title: "Dự kiến list 2",
+      value: "etsydate_expectedlist2",
+    },
+    {
+      title: "Dự kiến list 3",
+      value: "etsydate_expectedlist3",
+    },
+    {
+      title: "Dự kiến list 4",
+      value: "etsydate_expectedlist4",
+    },
+    {
+      title: "Dự kiến list 5",
+      value: "etsydate_expectedlist5",
+    },
+
+    {
+      title: "Ngày Suspended",
+      value: "etsydate_suspended",
+    },
+    {
+      title: "Ngày check",
+      value: "etsydate_checksus1",
+    },
+    {
+      title: "Ngày gỡ sus 1",
+      value: "etsydate_contact1",
+    },
+    {
+      title: "Ngày gỡ sus 2",
+      value: "etsydate_contact2",
+    },
+    {
+      title: "Ngày gỡ sus 3",
+      value: "etsydate_contact3",
+    },
+    {
+      title: "Ngày gỡ sus 4",
+      value: "etsydate_contact4",
+    },
+    {
+      title: "Ngày gỡ sus 5",
+      value: "etsydate_contact5",
+    },
+    {
+      title: "Ngày check",
+      value: "etsydate_checksus2",
+    },
+    {
+      title: "Ngày check",
+      value: "etsydate_checksus3",
     },
   ];
 
@@ -248,8 +378,15 @@ const etsy_info = () => {
                             message: "Hãy nhập etsy id!",
                           },
                         ]}
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("etsy_id"))
+                        }
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input
+                          disabled={true}
+                          size="small"
+                          placeholder="input here"
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
@@ -270,6 +407,139 @@ const etsy_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Col span={6}>
+                      <Form.Item label="etsy limit" name="etsy_limit">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="etsy items" name="etsy_item">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="etsy Sold" name="etsy_sold">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="etsy Feedback" name="etsy_feedback">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Quy trình"
+                      name="etsy_plan"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Phone" label="Phone">
+                          <div className="demo-option-label-item">Phone</div>
+                        </Option>
+                        <Option value="PC" label="PC">
+                          <div className="demo-option-label-item">PC</div>
+                        </Option>
+                        <Option value="Antidetect" label="Antidetect">
+                          <div className="demo-option-label-item">
+                            Antidetect
+                          </div>
+                        </Option>
+                        <Option value="Gologin" label="Gologin">
+                          <div className="demo-option-label-item">Gologin</div>
+                        </Option>
+                        <Option value="VPS" label="VPS">
+                          <div className="demo-option-label-item">VPS</div>
+                        </Option>
+                        <Option value="Windows 10" label="Windows 10">
+                          <div className="demo-option-label-item">
+                            Windows 10
+                          </div>
+                        </Option>
+                        <Option value="Windows 11" label="Windows 11">
+                          <div className="demo-option-label-item">
+                            Windows 11
+                          </div>
+                        </Option>
+                        <Option value="MAC" label="MAC">
+                          <div className="demo-option-label-item">MAC</div>
+                        </Option>
+                        <Option value="Ubuntu" label="Ubuntu">
+                          <div className="demo-option-label-item">Ubuntu</div>
+                        </Option>
+                        <Option value="Chrome" label="Chrome">
+                          <div className="demo-option-label-item">Chrome</div>
+                        </Option>
+                        <Option value="Firefox" label="Firefox">
+                          <div className="demo-option-label-item">Firefox</div>
+                        </Option>
+                        <Option value="Eagle" label="Eagle">
+                          <div className="demo-option-label-item">Eagle</div>
+                        </Option>
+                        <Option value="Safari" label="Safari">
+                          <div className="demo-option-label-item">Safari</div>
+                        </Option>
+                        <Option value="USB 4G" label="USB 4G">
+                          <div className="demo-option-label-item">USB 4G</div>
+                        </Option>
+                        <Option value="Proxy 4G" label="Proxy 4G">
+                          <div className="demo-option-label-item">Proxy 4G</div>
+                        </Option>
+                        <Option value="Proxy" label="Proxy">
+                          <div className="demo-option-label-item">Proxy</div>
+                        </Option>
+                        <Option value="Info real" label="Info real">
+                          <div className="demo-option-label-item">
+                            Info real
+                          </div>
+                        </Option>
+                        <Option value="Info gen" label="Info gen">
+                          <div className="demo-option-label-item">Info gen</div>
+                        </Option>
+                        <Option value="Quy trình 1" label="Quy trình 1">
+                          <div className="demo-option-label-item">
+                            Quy trình 1
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 2" label="Quy trình 2">
+                          <div className="demo-option-label-item">
+                            Quy trình 2
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 3" label="Quy trình 3">
+                          <div className="demo-option-label-item">
+                            Quy trình 3
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 4" label="Quy trình 4">
+                          <div className="demo-option-label-item">
+                            Quy trình 4
+                          </div>
+                        </Option>
+                        <Option value="Quy trình 5" label="Quy trình 5">
+                          <div className="demo-option-label-item">
+                            Quy trình 5
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
                   <Form.Item label="Tiến trình" name="etsy_processing">
                     <Select
                       mode="multiple"
@@ -278,11 +548,17 @@ const etsy_info = () => {
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="Mail" label="Mail">
-                        <div className="demo-option-label-item">Mail</div>
+                      <Option value="VN" label="VN">
+                        <div className="demo-option-label-item">VN</div>
+                      </Option>
+                      <Option value="US" label="US">
+                        <div className="demo-option-label-item">US</div>
                       </Option>
                       <Option value="Buyer" label="Buyer">
                         <div className="demo-option-label-item">Buyer</div>
+                      </Option>
+                      <Option value="Avatar" label="Avatar">
+                        <div className="demo-option-label-item">Avatar</div>
                       </Option>
                       <Option value="Verify" label="Verify">
                         <div className="demo-option-label-item">Verify</div>
@@ -290,30 +566,14 @@ const etsy_info = () => {
                       <Option value="Seller" label="Seller">
                         <div className="demo-option-label-item">Seller</div>
                       </Option>
+                      <Option value="Draft" label="Draft">
+                        <div className="demo-option-label-item">Draft</div>
+                      </Option>
                       <Option value="List" label="List">
                         <div className="demo-option-label-item">List</div>
                       </Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item label="Loại etsy" name="etsy_type">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="VN" label="VN">
-                        <div className="demo-option-label-item">VN</div>
-                      </Option>
-                      <Option value="US" label="US">
-                        <div className="demo-option-label-item">US</div>
-                      </Option>
-                      <Option value="etsy Buyer" label="Buyer">
-                        <div className="demo-option-label-item">Buyer</div>
-                      </Option>
-                      <Option value="etsy Seller" label="Seller">
-                        <div className="demo-option-label-item">Seller</div>
+                      <Option value="Sold" label="Sold">
+                        <div className="demo-option-label-item">Sold</div>
                       </Option>
                       <Option value="Gỡ Suspended" label="Gỡ Suspended">
                         <div className="demo-option-label-item">
@@ -331,107 +591,224 @@ const etsy_info = () => {
                       <Option value="Top Rate" label="Top Rate">
                         <div className="demo-option-label-item">Top Rate</div>
                       </Option>
-                    </Select>
-                  </Form.Item>
-
-                  <Form.Item label="TT Bán" name="etsy_sell_status">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                        <div className="demo-option-label-item">
-                          Chuẩn bị bán
-                        </div>
+                      <Option value="Restrict" label="Restrict">
+                        <div className="demo-option-label-item">Restrict</div>
                       </Option>
-                      <Option value="Đủ điều kiện bán" label="Đủ điều kiện bán">
-                        <div className="demo-option-label-item">
-                          Đủ điều kiện bán
-                        </div>
-                      </Option>
-
-                      <Option value="Bán tài khoản" label="Bán tài khoản">
-                        <div className="demo-option-label-item">
-                          Bán tài khoản
-                        </div>
-                      </Option>
-                      <Option value="Đang giao dịch" label="Đang giao dịch">
-                        <div className="demo-option-label-item">
-                          Đang giao dịch
-                        </div>
-                      </Option>
-
-                      <Option value="Bán thành công" label="Bán thành công">
-                        <div className="demo-option-label-item">
-                          Bán thành công
-                        </div>
-                      </Option>
-                      <Option value="Bảo hành" label="Bảo hành">
-                        <div className="demo-option-label-item">Bảo hành</div>
-                      </Option>
-                      <Option value="Hết bảo hành" label="Hết bảo hành">
-                        <div className="demo-option-label-item">
-                          Hết bảo hành
-                        </div>
+                      <Option value="Suspended" label="Suspended">
+                        <div className="demo-option-label-item">Suspended</div>
                       </Option>
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Sở hữu" name="etsy_owner">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                    >
-                      <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                        <div className="demo-option-label-item">
-                          Phòng sản xuất
-                        </div>
-                      </Option>
-                      <Option value="Phòng Kinh doanh" label="Phòng Kinh doanh">
-                        <div className="demo-option-label-item">
-                          Phòng Kinh doanh
-                        </div>
-                      </Option>
-                      <Option
-                        value="Phòng nâng cấp và phục hồi tài khoản"
-                        label="Phòng nâng cấp và phục hồi tài khoản"
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Loại etsy" name="etsy_type">
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
                       >
-                        <div className="demo-option-label-item">
-                          Phòng nâng cấp và phục hồi tài khoản
-                        </div>
-                      </Option>
-                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                        <div className="demo-option-label-item">
-                          Kho lưu trữ
-                        </div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
+                        <Option value="VN" label="VN">
+                          <div className="demo-option-label-item">VN</div>
+                        </Option>
+                        <Option value="US" label="US">
+                          <div className="demo-option-label-item">US</div>
+                        </Option>
+                        <Option value="Buyer" label="Buyer">
+                          <div className="demo-option-label-item">Buyer</div>
+                        </Option>
+                        <Option value="Kick Sold" label="Kick Sold">
+                          <div className="demo-option-label-item">
+                            Kick Sold
+                          </div>
+                        </Option>
+                        <Option value="Seller" label="Seller">
+                          <div className="demo-option-label-item">Seller</div>
+                        </Option>
+                        <Option value="Gỡ Suspended" label="Gỡ Suspended">
+                          <div className="demo-option-label-item">
+                            Gỡ Suspended
+                          </div>
+                        </Option>
+                        <Option value="Bán hàng" label="Bán hàng">
+                          <div className="demo-option-label-item">Bán hàng</div>
+                        </Option>
+                        <Option value="ADS" label="ADS">
+                          <div className="demo-option-label-item">
+                            Quảng cáo
+                          </div>
+                        </Option>
+                        <Option value="Above Standard" label="Above Standard">
+                          <div className="demo-option-label-item">
+                            Above Standard
+                          </div>
+                        </Option>
+                        <Option value="Top Rate" label="Top Rate">
+                          <div className="demo-option-label-item">Top Rate</div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
 
-                  <Form.Item label="Nhân viên" name="etsy_employee">
-                    <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="TT Bán"
+                      name="etsy_sell_status"
+                      style={{
+                        display:
+                          [
+                            "Tổ phó",
+                            "Chuyên viên",
+                            "Nhân viên",
+                            "Tập sự",
+                            "Thử việc",
+                          ].indexOf(users_function) == -1
+                            ? ""
+                            : "none",
+                      }}
                     >
-                      <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                        <div className="demo-option-label-item">
-                          Nguyễn Hoài
-                        </div>
-                      </Option>
-                      <Option value="Khắc Liêm" label="Khắc Liêm">
-                        <div className="demo-option-label-item">Khắc Liêm</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
+                          <div className="demo-option-label-item">
+                            Chuẩn bị bán
+                          </div>
+                        </Option>
+                        <Option
+                          value="Đủ điều kiện bán"
+                          label="Đủ điều kiện bán"
+                        >
+                          <div className="demo-option-label-item">
+                            Đủ điều kiện bán
+                          </div>
+                        </Option>
+
+                        <Option value="Bán tài khoản" label="Bán tài khoản">
+                          <div className="demo-option-label-item">
+                            Bán tài khoản
+                          </div>
+                        </Option>
+                        <Option value="Đang giao dịch" label="Đang giao dịch">
+                          <div className="demo-option-label-item">
+                            Đang giao dịch
+                          </div>
+                        </Option>
+
+                        <Option value="Bán thành công" label="Bán thành công">
+                          <div className="demo-option-label-item">
+                            Bán thành công
+                          </div>
+                        </Option>
+                        <Option value="Bảo hành" label="Bảo hành">
+                          <div className="demo-option-label-item">Bảo hành</div>
+                        </Option>
+                        <Option value="Hết bảo hành" label="Hết bảo hành">
+                          <div className="demo-option-label-item">
+                            Hết bảo hành
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Sở hữu" name="etsy_owner">
+                      <Select
+                        disabled={
+                          [
+                            "Trưởng phòng",
+                            "Phó phòng",
+                            "Tổ trưởng",
+                            "Tổ phó",
+                          ].indexOf(users_function) !== -1
+                        }
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
+                          <div className="demo-option-label-item">
+                            Phòng sản xuất
+                          </div>
+                        </Option>
+                        <Option
+                          value="Phòng Kinh doanh"
+                          label="Phòng Kinh doanh"
+                        >
+                          <div className="demo-option-label-item">
+                            Phòng Kinh doanh
+                          </div>
+                        </Option>
+                        <Option
+                          value="Phòng nâng cấp và phục hồi tài khoản"
+                          label="Phòng nâng cấp và phục hồi tài khoản"
+                        >
+                          <div className="demo-option-label-item">
+                            Phòng nâng cấp và phục hồi tài khoản
+                          </div>
+                        </Option>
+                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                          <div className="demo-option-label-item">
+                            Kho lưu trữ
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item label="Nhân viên" name="etsy_employee">
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
+                          <div className="demo-option-label-item">
+                            Nguyễn Hoài
+                          </div>
+                        </Option>
+                        <Option value="Khắc Liêm" label="Khắc Liêm">
+                          <div className="demo-option-label-item">
+                            Khắc Liêm
+                          </div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null}
 
                   <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={8}>
                       <Form.Item label="Trạng thái" name="etsy_status">
                         <Select
                           //mode="multiple"
@@ -443,6 +820,11 @@ const etsy_info = () => {
                           </Option>
                           <Option value="Error" label="Error">
                             <div className="demo-option-label-item">Error</div>
+                          </Option>
+                          <Option value="Restrict" label="Restrict">
+                            <div className="demo-option-label-item">
+                              Restrict
+                            </div>
                           </Option>
                           <Option value="Suspended" label="Suspended">
                             <div className="demo-option-label-item">
@@ -460,7 +842,7 @@ const etsy_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={8}>
                       <Form.Item label="Lớp etsy" name="etsy_class">
                         <Select
                           //mode="multiple"
@@ -509,14 +891,84 @@ const etsy_info = () => {
                               Lớp 12 Chuyển
                             </div>
                           </Option>
+                          <Option value="Lớp 13" label="Lớp 13">
+                            <div className="demo-option-label-item">Lớp 13</div>
+                          </Option>
+                          <Option value="Lớp 14" label="Lớp 14">
+                            <div className="demo-option-label-item">Lớp 14</div>
+                          </Option>
+                          <Option value="Lớp 15" label="Lớp 15">
+                            <div className="demo-option-label-item">Lớp 15</div>
+                          </Option>
+                          <Option value="Lớp 16" label="Lớp 16">
+                            <div className="demo-option-label-item">Lớp 16</div>
+                          </Option>
+                          <Option value="Lớp 17" label="Lớp 17">
+                            <div className="demo-option-label-item">Lớp 17</div>
+                          </Option>
+                          <Option value="Lớp 18" label="Lớp 18">
+                            <div className="demo-option-label-item">Lớp 18</div>
+                          </Option>
+                          <Option value="Lớp 19" label="Lớp 19">
+                            <div className="demo-option-label-item">Lớp 19</div>
+                          </Option>
                           <Option value="Lớp 20" label="Lớp 20 etsy error">
                             <div className="demo-option-label-item">
                               Lớp 20 etsy error
                             </div>
                           </Option>
-                          <Option value="Lớp 21" label="Lớp 21 etsy die">
+                          <Option value="Lớp 21" label="Lớp 21 Buyer suspended">
                             <div className="demo-option-label-item">
-                              Lớp 21 etsy die
+                              Lớp 21 etsy suspend
+                            </div>
+                          </Option>
+                          <Option value="Lớp 22" label="Lớp 22 Seller restrict">
+                            <div className="demo-option-label-item">
+                              Lớp 22 Seller restrict
+                            </div>
+                          </Option>
+                          <Option
+                            value="Lớp 23"
+                            label="Lớp 23 Seller Suspended"
+                          >
+                            <div className="demo-option-label-item">
+                              Lớp 23 Seller Suspended
+                            </div>
+                          </Option>
+                          <Option
+                            value="Lớp 24"
+                            label="Lớp 24 Gỡ suspended ngày 1"
+                          >
+                            <div className="demo-option-label-item">
+                              Lớp 24 Gỡ suspended ngày 1
+                            </div>
+                          </Option>
+                          <Option
+                            value="Lớp 25"
+                            label="Lớp 25 Gỡ suspended ngày 2"
+                          >
+                            <div className="demo-option-label-item">
+                              Lớp 25 Gỡ suspended ngày 2
+                            </div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      <Form.Item label="Hỗ trợ" name="etsy_support">
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="select one item"
+                          optionLabelProp="label"
+                        >
+                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
+                            <div className="demo-option-label-item">
+                              Nguyễn Hoài
+                            </div>
+                          </Option>
+                          <Option value="Khắc Liêm" label="Khắc Liêm">
+                            <div className="demo-option-label-item">
+                              Khắc Liêm
                             </div>
                           </Option>
                         </Select>
@@ -528,27 +980,36 @@ const etsy_info = () => {
             </Col>
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
-                <Select
-                  mode="multiple"
-                  style={{ width: "100%" }}
-                  placeholder="select one item"
-                  optionLabelProp="label"
-                  onChange={changeSelectListInfo}
-                  value={selectListInfo}
-                >
-                  {listInfo.map((item) => {
-                    return (
-                      <Option
-                        value={item.title.toLocaleLowerCase() + "_id"}
-                        label={item.title}
-                      >
-                        <div className="demo-option-label-item">
-                          {item.title}
-                        </div>
-                      </Option>
-                    );
-                  })}
-                </Select>
+                {[
+                  "Tổ phó",
+                  "Chuyên viên",
+                  "Nhân viên",
+                  "Tập sự",
+                  "Thử việc",
+                ].indexOf(users_function) == -1 ? (
+                  <Select
+                    mode="multiple"
+                    style={{ width: "100%" }}
+                    placeholder="select one item"
+                    optionLabelProp="label"
+                    onChange={changeSelectListInfo}
+                    value={selectListInfo}
+                  >
+                    {listInfo.map((item) => {
+                      return (
+                        <Option
+                          value={item.title.toLocaleLowerCase() + "_id"}
+                          label={item.title}
+                        >
+                          <div className="demo-option-label-item">
+                            {item.title}
+                          </div>
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                ) : null}
+
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
@@ -652,13 +1113,80 @@ const etsy_info = () => {
 
                 <span>
                   | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|Ctrl + /;Shift + Alt + A;Ctrl + Shift +
-                  [;Ctrl + K, Ctrl + 0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl +
-                  [;Ctrl + K, Ctrl + ];
+                  2022-11-23 16:50:34|;
                 </span>
               </Card>
             </Col>
           </Row>
+        </Tabs.TabPane>
+
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+          <p>1. Etsy mã ET_12345</p>
+          <p>
+            1. Etsy được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+            user|pass (có hướng dẫn tạo acc bên tool nhập liệu)
+          </p>
+          <p>
+            2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn.
+            Kế hoạch được tạo khi tạo mã Etsy từ tool nhập liệu
+          </p>
+          <p>
+            3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ
+            tiến trình ta biết được acc đang làm đến hạng mục nào, nếu suspend
+            thì biết được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại
+            acc
+          </p>
+          <p>
+            4. Loại etsy: Là tổng quan 1 tài khoản etsy, dùng để tạo báo cáo,
+            phân loại acc
+          </p>
+          <p>
+            5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh
+          </p>
+          <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
+          <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
+          <p>
+            8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo,
+            phân loại acc
+          </p>
+          <p>
+            9. Lớp etsy: Dùng để xác định tổng quan các hạng mục đã triển khai,
+            dùng tạo báo cáo, phân loại acc
+          </p>
+          <p>
+            10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh etsy
+            suspended, tải cccd, doc bank
+          </p>
+          <p>
+            11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến
+            trang chi tiết của tài nguyên đó
+          </p>
+          <br></br>
+          <p>
+            Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
+            chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn
+            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
+            động disable tất cả các field{" "}
+          </p>
+          <p>
+            Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
+            chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn
+            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
+            động disable tất cả các field{" "}
+          </p>
+          <p>
+            Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình
+            được chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
+          </p>
+          <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
+          <p>Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay or etsy...</p>
+          <p>Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào phần tool- xử lý số liệu - filter  </p>
+          <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
+          <br></br>
+          <p>
+            Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
+            0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
+          </p>
         </Tabs.TabPane>
       </Tabs>
     </Card>

@@ -36,7 +36,7 @@ const Info_class = () => {
     {
       key: "1",
       class: "Lớp 1",
-      content: "Setup máy",
+      content: "Info VN mới",
       count_account: "334",
       info_vn: "334",
       info_us: "0",
@@ -44,7 +44,7 @@ const Info_class = () => {
     {
         key: "2",
         class: "Lớp 2",
-        content: "( phải có chrome và info) change file infoacc.txt",
+        content: "Info US mới",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -52,7 +52,7 @@ const Info_class = () => {
       {
         key: "3",
         class: "Lớp 3",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info VN đang dùng",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -60,7 +60,7 @@ const Info_class = () => {
       {
         key: "4",
         class: "Lớp 4",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info US đang dùng",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -68,7 +68,7 @@ const Info_class = () => {
       {
         key: "5",
         class: "Lớp 5",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info VN lưu trữ",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -76,7 +76,7 @@ const Info_class = () => {
       {
         key: "6",
         class: "Lớp 6",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info US lưu trữ",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -84,7 +84,7 @@ const Info_class = () => {
       {
         key: "7",
         class: "Lớp 7",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info VN đã bán",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -92,7 +92,7 @@ const Info_class = () => {
       {
         key: "8",
         class: "Lớp 8",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "Info US đã bán",
         count_account: "334",
         info_vn: "334",
         info_us: "0",
@@ -100,7 +100,7 @@ const Info_class = () => {
       {
         key: "9",
         class: "Lớp 9 UpSeller",
-        content: "Dang nhap Gmail forword, , doc báo dan trí... info...",
+        content: "",
         count_account: "334",
         info_vn: "334",
         info_us: "0",

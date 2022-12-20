@@ -5,15 +5,15 @@ import {
   GET_LIST_EBAY_SUCCESS,
 } from "../actions/ebayActions";
 import { getListebay } from "../api/ebay/index.js";
+import { showError } from "../utils/index";
 
 function* getListebaySaga({ payload }) {
   try {
     const response = yield call(getListebay, payload);
-    console.log(response);
     const { data } = response;
     yield put({ type: GET_LIST_EBAY_SUCCESS, payload: data });
   } catch (res) {
-    const message = res.response.data.error;
+    const message = "Không có quyền truy cập vào ebay";
     showError(message);
     yield put({ type: GET_LIST_EBAY_ERROR, message: message });
   }

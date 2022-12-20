@@ -70,6 +70,7 @@ const Mail_table = () => {
       title: "Nhân viên",
       dataIndex: "mail_employee",
       key: "mail_employee",
+     
     },
     {
       title: "Ngày chuyển lớp",
@@ -132,6 +133,7 @@ const Mail_table = () => {
             {
               title: "Nhân viên",
               value: "mail_employee",
+              
               children: [
                 { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
                 { title: "Khắc Liêm", value: "Khắc Liêm" },
@@ -141,7 +143,7 @@ const Mail_table = () => {
         />
       </Form.Item>
       <Card type="inner">
-        <Table columns={columns} dataSource={mails}></Table>
+        <Table columns={columns} dataSource={mails} > </Table>
       </Card>
     </div>
   );

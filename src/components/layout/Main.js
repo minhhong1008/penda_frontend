@@ -1,10 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Layout, Drawer, Affix } from "antd";
 import Sidenav from "./Sidenav";
 import SideBarProduct from "../sidebar/SideBarProducts";
 import SideBarBussiness from "../sidebar/SideBarBusiness";
+import SideBarPersonnel from "../sidebar/SideBarPersonnel";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -87,6 +88,9 @@ function Main({ children }) {
         ) : null}
         {pathname.split("/")[0] == "business" ? (
           <SideBarBussiness color={sidenavColor}></SideBarBussiness>
+        ) : null}
+        {pathname.split("/")[0] == "personnel" ? (
+          <SideBarPersonnel color={sidenavColor}></SideBarPersonnel>
         ) : null}
       </Sider>
       <Layout>

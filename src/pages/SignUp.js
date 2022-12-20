@@ -79,19 +79,19 @@ const SignUp = () => {
               className="row-col"
             >
               <Form.Item
-                name="name"
+                name="users_name"
                 rules={[{ required: true, message: "Hãy nhập tên tài khoản!" }]}
               >
                 <Input placeholder="Tên tài khoản" />
               </Form.Item>
               <Form.Item
-                name="email"
+                name="users_mail"
                 rules={[{ required: true, message: "Hãy nhập email!" }]}
               >
                 <Input placeholder="Email" />
               </Form.Item>
               <Form.Item
-                name="password"
+                name="users_password"
                 rules={[{ required: true, message: "Hãy nhập mật khẩu!" }]}
               >
                 <Input placeholder="Mật khẩu" />

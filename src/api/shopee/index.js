@@ -22,6 +22,12 @@ export const updateshopeeInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountShopee = () => {
+  const url = `/getshopee/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)
