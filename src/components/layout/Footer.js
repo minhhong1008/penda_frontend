@@ -23,7 +23,7 @@ function Footer() {
             <ul>
               <li className="nav-item">
                 <a
-                  href="http://localhost:3000/Penda.vn"
+                  href={process.env.url + "/Penda.vn"}
                   className="nav-link text-muted"
                   target="_blank"
                 >
@@ -50,7 +50,7 @@ function Footer() {
               </li>
               <li className="nav-item">
                 <a
-                  href="http://localhost:3000/log-out"
+                  href={process.env.APP_URL + "/log-out"}
                   className="nav-link pe-0 text-muted"
                   target="_blank"
                 >

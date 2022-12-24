@@ -15,7 +15,7 @@ import {
   List,
   Upload,
 } from "antd";
-import { getUser } from "../../utils/index";
+import { getUser, randomStr } from "../../utils/index";
 import { PlusOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
@@ -120,13 +120,23 @@ const Ebay_info = () => {
   // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
-      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      window.open(`${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`);
     },
     [info]
   );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let ebay_file = [];
+    fileList.map((item) => {
+      let fileUrl = "";
+      if(item?.xhr?.response){
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url
+      }
+      ebay_file.push(fileUrl)
+    })
     let dateValue = {};
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = moment(dateData[item.value]).format(
@@ -136,6 +146,7 @@ const Ebay_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+      ebay_image_url: ebay_file.length > 0 ? ebay_file.join(",") : "",
       ebay_plan: values?.ebay_plan ? values.ebay_plan.join(",") : "",
       ebay_block: values?.ebay_block ? values.ebay_block.join(",") : "",
       ebay_error: values?.ebay_error ? values.ebay_error.join(",") : "",
@@ -303,7 +314,19 @@ const Ebay_info = () => {
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = moment(data[item.value]);
     });
-    //console.log(dateValue);
+    if(data?.ebay_image_url){
+      let dataImage = [];
+      let imageArr = data.ebay_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: 'done',
+          url: item,
+        })
+      })
+      setFileList(dataImage);
+    }
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
     setNoteValue(data.ebay_note);
@@ -326,6 +349,7 @@ const Ebay_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm upload
   // Hàm viết tự động hóa
   const onChange_Status = async (values) => {
     if (values == "Error" || values == "Restrict" || values == "Suspended") {
@@ -562,14 +586,7 @@ const Ebay_info = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "../asset/",
-    },
-  ]);
+  const [fileList, setFileList] = useState();
 
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -582,7 +599,9 @@ const Ebay_info = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -1020,13 +1039,13 @@ const Ebay_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="ebay_image_url">
                       <Upload
-                        action="http://localhost:4000/api/files"
                         listType="picture-card"
+                        action="http://42.114.177.31:4000/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}
                       >
-                        {fileList.length >= 8 ? null : uploadButton}
+                        {uploadButton}
                       </Upload>
                     </Form.Item>
                   </Row>
