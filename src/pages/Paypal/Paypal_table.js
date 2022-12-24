@@ -1,10 +1,24 @@
 //import React from 'react'
-import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
+import {
+  Button,
+  Card,
+  Table,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Collapse,
+  Space,
+  TreeSelect,
+} from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getListpaypalActions } from "../../actions/paypalActions";
-
+import { HuongDanPaypal_table } from "./Paypal_list";
 const Paypal_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -12,6 +26,7 @@ const Paypal_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
+
   const columns = [
     {
       title: "STT",
@@ -23,76 +38,197 @@ const Paypal_table = () => {
       dataIndex: "paypal_id",
       key: "paypal_id",
       render: (text, record) => (
-        <a onClick={() => history.push(`table/${encodeURIComponent(record.paypal_id)}`)}>{text}</a>
+        
+        <a 
+        style={{
+          borderRadius: "6px",
+          padding: "8px 8px",
+          background: "#1c84c6",
+          color: "white",
+        }}
+        
+          onClick={() =>
+            history.push(`table/${encodeURIComponent(record.paypal_id)}`)
+          }
+        >
+          {text}
+        </a>
+        
       ),
+      sorter: (a, b) => {
+        return a.paypal_id.localeCompare(b.paypal_id);
+      },
     },
     {
-      title: "Tài khoản",
+      title: "TÀI KHOẢN",
       dataIndex: "paypal_user",
       key: "paypal_user",
+      sorter: (a, b) => {
+        return a.paypal_user.localeCompare(b.paypal_user);
+      },
     },
     {
-      title: "Thiết bị",
-      dataIndex: "paypal_device",
-      key: "paypal_device",
+      title: "TIẾN TRÌNH",
+      dataIndex: "paypal_processing",
+      key: "paypal_processing",
+      render: (record) => {
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              if (item == "Buyer" || item == "Seller") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#1c84c6",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Verify" || item == "Verify Bank") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#1ab394",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Restrict" || item == "Suspended") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#ed5565",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#23c6c8",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              }
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.paypal_user.localeCompare(b.paypal_device);
+      },
     },
     {
-      title: "Lớp",
-      dataIndex: "paypal_class",
-      key: "paypal_class",
+      title: "PHÁT SINH",
+      dataIndex: "paypal_error",
+      key: "paypal_error",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "2px 2px",
+                    background: "gold",
+                    color: "red",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.paypal_user.localeCompare(b.paypal_class);
+      },
     },
+
     {
-      title: "Limit",
-      dataIndex: "paypal_limit",
-      key: "paypal_limit",
-    },
-    {
-      title: "active",
-      dataIndex: "paypal_active",
-      key: "paypal_active",
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "paypaldate_sine",
-      key: "paypaldate_sine",
-    },
-    {
-      title: "Ngày UpSeller",
-      dataIndex: "paypaldate_upseller",
-      key: "paypaldate_upseller",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "paypal_status",
-      key: "paypal_status",
-    },
-    {
-      title: "Nhân viên",
+      title: "NHÂN VIÊN",
       dataIndex: "paypal_employee",
       key: "paypal_employee",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "6px 6px",
+                    background: "#18a689",
+                    color: "white",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.paypal_user.localeCompare(b.paypal_employee);
+      },
     },
+
     {
-      title: "Ngày chuyển lớp",
-      dataIndex: "paypaldate_class",
-      key: "paypaldate_class",
-    },
-    {
-      title: "Ghi chú",
+      title: "GHI CHÚ",
       dataIndex: "paypal_note",
       key: "paypal_note",
+      sorter: (a, b) => {
+        return a.paypal_user.localeCompare(b.paypal_note);
+      },
     },
   ];
 
   const handleChangeFilter = (values) => {
-    let newValue = values.join(',');
+    let newValue = values.join(",");
     dispatch(
       getListpaypalActions({
         paypal_employee: newValue,
       })
     );
-  }
+  };
 
-  const getListpaypal = () => {
+  const getListPaypal = () => {
     dispatch(
       getListpaypalActions({
         paypal_class: class_name,
@@ -101,50 +237,82 @@ const Paypal_table = () => {
   };
 
   useEffect(() => {
-    getListpaypal();
+    getListPaypal();
   }, [class_name]);
 
   return (
     <div>
-      <Form.Item label="Lọc paypal">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionLabelProp="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "paypal_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "paypal_device",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "paypal_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Card type="inner">
-        <Table columns={columns} dataSource={paypals}></Table>
+      <Card>
+        <Form.Item label="Lọc eBay">
+          <TreeSelect
+            mode="multiple"
+            onChange={handleChangeFilter}
+            multiple
+            optionLabelProp="label"
+            treeData={[
+              {
+                title: "Lớp",
+                value: "paypal_class",
+                children: [
+                  { title: "Lớp 1", value: "Lớp 1" },
+                  { title: "Lớp 2", value: "Lớp 2" },
+                ],
+              },
+              {
+                title: "Thiết bị",
+                value: "paypal_device",
+                children: [
+                  { title: "PC06", value: "PC06" },
+                  { title: "PC07", value: "PC07" },
+                ],
+              },
+              {
+                title: "Nhân viên",
+                value: "paypal_employee",
+                children: [
+                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                  { title: "Khắc Liêm", value: "Khắc Liêm" },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={"BẢNG LỚP PAYPAL : " + class_name.toUpperCase()}
+            key="1"
+          >
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={paypals}
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight", "topRight"],
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+              ></Table>
+            </Card>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanPaypal_table />
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );
 };
 
-export default Paypal_table
+export default Paypal_table;

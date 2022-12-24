@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "antd/dist/antd.css";
+import "./App.css";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import "./assets/styles/main.css";
@@ -55,6 +56,10 @@ import Bank_info from "./pages/Bank/Bank_info";
 import Info_class from "./pages/Info/Info_class";
 import Info_table from "./pages/Info/Info_table";
 import Info_info from "./pages/Info/Info_info";
+// Person
+import Person_class from "./pages/Person/Person_class";
+import Person_table from "./pages/Person/Person_table";
+import Person_info from "./pages/Person/Person_info";
 // Mail
 import Mail_class from "./pages/Mail/Mail_class";
 import Mail_table from "./pages/Mail/Mail_table";
@@ -88,6 +93,7 @@ import Other_info from "./pages/Other/Other_info";
 
 // Create
 import Create from "./pages/Create/Create";
+import Tooldata_info from "./pages/Tooldata/Tooldata_info";
 import Tools_list from "./pages/Tools/tools_list";
 import CCCD from "./pages/Tools/cccd/cccd";
 
@@ -275,6 +281,20 @@ const App = () => {
             exact
             component={Info_info}
           />
+         
+
+          {/* Person */}
+          <Route path="/products/person_class" exact component={Person_class} />
+          <Route
+            path="/products/person_class/table"
+            exact
+            component={Person_table}
+          />
+          <Route
+            path="/products/person_class/table/:id"
+            exact
+            component={Person_info}
+          />
           {/* Mail */}
           <Route path="/products/mail_class" exact component={Mail_class} />
           <Route
@@ -362,6 +382,7 @@ const App = () => {
           />
 
           <Route path="/products/create" exact component={Create} />
+          <Route path="/products/tooldata_info" exact component={Tooldata_info} />
 
           <Route path="/products/tools" exact component={Tools_list} />
 

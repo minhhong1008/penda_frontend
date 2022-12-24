@@ -18,7 +18,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListbankActions } from "../../actions/bankActions";
-
+import { HuongDanBank_table } from "./Bank_list";
 const Bank_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -38,20 +38,29 @@ const Bank_table = () => {
       dataIndex: "bank_id",
       key: "bank_id",
       render: (text, record) => (
-        <a
+        
+        <a 
+        style={{
+          borderRadius: "6px",
+          padding: "8px 8px",
+          background: "#1c84c6",
+          color: "white",
+        }}
+        
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.bank_id)}`)
           }
         >
           {text}
         </a>
+        
       ),
       sorter: (a, b) => {
         return a.bank_id.localeCompare(b.bank_id);
       },
     },
     {
-      title: "Tài khoản",
+      title: "TÀI KHOẢN",
       dataIndex: "bank_user",
       key: "bank_user",
       sorter: (a, b) => {
@@ -59,81 +68,149 @@ const Bank_table = () => {
       },
     },
     {
-      title: "Thiết bị",
-      dataIndex: "bank_bank",
-      key: "bank_bank",
+      title: "TIẾN TRÌNH",
+      dataIndex: "bank_processing",
+      key: "bank_processing",
+      render: (record) => {
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              if (item == "Buyer" || item == "Seller") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#1c84c6",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Verify" || item == "Verify Bank") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#1ab394",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Restrict" || item == "Suspended") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#ed5565",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#23c6c8",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              }
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_bank);
+        return a.bank_user.localeCompare(b.bank_device);
       },
     },
     {
-      title: "Lớp",
-      dataIndex: "bank_class",
-      key: "bank_class",
+      title: "PHÁT SINH",
+      dataIndex: "bank_error",
+      key: "bank_error",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "2px 2px",
+                    background: "gold",
+                    color: "red",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.bank_user.localeCompare(b.bank_class);
       },
     },
+
     {
-      title: "Limit",
-      dataIndex: "bank_limit",
-      key: "bank_limit",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_limit);
-      },
-      
-    },
-    {
-      title: "active",
-      dataIndex: "bank_active",
-      key: "bank_active",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_active);
-      },
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "bankdate_sine",
-      key: "bankdate_sine",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bankdate_sine);
-      },
-    },
-    {
-      title: "Ngày UpSeller",
-      dataIndex: "bankdate_upseller",
-      key: "bankdate_upseller",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bankdate_upseller);
-      },
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "bank_status",
-      key: "bank_status",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_status);
-      },
-    },
-    {
-      title: "Nhân viên",
+      title: "NHÂN VIÊN",
       dataIndex: "bank_employee",
       key: "bank_employee",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "6px 6px",
+                    background: "#18a689",
+                    color: "white",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.bank_user.localeCompare(b.bank_employee);
       },
     },
+
     {
-      title: "Ngày chuyển lớp",
-      dataIndex: "bankdate_class",
-      key: "bankdate_class",
-      sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bankdate_class);
-      },
-    },
-    
-    {
-      title: "Ghi chú",
+      title: "GHI CHÚ",
       dataIndex: "bank_note",
       key: "bank_note",
       sorter: (a, b) => {
@@ -165,51 +242,74 @@ const Bank_table = () => {
 
   return (
     <div>
-      <Form.Item label="Lọc bank">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionLabelProp="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "bank_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "bank_bank",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "bank_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Card type="inner">
-        <Table
-          columns={columns}
-          dataSource={banks}
-          pagination={{
-            pageSizeOptions: ["10","20","30","50","100", "200", "300", "500","1000","2000"],
-            position: ["bottomRight", "topRight"],
-            showSizeChanger: true,
-            defaultPageSize: 100,
-          }}
-        ></Table>
+      <Card>
+        <Form.Item label="Lọc eBay">
+          <TreeSelect
+            mode="multiple"
+            onChange={handleChangeFilter}
+            multiple
+            optionLabelProp="label"
+            treeData={[
+              {
+                title: "Lớp",
+                value: "bank_class",
+                item: [
+                  { title: "Lớp 1", value: "Lớp 1" },
+                  { title: "Lớp 2", value: "Lớp 2" },
+                ],
+              },
+              {
+                title: "Thiết bị",
+                value: "bank_device",
+                item: [
+                  { title: "PC06", value: "PC06" },
+                  { title: "PC07", value: "PC07" },
+                ],
+              },
+              {
+                title: "Nhân viên",
+                value: "bank_employee",
+                item: [
+                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                  { title: "Khắc Liêm", value: "Khắc Liêm" },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={"BẢNG LỚP BANK : " + class_name.toUpperCase()}
+            key="1"
+          >
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={banks}
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight", "topRight"],
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+              ></Table>
+            </Card>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanBank_table />
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );

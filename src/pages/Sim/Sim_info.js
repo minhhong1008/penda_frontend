@@ -11,21 +11,51 @@ import {
   Modal,
   Avatar,
   List,
+  Upload,
 } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { getUser } from "../../utils/index";
+import { PlusOutlined } from "@ant-design/icons";
+import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
+import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
-import { getUser } from "../../utils/index";
+import moment, { now } from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+
+import {
+  tablelist_sim_Date,
+  listselect_view_acc,
+  listselect_sim_plan,
+  listselect_sim_block,
+  listselect_sim_processing,
+  listselect_sim_error,
+  listselect_sim_type,
+  listselect_sim_sell_status,
+  listselect_sim_owner,
+  listselect_sim_status,
+  listselect_sim_class,
+  HuongDanSim_info,
+  ContentSim,
+} from "./Sim_list";
+
 import {
   postsimInfo,
   getsimInfo,
   updatesimInfo,
 } from "../../api/sim/index";
-import { showError, showSuccess } from "../../utils";
-import { useSelector } from "react-redux";
+// dùng update các field trong bảng sim_info
+import { updateListView } from "../../api/update";
 
-const sim_info = () => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const Sim_info = () => {
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -34,20 +64,80 @@ const sim_info = () => {
   const [simData, setsimData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
+  const [selectListInfo, setSelectListInfo] = useState([]);
   const [noteValue, setNoteValue] = useState("");
-
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
+  const [listselect_sim_employee, setListsim_employee] = useState();
+
+  // Tạo state để nhận dữ liệu của listview
+
+  const [listViewData, setListViewData] = useState();
+  const [modalListView, setModalListView] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [valueInput, setValueInput] = useState();
+
+  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
+
+  const setValueView = (e) => {
+    setValueInput(e.target.value);
+  };
+
+  const openModalListView = (name) => {
+    setViewData(name);
+    setModalListView(true);
+  };
+
+  const submitModalListView = async () => {
+    let payload = {};
+    payload[viewData] = valueInput;
+    if (!valueInput) {
+      cancelListView();
+      return;
+    }
+    await updatesimInfo(payload, info.sim_id);
+    window.location.reload();
+    showSuccess("Thành công");
+  };
+
+  const cancelListView = () => {
+    setModalListView(false);
+    setValueInput("");
+    setViewData("");
+  };
+
+  // hàm lưu lại value của class, status trong listview theo db của từng field
+  const onChangeStatusListView = async (key, value, id) => {
+    let newData = JSON.parse(JSON.stringify(listViewData));
+    newData[key] = value;
+    setListViewData(newData);
+    await updateListView(id, key, value);
+    showSuccess("Thành công");
+  };
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+    },
+    [info]
+  );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let dateValue = {};
+    tablelist_sim_Date.map((item) => {
+      dateValue[item.value] = moment(dateData[item.value]).format(
+        "MM-DD-YYYY HH:mm"
+      );
+    });
     const newValue = {
-      ...info,
       ...values,
+      ...dateValue,
       sim_plan: values?.sim_plan ? values.sim_plan.join(",") : "",
+      sim_block: values?.sim_block ? values.sim_block.join(",") : "",
+      sim_error: values?.sim_error ? values.sim_error.join(",") : "",
       sim_processing: values?.sim_processing
         ? values.sim_processing.join(",")
         : "",
@@ -60,15 +150,10 @@ const sim_info = () => {
         ? values.sim_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-
-      simdate_start: dateData?.sim_date_start
-        ? moment(dateData.sim_date_start).format("MM-DD-YYYY")
-        : "",
-      simdate_verify: dateData?.sim_date_verify
-        ? moment(dateData.sim_date_verify).format("MM-DD-YYYY")
-        : "",
       sim_note: noteValue,
+      sim_history: info.sim_history,
     };
+
     const response = await updatesimInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
@@ -76,6 +161,7 @@ const sim_info = () => {
       showError("Sửa không thành công");
     }
   };
+
   // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
@@ -84,12 +170,16 @@ const sim_info = () => {
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
   // Hàm gọi dữ liệu về từ database
   const getInfosim = async () => {
-    const { data } = await getsimInfo(id);
+    const res = await getsimInfo(id);
+    let data = res.data;
     const newData = {
       ...data,
       sim_plan: data?.sim_plan ? data.sim_plan.split(",") : "",
+      sim_block: data?.sim_block ? data.sim_block.split(",") : "",
+      sim_error: data?.sim_error ? data.sim_error.split(",") : "",
       sim_employee: data?.sim_employee ? data.sim_employee.split(",") : "",
       sim_processing: data?.sim_processing
         ? data.sim_processing.split(",")
@@ -99,246 +189,132 @@ const sim_info = () => {
         ? data.sim_sell_status.split(",")
         : "",
       sim_owner: data?.sim_owner ? data.sim_owner.split(",") : "",
+
+      device_id: data?.device_id ? data?.device_id?.device_id : "",
+      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
+      info_id: data?.info_id ? data?.info_id?.info_id : "",
+      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
+      etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
+      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
+      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
+      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
+      //sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
+      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
+      shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
+      facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
+      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
+    // hàm đổ dữ liệu về khi đã liên kết field từ các collection
+    setListViewData({
+      device_class: data?.device_id ? data?.device_id?.device_class : "",
+      device_status: data?.device_id ? data?.device_id?.device_status : "",
+      device_user: data?.device_id ? data?.device_id?.device_user : "",
+      device_password: data?.device_id ? data?.device_id?.device_password : "",
+
+      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
+      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
+      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
+      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
+
+      info_class: data?.info_id ? data?.info_id?.info_class : "",
+      info_status: data?.info_id ? data?.info_id?.info_status : "",
+      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
+      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
+
+      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
+      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
+      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
+      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
+
+      etsy_class: data?.etsy_id ? data?.etsy_id?.etsy_class : "",
+      etsy_status: data?.etsy_id ? data?.etsy_id?.etsy_status : "",
+      etsy_user: data?.etsy_id ? data?.etsy_id?.etsy_user : "",
+      etsy_password: data?.etsy_id ? data?.etsy_id?.etsy_password : "",
+
+      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
+      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
+      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
+      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
+
+      payoneer_class: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_class
+        : "",
+      payoneer_status: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_status
+        : "",
+      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
+      payoneer_password: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_password
+        : "",
+
+      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
+      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
+      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
+      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
+
+      pingpong_class: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_class
+        : "",
+      pingpong_status: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_status
+        : "",
+      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
+      pingpong_password: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_password
+        : "",
+
+      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
+      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
+      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
+      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
+
+      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
+      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
+      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
+      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
+
+      shopee_class: data?.shopee_id ? data?.shopee_id?.shopee_class : "",
+      shopee_status: data?.shopee_id ? data?.shopee_id?.shopee_status : "",
+      shopee_user: data?.shopee_id ? data?.shopee_id?.shopee_user : "",
+      shopee_password: data?.shopee_id ? data?.shopee_id?.shopee_password : "",
+
+      facebook_class: data?.facebook_id
+        ? data?.facebook_id?.facebook_class
+        : "",
+      facebook_status: data?.facebook_id
+        ? data?.facebook_id?.facebook_status
+        : "",
+      facebook_user: data?.facebook_id ? data?.facebook_id?.facebook_user : "",
+      facebook_password: data?.facebook_id
+        ? data?.facebook_id?.facebook_password
+        : "",
+
+      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
+      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
+      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
+      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+    });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
-    dateForm.setFieldsValue({
-      sim_date_start: moment(data.sim_date_start),
-      sim_date_verify: moment(data.sim_date_verify),
+    let dateValue = {};
+    tablelist_sim_Date.map((item) => {
+      dateValue[item.value] = moment(data[item.value]);
     });
-    setInfo(data);
+    //console.log(dateValue);
+    dateForm.setFieldsValue(dateValue);
+    setDateData(data);
     setNoteValue(data.sim_note);
+    setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
+    setListsim_employee(data.listselect_sim_employee);
   };
-
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      {
-        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-      }
-    },
-    [info]
-  );
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfosim();
   }, []);
-
-  // List danh sách các trường trong bảng INFO
-  const listInfo = [
-    {
-      title: "DEVICE",
-      thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "",
-    },
-    {
-      title: "PROXY",
-      thumbnail:
-        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
-      value: "",
-    },
-    {
-      title: "INFO",
-      thumbnail:
-        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "",
-    },
-    {
-      title: "MAIL",
-      thumbnail:
-        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "",
-    },
-    {
-      title: "SIM",
-      thumbnail:
-        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "",
-    },
-    {
-      title: "BANK",
-      thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-sim-flat-design-yellow-round-web-icon.jpg",
-      value: "",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
-      value: "",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
-      value: "",
-    },
-    {
-      title: "PINGPONG",
-      thumbnail:
-        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
-      value: "",
-    },
-    {
-      title: "EBAY",
-      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value: "",
-    },
-    {
-      title: "ETSY",
-      thumbnail:
-        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "",
-    },
-    {
-      title: "AMAZON",
-      thumbnail:
-        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "",
-    },
-    {
-      title: "SHOPEE",
-      thumbnail:
-        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "",
-    },
-    {
-      title: "FACEBOOK",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
-      value: "",
-    },
-    {
-      title: "TIKTOK",
-      thumbnail:
-        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
-      value: "",
-    },
-    {
-      title: "OTHER",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
-      value: "",
-    },
-  ];
-
-  //  List danh sách các trường trong bảng DATE
-  const listDate = [
-    {
-      title: "Ngày giao",
-      value: "simdate_delivery",
-    },
-    {
-      title: "Ngày tạo",
-      value: "simdate_start",
-    },
-    {
-      title: "Ngày chuyển lớp",
-      value: "simdate_nextclass",
-    },
-    {
-      title: "Ngày verify",
-      value: "simdate_verify",
-    },
-    {
-      title: "Ngày Seller",
-      value: "simdate_seller",
-    },
-    {
-      title: "Ngày verify Bank",
-      value: "simdate_verifybank",
-    },
-    {
-      title: "Ngày draft",
-      value: "simdate_draft",
-    },
-    {
-      title: "Ngày list1",
-      value: "simdate_list1",
-    },
-    {
-      title: "Ngày list2",
-      value: "simdate_list2",
-    },
-    {
-      title: "Ngày list3",
-      value: "simdate_list3",
-    },
-    {
-      title: "Ngày list4",
-      value: "simdate_list4",
-    },
-    {
-      title: "Ngày list5",
-      value: "simdate_list5",
-    },
-
-    {
-      title: "Dự kiến seller",
-      value: "simdate_expectedseller",
-    },
-    {
-      title: "Dự kiến list 1",
-      value: "simdate_expectedlist1",
-    },
-    {
-      title: "Dự kiến list 2",
-      value: "simdate_expectedlist2",
-    },
-    {
-      title: "Dự kiến list 3",
-      value: "simdate_expectedlist3",
-    },
-    {
-      title: "Dự kiến list 4",
-      value: "simdate_expectedlist4",
-    },
-    {
-      title: "Dự kiến list 5",
-      value: "simdate_expectedlist5",
-    },
-
-    {
-      title: "Ngày Suspended",
-      value: "simdate_suspended",
-    },
-    {
-      title: "Ngày check",
-      value: "simdate_checksus1",
-    },
-    {
-      title: "Ngày gỡ sus 1",
-      value: "simdate_contact1",
-    },
-    {
-      title: "Ngày gỡ sus 2",
-      value: "simdate_contact2",
-    },
-    {
-      title: "Ngày gỡ sus 3",
-      value: "simdate_contact3",
-    },
-    {
-      title: "Ngày gỡ sus 4",
-      value: "simdate_contact4",
-    },
-    {
-      title: "Ngày gỡ sus 5",
-      value: "simdate_contact5",
-    },
-    {
-      title: "Ngày check",
-      value: "simdate_checksus2",
-    },
-    {
-      title: "Ngày check",
-      value: "simdate_checksus3",
-    },
-  ];
-
   // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
@@ -349,37 +325,321 @@ const sim_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm viết tự động hóa
+  const onChange_Status = async (values) => {
+    if (values == "Error" || values == "Restrict" || values == "Suspended") {
+      let new_sim_owner = form.getFieldValue("sim_owner");
+      if (new_sim_owner.indexOf("Phòng phục hồi") == -1) {
+        new_sim_owner.push("Phòng phục hồi");
+      }
+      if (new_sim_owner.indexOf("Kho lưu trữ") == -1) {
+        new_sim_owner.push("Kho lưu trữ");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatesimInfo(
+        {
+          sim_owner: new_sim_owner.join(","),
+        },
+        info.sim_id
+      );
+      // Tiếp tục set
+      let new_sim_processing = form.getFieldValue("sim_processing");
+      let old_sim_processing = info.sim_processing;
+      if (new_sim_processing.indexOf(values) == -1) {
+        new_sim_processing.push(values);
+      }
+
+      let new_sim_class = form.getFieldValue("sim_class");
+      if (values == "Error") {
+        (new_sim_class = "Lớp 20"),
+          dateForm.setFieldValue("simdate_error", moment(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          simdate_error: moment(now()),
+          simdate_nextclass: moment(now()),
+        }); // Dùng hàm này set lại date mới lưu đc vào db
+      }
+      if (values == "Restrict") {
+        (new_sim_class = "Lớp 23"),
+          dateForm.setFieldValue("simdate_restrict", moment(now()));
+        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          simdate_restrict: moment(now()),
+          simdate_nextclass: moment(now()),
+        });
+      }
+      if (values == "Suspended") {
+        (new_sim_class = "Lớp 26"),
+          dateForm.setFieldValue("simdate_suspended", moment(now()));
+        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          simdate_suspended: moment(now()),
+          simdate_nextclass: moment(now()),
+        });
+      }
+
+      form.setFieldsValue({
+        sim_class: new_sim_class,
+        sim_support: "Nguyễn Hoài",
+        sim_processing: new_sim_processing,
+        sim_owner: new_sim_owner,
+      }); // Dùng hàm này set lại để lưu vào db
+    }
+  };
+
+  const onChange_Processing = (values) => {
+    if (values[values.length - 1] == "Buyer") {
+      form.setFieldValue("sim_class", "Lớp 4");
+      dateForm.setFieldValue("simdate_start", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_start: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Verify") {
+      form.setFieldValue("sim_class", "Lớp 6");
+      dateForm.setFieldValue("simdate_verify", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_verify: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Seller") {
+      form.setFieldValue("sim_class", "Lớp 9");
+      dateForm.setFieldValue("simdate_seller", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_seller: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "List") {
+      form.setFieldValue("sim_class", "Lớp 10");
+      dateForm.setFieldValue("simdate_list1", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_list1: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Move room") {
+      form.setFieldValue("sim_class", "Lớp 12");
+      dateForm.setFieldValue("simdate_moveroom", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_moveroom: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  const onChange_Class = async (values) => {
+    dateForm.setFieldValue("simdate_nextclass", moment(now()));
+    setDateData({
+      ...dateData,
+      simdate_nextclass: moment(now()),
+    });
+
+    if (values == "Lớp 9") {
+      let new_sim_type = form.getFieldValue("sim_type");
+      if (new_sim_type.indexOf("Seller") == -1) {
+        new_sim_type.push("Seller");
+      }
+
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatesimInfo(
+        {
+          new_sim_type: new_sim_type.join(","),
+        },
+        info.sim_id
+      );
+
+      let new_sim_processing = form.getFieldValue("sim_processing");
+      if (new_sim_processing.indexOf("Seller") == -1) {
+        new_sim_processing.push("Seller");
+      }
+
+      form.setFieldsValue({
+        sim_processing: new_sim_processing,
+        sim_type: new_sim_type,
+      });
+
+      dateForm.setFieldValue("simdate_seller", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_seller: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 4") {
+      let new_sim_type = form.getFieldValue("sim_type");
+      if (new_sim_type.indexOf("Buyer") == -1) {
+        new_sim_type.push("Buyer");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatesimInfo(
+        {
+          new_sim_type: new_sim_type.join(","),
+        },
+        info.sim_id
+      );
+
+      let new_sim_processing = form.getFieldValue("sim_processing");
+      if (new_sim_processing.indexOf("Buyer") == -1) {
+        new_sim_processing.push("Buyer");
+      }
+      /*  let new_sim_owner = form
+        .getFieldValue("sim_owner")
+        .filter((item) => item !== ""); */
+
+      form.setFieldsValue({
+        sim_processing: new_sim_processing,
+        sim_type: new_sim_type,
+      });
+
+      dateForm.setFieldValue("simdate_start", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_start: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 12") {
+      let new_sim_type = form.getFieldValue("sim_type");
+      if (new_sim_type.indexOf("Bán acc") == -1) {
+        new_sim_type.push("Bán acc");
+      }
+      let new_sim_owner = form.getFieldValue("sim_owner");
+      if (new_sim_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_sim_owner.push("Phòng Kinh doanh");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatesimInfo(
+        {
+          new_sim_type: new_sim_type.join(","),
+          new_sim_owner: new_sim_owner.join(","),
+        },
+        info.sim_id
+      );
+
+      let new_sim_processing = form.getFieldValue("sim_processing");
+      if (new_sim_processing.indexOf("Move room") == -1) {
+        new_sim_processing.push("Move room");
+      }
+
+      form.setFieldsValue({
+        sim_processing: new_sim_processing,
+        sim_type: new_sim_type,
+        sim_owner: new_sim_owner,
+      });
+
+      dateForm.setFieldValue("simdate_moveroom", moment(now()));
+      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        simdate_moveroom: moment(now()),
+        simdate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url: "../asset/",
+    },
+  ]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
   return (
     <Card
-      title={id}
-      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+      title={id + " | " + (info?._id ? info?._id : "")}
+      extra={
+        <Button
+          onClick={() => form.submit()}
+          style={{
+            background: "#18a689",
+            color: "white",
+          }}
+        >
+          Lưu thông tin
+        </Button>
+      }
     >
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN ETSY">
+            <Col span={12} >
+              <Card title="THÔNG TIN ETSY" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={simData}
                   autoComplete="off"
+                  // labelCol={{ span: 3 }}
+                  // layout="horizontal"
+
+                  size="large"
                 >
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item
-                        label="sim id"
+                        label="Sim id"
                         name="sim_id"
+                        style={{ width: "100%" }}
                         rules={[
                           {
                             required: true,
-                            message: "Hãy nhập sim id!",
+                            message: "Hãy nhập Sim id!",
                           },
                         ]}
                         onClick={() =>
-                          copyToClipboard(form.getFieldValue("sim_id"))
+                          copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
                         <Input
@@ -390,43 +650,62 @@ const sim_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item label="sim User" name="sim_user">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("sim_user"))
+                        }
+                        label="Sim User"
+                        name="sim_user"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="sim Pass" name="sim_password">
-                        <Input size="small" placeholder="input here" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item label="sim chi tiết" name="sim_detail">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("sim_password"))
+                        }
+                        label="Sim Pass"
+                        name="sim_password"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={5}>
-                      <Form.Item label="Giá sim" name="sim_limit">
-                        <Input size="small" />
+                    <Col span={24}>
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("sim_password"))
+                        }
+                        label="Sim chi tiết"
+                        name="sim_detail"
+                      >
+                        <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={5}>
-                      <Form.Item label="Số tiền" name="sim_item">
-                        <Input size="small"  />
+                  </Row>
+
+                  <Row gutter={16}>
+                    <Col span={6}>
+                      <Form.Item label="Sim limit" name="sim_limit">
+                        <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={7}>
-                      <Form.Item label="Hạn gọi" name="sim_sold">
-                        <Input size="small"  />
+                    <Col span={6}>
+                      <Form.Item label="Sim items" name="sim_item">
+                        <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={7}>
-                      <Form.Item label="Hạn nghe" name="sim_feedback">
-                        <Input size="small"  />
+                    <Col span={6}>
+                      <Form.Item label="Sim Sold" name="sim_sold">
+                        <Input size="small" placeholder="0" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="Sim Fb" name="sim_feedback">
+                        <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -449,70 +728,81 @@ const sim_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Quy trình 1" label="Quy trình 1">
-                          <div className="demo-option-label-item">
-                            Quy trình 1
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 2" label="Quy trình 2">
-                          <div className="demo-option-label-item">
-                            Quy trình 2
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 3" label="Quy trình 3">
-                          <div className="demo-option-label-item">
-                            Quy trình 3
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 4" label="Quy trình 4">
-                          <div className="demo-option-label-item">
-                            Quy trình 4
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 5" label="Quy trình 5">
-                          <div className="demo-option-label-item">
-                            Quy trình 5
-                          </div>
-                        </Option>
+                        {listselect_sim_plan.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Sim block"
+                      name="sim_block"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        {listselect_sim_block.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
 
                   <Form.Item label="Tiến trình" name="sim_processing">
                     <Select
+                      onChange={onChange_Processing}
                       mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
+                      style={{ width: "100%", color: "green" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="Đánh số" label="Đánh số">
-                        <div className="demo-option-label-item">Đánh số</div>
-                      </Option>
-                      <Option value="Sắp xếp" label="Sắp xếp">
-                        <div className="demo-option-label-item">Sắp xếp</div>
-                      </Option>
-                      <Option value="Check hạn" label="Check hạn">
-                        <div className="demo-option-label-item">Check hạn</div>
-                      </Option>
-                      <Option value="SMS" label="SMS">
-                        <div className="demo-option-label-item">SMS</div>
-                      </Option>
-                      <Option value="Call" label="Call">
-                        <div className="demo-option-label-item">Call</div>
-                      </Option>
-                      <Option value="Nạp tiền" label="Nạp tiền">
-                        <div className="demo-option-label-item">Nạp tiền</div>
-                      </Option>
-                      <Option value="Error" label="Error">
-                        <div className="demo-option-label-item">Error</div>
-                      </Option>
-                      <Option value="Khóa 1 chiều" label="Khóa 1 chiều">
-                        <div className="demo-option-label-item">Khóa 1 chiều</div>
-                      </Option>
-                      <Option value="Die" label="Die">
-                        <div className="demo-option-label-item">Die</div>
-                      </Option>
+                      {listselect_sim_processing.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="Phát sinh" name="sim_error">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%", color: "red" }}
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      {listselect_sim_error.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
 
@@ -525,64 +815,23 @@ const sim_info = () => {
                   ].indexOf(users_function) == -1 ? (
                     <Form.Item label="Loại sim" name="sim_type">
                       <Select
-                      mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionLabelProp="label"
-                      //status="warning"
-                    >
-                      <Option value="VN" label="VN">
-                        <div className="demo-option-label-item">VN</div>
-                      </Option>
-                      <Option value="US" label="US">
-                        <div className="demo-option-label-item">US</div>
-                      </Option>
-                      <Option value="4G" label="4G">
-                        <div className="demo-option-label-item">4G</div>
-                      </Option>
-                      <Option value="Vinaphone" label="Vinaphone">
-                        <div className="demo-option-label-item">Vinaphone</div>
-                      </Option>
-                      <Option value="Viettel" label="Viettel">
-                        <div className="demo-option-label-item">Viettel</div>
-                      </Option>
-                      <Option value="Mobiphone" label="Mobiphone">
-                        <div className="demo-option-label-item">Mobiphone</div>
-                      </Option>
-                      <Option value="VietNammobile" label="VietNammobile">
-                        <div className="demo-option-label-item">VietNammobile</div>
-                      </Option>
-                      <Option value="Gphone" label="Gphone">
-                        <div className="demo-option-label-item">Gphone</div>
-                      </Option>
-                      <Option value="Reg" label="Reg">
-                        <div className="demo-option-label-item">Reg</div>
-                      </Option>
-                      <Option value="Buy" label="Buy">
-                        <div className="demo-option-label-item">
-                          Buy
-                        </div>
-                      </Option>
-                      <Option value="Trả trước" label="Trả trước">
-                        <div className="demo-option-label-item">
-                          Trả trước
-                        </div>
-                      </Option>
-                      <Option value="Trả sau" label="Trả sau">
-                        <div className="demo-option-label-item">
-                          Trả sau
-                        </div>
-                      </Option>
-                      <Option value="Error" label="Error">
-                        <div className="demo-option-label-item">Error</div>
-                      </Option>
-                      <Option value="Die" label="Die">
-                        <div className="demo-option-label-item">Die</div>
-                      </Option>
-                    </Select>
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        {listselect_sim_type.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
                     </Form.Item>
                   ) : null}
-
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -612,44 +861,15 @@ const sim_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                          <div className="demo-option-label-item">
-                            Chuẩn bị bán
-                          </div>
-                        </Option>
-                        <Option
-                          value="Đủ điều kiện bán"
-                          label="Đủ điều kiện bán"
-                        >
-                          <div className="demo-option-label-item">
-                            Đủ điều kiện bán
-                          </div>
-                        </Option>
-
-                        <Option value="Bán tài khoản" label="Bán tài khoản">
-                          <div className="demo-option-label-item">
-                            Bán tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Đang giao dịch" label="Đang giao dịch">
-                          <div className="demo-option-label-item">
-                            Đang giao dịch
-                          </div>
-                        </Option>
-
-                        <Option value="Bán thành công" label="Bán thành công">
-                          <div className="demo-option-label-item">
-                            Bán thành công
-                          </div>
-                        </Option>
-                        <Option value="Bảo hành" label="Bảo hành">
-                          <div className="demo-option-label-item">Bảo hành</div>
-                        </Option>
-                        <Option value="Hết bảo hành" label="Hết bảo hành">
-                          <div className="demo-option-label-item">
-                            Hết bảo hành
-                          </div>
-                        </Option>
+                        {listselect_sim_sell_status.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -676,32 +896,15 @@ const sim_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng Kinh doanh"
-                          label="Phòng Kinh doanh"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng nâng cấp và phục hồi tài khoản"
-                          label="Phòng nâng cấp và phục hồi tài khoản"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng nâng cấp và phục hồi tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                          <div className="demo-option-label-item">
-                            Kho lưu trữ
-                          </div>
-                        </Option>
+                        {listselect_sim_owner.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -720,16 +923,15 @@ const sim_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                          <div className="demo-option-label-item">
-                            Nguyễn Hoài
-                          </div>
-                        </Option>
-                        <Option value="Khắc Liêm" label="Khắc Liêm">
-                          <div className="demo-option-label-item">
-                            Khắc Liêm
-                          </div>
-                        </Option>
+                        {listselect_sim_employee?.map((item) => {
+                          return (
+                            <Option value={item} label={item}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -739,140 +941,57 @@ const sim_info = () => {
                       <Form.Item label="Trạng thái" name="sim_status">
                         <Select
                           //mode="multiple"
-                          style={{ width: "100%" }}
+                          onChange={onChange_Status}
                           optionLabelProp="label"
+                          style={{
+                            width: "100%",
+                            color:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("sim_status")
+                              ) != -1
+                                ? "red"
+                                : "",
+                            fontWeight:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("sim_status")
+                              ) != -1
+                                ? "bold !important"
+                                : "",
+                          }}
                         >
-                          <Option value="Live" label="Live">
-                            <div className="demo-option-label-item">Live</div>
-                          </Option>
-                          <Option value="Active" label="Active">
-                            <div className="demo-option-label-item">Active</div>
-                          </Option>
-                          <Option value="Error" label="Error">
-                            <div className="demo-option-label-item">Error</div>
-                          </Option>
-                          <Option value="Request verify" label="Request verify">
-                            <div className="demo-option-label-item">
-                              Request verify
-                            </div>
-                          </Option>
-                          <Option value="die" label="die">
-                            <div className="demo-option-label-item">
-                              die
-                            </div>
-                          </Option>
+                          {listselect_sim_status.map((item, index) => {
+                            return (
+                              <Option value={item} label={item} key={index}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Lớp sim" name="sim_class">
+                      <Form.Item label="Lớp Sim" name="sim_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          onChange={onChange_Class}
                         >
-                          <Option value="Lớp 1" label="Lớp 1 New">
-                            <div className="demo-option-label-item">
-                              Lớp 1 New
-                            </div>
-                          </Option>
-                          <Option value="Lớp 2" label="Lớp 2">
-                            <div className="demo-option-label-item">Lớp 2</div>
-                          </Option>
-                          <Option value="Lớp 3" label="Lớp 3">
-                            <div className="demo-option-label-item">Lớp 3</div>
-                          </Option>
-                          <Option value="Lớp 4" label="Lớp 4">
-                            <div className="demo-option-label-item">Lớp 4</div>
-                          </Option>
-                          <Option value="Lớp 5" label="Lớp 5">
-                            <div className="demo-option-label-item">Lớp 5</div>
-                          </Option>
-                          <Option value="Lớp 6" label="Lớp 6">
-                            <div className="demo-option-label-item">Lớp 6</div>
-                          </Option>
-                          <Option value="Lớp 7" label="Lớp 7">
-                            <div className="demo-option-label-item">Lớp 7</div>
-                          </Option>
-                          <Option value="Lớp 8" label="Lớp 8 Upseller">
-                            <div className="demo-option-label-item">
-                              Lớp 8 Upseller
-                            </div>
-                          </Option>
-                          <Option value="Lớp 9" label="Lớp 9">
-                            <div className="demo-option-label-item">Lớp 9</div>
-                          </Option>
-                          <Option value="Lớp 10" label="Lớp 10">
-                            <div className="demo-option-label-item">Lớp 10</div>
-                          </Option>
-                          <Option value="Lớp 11" label="Lớp 11">
-                            <div className="demo-option-label-item">Lớp 11</div>
-                          </Option>
-                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
-                            <div className="demo-option-label-item">
-                              Lớp 12 Chuyển
-                            </div>
-                          </Option>
-                          <Option value="Lớp 13" label="Lớp 13">
-                            <div className="demo-option-label-item">Lớp 13</div>
-                          </Option>
-                          <Option value="Lớp 14" label="Lớp 14">
-                            <div className="demo-option-label-item">Lớp 14</div>
-                          </Option>
-                          <Option value="Lớp 15" label="Lớp 15">
-                            <div className="demo-option-label-item">Lớp 15</div>
-                          </Option>
-                          <Option value="Lớp 16" label="Lớp 16">
-                            <div className="demo-option-label-item">Lớp 16</div>
-                          </Option>
-                          <Option value="Lớp 17" label="Lớp 17">
-                            <div className="demo-option-label-item">Lớp 17</div>
-                          </Option>
-                          <Option value="Lớp 18" label="Lớp 18">
-                            <div className="demo-option-label-item">Lớp 18</div>
-                          </Option>
-                          <Option value="Lớp 19" label="Lớp 19">
-                            <div className="demo-option-label-item">Lớp 19</div>
-                          </Option>
-                          <Option value="Lớp 20" label="Lớp 20 sim error">
-                            <div className="demo-option-label-item">
-                              Lớp 20 sim error
-                            </div>
-                          </Option>
-                          <Option value="Lớp 21" label="Lớp 21 Request verify">
-                            <div className="demo-option-label-item">
-                              Lớp 21 Request verify
-                            </div>
-                          </Option>
-                          <Option value="Lớp 22" label="Lớp 22 khóa 1 chiều">
-                            <div className="demo-option-label-item">
-                              Lớp 22 khóa 1 chiều
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 23"
-                            label="Lớp 23 khóa 2 chiều"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 23 khóa 2 chiều
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 24"
-                            label="Lớp 24 Gỡ suspended ngày 1"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 24 Gỡ suspended ngày 1
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 25"
-                            label="Lớp 25 Gỡ suspended ngày 2"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 25 Gỡ suspended ngày 2
-                            </div>
-                          </Option>
+                          {listselect_sim_class.map((item, index) => {
+                            return (
+                              <Option
+                                value={item.value}
+                                label={item.title}
+                                key={index}
+                              >
+                                <div className="demo-option-label-item">
+                                  {item.title}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -883,23 +1002,37 @@ const sim_info = () => {
                           placeholder="select one item"
                           optionLabelProp="label"
                         >
-                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                            <div className="demo-option-label-item">
-                              Nguyễn Hoài
-                            </div>
-                          </Option>
-                          <Option value="Khắc Liêm" label="Khắc Liêm">
-                            <div className="demo-option-label-item">
-                              Khắc Liêm
-                            </div>
-                          </Option>
+                          {listselect_sim_employee?.map((item) => {
+                            return (
+                              <Option value={item} label={item}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Form.Item name="sim_image_url">
+                      <Upload
+                        action="http://localhost:4000/api/files"
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+                    </Form.Item>
+                  </Row>
                 </Form>
               </Card>
             </Col>
+
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
                 {[
@@ -916,8 +1049,9 @@ const sim_info = () => {
                     optionLabelProp="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
+                    size="large"
                   >
-                    {listInfo.map((item) => {
+                    {listselect_view_acc.map((item) => {
                       return (
                         <Option
                           value={item.title.toLocaleLowerCase() + "_id"}
@@ -931,16 +1065,17 @@ const sim_info = () => {
                     })}
                   </Select>
                 ) : null}
-
+                {/* form List_view */}
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
                   form={infoForm}
                   name="info"
+                  size="large"
                 >
                   <List
                     itemLayout="horizontal"
-                    dataSource={listInfo}
+                    dataSource={listselect_view_acc}
                     renderItem={(item) => (
                       <>
                         {selectListInfo.indexOf(
@@ -975,11 +1110,147 @@ const sim_info = () => {
                                   {item.title}
                                 </a>
                               </div>
-                              <Form.Item
-                                name={item.title.toLocaleLowerCase() + "_id"}
-                              >
-                                <Input onChange={() => infoForm.submit()} />
-                              </Form.Item>
+
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      openModalListView(
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      )
+                                    }
+                                    name={
+                                      item.title
+                                        .toLocaleLowerCase()
+                                        .split("|")[0] + "_id"
+                                    }
+                                  >
+                                    <Input disabled />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_status"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_status",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_sim_status.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item}
+                                            label={item}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_class"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_class",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_sim_class.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item.value}
+                                            label={item.title}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item.title}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                              </Row>
                             </div>
                           </List.Item>
                         ) : null}
@@ -996,20 +1267,22 @@ const sim_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN">
+              <Card title="THỜI GIAN: MM-DD-YYYY">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
                   name="date"
                   initialValues={dateData}
+                  size="large"
                 >
                   <Row gutter={16}>
-                    {listDate.map((item, index) => {
+                    {tablelist_sim_Date.map((item, index) => {
                       return (
-                        <Col span={8} key={index}>
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              style={{ float: "right" }}
+                              format="MM-DD-YYYY HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
@@ -1024,7 +1297,7 @@ const sim_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col span={24} >
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1034,16 +1307,38 @@ const sim_info = () => {
                 </Row>
 
                 <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|;
+                  {info?.sim_history?.split(",")?.map((data) => {
+                    return <div>{data}</div>;
+                  })}
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+       
+          <HuongDanSim_info />
+        </Tabs.TabPane>
       </Tabs>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      <Modal
+        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
+        open={modalListView}
+        onOk={() => submitModalListView()}
+        onCancel={() => cancelListView()}
+      >
+        <Input placeholder="Input _id" onChange={setValueView}></Input>
+      </Modal>
     </Card>
   );
 };
 
-export default sim_info;
+export default Sim_info;

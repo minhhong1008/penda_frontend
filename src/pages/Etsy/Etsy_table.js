@@ -18,7 +18,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListetsyActions } from "../../actions/etsyActions";
-
+import { HuongDanEtsy_table } from "./Etsy_list";
 const Etsy_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -38,20 +38,29 @@ const Etsy_table = () => {
       dataIndex: "etsy_id",
       key: "etsy_id",
       render: (text, record) => (
-        <a
+        
+        <a 
+        style={{
+          borderRadius: "6px",
+          padding: "8px 8px",
+          background: "#1c84c6",
+          color: "white",
+        }}
+        
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.etsy_id)}`)
           }
         >
           {text}
         </a>
+        
       ),
       sorter: (a, b) => {
         return a.etsy_id.localeCompare(b.etsy_id);
       },
     },
     {
-      title: "Tài khoản",
+      title: "TÀI KHOẢN",
       dataIndex: "etsy_user",
       key: "etsy_user",
       sorter: (a, b) => {
@@ -59,81 +68,149 @@ const Etsy_table = () => {
       },
     },
     {
-      title: "Thiết bị",
-      dataIndex: "etsy_device",
-      key: "etsy_device",
+      title: "TIẾN TRÌNH",
+      dataIndex: "etsy_processing",
+      key: "etsy_processing",
+      render: (record) => {
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              if (item == "Buyer" || item == "Seller") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#1c84c6",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Verify" || item == "Verify Bank") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#1ab394",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Restrict" || item == "Suspended") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#ed5565",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#23c6c8",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              }
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.etsy_user.localeCompare(b.etsy_device);
       },
     },
     {
-      title: "Lớp",
-      dataIndex: "etsy_class",
-      key: "etsy_class",
+      title: "PHÁT SINH",
+      dataIndex: "etsy_error",
+      key: "etsy_error",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "2px 2px",
+                    background: "gold",
+                    color: "red",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.etsy_user.localeCompare(b.etsy_class);
       },
     },
+
     {
-      title: "Limit",
-      dataIndex: "etsy_limit",
-      key: "etsy_limit",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_limit);
-      },
-      
-    },
-    {
-      title: "active",
-      dataIndex: "etsy_active",
-      key: "etsy_active",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_active);
-      },
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "etsydate_sine",
-      key: "etsydate_sine",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsydate_sine);
-      },
-    },
-    {
-      title: "Ngày UpSeller",
-      dataIndex: "etsydate_upseller",
-      key: "etsydate_upseller",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsydate_upseller);
-      },
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "etsy_status",
-      key: "etsy_status",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_status);
-      },
-    },
-    {
-      title: "Nhân viên",
+      title: "NHÂN VIÊN",
       dataIndex: "etsy_employee",
       key: "etsy_employee",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "6px 6px",
+                    background: "#18a689",
+                    color: "white",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.etsy_user.localeCompare(b.etsy_employee);
       },
     },
+
     {
-      title: "Ngày chuyển lớp",
-      dataIndex: "etsydate_class",
-      key: "etsydate_class",
-      sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsydate_class);
-      },
-    },
-    
-    {
-      title: "Ghi chú",
+      title: "GHI CHÚ",
       dataIndex: "etsy_note",
       key: "etsy_note",
       sorter: (a, b) => {
@@ -165,51 +242,74 @@ const Etsy_table = () => {
 
   return (
     <div>
-      <Form.Item label="Lọc Etsy">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionLabelProp="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "etsy_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "etsy_device",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "etsy_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Card type="inner">
-        <Table
-          columns={columns}
-          dataSource={etsys}
-          pagination={{
-            pageSizeOptions: ["10","20","30","50","100", "200", "300", "500","1000","2000"],
-            position: ["bottomRight", "topRight"],
-            showSizeChanger: true,
-            defaultPageSize: 100,
-          }}
-        ></Table>
+      <Card>
+        <Form.Item label="Lọc eBay">
+          <TreeSelect
+            mode="multiple"
+            onChange={handleChangeFilter}
+            multiple
+            optionLabelProp="label"
+            treeData={[
+              {
+                title: "Lớp",
+                value: "etsy_class",
+                children: [
+                  { title: "Lớp 1", value: "Lớp 1" },
+                  { title: "Lớp 2", value: "Lớp 2" },
+                ],
+              },
+              {
+                title: "Thiết bị",
+                value: "etsy_device",
+                children: [
+                  { title: "PC06", value: "PC06" },
+                  { title: "PC07", value: "PC07" },
+                ],
+              },
+              {
+                title: "Nhân viên",
+                value: "etsy_employee",
+                children: [
+                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                  { title: "Khắc Liêm", value: "Khắc Liêm" },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={"BẢNG LỚP ETSY : " + class_name.toUpperCase()}
+            key="1"
+          >
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={etsys}
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight", "topRight"],
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+              ></Table>
+            </Card>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanEtsy_table />
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );

@@ -18,7 +18,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListdeviceActions } from "../../actions/deviceActions";
-
+import { HuongDanDevice_table } from "./Device_list";
 const Device_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -38,20 +38,29 @@ const Device_table = () => {
       dataIndex: "device_id",
       key: "device_id",
       render: (text, record) => (
-        <a
+        
+        <a 
+        style={{
+          borderRadius: "6px",
+          padding: "8px 8px",
+          background: "#1c84c6",
+          color: "white",
+        }}
+        
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.device_id)}`)
           }
         >
           {text}
         </a>
+        
       ),
       sorter: (a, b) => {
         return a.device_id.localeCompare(b.device_id);
       },
     },
     {
-      title: "Tài khoản",
+      title: "TÀI KHOẢN",
       dataIndex: "device_user",
       key: "device_user",
       sorter: (a, b) => {
@@ -59,81 +68,149 @@ const Device_table = () => {
       },
     },
     {
-      title: "Thiết bị",
-      dataIndex: "device_device",
-      key: "device_device",
+      title: "TIẾN TRÌNH",
+      dataIndex: "device_processing",
+      key: "device_processing",
+      render: (record) => {
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              if (item == "Buyer" || item == "Seller") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#1c84c6",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Verify" || item == "Verify Bank") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#1ab394",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Restrict" || item == "Suspended") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#ed5565",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#23c6c8",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              }
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.device_user.localeCompare(b.device_device);
       },
     },
     {
-      title: "Lớp",
-      dataIndex: "device_class",
-      key: "device_class",
+      title: "PHÁT SINH",
+      dataIndex: "device_error",
+      key: "device_error",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "2px 2px",
+                    background: "gold",
+                    color: "red",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.device_user.localeCompare(b.device_class);
       },
     },
+
     {
-      title: "Limit",
-      dataIndex: "device_limit",
-      key: "device_limit",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_limit);
-      },
-      
-    },
-    {
-      title: "active",
-      dataIndex: "device_active",
-      key: "device_active",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_active);
-      },
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "devicedate_sine",
-      key: "devicedate_sine",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.devicedate_sine);
-      },
-    },
-    {
-      title: "Ngày UpSeller",
-      dataIndex: "devicedate_upseller",
-      key: "devicedate_upseller",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.devicedate_upseller);
-      },
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "device_status",
-      key: "device_status",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_status);
-      },
-    },
-    {
-      title: "Nhân viên",
+      title: "NHÂN VIÊN",
       dataIndex: "device_employee",
       key: "device_employee",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "6px 6px",
+                    background: "#18a689",
+                    color: "white",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.device_user.localeCompare(b.device_employee);
       },
     },
+
     {
-      title: "Ngày chuyển lớp",
-      dataIndex: "devicedate_class",
-      key: "devicedate_class",
-      sorter: (a, b) => {
-        return a.device_user.localeCompare(b.devicedate_class);
-      },
-    },
-    
-    {
-      title: "Ghi chú",
+      title: "GHI CHÚ",
       dataIndex: "device_note",
       key: "device_note",
       sorter: (a, b) => {
@@ -165,51 +242,74 @@ const Device_table = () => {
 
   return (
     <div>
-      <Form.Item label="Lọc device">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionLabelProp="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "device_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "device_device",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "device_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Card type="inner">
-        <Table
-          columns={columns}
-          dataSource={devices}
-          pagination={{
-            pageSizeOptions: ["10","20","30","50","100", "200", "300", "500","1000","2000"],
-            position: ["bottomRight", "topRight"],
-            showSizeChanger: true,
-            defaultPageSize: 100,
-          }}
-        ></Table>
+      <Card>
+        <Form.Item label="Lọc eBay">
+          <TreeSelect
+            mode="multiple"
+            onChange={handleChangeFilter}
+            multiple
+            optionLabelProp="label"
+            treeData={[
+              {
+                title: "Lớp",
+                value: "device_class",
+                item: [
+                  { title: "Lớp 1", value: "Lớp 1" },
+                  { title: "Lớp 2", value: "Lớp 2" },
+                ],
+              },
+              {
+                title: "Thiết bị",
+                value: "device_device",
+                item: [
+                  { title: "PC06", value: "PC06" },
+                  { title: "PC07", value: "PC07" },
+                ],
+              },
+              {
+                title: "Nhân viên",
+                value: "device_employee",
+                item: [
+                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                  { title: "Khắc Liêm", value: "Khắc Liêm" },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={"BẢNG THIẾT BỊ : " + class_name.toUpperCase()}
+            key="1"
+          >
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={devices}
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight", "topRight"],
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+              ></Table>
+            </Card>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanDevice_table />
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );

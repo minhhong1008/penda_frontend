@@ -22,6 +22,12 @@ export const updatetiktokInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountTiktok = () => {
+  const url = `/gettiktok/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

@@ -12,6 +12,7 @@ import paypalSaga from "./paypal";
 import pingpongSaga from "./pingpong";
 import bankSaga from "./bank";
 import infoSaga from "./info";
+import personSaga from "./person";
 import mailSaga from "./mail";
 import simSaga from "./sim";
 import deviceSaga from "./device";
@@ -39,6 +40,7 @@ export default function* rootSaga() {
     pingpongSaga(),
     bankSaga(),
     infoSaga(),
+    personSaga(),
     mailSaga(),
     simSaga(),
     deviceSaga(),

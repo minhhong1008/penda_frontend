@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+.ant-select-selector {
+  border-radius: 6px !important;
+}
+
 .App {
   text-align: center;
 }

@@ -50,11 +50,11 @@ function Footer() {
               </li>
               <li className="nav-item">
                 <a
-                  href="http://localhost:3000/sign-in"
+                  href="http://localhost:3000/log-out"
                   className="nav-link pe-0 text-muted"
                   target="_blank"
                 >
-                  License
+                  Log out
                 </a>
               </li>
             </ul>

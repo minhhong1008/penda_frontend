@@ -22,6 +22,12 @@ export const updatepayoneerInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountPayoneer = () => {
+  const url = `/getpayoneer/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

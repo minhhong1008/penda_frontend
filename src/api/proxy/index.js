@@ -22,6 +22,12 @@ export const updateproxyInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountProxy = () => {
+  const url = `/getproxy/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

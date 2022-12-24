@@ -22,6 +22,12 @@ export const updatefacebookInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountFacebook = () => {
+  const url = `/getfacebook/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

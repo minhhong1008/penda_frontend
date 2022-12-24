@@ -11,21 +11,51 @@ import {
   Modal,
   Avatar,
   List,
+  Upload,
 } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { getUser } from "../../utils/index";
+import { PlusOutlined } from "@ant-design/icons";
+import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
+import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
-import { getUser } from "../../utils/index";
+import moment, { now } from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+
+import {
+  tablelist_etsy_Date,
+  listselect_view_acc,
+  listselect_etsy_plan,
+  listselect_etsy_block,
+  listselect_etsy_processing,
+  listselect_etsy_error,
+  listselect_etsy_type,
+  listselect_etsy_sell_status,
+  listselect_etsy_owner,
+  listselect_etsy_status,
+  listselect_etsy_class,
+  HuongDanEtsy_info,
+  ContentEtsy,
+} from "./Etsy_list";
+
 import {
   postetsyInfo,
   getetsyInfo,
   updateetsyInfo,
 } from "../../api/etsy/index";
-import { showError, showSuccess } from "../../utils";
-import { useSelector } from "react-redux";
+// dùng update các field trong bảng etsy_info
+import { updateListView } from "../../api/update";
 
-const etsy_info = () => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const Etsy_info = () => {
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -34,20 +64,80 @@ const etsy_info = () => {
   const [etsyData, setetsyData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
+  const [selectListInfo, setSelectListInfo] = useState([]);
   const [noteValue, setNoteValue] = useState("");
-
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
+  const [listselect_etsy_employee, setListetsy_employee] = useState();
+
+  // Tạo state để nhận dữ liệu của listview
+
+  const [listViewData, setListViewData] = useState();
+  const [modalListView, setModalListView] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [valueInput, setValueInput] = useState();
+
+  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
+
+  const setValueView = (e) => {
+    setValueInput(e.target.value);
+  };
+
+  const openModalListView = (name) => {
+    setViewData(name);
+    setModalListView(true);
+  };
+
+  const submitModalListView = async () => {
+    let payload = {};
+    payload[viewData] = valueInput;
+    if (!valueInput) {
+      cancelListView();
+      return;
+    }
+    await updateetsyInfo(payload, info.etsy_id);
+    window.location.reload();
+    showSuccess("Thành công");
+  };
+
+  const cancelListView = () => {
+    setModalListView(false);
+    setValueInput("");
+    setViewData("");
+  };
+
+  // hàm lưu lại value của class, status trong listview theo db của từng field
+  const onChangeStatusListView = async (key, value, id) => {
+    let newData = JSON.parse(JSON.stringify(listViewData));
+    newData[key] = value;
+    setListViewData(newData);
+    await updateListView(id, key, value);
+    showSuccess("Thành công");
+  };
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+    },
+    [info]
+  );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let dateValue = {};
+    tablelist_etsy_Date.map((item) => {
+      dateValue[item.value] = moment(dateData[item.value]).format(
+        "MM-DD-YYYY HH:mm"
+      );
+    });
     const newValue = {
-      ...info,
       ...values,
+      ...dateValue,
       etsy_plan: values?.etsy_plan ? values.etsy_plan.join(",") : "",
+      etsy_block: values?.etsy_block ? values.etsy_block.join(",") : "",
+      etsy_error: values?.etsy_error ? values.etsy_error.join(",") : "",
       etsy_processing: values?.etsy_processing
         ? values.etsy_processing.join(",")
         : "",
@@ -60,15 +150,10 @@ const etsy_info = () => {
         ? values.etsy_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-
-      etsydate_start: dateData?.etsy_date_start
-        ? moment(dateData.etsy_date_start).format("MM-DD-YYYY")
-        : "",
-      etsydate_verify: dateData?.etsy_date_verify
-        ? moment(dateData.etsy_date_verify).format("MM-DD-YYYY")
-        : "",
       etsy_note: noteValue,
+      etsy_history: info.etsy_history,
     };
+
     const response = await updateetsyInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
@@ -76,6 +161,7 @@ const etsy_info = () => {
       showError("Sửa không thành công");
     }
   };
+
   // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
@@ -84,12 +170,16 @@ const etsy_info = () => {
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
   // Hàm gọi dữ liệu về từ database
   const getInfoetsy = async () => {
-    const { data } = await getetsyInfo(id);
+    const res = await getetsyInfo(id);
+    let data = res.data;
     const newData = {
       ...data,
       etsy_plan: data?.etsy_plan ? data.etsy_plan.split(",") : "",
+      etsy_block: data?.etsy_block ? data.etsy_block.split(",") : "",
+      etsy_error: data?.etsy_error ? data.etsy_error.split(",") : "",
       etsy_employee: data?.etsy_employee ? data.etsy_employee.split(",") : "",
       etsy_processing: data?.etsy_processing
         ? data.etsy_processing.split(",")
@@ -99,246 +189,132 @@ const etsy_info = () => {
         ? data.etsy_sell_status.split(",")
         : "",
       etsy_owner: data?.etsy_owner ? data.etsy_owner.split(",") : "",
+
+      device_id: data?.device_id ? data?.device_id?.device_id : "",
+      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
+      info_id: data?.info_id ? data?.info_id?.info_id : "",
+      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
+      sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
+      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
+      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
+      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
+      //etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
+      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
+      shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
+      facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
+      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
+    // hàm đổ dữ liệu về khi đã liên kết field
+    setListViewData({
+      device_class: data?.device_id ? data?.device_id?.device_class : "",
+      device_status: data?.device_id ? data?.device_id?.device_status : "",
+      device_user: data?.device_id ? data?.device_id?.device_user : "",
+      device_password: data?.device_id ? data?.device_id?.device_password : "",
+
+      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
+      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
+      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
+      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
+
+      info_class: data?.info_id ? data?.info_id?.info_class : "",
+      info_status: data?.info_id ? data?.info_id?.info_status : "",
+      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
+      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
+
+      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
+      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
+      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
+      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
+
+      sim_class: data?.sim_id ? data?.sim_id?.sim_class : "",
+      sim_status: data?.sim_id ? data?.sim_id?.sim_status : "",
+      sim_user: data?.sim_id ? data?.sim_id?.sim_user : "",
+      sim_password: data?.sim_id ? data?.sim_id?.sim_password : "",
+
+      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
+      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
+      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
+      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
+
+      payoneer_class: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_class
+        : "",
+      payoneer_status: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_status
+        : "",
+      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
+      payoneer_password: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_password
+        : "",
+
+      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
+      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
+      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
+      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
+
+      pingpong_class: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_class
+        : "",
+      pingpong_status: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_status
+        : "",
+      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
+      pingpong_password: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_password
+        : "",
+
+      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
+      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
+      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
+      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
+
+      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
+      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
+      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
+      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
+
+      shopee_class: data?.shopee_id ? data?.shopee_id?.shopee_class : "",
+      shopee_status: data?.shopee_id ? data?.shopee_id?.shopee_status : "",
+      shopee_user: data?.shopee_id ? data?.shopee_id?.shopee_user : "",
+      shopee_password: data?.shopee_id ? data?.shopee_id?.shopee_password : "",
+
+      facebook_class: data?.facebook_id
+        ? data?.facebook_id?.facebook_class
+        : "",
+      facebook_status: data?.facebook_id
+        ? data?.facebook_id?.facebook_status
+        : "",
+      facebook_user: data?.facebook_id ? data?.facebook_id?.facebook_user : "",
+      facebook_password: data?.facebook_id
+        ? data?.facebook_id?.facebook_password
+        : "",
+
+      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
+      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
+      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
+      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+    });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
-    dateForm.setFieldsValue({
-      etsy_date_start: moment(data.etsy_date_start),
-      etsy_date_verify: moment(data.etsy_date_verify),
+    let dateValue = {};
+    tablelist_etsy_Date.map((item) => {
+      dateValue[item.value] = moment(data[item.value]);
     });
-    setInfo(data);
+    //console.log(dateValue);
+    dateForm.setFieldsValue(dateValue);
+    setDateData(data);
     setNoteValue(data.etsy_note);
+    setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
+    setListetsy_employee(data.listselect_etsy_employee);
   };
-
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      {
-        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-      }
-    },
-    [info]
-  );
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfoetsy();
   }, []);
-
-  // List danh sách các trường trong bảng INFO
-  const listInfo = [
-    {
-      title: "DEVICE",
-      thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "",
-    },
-    {
-      title: "PROXY",
-      thumbnail:
-        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
-      value: "",
-    },
-    {
-      title: "INFO",
-      thumbnail:
-        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "",
-    },
-    {
-      title: "MAIL",
-      thumbnail:
-        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "",
-    },
-    {
-      title: "SIM",
-      thumbnail:
-        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "",
-    },
-    {
-      title: "BANK",
-      thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-etsy-flat-design-yellow-round-web-icon.jpg",
-      value: "",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
-      value: "",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
-      value: "",
-    },
-    {
-      title: "PINGPONG",
-      thumbnail:
-        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
-      value: "",
-    },
-    {
-      title: "EBAY",
-      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value: "",
-    },
-    {
-      title: "ETSY",
-      thumbnail:
-        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "",
-    },
-    {
-      title: "AMAZON",
-      thumbnail:
-        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "",
-    },
-    {
-      title: "SHOPEE",
-      thumbnail:
-        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "",
-    },
-    {
-      title: "FACEBOOK",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
-      value: "",
-    },
-    {
-      title: "TIKTOK",
-      thumbnail:
-        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
-      value: "",
-    },
-    {
-      title: "OTHER",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
-      value: "",
-    },
-  ];
-
-  //  List danh sách các trường trong bảng DATE
-  const listDate = [
-    {
-      title: "Ngày giao",
-      value: "etsydate_delivery",
-    },
-    {
-      title: "Ngày tạo",
-      value: "etsydate_start",
-    },
-    {
-      title: "Ngày chuyển lớp",
-      value: "etsydate_nextclass",
-    },
-    {
-      title: "Ngày verify",
-      value: "etsydate_verify",
-    },
-    {
-      title: "Ngày Seller",
-      value: "etsydate_seller",
-    },
-    {
-      title: "Ngày verify Bank",
-      value: "etsydate_verifybank",
-    },
-    {
-      title: "Ngày draft",
-      value: "etsydate_draft",
-    },
-    {
-      title: "Ngày list1",
-      value: "etsydate_list1",
-    },
-    {
-      title: "Ngày list2",
-      value: "etsydate_list2",
-    },
-    {
-      title: "Ngày list3",
-      value: "etsydate_list3",
-    },
-    {
-      title: "Ngày list4",
-      value: "etsydate_list4",
-    },
-    {
-      title: "Ngày list5",
-      value: "etsydate_list5",
-    },
-
-    {
-      title: "Dự kiến seller",
-      value: "etsydate_expectedseller",
-    },
-    {
-      title: "Dự kiến list 1",
-      value: "etsydate_expectedlist1",
-    },
-    {
-      title: "Dự kiến list 2",
-      value: "etsydate_expectedlist2",
-    },
-    {
-      title: "Dự kiến list 3",
-      value: "etsydate_expectedlist3",
-    },
-    {
-      title: "Dự kiến list 4",
-      value: "etsydate_expectedlist4",
-    },
-    {
-      title: "Dự kiến list 5",
-      value: "etsydate_expectedlist5",
-    },
-
-    {
-      title: "Ngày Suspended",
-      value: "etsydate_suspended",
-    },
-    {
-      title: "Ngày check",
-      value: "etsydate_checksus1",
-    },
-    {
-      title: "Ngày gỡ sus 1",
-      value: "etsydate_contact1",
-    },
-    {
-      title: "Ngày gỡ sus 2",
-      value: "etsydate_contact2",
-    },
-    {
-      title: "Ngày gỡ sus 3",
-      value: "etsydate_contact3",
-    },
-    {
-      title: "Ngày gỡ sus 4",
-      value: "etsydate_contact4",
-    },
-    {
-      title: "Ngày gỡ sus 5",
-      value: "etsydate_contact5",
-    },
-    {
-      title: "Ngày check",
-      value: "etsydate_checksus2",
-    },
-    {
-      title: "Ngày check",
-      value: "etsydate_checksus3",
-    },
-  ];
-
   // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
@@ -349,37 +325,321 @@ const etsy_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm viết tự động hóa
+  const onChange_Status = async (values) => {
+    if (values == "Error" || values == "Restrict" || values == "Suspended") {
+      let new_etsy_owner = form.getFieldValue("etsy_owner");
+      if (new_etsy_owner.indexOf("Phòng phục hồi") == -1) {
+        new_etsy_owner.push("Phòng phục hồi");
+      }
+      if (new_etsy_owner.indexOf("Kho lưu trữ") == -1) {
+        new_etsy_owner.push("Kho lưu trữ");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateetsyInfo(
+        {
+          etsy_owner: new_etsy_owner.join(","),
+        },
+        info.etsy_id
+      );
+      // Tiếp tục set
+      let new_etsy_processing = form.getFieldValue("etsy_processing");
+      let old_etsy_processing = info.etsy_processing;
+      if (new_etsy_processing.indexOf(values) == -1) {
+        new_etsy_processing.push(values);
+      }
+
+      let new_etsy_class = form.getFieldValue("etsy_class");
+      if (values == "Error") {
+        (new_etsy_class = "Lớp 20"),
+          dateForm.setFieldValue("etsydate_error", moment(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          etsydate_error: moment(now()),
+          etsydate_nextclass: moment(now()),
+        }); // Dùng hàm này set lại date mới lưu đc vào db
+      }
+      if (values == "Restrict") {
+        (new_etsy_class = "Lớp 23"),
+          dateForm.setFieldValue("etsydate_restrict", moment(now()));
+        dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          etsydate_restrict: moment(now()),
+          etsydate_nextclass: moment(now()),
+        });
+      }
+      if (values == "Suspended") {
+        (new_etsy_class = "Lớp 26"),
+          dateForm.setFieldValue("etsydate_suspended", moment(now()));
+        dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          etsydate_suspended: moment(now()),
+          etsydate_nextclass: moment(now()),
+        });
+      }
+
+      form.setFieldsValue({
+        etsy_class: new_etsy_class,
+        etsy_support: "Nguyễn Hoài",
+        etsy_processing: new_etsy_processing,
+        etsy_owner: new_etsy_owner,
+      }); // Dùng hàm này set lại để lưu vào db
+    }
+  };
+
+  const onChange_Processing = (values) => {
+    if (values[values.length - 1] == "Buyer") {
+      form.setFieldValue("etsy_class", "Lớp 4");
+      dateForm.setFieldValue("etsydate_start", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_start: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Verify") {
+      form.setFieldValue("etsy_class", "Lớp 6");
+      dateForm.setFieldValue("etsydate_verify", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_verify: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Seller") {
+      form.setFieldValue("etsy_class", "Lớp 9");
+      dateForm.setFieldValue("etsydate_seller", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_seller: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "List") {
+      form.setFieldValue("etsy_class", "Lớp 10");
+      dateForm.setFieldValue("etsydate_list1", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_list1: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Move room") {
+      form.setFieldValue("etsy_class", "Lớp 12");
+      dateForm.setFieldValue("etsydate_moveroom", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_moveroom: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  const onChange_Class = async (values) => {
+    dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+    setDateData({
+      ...dateData,
+      etsydate_nextclass: moment(now()),
+    });
+
+    if (values == "Lớp 9") {
+      let new_etsy_type = form.getFieldValue("etsy_type");
+      if (new_etsy_type.indexOf("Seller") == -1) {
+        new_etsy_type.push("Seller");
+      }
+
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateetsyInfo(
+        {
+          new_etsy_type: new_etsy_type.join(","),
+        },
+        info.etsy_id
+      );
+
+      let new_etsy_processing = form.getFieldValue("etsy_processing");
+      if (new_etsy_processing.indexOf("Seller") == -1) {
+        new_etsy_processing.push("Seller");
+      }
+
+      form.setFieldsValue({
+        etsy_processing: new_etsy_processing,
+        etsy_type: new_etsy_type,
+      });
+
+      dateForm.setFieldValue("etsydate_seller", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_seller: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 4") {
+      let new_etsy_type = form.getFieldValue("etsy_type");
+      if (new_etsy_type.indexOf("Buyer") == -1) {
+        new_etsy_type.push("Buyer");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateetsyInfo(
+        {
+          new_etsy_type: new_etsy_type.join(","),
+        },
+        info.etsy_id
+      );
+
+      let new_etsy_processing = form.getFieldValue("etsy_processing");
+      if (new_etsy_processing.indexOf("Buyer") == -1) {
+        new_etsy_processing.push("Buyer");
+      }
+      /*  let new_etsy_owner = form
+        .getFieldValue("etsy_owner")
+        .filter((item) => item !== ""); */
+
+      form.setFieldsValue({
+        etsy_processing: new_etsy_processing,
+        etsy_type: new_etsy_type,
+      });
+
+      dateForm.setFieldValue("etsydate_start", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_start: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 12") {
+      let new_etsy_type = form.getFieldValue("etsy_type");
+      if (new_etsy_type.indexOf("Bán acc") == -1) {
+        new_etsy_type.push("Bán acc");
+      }
+      let new_etsy_owner = form.getFieldValue("etsy_owner");
+      if (new_etsy_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_etsy_owner.push("Phòng Kinh doanh");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateetsyInfo(
+        {
+          new_etsy_type: new_etsy_type.join(","),
+          new_etsy_owner: new_etsy_owner.join(","),
+        },
+        info.etsy_id
+      );
+
+      let new_etsy_processing = form.getFieldValue("etsy_processing");
+      if (new_etsy_processing.indexOf("Move room") == -1) {
+        new_etsy_processing.push("Move room");
+      }
+
+      form.setFieldsValue({
+        etsy_processing: new_etsy_processing,
+        etsy_type: new_etsy_type,
+        etsy_owner: new_etsy_owner,
+      });
+
+      dateForm.setFieldValue("etsydate_moveroom", moment(now()));
+      dateForm.setFieldValue("etsydate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        etsydate_moveroom: moment(now()),
+        etsydate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url: "../asset/",
+    },
+  ]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
   return (
     <Card
-      title={id}
-      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+      title={id + " | " + (info?._id ? info?._id : "")}
+      extra={
+        <Button
+          onClick={() => form.submit()}
+          style={{
+            background: "#18a689",
+            color: "white",
+          }}
+        >
+          Lưu thông tin
+        </Button>
+      }
     >
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN ETSY">
+            <Col span={12} >
+              <Card title="THÔNG TIN ETSY" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={etsyData}
                   autoComplete="off"
+                  // labelCol={{ span: 3 }}
+                  // layout="horizontal"
+
+                  size="large"
                 >
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item
-                        label="etsy id"
+                        label="Etsy id"
                         name="etsy_id"
+                        style={{ width: "100%" }}
                         rules={[
                           {
                             required: true,
-                            message: "Hãy nhập etsy id!",
+                            message: "Hãy nhập Etsy id!",
                           },
                         ]}
                         onClick={() =>
-                          copyToClipboard(form.getFieldValue("etsy_id"))
+                          copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
                         <Input
@@ -390,19 +650,38 @@ const etsy_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item label="etsy User" name="etsy_user">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("etsy_user"))
+                        }
+                        label="Etsy User"
+                        name="etsy_user"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="etsy Pass" name="etsy_password">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("etsy_password"))
+                        }
+                        label="Etsy Pass"
+                        name="etsy_password"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
+
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="etsy chi tiết" name="etsy_detail">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("etsy_password"))
+                        }
+                        label="Etsy chi tiết"
+                        name="etsy_detail"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -410,22 +689,22 @@ const etsy_info = () => {
 
                   <Row gutter={16}>
                     <Col span={6}>
-                      <Form.Item label="etsy limit" name="etsy_limit">
+                      <Form.Item label="Etsy limit" name="etsy_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="etsy items" name="etsy_item">
+                      <Form.Item label="Etsy items" name="etsy_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="etsy Sold" name="etsy_sold">
+                      <Form.Item label="Etsy Sold" name="etsy_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="etsy Feedback" name="etsy_feedback">
+                      <Form.Item label="Etsy Fb" name="etsy_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
@@ -449,154 +728,81 @@ const etsy_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phone" label="Phone">
-                          <div className="demo-option-label-item">Phone</div>
-                        </Option>
-                        <Option value="PC" label="PC">
-                          <div className="demo-option-label-item">PC</div>
-                        </Option>
-                        <Option value="Antidetect" label="Antidetect">
-                          <div className="demo-option-label-item">
-                            Antidetect
-                          </div>
-                        </Option>
-                        <Option value="Gologin" label="Gologin">
-                          <div className="demo-option-label-item">Gologin</div>
-                        </Option>
-                        <Option value="VPS" label="VPS">
-                          <div className="demo-option-label-item">VPS</div>
-                        </Option>
-                        <Option value="Windows 10" label="Windows 10">
-                          <div className="demo-option-label-item">
-                            Windows 10
-                          </div>
-                        </Option>
-                        <Option value="Windows 11" label="Windows 11">
-                          <div className="demo-option-label-item">
-                            Windows 11
-                          </div>
-                        </Option>
-                        <Option value="MAC" label="MAC">
-                          <div className="demo-option-label-item">MAC</div>
-                        </Option>
-                        <Option value="Ubuntu" label="Ubuntu">
-                          <div className="demo-option-label-item">Ubuntu</div>
-                        </Option>
-                        <Option value="Chrome" label="Chrome">
-                          <div className="demo-option-label-item">Chrome</div>
-                        </Option>
-                        <Option value="Firefox" label="Firefox">
-                          <div className="demo-option-label-item">Firefox</div>
-                        </Option>
-                        <Option value="Eagle" label="Eagle">
-                          <div className="demo-option-label-item">Eagle</div>
-                        </Option>
-                        <Option value="Safari" label="Safari">
-                          <div className="demo-option-label-item">Safari</div>
-                        </Option>
-                        <Option value="USB 4G" label="USB 4G">
-                          <div className="demo-option-label-item">USB 4G</div>
-                        </Option>
-                        <Option value="Proxy 4G" label="Proxy 4G">
-                          <div className="demo-option-label-item">Proxy 4G</div>
-                        </Option>
-                        <Option value="Proxy" label="Proxy">
-                          <div className="demo-option-label-item">Proxy</div>
-                        </Option>
-                        <Option value="Info real" label="Info real">
-                          <div className="demo-option-label-item">
-                            Info real
-                          </div>
-                        </Option>
-                        <Option value="Info gen" label="Info gen">
-                          <div className="demo-option-label-item">Info gen</div>
-                        </Option>
-                        <Option value="Quy trình 1" label="Quy trình 1">
-                          <div className="demo-option-label-item">
-                            Quy trình 1
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 2" label="Quy trình 2">
-                          <div className="demo-option-label-item">
-                            Quy trình 2
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 3" label="Quy trình 3">
-                          <div className="demo-option-label-item">
-                            Quy trình 3
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 4" label="Quy trình 4">
-                          <div className="demo-option-label-item">
-                            Quy trình 4
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 5" label="Quy trình 5">
-                          <div className="demo-option-label-item">
-                            Quy trình 5
-                          </div>
-                        </Option>
+                        {listselect_etsy_plan.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Etsy block"
+                      name="etsy_block"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        {listselect_etsy_block.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
 
                   <Form.Item label="Tiến trình" name="etsy_processing">
                     <Select
+                      onChange={onChange_Processing}
                       mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
+                      style={{ width: "100%", color: "green" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="VN" label="VN">
-                        <div className="demo-option-label-item">VN</div>
-                      </Option>
-                      <Option value="US" label="US">
-                        <div className="demo-option-label-item">US</div>
-                      </Option>
-                      <Option value="Buyer" label="Buyer">
-                        <div className="demo-option-label-item">Buyer</div>
-                      </Option>
-                      <Option value="Avatar" label="Avatar">
-                        <div className="demo-option-label-item">Avatar</div>
-                      </Option>
-                      <Option value="Verify" label="Verify">
-                        <div className="demo-option-label-item">Verify</div>
-                      </Option>
-                      <Option value="Seller" label="Seller">
-                        <div className="demo-option-label-item">Seller</div>
-                      </Option>
-                      <Option value="Draft" label="Draft">
-                        <div className="demo-option-label-item">Draft</div>
-                      </Option>
-                      <Option value="List" label="List">
-                        <div className="demo-option-label-item">List</div>
-                      </Option>
-                      <Option value="Sold" label="Sold">
-                        <div className="demo-option-label-item">Sold</div>
-                      </Option>
-                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                        <div className="demo-option-label-item">
-                          Gỡ Suspended
-                        </div>
-                      </Option>
-                      <Option value="ADS" label="ADS">
-                        <div className="demo-option-label-item">Quảng cáo</div>
-                      </Option>
-                      <Option value="Above Standard" label="Above Standard">
-                        <div className="demo-option-label-item">
-                          Above Standard
-                        </div>
-                      </Option>
-                      <Option value="Top Rate" label="Top Rate">
-                        <div className="demo-option-label-item">Top Rate</div>
-                      </Option>
-                      <Option value="Restrict" label="Restrict">
-                        <div className="demo-option-label-item">Restrict</div>
-                      </Option>
-                      <Option value="Suspended" label="Suspended">
-                        <div className="demo-option-label-item">Suspended</div>
-                      </Option>
+                      {listselect_etsy_processing.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="Phát sinh" name="etsy_error">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%", color: "red" }}
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      {listselect_etsy_error.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
 
@@ -614,48 +820,18 @@ const etsy_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="VN" label="VN">
-                          <div className="demo-option-label-item">VN</div>
-                        </Option>
-                        <Option value="US" label="US">
-                          <div className="demo-option-label-item">US</div>
-                        </Option>
-                        <Option value="Buyer" label="Buyer">
-                          <div className="demo-option-label-item">Buyer</div>
-                        </Option>
-                        <Option value="Kick Sold" label="Kick Sold">
-                          <div className="demo-option-label-item">
-                            Kick Sold
-                          </div>
-                        </Option>
-                        <Option value="Seller" label="Seller">
-                          <div className="demo-option-label-item">Seller</div>
-                        </Option>
-                        <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                          <div className="demo-option-label-item">
-                            Gỡ Suspended
-                          </div>
-                        </Option>
-                        <Option value="Bán hàng" label="Bán hàng">
-                          <div className="demo-option-label-item">Bán hàng</div>
-                        </Option>
-                        <Option value="ADS" label="ADS">
-                          <div className="demo-option-label-item">
-                            Quảng cáo
-                          </div>
-                        </Option>
-                        <Option value="Above Standard" label="Above Standard">
-                          <div className="demo-option-label-item">
-                            Above Standard
-                          </div>
-                        </Option>
-                        <Option value="Top Rate" label="Top Rate">
-                          <div className="demo-option-label-item">Top Rate</div>
-                        </Option>
+                        {listselect_etsy_type.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
-
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -685,44 +861,15 @@ const etsy_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                          <div className="demo-option-label-item">
-                            Chuẩn bị bán
-                          </div>
-                        </Option>
-                        <Option
-                          value="Đủ điều kiện bán"
-                          label="Đủ điều kiện bán"
-                        >
-                          <div className="demo-option-label-item">
-                            Đủ điều kiện bán
-                          </div>
-                        </Option>
-
-                        <Option value="Bán tài khoản" label="Bán tài khoản">
-                          <div className="demo-option-label-item">
-                            Bán tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Đang giao dịch" label="Đang giao dịch">
-                          <div className="demo-option-label-item">
-                            Đang giao dịch
-                          </div>
-                        </Option>
-
-                        <Option value="Bán thành công" label="Bán thành công">
-                          <div className="demo-option-label-item">
-                            Bán thành công
-                          </div>
-                        </Option>
-                        <Option value="Bảo hành" label="Bảo hành">
-                          <div className="demo-option-label-item">Bảo hành</div>
-                        </Option>
-                        <Option value="Hết bảo hành" label="Hết bảo hành">
-                          <div className="demo-option-label-item">
-                            Hết bảo hành
-                          </div>
-                        </Option>
+                        {listselect_etsy_sell_status.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -749,32 +896,15 @@ const etsy_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng Kinh doanh"
-                          label="Phòng Kinh doanh"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng nâng cấp và phục hồi tài khoản"
-                          label="Phòng nâng cấp và phục hồi tài khoản"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng nâng cấp và phục hồi tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                          <div className="demo-option-label-item">
-                            Kho lưu trữ
-                          </div>
-                        </Option>
+                        {listselect_etsy_owner.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -793,16 +923,15 @@ const etsy_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                          <div className="demo-option-label-item">
-                            Nguyễn Hoài
-                          </div>
-                        </Option>
-                        <Option value="Khắc Liêm" label="Khắc Liêm">
-                          <div className="demo-option-label-item">
-                            Khắc Liêm
-                          </div>
-                        </Option>
+                        {listselect_etsy_employee?.map((item) => {
+                          return (
+                            <Option value={item} label={item}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -812,145 +941,57 @@ const etsy_info = () => {
                       <Form.Item label="Trạng thái" name="etsy_status">
                         <Select
                           //mode="multiple"
-                          style={{ width: "100%" }}
+                          onChange={onChange_Status}
                           optionLabelProp="label"
+                          style={{
+                            width: "100%",
+                            color:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("etsy_status")
+                              ) != -1
+                                ? "red"
+                                : "",
+                            fontWeight:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("etsy_status")
+                              ) != -1
+                                ? "bold !important"
+                                : "",
+                          }}
                         >
-                          <Option value="Live" label="Live">
-                            <div className="demo-option-label-item">Live</div>
-                          </Option>
-                          <Option value="Error" label="Error">
-                            <div className="demo-option-label-item">Error</div>
-                          </Option>
-                          <Option value="Restrict" label="Restrict">
-                            <div className="demo-option-label-item">
-                              Restrict
-                            </div>
-                          </Option>
-                          <Option value="Suspended" label="Suspended">
-                            <div className="demo-option-label-item">
-                              Suspended
-                            </div>
-                          </Option>
-                          <Option value="Disable" label="Disable">
-                            <div className="demo-option-label-item">
-                              Disable
-                            </div>
-                          </Option>
-                          <Option value="Die" label="Die">
-                            <div className="demo-option-label-item">Die</div>
-                          </Option>
+                          {listselect_etsy_status.map((item, index) => {
+                            return (
+                              <Option value={item} label={item} key={index}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Lớp etsy" name="etsy_class">
+                      <Form.Item label="Lớp Etsy" name="etsy_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          onChange={onChange_Class}
                         >
-                          <Option value="Lớp 1" label="Lớp 1 New">
-                            <div className="demo-option-label-item">
-                              Lớp 1 New
-                            </div>
-                          </Option>
-                          <Option value="Lớp 2" label="Lớp 2">
-                            <div className="demo-option-label-item">Lớp 2</div>
-                          </Option>
-                          <Option value="Lớp 3" label="Lớp 3">
-                            <div className="demo-option-label-item">Lớp 3</div>
-                          </Option>
-                          <Option value="Lớp 4" label="Lớp 4">
-                            <div className="demo-option-label-item">Lớp 4</div>
-                          </Option>
-                          <Option value="Lớp 5" label="Lớp 5">
-                            <div className="demo-option-label-item">Lớp 5</div>
-                          </Option>
-                          <Option value="Lớp 6" label="Lớp 6">
-                            <div className="demo-option-label-item">Lớp 6</div>
-                          </Option>
-                          <Option value="Lớp 7" label="Lớp 7">
-                            <div className="demo-option-label-item">Lớp 7</div>
-                          </Option>
-                          <Option value="Lớp 8" label="Lớp 8 Upseller">
-                            <div className="demo-option-label-item">
-                              Lớp 8 Upseller
-                            </div>
-                          </Option>
-                          <Option value="Lớp 9" label="Lớp 9">
-                            <div className="demo-option-label-item">Lớp 9</div>
-                          </Option>
-                          <Option value="Lớp 10" label="Lớp 10">
-                            <div className="demo-option-label-item">Lớp 10</div>
-                          </Option>
-                          <Option value="Lớp 11" label="Lớp 11">
-                            <div className="demo-option-label-item">Lớp 11</div>
-                          </Option>
-                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
-                            <div className="demo-option-label-item">
-                              Lớp 12 Chuyển
-                            </div>
-                          </Option>
-                          <Option value="Lớp 13" label="Lớp 13">
-                            <div className="demo-option-label-item">Lớp 13</div>
-                          </Option>
-                          <Option value="Lớp 14" label="Lớp 14">
-                            <div className="demo-option-label-item">Lớp 14</div>
-                          </Option>
-                          <Option value="Lớp 15" label="Lớp 15">
-                            <div className="demo-option-label-item">Lớp 15</div>
-                          </Option>
-                          <Option value="Lớp 16" label="Lớp 16">
-                            <div className="demo-option-label-item">Lớp 16</div>
-                          </Option>
-                          <Option value="Lớp 17" label="Lớp 17">
-                            <div className="demo-option-label-item">Lớp 17</div>
-                          </Option>
-                          <Option value="Lớp 18" label="Lớp 18">
-                            <div className="demo-option-label-item">Lớp 18</div>
-                          </Option>
-                          <Option value="Lớp 19" label="Lớp 19">
-                            <div className="demo-option-label-item">Lớp 19</div>
-                          </Option>
-                          <Option value="Lớp 20" label="Lớp 20 etsy error">
-                            <div className="demo-option-label-item">
-                              Lớp 20 etsy error
-                            </div>
-                          </Option>
-                          <Option value="Lớp 21" label="Lớp 21 Buyer suspended">
-                            <div className="demo-option-label-item">
-                              Lớp 21 etsy suspend
-                            </div>
-                          </Option>
-                          <Option value="Lớp 22" label="Lớp 22 Seller restrict">
-                            <div className="demo-option-label-item">
-                              Lớp 22 Seller restrict
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 23"
-                            label="Lớp 23 Seller Suspended"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 23 Seller Suspended
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 24"
-                            label="Lớp 24 Gỡ suspended ngày 1"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 24 Gỡ suspended ngày 1
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 25"
-                            label="Lớp 25 Gỡ suspended ngày 2"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 25 Gỡ suspended ngày 2
-                            </div>
-                          </Option>
+                          {listselect_etsy_class.map((item, index) => {
+                            return (
+                              <Option
+                                value={item.value}
+                                label={item.title}
+                                key={index}
+                              >
+                                <div className="demo-option-label-item">
+                                  {item.title}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -961,23 +1002,37 @@ const etsy_info = () => {
                           placeholder="select one item"
                           optionLabelProp="label"
                         >
-                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                            <div className="demo-option-label-item">
-                              Nguyễn Hoài
-                            </div>
-                          </Option>
-                          <Option value="Khắc Liêm" label="Khắc Liêm">
-                            <div className="demo-option-label-item">
-                              Khắc Liêm
-                            </div>
-                          </Option>
+                          {listselect_etsy_employee?.map((item) => {
+                            return (
+                              <Option value={item} label={item}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Form.Item name="etsy_image_url">
+                      <Upload
+                        action="http://localhost:4000/api/files"
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+                    </Form.Item>
+                  </Row>
                 </Form>
               </Card>
             </Col>
+
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
                 {[
@@ -994,8 +1049,9 @@ const etsy_info = () => {
                     optionLabelProp="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
+                    size="large"
                   >
-                    {listInfo.map((item) => {
+                    {listselect_view_acc.map((item) => {
                       return (
                         <Option
                           value={item.title.toLocaleLowerCase() + "_id"}
@@ -1009,16 +1065,17 @@ const etsy_info = () => {
                     })}
                   </Select>
                 ) : null}
-
+                {/* form List_view */}
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
                   form={infoForm}
                   name="info"
+                  size="large"
                 >
                   <List
                     itemLayout="horizontal"
-                    dataSource={listInfo}
+                    dataSource={listselect_view_acc}
                     renderItem={(item) => (
                       <>
                         {selectListInfo.indexOf(
@@ -1053,11 +1110,147 @@ const etsy_info = () => {
                                   {item.title}
                                 </a>
                               </div>
-                              <Form.Item
-                                name={item.title.toLocaleLowerCase() + "_id"}
-                              >
-                                <Input onChange={() => infoForm.submit()} />
-                              </Form.Item>
+
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      openModalListView(
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      )
+                                    }
+                                    name={
+                                      item.title
+                                        .toLocaleLowerCase()
+                                        .split("|")[0] + "_id"
+                                    }
+                                  >
+                                    <Input disabled />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_status"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_status",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_etsy_status.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item}
+                                            label={item}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_class"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_class",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_etsy_class.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item.value}
+                                            label={item.title}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item.title}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                              </Row>
                             </div>
                           </List.Item>
                         ) : null}
@@ -1074,20 +1267,22 @@ const etsy_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN">
+              <Card title="THỜI GIAN: MM-DD-YYYY">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
                   name="date"
                   initialValues={dateData}
+                  size="large"
                 >
                   <Row gutter={16}>
-                    {listDate.map((item, index) => {
+                    {tablelist_etsy_Date.map((item, index) => {
                       return (
-                        <Col span={8} key={index}>
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              style={{ float: "right" }}
+                              format="MM-DD-YYYY HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
@@ -1102,7 +1297,7 @@ const etsy_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col span={24} >
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1112,85 +1307,38 @@ const etsy_info = () => {
                 </Row>
 
                 <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|;
+                  {info?.etsy_history?.split(",")?.map((data) => {
+                    return <div>{data}</div>;
+                  })}
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
-
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-          <p>1. Etsy mã ET_12345</p>
-          <p>
-            1. Etsy được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-            user|pass (có hướng dẫn tạo acc bên tool nhập liệu)
-          </p>
-          <p>
-            2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn.
-            Kế hoạch được tạo khi tạo mã Etsy từ tool nhập liệu
-          </p>
-          <p>
-            3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ
-            tiến trình ta biết được acc đang làm đến hạng mục nào, nếu suspend
-            thì biết được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại
-            acc
-          </p>
-          <p>
-            4. Loại etsy: Là tổng quan 1 tài khoản etsy, dùng để tạo báo cáo,
-            phân loại acc
-          </p>
-          <p>
-            5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh
-          </p>
-          <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
-          <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
-          <p>
-            8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo,
-            phân loại acc
-          </p>
-          <p>
-            9. Lớp etsy: Dùng để xác định tổng quan các hạng mục đã triển khai,
-            dùng tạo báo cáo, phân loại acc
-          </p>
-          <p>
-            10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh etsy
-            suspended, tải cccd, doc bank
-          </p>
-          <p>
-            11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến
-            trang chi tiết của tài nguyên đó
-          </p>
-          <br></br>
-          <p>
-            Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
-            chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn
-            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
-            động disable tất cả các field{" "}
-          </p>
-          <p>
-            Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
-            chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn
-            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
-            động disable tất cả các field{" "}
-          </p>
-          <p>
-            Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình
-            được chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
-          </p>
-          <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
-          <p>Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay or etsy...</p>
-          <p>Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào phần tool- xử lý số liệu - filter  </p>
-          <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
-          <br></br>
-          <p>
-            Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
-            0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
-          </p>
+       
+          <HuongDanEtsy_info />
         </Tabs.TabPane>
       </Tabs>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      <Modal
+        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
+        open={modalListView}
+        onOk={() => submitModalListView()}
+        onCancel={() => cancelListView()}
+      >
+        <Input placeholder="Input _id" onChange={setValueView}></Input>
+      </Modal>
     </Card>
   );
 };
 
-export default etsy_info;
+export default Etsy_info;

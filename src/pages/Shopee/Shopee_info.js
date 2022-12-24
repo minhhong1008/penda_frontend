@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
+import moment, { now } from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -35,6 +35,8 @@ import {
   listselect_shopee_owner,
   listselect_shopee_status,
   listselect_shopee_class,
+  HuongDanShopee_info,
+  ContentShopee,
 } from "./Shopee_list";
 
 import {
@@ -42,6 +44,8 @@ import {
   getshopeeInfo,
   updateshopeeInfo,
 } from "../../api/shopee/index";
+// dùng update các field trong bảng shopee_info
+import { updateListView } from "../../api/update";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -52,7 +56,6 @@ const getBase64 = (file) =>
   });
 
 const Shopee_info = () => {
-  
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -68,11 +71,70 @@ const Shopee_info = () => {
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
   const [listselect_shopee_employee, setListshopee_employee] = useState();
+
+  // Tạo state để nhận dữ liệu của listview
+
+  const [listViewData, setListViewData] = useState();
+  const [modalListView, setModalListView] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [valueInput, setValueInput] = useState();
+
+  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
+
+  const setValueView = (e) => {
+    setValueInput(e.target.value);
+  };
+
+  const openModalListView = (name) => {
+    setViewData(name);
+    setModalListView(true);
+  };
+
+  const submitModalListView = async () => {
+    let payload = {};
+    payload[viewData] = valueInput;
+    if (!valueInput) {
+      cancelListView();
+      return;
+    }
+    await updateshopeeInfo(payload, info.shopee_id);
+    window.location.reload();
+    showSuccess("Thành công");
+  };
+
+  const cancelListView = () => {
+    setModalListView(false);
+    setValueInput("");
+    setViewData("");
+  };
+
+  // hàm lưu lại value của class, status trong listview theo db của từng field
+  const onChangeStatusListView = async (key, value, id) => {
+    let newData = JSON.parse(JSON.stringify(listViewData));
+    newData[key] = value;
+    setListViewData(newData);
+    await updateListView(id, key, value);
+    showSuccess("Thành công");
+  };
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+    },
+    [info]
+  );
+
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let dateValue = {};
+    tablelist_shopee_Date.map((item) => {
+      dateValue[item.value] = moment(dateData[item.value]).format(
+        "MM-DD-YYYY HH:mm"
+      );
+    });
     const newValue = {
-      ...info,
       ...values,
+      ...dateValue,
       shopee_plan: values?.shopee_plan ? values.shopee_plan.join(",") : "",
       shopee_block: values?.shopee_block ? values.shopee_block.join(",") : "",
       shopee_error: values?.shopee_error ? values.shopee_error.join(",") : "",
@@ -88,38 +150,10 @@ const Shopee_info = () => {
         ? values.shopee_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-
-
-        shopeedate_delivery:dateData?.shopeedate_delivery? moment(dateData.shopeedate_delivery).format("MM-DD-YYYY"): "",
-        shopeedate_nextclass:dateData?.shopeedate_nextclass? moment(dateData.shopeedate_nextclass).format("MM-DD-YYYY"): "",
-        shopeedate_start:dateData?.shopeedate_start? moment(dateData.shopeedate_start).format("MM-DD-YYYY"): "",
-        shopeedate_verify:dateData?.shopeedate_verify? moment(dateData.shopeedate_verify).format("MM-DD-YYYY"): "",
-        shopeedate_seller:dateData?.shopeedate_seller? moment(dateData.shopeedate_seller).format("MM-DD-YYYY"): "",
-        shopeedate_verifybank:dateData?.shopeedate_verifybank? moment(dateData.shopeedate_verifybank).format("MM-DD-YYYY"): "",
-        shopeedate_draft:dateData?.shopeedate_draft? moment(dateData.shopeedate_draft).format("MM-DD-YYYY"): "",
-        shopeedate_list1:dateData?.shopeedate_list1? moment(dateData.shopeedate_list1).format("MM-DD-YYYY"): "",
-        shopeedate_list2:dateData?.shopeedate_list2? moment(dateData.shopeedate_list2).format("MM-DD-YYYY"): "",
-        shopeedate_list3:dateData?.shopeedate_list3? moment(dateData.shopeedate_list3).format("MM-DD-YYYY"): "",
-        shopeedate_list4:dateData?.shopeedate_list4? moment(dateData.shopeedate_list4).format("MM-DD-YYYY"): "",
-        shopeedate_list5:dateData?.shopeedate_list5? moment(dateData.shopeedate_list5).format("MM-DD-YYYY"): "",
-        shopeedate_calendarseller:dateData?.shopeedate_calendarseller? moment(dateData.shopeedate_calendarseller).format("MM-DD-YYYY"): "",
-        shopeedate_calendarlist1:dateData?.shopeedate_calendarlist1? moment(dateData.shopeedate_calendarlist1).format("MM-DD-YYYY"): "",
-        shopeedate_calendarlist2:dateData?.shopeedate_calendarlist2? moment(dateData.shopeedate_calendarlist2).format("MM-DD-YYYY"): "",
-        shopeedate_calendarlist3:dateData?.shopeedate_calendarlist3? moment(dateData.shopeedate_calendarlist3).format("MM-DD-YYYY"): "",
-        shopeedate_calendarlist4:dateData?.shopeedate_calendarlist4? moment(dateData.shopeedate_calendarlist4).format("MM-DD-YYYY"): "",
-        shopeedate_calendarlist5:dateData?.shopeedate_calendarlist5? moment(dateData.shopeedate_calendarlist5).format("MM-DD-YYYY"): "",
-        shopeedate_suspended:dateData?.shopeedate_suspended? moment(dateData.shopeedate_suspended).format("MM-DD-YYYY"): "",
-        shopeedate_contact1:dateData?.shopeedate_contact1? moment(dateData.shopeedate_contact1).format("MM-DD-YYYY"): "",
-        shopeedate_contact2:dateData?.shopeedate_contact2? moment(dateData.shopeedate_contact2).format("MM-DD-YYYY"): "",
-        shopeedate_contact3:dateData?.shopeedate_contact3? moment(dateData.shopeedate_contact3).format("MM-DD-YYYY"): "",
-        shopeedate_contact4:dateData?.shopeedate_contact4? moment(dateData.shopeedate_contact4).format("MM-DD-YYYY"): "",
-        shopeedate_contact5:dateData?.shopeedate_contact5? moment(dateData.shopeedate_contact5).format("MM-DD-YYYY"): "",
-        shopeedate_checksus1:dateData?.shopeedate_checksus1? moment(dateData.shopeedate_checksus1).format("MM-DD-YYYY"): "",
-        shopeedate_checksus2:dateData?.shopeedate_checksus2? moment(dateData.shopeedate_checksus2).format("MM-DD-YYYY"): "",
-        shopeedate_checksus3:dateData?.shopeedate_checksus3? moment(dateData.shopeedate_checksus3).format("MM-DD-YYYY"): "",
-
       shopee_note: noteValue,
+      shopee_history: info.shopee_history,
     };
+
     const response = await updateshopeeInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
@@ -127,6 +161,7 @@ const Shopee_info = () => {
       showError("Sửa không thành công");
     }
   };
+
   // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
@@ -135,6 +170,7 @@ const Shopee_info = () => {
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
   // Hàm gọi dữ liệu về từ database
   const getInfoshopee = async () => {
     const res = await getshopeeInfo(id);
@@ -153,52 +189,128 @@ const Shopee_info = () => {
         ? data.shopee_sell_status.split(",")
         : "",
       shopee_owner: data?.shopee_owner ? data.shopee_owner.split(",") : "",
+
+      device_id: data?.device_id ? data?.device_id?.device_id : "",
+      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
+      info_id: data?.info_id ? data?.info_id?.info_id : "",
+      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
+      sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
+      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
+      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
+      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
+      //shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
+      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
+      etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
+      facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
+      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
+    // hàm đổ dữ liệu về khi đã liên kết field
+    setListViewData({
+      device_class: data?.device_id ? data?.device_id?.device_class : "",
+      device_status: data?.device_id ? data?.device_id?.device_status : "",
+      device_user: data?.device_id ? data?.device_id?.device_user : "",
+      device_password: data?.device_id ? data?.device_id?.device_password : "",
+
+      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
+      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
+      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
+      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
+
+      info_class: data?.info_id ? data?.info_id?.info_class : "",
+      info_status: data?.info_id ? data?.info_id?.info_status : "",
+      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
+      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
+
+      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
+      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
+      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
+      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
+
+      sim_class: data?.sim_id ? data?.sim_id?.sim_class : "",
+      sim_status: data?.sim_id ? data?.sim_id?.sim_status : "",
+      sim_user: data?.sim_id ? data?.sim_id?.sim_user : "",
+      sim_password: data?.sim_id ? data?.sim_id?.sim_password : "",
+
+      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
+      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
+      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
+      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
+
+      payoneer_class: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_class
+        : "",
+      payoneer_status: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_status
+        : "",
+      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
+      payoneer_password: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_password
+        : "",
+
+      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
+      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
+      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
+      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
+
+      pingpong_class: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_class
+        : "",
+      pingpong_status: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_status
+        : "",
+      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
+      pingpong_password: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_password
+        : "",
+
+      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
+      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
+      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
+      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
+
+      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
+      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
+      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
+      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
+
+      etsy_class: data?.etsy_id ? data?.etsy_id?.etsy_class : "",
+      etsy_status: data?.etsy_id ? data?.etsy_id?.etsy_status : "",
+      etsy_user: data?.etsy_id ? data?.etsy_id?.etsy_user : "",
+      etsy_password: data?.etsy_id ? data?.etsy_id?.etsy_password : "",
+
+      facebook_class: data?.facebook_id
+        ? data?.facebook_id?.facebook_class
+        : "",
+      facebook_status: data?.facebook_id
+        ? data?.facebook_id?.facebook_status
+        : "",
+      facebook_user: data?.facebook_id ? data?.facebook_id?.facebook_user : "",
+      facebook_password: data?.facebook_id
+        ? data?.facebook_id?.facebook_password
+        : "",
+
+      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
+      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
+      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
+      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+    });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
-    dateForm.setFieldsValue({
-      shopeedate_delivery: moment(data.shopeedate_delivery),
-      shopeedate_nextclass: moment(data.shopeedate_nextclass),
-      shopeedate_start: moment(data.shopeedate_start),
-      shopeedate_verify: moment(data.shopeedate_verify),
-      shopeedate_seller: moment(data.shopeedate_seller),
-      shopeedate_verifybank: moment(data.shopeedate_verifybank),
-      shopeedate_draft: moment(data.shopeedate_draft),
-      shopeedate_list1: moment(data.shopeedate_list1),
-      shopeedate_list2: moment(data.shopeedate_list2),
-      shopeedate_list3: moment(data.shopeedate_list3),
-      shopeedate_list4: moment(data.shopeedate_list4),
-      shopeedate_list5: moment(data.shopeedate_list5),
-      shopeedate_calendarseller: moment(data.shopeedate_calendarseller),
-      shopeedate_calendarlist1: moment(data.shopeedate_calendarlist1),
-      shopeedate_calendarlist2: moment(data.shopeedate_calendarlist2),
-      shopeedate_calendarlist3: moment(data.shopeedate_calendarlist3),
-      shopeedate_calendarlist4: moment(data.shopeedate_calendarlist4),
-      shopeedate_calendarlist5: moment(data.shopeedate_calendarlist5),
-      shopeedate_suspended: moment(data.shopeedate_suspended),
-      shopeedate_contact1: moment(data.shopeedate_contact1),
-      shopeedate_contact2: moment(data.shopeedate_contact2),
-      shopeedate_contact3: moment(data.shopeedate_contact3),
-      shopeedate_contact4: moment(data.shopeedate_contact4),
-      shopeedate_contact5: moment(data.shopeedate_contact5),
-      shopeedate_checksus1: moment(data.shopeedate_checksus1),
-      shopeedate_checksus2: moment(data.shopeedate_checksus2),
-      shopeedate_checksus3: moment(data.shopeedate_checksus3),
-      
+    let dateValue = {};
+    tablelist_shopee_Date.map((item) => {
+      dateValue[item.value] = moment(data[item.value]);
     });
+    //console.log(dateValue);
+    dateForm.setFieldsValue(dateValue);
+    setDateData(data);
     setNoteValue(data.shopee_note);
+    setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
     setListshopee_employee(data.listselect_shopee_employee);
   };
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      {
-        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-      }
-    },
-    [info]
-  );
+
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfoshopee();
@@ -214,84 +326,143 @@ const Shopee_info = () => {
   };
 
   // Hàm viết tự động hóa
-  const onChange_Status = (values) => {
-    if (values == "Error") {
-      let old_shopee_owner = form.getFieldValue("shopee_owner");
-      if (
-        old_shopee_owner.indexOf("Phòng nâng cấp và phục hồi tài khoản") == -1
-      ) {
-        old_shopee_owner.push("Phòng nâng cấp và phục hồi tài khoản");
+  const onChange_Status = async (values) => {
+    if (values == "Error" || values == "Restrict" || values == "Suspended") {
+      let new_shopee_owner = form.getFieldValue("shopee_owner");
+      if (new_shopee_owner.indexOf("Phòng phục hồi") == -1) {
+        new_shopee_owner.push("Phòng phục hồi");
       }
+      if (new_shopee_owner.indexOf("Kho lưu trữ") == -1) {
+        new_shopee_owner.push("Kho lưu trữ");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateshopeeInfo(
+        {
+          shopee_owner: new_shopee_owner.join(","),
+        },
+        info.shopee_id
+      );
+      // Tiếp tục set
       let new_shopee_processing = form.getFieldValue("shopee_processing");
-      new_shopee_processing.push("Error");
-      form.setFieldsValue({
-        shopee_class: "Lớp 20",
-        shopee_support: "Nguyễn Hoài",
-        shopee_owner: old_shopee_owner,
-        shopee_processing: new_shopee_processing,
-      });
-    }
-    if (values == "Restrict") {
-      let old_shopee_owner = form
-        .getFieldValue("shopee_owner")
-        .filter((item) => item !== "Phòng sản xuất");
-      if (
-        old_shopee_owner.indexOf("Phòng nâng cấp và phục hồi tài khoản") == -1
-      ) {
-        old_shopee_owner.push("Phòng nâng cấp và phục hồi tài khoản");
-      }
-      if (old_shopee_owner.indexOf("Kho lưu trữ") == -1) {
-        old_shopee_owner.push("Kho lưu trữ");
-      }
-      let new_shopee_processing = form.getFieldValue("shopee_processing");
-      new_shopee_processing.push("Restrict");
-      form.setFieldsValue({
-        shopee_class: "Lớp 23",
-        shopee_support: "Nguyễn Hoài",
-        shopee_owner: old_shopee_owner,
-        shopee_processing: new_shopee_processing,
-      });
-    }
-    if (values == "Suspended") {
-      let old_shopee_owner = form
-        .getFieldValue("shopee_owner")
-        .filter((item) => item !== "Phòng sản xuất");
-      if (
-        old_shopee_owner.indexOf("Phòng nâng cấp và phục hồi tài khoản") == -1
-      ) {
-        old_shopee_owner.push("Phòng nâng cấp và phục hồi tài khoản");
-      }
-      if (old_shopee_owner.indexOf("Kho lưu trữ") == -1) {
-        old_shopee_owner.push("Kho lưu trữ");
+      let old_shopee_processing = info.shopee_processing;
+      if (new_shopee_processing.indexOf(values) == -1) {
+        new_shopee_processing.push(values);
       }
 
-      let new_shopee_processing = form.getFieldValue("shopee_processing");
-      new_shopee_processing.push("Suspended");
+      let new_shopee_class = form.getFieldValue("shopee_class");
+      if (values == "Error") {
+        (new_shopee_class = "Lớp 20"),
+          dateForm.setFieldValue("shopeedate_error", moment(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          shopeedate_error: moment(now()),
+          shopeedate_nextclass: moment(now()),
+        }); // Dùng hàm này set lại date mới lưu đc vào db
+      }
+      if (values == "Restrict") {
+        (new_shopee_class = "Lớp 23"),
+          dateForm.setFieldValue("shopeedate_restrict", moment(now()));
+        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          shopeedate_restrict: moment(now()),
+          shopeedate_nextclass: moment(now()),
+        });
+      }
+      if (values == "Suspended") {
+        (new_shopee_class = "Lớp 26"),
+          dateForm.setFieldValue("shopeedate_suspended", moment(now()));
+        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          shopeedate_suspended: moment(now()),
+          shopeedate_nextclass: moment(now()),
+        });
+      }
 
       form.setFieldsValue({
-        shopee_class: "Lớp 26",
+        shopee_class: new_shopee_class,
         shopee_support: "Nguyễn Hoài",
-        shopee_owner: old_shopee_owner,
         shopee_processing: new_shopee_processing,
-      });
+        shopee_owner: new_shopee_owner,
+      }); // Dùng hàm này set lại để lưu vào db
     }
   };
 
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
-      form.setFieldValue("shopee_class", "Lớp 3");
+      form.setFieldValue("shopee_class", "Lớp 4");
+      dateForm.setFieldValue("shopeedate_start", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_start: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
     }
     if (values[values.length - 1] == "Verify") {
-      form.setFieldValue("shopee_class", "Lớp 5");
+      form.setFieldValue("shopee_class", "Lớp 6");
+      dateForm.setFieldValue("shopeedate_verify", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_verify: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Seller") {
+      form.setFieldValue("shopee_class", "Lớp 9");
+      dateForm.setFieldValue("shopeedate_seller", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_seller: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "List") {
+      form.setFieldValue("shopee_class", "Lớp 10");
+      dateForm.setFieldValue("shopeedate_list1", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_list1: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Move room") {
+      form.setFieldValue("shopee_class", "Lớp 12");
+      dateForm.setFieldValue("shopeedate_moveroom", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_moveroom: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
     }
   };
 
-  const onChange_Class = (values) => {
-    if (values == "Lớp 8") {
+  const onChange_Class = async (values) => {
+    dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+    setDateData({
+      ...dateData,
+      shopeedate_nextclass: moment(now()),
+    });
+
+    if (values == "Lớp 9") {
       let new_shopee_type = form.getFieldValue("shopee_type");
       if (new_shopee_type.indexOf("Seller") == -1) {
         new_shopee_type.push("Seller");
       }
+
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateshopeeInfo(
+        {
+          new_shopee_type: new_shopee_type.join(","),
+        },
+        info.shopee_id
+      );
 
       let new_shopee_processing = form.getFieldValue("shopee_processing");
       if (new_shopee_processing.indexOf("Seller") == -1) {
@@ -301,6 +472,87 @@ const Shopee_info = () => {
       form.setFieldsValue({
         shopee_processing: new_shopee_processing,
         shopee_type: new_shopee_type,
+      });
+
+      dateForm.setFieldValue("shopeedate_seller", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_seller: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 4") {
+      let new_shopee_type = form.getFieldValue("shopee_type");
+      if (new_shopee_type.indexOf("Buyer") == -1) {
+        new_shopee_type.push("Buyer");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateshopeeInfo(
+        {
+          new_shopee_type: new_shopee_type.join(","),
+        },
+        info.shopee_id
+      );
+
+      let new_shopee_processing = form.getFieldValue("shopee_processing");
+      if (new_shopee_processing.indexOf("Buyer") == -1) {
+        new_shopee_processing.push("Buyer");
+      }
+      /*  let new_shopee_owner = form
+        .getFieldValue("shopee_owner")
+        .filter((item) => item !== ""); */
+
+      form.setFieldsValue({
+        shopee_processing: new_shopee_processing,
+        shopee_type: new_shopee_type,
+      });
+
+      dateForm.setFieldValue("shopeedate_start", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_start: moment(now()),
+        shopeedate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 12") {
+      let new_shopee_type = form.getFieldValue("shopee_type");
+      if (new_shopee_type.indexOf("Bán acc") == -1) {
+        new_shopee_type.push("Bán acc");
+      }
+      let new_shopee_owner = form.getFieldValue("shopee_owner");
+      if (new_shopee_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_shopee_owner.push("Phòng Kinh doanh");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updateshopeeInfo(
+        {
+          new_shopee_type: new_shopee_type.join(","),
+          new_shopee_owner: new_shopee_owner.join(","),
+        },
+        info.shopee_id
+      );
+
+      let new_shopee_processing = form.getFieldValue("shopee_processing");
+      if (new_shopee_processing.indexOf("Move room") == -1) {
+        new_shopee_processing.push("Move room");
+      }
+
+      form.setFieldsValue({
+        shopee_processing: new_shopee_processing,
+        shopee_type: new_shopee_type,
+        shopee_owner: new_shopee_owner,
+      });
+
+      dateForm.setFieldValue("shopeedate_moveroom", moment(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        shopeedate_moveroom: moment(now()),
+        shopeedate_nextclass: moment(now()),
       });
     }
   };
@@ -345,26 +597,41 @@ const Shopee_info = () => {
 
   return (
     <Card
-      title={id}
-      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+      title={id + " | " + (info?._id ? info?._id : "")}
+      extra={
+        <Button
+          onClick={() => form.submit()}
+          style={{
+            background: "#18a689",
+            color: "white",
+          }}
+        >
+          Lưu thông tin
+        </Button>
+      }
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN SHOPEE">
+            <Col span={12} >
+              <Card title="THÔNG TIN ETSY" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={shopeeData}
                   autoComplete="off"
+                  // labelCol={{ span: 3 }}
+                  // layout="horizontal"
+
+                  size="large"
                 >
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item
                         label="Shopee id"
                         name="shopee_id"
+                        style={{ width: "100%" }}
                         rules={[
                           {
                             required: true,
@@ -372,7 +639,7 @@ const Shopee_info = () => {
                           },
                         ]}
                         onClick={() =>
-                          copyToClipboard(form.getFieldValue("shopee_id"))
+                          copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
                         <Input
@@ -394,7 +661,13 @@ const Shopee_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Shopee Pass" name="shopee_password">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("shopee_password"))
+                        }
+                        label="Shopee Pass"
+                        name="shopee_password"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -402,7 +675,13 @@ const Shopee_info = () => {
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="Shopee chi tiết" name="shopee_detail">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("shopee_password"))
+                        }
+                        label="Shopee chi tiết"
+                        name="shopee_detail"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -497,7 +776,7 @@ const Shopee_info = () => {
                     <Select
                       onChange={onChange_Processing}
                       mode="multiple"
-                      style={{ width: "100%" }}
+                      style={{ width: "100%", color: "green" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
@@ -513,7 +792,7 @@ const Shopee_info = () => {
                   <Form.Item label="Phát sinh" name="shopee_error">
                     <Select
                       mode="multiple"
-                      style={{ width: "100%" }}
+                      style={{ width: "100%", color: "red" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
@@ -553,7 +832,6 @@ const Shopee_info = () => {
                       </Select>
                     </Form.Item>
                   ) : null}
-
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -664,8 +942,22 @@ const Shopee_info = () => {
                         <Select
                           //mode="multiple"
                           onChange={onChange_Status}
-                          style={{ width: "100%" }}
                           optionLabelProp="label"
+                          style={{
+                            width: "100%",
+                            color:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("shopee_status")
+                              ) != -1
+                                ? "red"
+                                : "",
+                            fontWeight:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("shopee_status")
+                              ) != -1
+                                ? "bold !important"
+                                : "",
+                          }}
                         >
                           {listselect_shopee_status.map((item, index) => {
                             return (
@@ -757,6 +1049,7 @@ const Shopee_info = () => {
                     optionLabelProp="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
+                    size="large"
                   >
                     {listselect_view_acc.map((item) => {
                       return (
@@ -772,12 +1065,13 @@ const Shopee_info = () => {
                     })}
                   </Select>
                 ) : null}
-
+                {/* form List_view */}
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
                   form={infoForm}
                   name="info"
+                  size="large"
                 >
                   <List
                     itemLayout="horizontal"
@@ -816,14 +1110,147 @@ const Shopee_info = () => {
                                   {item.title}
                                 </a>
                               </div>
-                              <Form.Item
-                                name={item.title.toLocaleLowerCase() + "_id"}
-                              >
-                                <Input
-                                  disabled={false}
-                                  onChange={() => infoForm.submit()}
-                                />
-                              </Form.Item>
+
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      openModalListView(
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      )
+                                    }
+                                    name={
+                                      item.title
+                                        .toLocaleLowerCase()
+                                        .split("|")[0] + "_id"
+                                    }
+                                  >
+                                    <Input disabled />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_status"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_status",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_shopee_status.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item}
+                                            label={item}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_class"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_class",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_shopee_class.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item.value}
+                                            label={item.title}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item.title}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                              </Row>
                             </div>
                           </List.Item>
                         ) : null}
@@ -840,20 +1267,22 @@ const Shopee_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN">
+              <Card title="THỜI GIAN: MM-DD-YYYY">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
                   name="date"
                   initialValues={dateData}
+                  size="large"
                 >
                   <Row gutter={16}>
                     {tablelist_shopee_Date.map((item, index) => {
                       return (
-                        <Col span={8} key={index}>
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              style={{ float: "right" }}
+                              format="MM-DD-YYYY HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
@@ -868,7 +1297,7 @@ const Shopee_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col span={24} >
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -878,90 +1307,17 @@ const Shopee_info = () => {
                 </Row>
 
                 <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34
+                  {info?.shopee_history?.split(",")?.map((data) => {
+                    return <div>{data}</div>;
+                  })}
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
-
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-          <p>1. Shopee mã EB_12345</p>
-          <p>
-            1. Shopee được tạo từ tool - nhập liệu - Chọn SHOPEE, bảng bên cạnh nhập
-            user|pass (user: là tên shop shopee chuẩn bị sẵn, có hướng dẫn tạo acc
-            bên tool nhập liệu)
-          </p>
-          <p>
-            2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn.
-            Kế hoạch được tạo khi tạo mã Shopee từ tool nhập liệu
-          </p>
-          <p>
-            3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ
-            tiến trình ta biết được acc đang làm đến hạng mục nào, nếu suspend
-            thì biết được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại
-            acc
-          </p>
-          <p>
-            4. Loại shopee: Là tổng quan 1 tài khoản shopee, dùng để tạo báo cáo,
-            phân loại acc
-          </p>
-          <p>
-            5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh
-          </p>
-          <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
-          <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
-          <p>
-            8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo,
-            phân loại acc
-          </p>
-          <p>
-            9. Lớp shopee: Dùng để xác định tổng quan các hạng mục đã triển khai,
-            dùng tạo báo cáo, phân loại acc
-          </p>
-          <p>
-            10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh shopee
-            suspended, tải cccd
-          </p>
-          <p>
-            11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến
-            trang chi tiết của tài nguyên đó
-          </p>
-          <br></br>
-          <p>
-            Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
-            chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn
-            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
-            động disable tất cả các field{" "}
-          </p>
-          <p>
-            Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
-            chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn
-            suspended trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự
-            động disable tất cả các field{" "}
-          </p>
-          <p>
-            Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình
-            được chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
-          </p>
-          <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
-          <p>
-            Để tạo 1 acc shopee or etsy... trên 1 device thì vào device đó ấn tạo
-            shopee or etsy...
-          </p>
-          <p>
-            Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì
-            vào phần tool- xử lý số liệu - filter{" "}
-          </p>
-          <p>
-            Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám
-          </p>
-          <br></br>
-          <p>
-            Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
-            0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
-          </p>
+       
+          <HuongDanShopee_info />
         </Tabs.TabPane>
       </Tabs>
 
@@ -972,6 +1328,14 @@ const Shopee_info = () => {
         onCancel={handleCancel}
       >
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      <Modal
+        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
+        open={modalListView}
+        onOk={() => submitModalListView()}
+        onCancel={() => cancelListView()}
+      >
+        <Input placeholder="Input _id" onChange={setValueView}></Input>
       </Modal>
     </Card>
   );

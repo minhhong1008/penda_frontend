@@ -18,15 +18,15 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListamazonActions } from "../../actions/amazonActions";
-
-const Amzon_table = () => {
+import { HuongDanAmazon_table } from "./Amazon_list";
+const Amazon_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const { amazons } = useSelector((state) => state.amazon);
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
-
   const history = useHistory();
+
   const columns = [
     {
       title: "STT",
@@ -38,76 +38,197 @@ const Amzon_table = () => {
       dataIndex: "amazon_id",
       key: "amazon_id",
       render: (text, record) => (
-        <a onClick={() => history.push(`table/${encodeURIComponent(record.amazon_id)}`)}>{text}</a>
+        
+        <a 
+        style={{
+          borderRadius: "6px",
+          padding: "8px 8px",
+          background: "#1c84c6",
+          color: "white",
+        }}
+        
+          onClick={() =>
+            history.push(`table/${encodeURIComponent(record.amazon_id)}`)
+          }
+        >
+          {text}
+        </a>
+        
       ),
+      sorter: (a, b) => {
+        return a.amazon_id.localeCompare(b.amazon_id);
+      },
     },
     {
-      title: "Tài khoản",
+      title: "TÀI KHOẢN",
       dataIndex: "amazon_user",
       key: "amazon_user",
+      sorter: (a, b) => {
+        return a.amazon_user.localeCompare(b.amazon_user);
+      },
     },
     {
-      title: "Thiết bị",
-      dataIndex: "amazon_device",
-      key: "amazon_device",
+      title: "TIẾN TRÌNH",
+      dataIndex: "amazon_processing",
+      key: "amazon_processing",
+      render: (record) => {
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              if (item == "Buyer" || item == "Seller") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#1c84c6",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Verify" || item == "Verify Bank") {
+                return (
+                  <div
+                    style={{
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#1ab394",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Restrict" || item == "Suspended") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 6px",
+                      background: "#ed5565",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "#23c6c8",
+                      color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              }
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.amazon_user.localeCompare(b.amazon_device);
+      },
     },
     {
-      title: "Lớp",
-      dataIndex: "amazon_class",
-      key: "amazon_class",
+      title: "PHÁT SINH",
+      dataIndex: "amazon_error",
+      key: "amazon_error",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "2px 2px",
+                    background: "gold",
+                    color: "red",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.amazon_user.localeCompare(b.amazon_class);
+      },
     },
+
     {
-      title: "Limit",
-      dataIndex: "amazon_limit",
-      key: "amazon_limit",
-    },
-    {
-      title: "active",
-      dataIndex: "amazon_active",
-      key: "amazon_active",
-    },
-    {
-      title: "Ngày tạo",
-      dataIndex: "amazondate_sine",
-      key: "amazondate_sine",
-    },
-    {
-      title: "Ngày UpSeller",
-      dataIndex: "amazondate_upseller",
-      key: "amazondate_upseller",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "amazon_status",
-      key: "amazon_status",
-    },
-    {
-      title: "Nhân viên",
+      title: "NHÂN VIÊN",
       dataIndex: "amazon_employee",
       key: "amazon_employee",
+      render: (record) => {
+        if (!record){
+         
+          return
+        }
+       
+        let list = record?.split(",");
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            {list?.map((item) => {
+              return (
+                <div
+                  style={{
+                    borderRadius: "6px",
+                    padding: "6px 6px",
+                    background: "#18a689",
+                    color: "white",
+                  }}
+                >
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        );
+      },
+      sorter: (a, b) => {
+        return a.amazon_user.localeCompare(b.amazon_employee);
+      },
     },
+
     {
-      title: "Ngày chuyển lớp",
-      dataIndex: "amazondate_class",
-      key: "amazondate_class",
-    },
-    {
-      title: "Ghi chú",
+      title: "GHI CHÚ",
       dataIndex: "amazon_note",
       key: "amazon_note",
+      sorter: (a, b) => {
+        return a.amazon_user.localeCompare(b.amazon_note);
+      },
     },
   ];
 
   const handleChangeFilter = (values) => {
-    let newValue = values.join(',');
+    let newValue = values.join(",");
     dispatch(
       getListamazonActions({
         amazon_employee: newValue,
       })
     );
-  }
+  };
 
-  const getListAmzon = () => {
+  const getListAmazon = () => {
     dispatch(
       getListamazonActions({
         amazon_class: class_name,
@@ -116,50 +237,82 @@ const Amzon_table = () => {
   };
 
   useEffect(() => {
-    getListAmzon();
+    getListAmazon();
   }, [class_name]);
 
   return (
     <div>
-      <Form.Item label="Lọc eBay">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionLabelProp="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "amazon_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "amazon_device",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "amazon_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Card type="inner">
-        <Table columns={columns} dataSource={amazons}></Table>
+      <Card>
+        <Form.Item label="Lọc eBay">
+          <TreeSelect
+            mode="multiple"
+            onChange={handleChangeFilter}
+            multiple
+            optionLabelProp="label"
+            treeData={[
+              {
+                title: "Lớp",
+                value: "amazon_class",
+                item: [
+                  { title: "Lớp 1", value: "Lớp 1" },
+                  { title: "Lớp 2", value: "Lớp 2" },
+                ],
+              },
+              {
+                title: "Thiết bị",
+                value: "amazon_device",
+                item: [
+                  { title: "PC06", value: "PC06" },
+                  { title: "PC07", value: "PC07" },
+                ],
+              },
+              {
+                title: "Nhân viên",
+                value: "amazon_employee",
+                item: [
+                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
+                  { title: "Khắc Liêm", value: "Khắc Liêm" },
+                ],
+              },
+            ]}
+          />
+        </Form.Item>
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane
+            tab={"BẢNG LỚP AMAZON : " + class_name.toUpperCase()}
+            key="1"
+          >
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={amazons}
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight", "topRight"],
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+              ></Table>
+            </Card>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanAmazon_table />
+          </Tabs.TabPane>
+        </Tabs>
       </Card>
     </div>
   );
 };
 
-export default Amzon_table;
+export default Amazon_table;

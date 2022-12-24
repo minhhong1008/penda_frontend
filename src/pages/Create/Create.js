@@ -148,18 +148,18 @@ const Create = () => {
   return (
     <Card
       title="NHẬP SỐ LIỆU ĐẦU VÀO"
-      extra={
+      
+    >
+      <Tabs defaultActiveKey="1">
+        <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1" >
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card title="THÔNG TIN ITEM" extra={
         <>
           <Button onClick={() => form.submit()}>Tạo tài khoản</Button>
           <Button onClick={() => handleSubmitData()}>Ghép dữ liệu</Button>
         </>
-      }
-    >
-      <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN ITEM">
+      }>
                 <Form
                   form={form}
                   name="form-create"
@@ -173,6 +173,7 @@ const Create = () => {
                       optionLabelProp="label"
                       onChange={changeSelectListInfo}
                       value={selectListInfo}
+                      size="large"
                     >
                       {listInfo.map((item) => {
                         return (
@@ -197,6 +198,7 @@ const Create = () => {
                       placeholder="select one item"
                       optionLabelProp="label"
                       onChange={onChangeTypeAcc}
+                      size="large"
                     >
                       <Option value="device_id" label="device">
                         <div className="demo-option-label-item">device</div>
@@ -253,6 +255,7 @@ const Create = () => {
                       placeholder="select one item"
                       optionLabelProp="label"
                       classNamePrefix="select"
+                      size="large"
                     >
                       {listselect_plan.map((item, index) => {
                         return (
@@ -271,6 +274,7 @@ const Create = () => {
                       placeholder="select one item"
                       optionLabelProp="label"
                       classNamePrefix="select"
+                      size="large"
                     >
                       {listselect_ebay_block.map((item, index) => {
                         return (
@@ -288,6 +292,7 @@ const Create = () => {
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
+                      size="large"
                     >
                       {listselect_processing.map((item, index) => {
                         return (
@@ -305,6 +310,7 @@ const Create = () => {
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
+                      size="large"
                     >
                       {listselect_ebay_type.map((item, index) => {
                         return (
@@ -322,6 +328,7 @@ const Create = () => {
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
+                      size="large"
                     >
                       <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
                         <div className="demo-option-label-item">
@@ -337,6 +344,7 @@ const Create = () => {
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
+                      size="large"
                     >
                       {listselect_ebay_owner.map((item, index) => {
                         return (
@@ -354,6 +362,7 @@ const Create = () => {
                       style={{ width: "100%" }}
                       placeholder="select one item"
                       optionLabelProp="label"
+                      size="large"
                     >
                       {listselect_employee.map((item, index) => {
                         return (
@@ -372,6 +381,7 @@ const Create = () => {
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          size="large"
                         >
                           {listselect_ebay_status.map((item, index) => {
                             return (
@@ -391,6 +401,7 @@ const Create = () => {
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          size="large"
                         >
                           {listselect_ebay_class.map((item, index) => {
                             return (

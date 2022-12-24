@@ -22,6 +22,12 @@ export const updatebankInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountBank = () => {
+  const url = `/getbank/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

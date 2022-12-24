@@ -22,6 +22,12 @@ export const updatesimInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountSim = () => {
+  const url = `/getsim/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

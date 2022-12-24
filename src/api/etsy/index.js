@@ -22,6 +22,7 @@ export const updateetsyInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
 export const getCountEtsy = () => {
   const url = `/getetsy/count`;
   return axiosClient.get(url);

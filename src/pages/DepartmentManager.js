@@ -126,7 +126,7 @@ const DepartmentManager = () => {
           centered
           onOk={onOk}
           onCancel={onCancel}
-          visible={visibleModal}
+          open={visibleModal}
         >
           Tên phòng ban{" "}
           <Input

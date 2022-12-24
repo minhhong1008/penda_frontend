@@ -11,21 +11,51 @@ import {
   Modal,
   Avatar,
   List,
+  Upload,
 } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { getUser } from "../../utils/index";
+import { PlusOutlined } from "@ant-design/icons";
+import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
+import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
-import { getUser } from "../../utils/index";
+import moment, { now } from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+
+import {
+  tablelist_device_Date,
+  listselect_view_acc,
+  listselect_device_plan,
+  listselect_device_block,
+  listselect_device_processing,
+  listselect_device_error,
+  listselect_device_type,
+  listselect_device_sell_status,
+  listselect_device_owner,
+  listselect_device_status,
+  listselect_device_class,
+  HuongDanDevice_info,
+  ContentDevice,
+} from "./Device_list";
+
 import {
   postdeviceInfo,
   getdeviceInfo,
   updatedeviceInfo,
 } from "../../api/device/index";
-import { showError, showSuccess } from "../../utils";
-import { useSelector } from "react-redux";
+// dùng update các field trong bảng device_info
+import { updateListView } from "../../api/update";
 
-const device_info = () => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const Device_info = () => {
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -34,20 +64,80 @@ const device_info = () => {
   const [deviceData, setdeviceData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
+  const [selectListInfo, setSelectListInfo] = useState([]);
   const [noteValue, setNoteValue] = useState("");
-
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
+  const [listselect_device_employee, setListdevice_employee] = useState();
+
+  // Tạo state để nhận dữ liệu của listview
+
+  const [listViewData, setListViewData] = useState();
+  const [modalListView, setModalListView] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [valueInput, setValueInput] = useState();
+
+  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
+
+  const setValueView = (e) => {
+    setValueInput(e.target.value);
+  };
+
+  const openModalListView = (name) => {
+    setViewData(name);
+    setModalListView(true);
+  };
+
+  const submitModalListView = async () => {
+    let payload = {};
+    payload[viewData] = valueInput;
+    if (!valueInput) {
+      cancelListView();
+      return;
+    }
+    await updatedeviceInfo(payload, info.device_id);
+    window.location.reload();
+    showSuccess("Thành công");
+  };
+
+  const cancelListView = () => {
+    setModalListView(false);
+    setValueInput("");
+    setViewData("");
+  };
+
+  // hàm lưu lại value của class, status trong listview theo db của từng field
+  const onChangeStatusListView = async (key, value, id) => {
+    let newData = JSON.parse(JSON.stringify(listViewData));
+    newData[key] = value;
+    setListViewData(newData);
+    await updateListView(id, key, value);
+    showSuccess("Thành công");
+  };
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+    },
+    [info]
+  );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let dateValue = {};
+    tablelist_device_Date.map((item) => {
+      dateValue[item.value] = moment(dateData[item.value]).format(
+        "MM-DD-YYYY HH:mm"
+      );
+    });
     const newValue = {
-      ...info,
       ...values,
+      ...dateValue,
       device_plan: values?.device_plan ? values.device_plan.join(",") : "",
+      device_block: values?.device_block ? values.device_block.join(",") : "",
+      device_error: values?.device_error ? values.device_error.join(",") : "",
       device_processing: values?.device_processing
         ? values.device_processing.join(",")
         : "",
@@ -60,15 +150,10 @@ const device_info = () => {
         ? values.device_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-
-      devicedate_start: dateData?.device_date_start
-        ? moment(dateData.device_date_start).format("MM-DD-YYYY")
-        : "",
-      devicedate_verify: dateData?.device_date_verify
-        ? moment(dateData.device_date_verify).format("MM-DD-YYYY")
-        : "",
       device_note: noteValue,
+      device_history: info.device_history,
     };
+
     const response = await updatedeviceInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
@@ -76,6 +161,7 @@ const device_info = () => {
       showError("Sửa không thành công");
     }
   };
+
   // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
@@ -84,12 +170,16 @@ const device_info = () => {
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
   // Hàm gọi dữ liệu về từ database
   const getInfodevice = async () => {
-    const { data } = await getdeviceInfo(id);
+    const res = await getdeviceInfo(id);
+    let data = res.data;
     const newData = {
       ...data,
       device_plan: data?.device_plan ? data.device_plan.split(",") : "",
+      device_block: data?.device_block ? data.device_block.split(",") : "",
+      device_error: data?.device_error ? data.device_error.split(",") : "",
       device_employee: data?.device_employee ? data.device_employee.split(",") : "",
       device_processing: data?.device_processing
         ? data.device_processing.split(",")
@@ -99,246 +189,132 @@ const device_info = () => {
         ? data.device_sell_status.split(",")
         : "",
       device_owner: data?.device_owner ? data.device_owner.split(",") : "",
+
+      etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
+      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
+      info_id: data?.info_id ? data?.info_id?.info_id : "",
+      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
+      sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
+      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
+      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
+      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
+      //device_id: data?.device_id ? data?.device_id?.device_id : "",
+      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
+      shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
+      facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
+      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
+    // hàm đổ dữ liệu về khi đã liên kết field
+    setListViewData({
+      etsy_class: data?.etsy_id ? data?.etsy_id?.etsy_class : "",
+      etsy_status: data?.etsy_id ? data?.etsy_id?.etsy_status : "",
+      etsy_user: data?.etsy_id ? data?.etsy_id?.etsy_user : "",
+      etsy_password: data?.etsy_id ? data?.etsy_id?.etsy_password : "",
+
+      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
+      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
+      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
+      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
+
+      info_class: data?.info_id ? data?.info_id?.info_class : "",
+      info_status: data?.info_id ? data?.info_id?.info_status : "",
+      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
+      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
+
+      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
+      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
+      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
+      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
+
+      sim_class: data?.sim_id ? data?.sim_id?.sim_class : "",
+      sim_status: data?.sim_id ? data?.sim_id?.sim_status : "",
+      sim_user: data?.sim_id ? data?.sim_id?.sim_user : "",
+      sim_password: data?.sim_id ? data?.sim_id?.sim_password : "",
+
+      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
+      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
+      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
+      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
+
+      payoneer_class: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_class
+        : "",
+      payoneer_status: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_status
+        : "",
+      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
+      payoneer_password: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_password
+        : "",
+
+      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
+      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
+      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
+      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
+
+      pingpong_class: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_class
+        : "",
+      pingpong_status: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_status
+        : "",
+      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
+      pingpong_password: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_password
+        : "",
+
+      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
+      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
+      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
+      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
+
+      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
+      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
+      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
+      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
+
+      shopee_class: data?.shopee_id ? data?.shopee_id?.shopee_class : "",
+      shopee_status: data?.shopee_id ? data?.shopee_id?.shopee_status : "",
+      shopee_user: data?.shopee_id ? data?.shopee_id?.shopee_user : "",
+      shopee_password: data?.shopee_id ? data?.shopee_id?.shopee_password : "",
+
+      facebook_class: data?.facebook_id
+        ? data?.facebook_id?.facebook_class
+        : "",
+      facebook_status: data?.facebook_id
+        ? data?.facebook_id?.facebook_status
+        : "",
+      facebook_user: data?.facebook_id ? data?.facebook_id?.facebook_user : "",
+      facebook_password: data?.facebook_id
+        ? data?.facebook_id?.facebook_password
+        : "",
+
+      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
+      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
+      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
+      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+    });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
-    dateForm.setFieldsValue({
-      device_date_start: moment(data.device_date_start),
-      device_date_verify: moment(data.device_date_verify),
+    let dateValue = {};
+    tablelist_device_Date.map((item) => {
+      dateValue[item.value] = moment(data[item.value]);
     });
-    setInfo(data);
+    //console.log(dateValue);
+    dateForm.setFieldsValue(dateValue);
+    setDateData(data);
     setNoteValue(data.device_note);
+    setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
+    setListdevice_employee(data.listselect_device_employee);
   };
-
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      {
-        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-      }
-    },
-    [info]
-  );
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfodevice();
   }, []);
-
-  // List danh sách các trường trong bảng INFO
-  const listInfo = [
-    {
-      title: "DEVICE",
-      thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "",
-    },
-    {
-      title: "PROXY",
-      thumbnail:
-        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
-      value: "",
-    },
-    {
-      title: "INFO",
-      thumbnail:
-        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "",
-    },
-    {
-      title: "MAIL",
-      thumbnail:
-        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "",
-    },
-    {
-      title: "SIM",
-      thumbnail:
-        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "",
-    },
-    {
-      title: "BANK",
-      thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-device-flat-design-yellow-round-web-icon.jpg",
-      value: "",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
-      value: "",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
-      value: "",
-    },
-    {
-      title: "PINGPONG",
-      thumbnail:
-        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
-      value: "",
-    },
-    {
-      title: "EBAY",
-      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value: "",
-    },
-    {
-      title: "ETSY",
-      thumbnail:
-        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "",
-    },
-    {
-      title: "AMAZON",
-      thumbnail:
-        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "",
-    },
-    {
-      title: "SHOPEE",
-      thumbnail:
-        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "",
-    },
-    {
-      title: "FACEBOOK",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
-      value: "",
-    },
-    {
-      title: "TIKTOK",
-      thumbnail:
-        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
-      value: "",
-    },
-    {
-      title: "OTHER",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
-      value: "",
-    },
-  ];
-
-  //  List danh sách các trường trong bảng DATE
-  const listDate = [
-    {
-      title: "Ngày giao",
-      value: "devicedate_delivery",
-    },
-    {
-      title: "Ngày tạo",
-      value: "devicedate_start",
-    },
-    {
-      title: "Ngày chuyển lớp",
-      value: "devicedate_nextclass",
-    },
-    {
-      title: "Ngày verify",
-      value: "devicedate_verify",
-    },
-    {
-      title: "Ngày Seller",
-      value: "devicedate_seller",
-    },
-    {
-      title: "Ngày verify Bank",
-      value: "devicedate_verifybank",
-    },
-    {
-      title: "Ngày draft",
-      value: "devicedate_draft",
-    },
-    {
-      title: "Ngày list1",
-      value: "devicedate_list1",
-    },
-    {
-      title: "Ngày list2",
-      value: "devicedate_list2",
-    },
-    {
-      title: "Ngày list3",
-      value: "devicedate_list3",
-    },
-    {
-      title: "Ngày list4",
-      value: "devicedate_list4",
-    },
-    {
-      title: "Ngày list5",
-      value: "devicedate_list5",
-    },
-
-    {
-      title: "Dự kiến seller",
-      value: "devicedate_expectedseller",
-    },
-    {
-      title: "Dự kiến list 1",
-      value: "devicedate_expectedlist1",
-    },
-    {
-      title: "Dự kiến list 2",
-      value: "devicedate_expectedlist2",
-    },
-    {
-      title: "Dự kiến list 3",
-      value: "devicedate_expectedlist3",
-    },
-    {
-      title: "Dự kiến list 4",
-      value: "devicedate_expectedlist4",
-    },
-    {
-      title: "Dự kiến list 5",
-      value: "devicedate_expectedlist5",
-    },
-
-    {
-      title: "Ngày Suspended",
-      value: "devicedate_suspended",
-    },
-    {
-      title: "Ngày check",
-      value: "devicedate_checksus1",
-    },
-    {
-      title: "Ngày gỡ sus 1",
-      value: "devicedate_contact1",
-    },
-    {
-      title: "Ngày gỡ sus 2",
-      value: "devicedate_contact2",
-    },
-    {
-      title: "Ngày gỡ sus 3",
-      value: "devicedate_contact3",
-    },
-    {
-      title: "Ngày gỡ sus 4",
-      value: "devicedate_contact4",
-    },
-    {
-      title: "Ngày gỡ sus 5",
-      value: "devicedate_contact5",
-    },
-    {
-      title: "Ngày check",
-      value: "devicedate_checksus2",
-    },
-    {
-      title: "Ngày check",
-      value: "devicedate_checksus3",
-    },
-  ];
-
   // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
@@ -349,37 +325,321 @@ const device_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm viết tự động hóa
+  const onChange_Status = async (values) => {
+    if (values == "Error" || values == "Restrict" || values == "Suspended") {
+      let new_device_owner = form.getFieldValue("device_owner");
+      if (new_device_owner.indexOf("Phòng phục hồi") == -1) {
+        new_device_owner.push("Phòng phục hồi");
+      }
+      if (new_device_owner.indexOf("Kho lưu trữ") == -1) {
+        new_device_owner.push("Kho lưu trữ");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatedeviceInfo(
+        {
+          device_owner: new_device_owner.join(","),
+        },
+        info.device_id
+      );
+      // Tiếp tục set
+      let new_device_processing = form.getFieldValue("device_processing");
+      let old_device_processing = info.device_processing;
+      if (new_device_processing.indexOf(values) == -1) {
+        new_device_processing.push(values);
+      }
+
+      let new_device_class = form.getFieldValue("device_class");
+      if (values == "Error") {
+        (new_device_class = "Lớp 20"),
+          dateForm.setFieldValue("devicedate_error", moment(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          devicedate_error: moment(now()),
+          devicedate_nextclass: moment(now()),
+        }); // Dùng hàm này set lại date mới lưu đc vào db
+      }
+      if (values == "Restrict") {
+        (new_device_class = "Lớp 23"),
+          dateForm.setFieldValue("devicedate_restrict", moment(now()));
+        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          devicedate_restrict: moment(now()),
+          devicedate_nextclass: moment(now()),
+        });
+      }
+      if (values == "Suspended") {
+        (new_device_class = "Lớp 26"),
+          dateForm.setFieldValue("devicedate_suspended", moment(now()));
+        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          devicedate_suspended: moment(now()),
+          devicedate_nextclass: moment(now()),
+        });
+      }
+
+      form.setFieldsValue({
+        device_class: new_device_class,
+        device_support: "Nguyễn Hoài",
+        device_processing: new_device_processing,
+        device_owner: new_device_owner,
+      }); // Dùng hàm này set lại để lưu vào db
+    }
+  };
+
+  const onChange_Processing = (values) => {
+    if (values[values.length - 1] == "Buyer") {
+      form.setFieldValue("device_class", "Lớp 4");
+      dateForm.setFieldValue("devicedate_start", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_start: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Verify") {
+      form.setFieldValue("device_class", "Lớp 6");
+      dateForm.setFieldValue("devicedate_verify", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_verify: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Seller") {
+      form.setFieldValue("device_class", "Lớp 9");
+      dateForm.setFieldValue("devicedate_seller", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_seller: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "List") {
+      form.setFieldValue("device_class", "Lớp 10");
+      dateForm.setFieldValue("devicedate_list1", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_list1: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Move room") {
+      form.setFieldValue("device_class", "Lớp 12");
+      dateForm.setFieldValue("devicedate_moveroom", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_moveroom: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  const onChange_Class = async (values) => {
+    dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+    setDateData({
+      ...dateData,
+      devicedate_nextclass: moment(now()),
+    });
+
+    if (values == "Lớp 9") {
+      let new_device_type = form.getFieldValue("device_type");
+      if (new_device_type.indexOf("Seller") == -1) {
+        new_device_type.push("Seller");
+      }
+
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatedeviceInfo(
+        {
+          new_device_type: new_device_type.join(","),
+        },
+        info.device_id
+      );
+
+      let new_device_processing = form.getFieldValue("device_processing");
+      if (new_device_processing.indexOf("Seller") == -1) {
+        new_device_processing.push("Seller");
+      }
+
+      form.setFieldsValue({
+        device_processing: new_device_processing,
+        device_type: new_device_type,
+      });
+
+      dateForm.setFieldValue("devicedate_seller", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_seller: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 4") {
+      let new_device_type = form.getFieldValue("device_type");
+      if (new_device_type.indexOf("Buyer") == -1) {
+        new_device_type.push("Buyer");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatedeviceInfo(
+        {
+          new_device_type: new_device_type.join(","),
+        },
+        info.device_id
+      );
+
+      let new_device_processing = form.getFieldValue("device_processing");
+      if (new_device_processing.indexOf("Buyer") == -1) {
+        new_device_processing.push("Buyer");
+      }
+      /*  let new_device_owner = form
+        .getFieldValue("device_owner")
+        .filter((item) => item !== ""); */
+
+      form.setFieldsValue({
+        device_processing: new_device_processing,
+        device_type: new_device_type,
+      });
+
+      dateForm.setFieldValue("devicedate_start", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_start: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 12") {
+      let new_device_type = form.getFieldValue("device_type");
+      if (new_device_type.indexOf("Bán acc") == -1) {
+        new_device_type.push("Bán acc");
+      }
+      let new_device_owner = form.getFieldValue("device_owner");
+      if (new_device_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_device_owner.push("Phòng Kinh doanh");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatedeviceInfo(
+        {
+          new_device_type: new_device_type.join(","),
+          new_device_owner: new_device_owner.join(","),
+        },
+        info.device_id
+      );
+
+      let new_device_processing = form.getFieldValue("device_processing");
+      if (new_device_processing.indexOf("Move room") == -1) {
+        new_device_processing.push("Move room");
+      }
+
+      form.setFieldsValue({
+        device_processing: new_device_processing,
+        device_type: new_device_type,
+        device_owner: new_device_owner,
+      });
+
+      dateForm.setFieldValue("devicedate_moveroom", moment(now()));
+      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        devicedate_moveroom: moment(now()),
+        devicedate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url: "../asset/",
+    },
+  ]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
   return (
     <Card
-      title={id}
-      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+      title={id + " | " + (info?._id ? info?._id : "")}
+      extra={
+        <Button
+          onClick={() => form.submit()}
+          style={{
+            background: "#18a689",
+            color: "white",
+          }}
+        >
+          Lưu thông tin
+        </Button>
+      }
     >
       <Tabs defaultActiveKey="1">
-        
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN DEVICE">
+            <Col span={12} >
+              <Card title="THÔNG TIN ETSY" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={deviceData}
                   autoComplete="off"
+                  // labelCol={{ span: 3 }}
+                  // layout="horizontal"
+
+                  size="large"
                 >
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item
-                        label="device id"
+                        label="Device id"
                         name="device_id"
+                        style={{ width: "100%" }}
                         rules={[
                           {
                             required: true,
-                            message: "Hãy nhập device id!",
+                            message: "Hãy nhập Device id!",
                           },
                         ]}
                         onClick={() =>
-                          copyToClipboard(form.getFieldValue("device_id"))
+                          copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
                         <Input
@@ -390,19 +650,38 @@ const device_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item label="device User" name="device_user">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("device_user"))
+                        }
+                        label="Device User"
+                        name="device_user"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="device Pass" name="device_password">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("device_password"))
+                        }
+                        label="Device Pass"
+                        name="device_password"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
+
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="device chi tiết" name="device_detail">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("device_password"))
+                        }
+                        label="Device chi tiết"
+                        name="device_detail"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -410,22 +689,22 @@ const device_info = () => {
 
                   <Row gutter={16}>
                     <Col span={6}>
-                      <Form.Item label="device profile" name="device_limit">
+                      <Form.Item label="Device limit" name="device_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="device items" name="device_item">
+                      <Form.Item label="Device items" name="device_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="device Sold" name="device_sold">
+                      <Form.Item label="Device Sold" name="device_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="device Feedback" name="device_feedback">
+                      <Form.Item label="Device Fb" name="device_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
@@ -449,133 +728,81 @@ const device_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phone" label="Phone">
-                          <div className="demo-option-label-item">Phone</div>
-                        </Option>
-                        <Option value="PC" label="PC">
-                          <div className="demo-option-label-item">PC</div>
-                        </Option>
-                        <Option value="Antidetect" label="Antidetect">
-                          <div className="demo-option-label-item">
-                            Antidetect
-                          </div>
-                        </Option>
-                        <Option value="Gologin" label="Gologin">
-                          <div className="demo-option-label-item">Gologin</div>
-                        </Option>
-                        <Option value="VPS" label="VPS">
-                          <div className="demo-option-label-item">VPS</div>
-                        </Option>
-                        <Option value="Windows 10" label="Windows 10">
-                          <div className="demo-option-label-item">
-                            Windows 10
-                          </div>
-                        </Option>
-                        <Option value="Windows 11" label="Windows 11">
-                          <div className="demo-option-label-item">
-                            Windows 11
-                          </div>
-                        </Option>
-                        <Option value="MAC" label="MAC">
-                          <div className="demo-option-label-item">MAC</div>
-                        </Option>
-                        <Option value="Ubuntu" label="Ubuntu">
-                          <div className="demo-option-label-item">Ubuntu</div>
-                        </Option>
-                        <Option value="Chrome" label="Chrome">
-                          <div className="demo-option-label-item">Chrome</div>
-                        </Option>
-                        <Option value="Firefox" label="Firefox">
-                          <div className="demo-option-label-item">Firefox</div>
-                        </Option>
-                        <Option value="Eagle" label="Eagle">
-                          <div className="demo-option-label-item">Eagle</div>
-                        </Option>
-                        <Option value="Safari" label="Safari">
-                          <div className="demo-option-label-item">Safari</div>
-                        </Option>
-                        <Option value="USB 4G" label="USB 4G">
-                          <div className="demo-option-label-item">USB 4G</div>
-                        </Option>
-                        <Option value="Proxy 4G" label="Proxy 4G">
-                          <div className="demo-option-label-item">Proxy 4G</div>
-                        </Option>
-                        <Option value="Proxy" label="Proxy">
-                          <div className="demo-option-label-item">Proxy</div>
-                        </Option>
-                        <Option value="Info real" label="Info real">
-                          <div className="demo-option-label-item">
-                            Info real
-                          </div>
-                        </Option>
-                        <Option value="Info gen" label="Info gen">
-                          <div className="demo-option-label-item">Info gen</div>
-                        </Option>
-                        <Option value="Quy trình 1" label="Quy trình 1">
-                          <div className="demo-option-label-item">
-                            Quy trình 1
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 2" label="Quy trình 2">
-                          <div className="demo-option-label-item">
-                            Quy trình 2
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 3" label="Quy trình 3">
-                          <div className="demo-option-label-item">
-                            Quy trình 3
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 4" label="Quy trình 4">
-                          <div className="demo-option-label-item">
-                            Quy trình 4
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 5" label="Quy trình 5">
-                          <div className="demo-option-label-item">
-                            Quy trình 5
-                          </div>
-                        </Option>
+                        {listselect_device_plan.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Device block"
+                      name="device_block"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        {listselect_device_block.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
 
                   <Form.Item label="Tiến trình" name="device_processing">
                     <Select
+                      onChange={onChange_Processing}
                       mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
+                      style={{ width: "100%", color: "green" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="Set device" label="Set device">
-                        <div className="demo-option-label-item">Set device</div>
-                      </Option>
-                      <Option value="Cài Windows" label="Cài Windows">
-                        <div className="demo-option-label-item">Cài Windows</div>
-                      </Option>
-                      <Option value="Copy tool" label="Copy tool">
-                        <div className="demo-option-label-item">Copy tool</div>
-                      </Option>
-                      <Option value="Cài Browser" label="Cài Browser">
-                        <div className="demo-option-label-item">Cài Browser</div>
-                      </Option>
-                      <Option value="Check device" label="Check device">
-                        <div className="demo-option-label-item">Check device</div>
-                      </Option>
-                      <Option value="Check browser" label="Check browser">
-                        <div className="demo-option-label-item">Check browser</div>
-                      </Option>
-                      <Option value="Active" label="Active">
-                        <div className="demo-option-label-item">Active</div>
-                      </Option>
-                      <Option value="Error" label="Error">
-                        <div className="demo-option-label-item">Error</div>
-                      </Option>
-                      <Option value="Die" label="Die">
-                        <div className="demo-option-label-item">Die</div>
-                      </Option>
-                      
+                      {listselect_device_processing.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="Phát sinh" name="device_error">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%", color: "red" }}
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      {listselect_device_error.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
 
@@ -593,75 +820,18 @@ const device_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="VN" label="VN">
-                          <div className="demo-option-label-item">VN</div>
-                        </Option>
-                        <Option value="US" label="US">
-                          <div className="demo-option-label-item">US</div>
-                        </Option>
-                        <Option value="Phone" label="Phone">
-                          <div className="demo-option-label-item">Phone</div>
-                        </Option>
-                        <Option value="PC" label="PC">
-                          <div className="demo-option-label-item">
-                            PC
-                          </div>
-                        </Option>
-                        <Option value="Antidetect" label="Antidetect">
-                          <div className="demo-option-label-item">Antidetect</div>
-                        </Option>
-                        <Option value="Gologin" label="Gologin">
-                          <div className="demo-option-label-item">
-                            Gologin
-                          </div>
-                        </Option>
-                        <Option value="VPS" label="VPS">
-                          <div className="demo-option-label-item">VPS</div>
-                        </Option>
-                        <Option value="VMW" label="VMW">
-                          <div className="demo-option-label-item">
-                          VMW
-                          </div>
-                        </Option>
-                        <Option value="Windows 10" label="Windows 10">
-                          <div className="demo-option-label-item">
-                          Windows 10
-                          </div>
-                        </Option>
-                        <Option value="Windows 11" label="Windows 11">
-                          <div className="demo-option-label-item">
-                          Windows 11
-                          </div>
-                        </Option>
-                        <Option value="App" label="App">
-                          <div className="demo-option-label-item">
-                          App
-                          </div>
-                        </Option>
-                        <Option value="Chrome" label="Chrome">
-                          <div className="demo-option-label-item">
-                          Chrome
-                          </div>
-                        </Option>
-                        <Option value="Firefox" label="Firefox">
-                          <div className="demo-option-label-item">
-                          Firefox
-                          </div>
-                        </Option>
-                        <Option value="Edge" label="Edge">
-                          <div className="demo-option-label-item">
-                          Edge
-                          </div>
-                        </Option>
-                        <Option value="Safari" label="Safari">
-                          <div className="demo-option-label-item">
-                          Safari
-                          </div>
-                        </Option>
+                        {listselect_device_type.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
-
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -691,44 +861,15 @@ const device_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                          <div className="demo-option-label-item">
-                            Chuẩn bị bán
-                          </div>
-                        </Option>
-                        <Option
-                          value="Đủ điều kiện bán"
-                          label="Đủ điều kiện bán"
-                        >
-                          <div className="demo-option-label-item">
-                            Đủ điều kiện bán
-                          </div>
-                        </Option>
-
-                        <Option value="Bán tài khoản" label="Bán tài khoản">
-                          <div className="demo-option-label-item">
-                            Bán tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Đang giao dịch" label="Đang giao dịch">
-                          <div className="demo-option-label-item">
-                            Đang giao dịch
-                          </div>
-                        </Option>
-
-                        <Option value="Bán thành công" label="Bán thành công">
-                          <div className="demo-option-label-item">
-                            Bán thành công
-                          </div>
-                        </Option>
-                        <Option value="Bảo hành" label="Bảo hành">
-                          <div className="demo-option-label-item">Bảo hành</div>
-                        </Option>
-                        <Option value="Hết bảo hành" label="Hết bảo hành">
-                          <div className="demo-option-label-item">
-                            Hết bảo hành
-                          </div>
-                        </Option>
+                        {listselect_device_sell_status.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -755,32 +896,15 @@ const device_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng Kinh doanh"
-                          label="Phòng Kinh doanh"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng nâng cấp và phục hồi tài khoản"
-                          label="Phòng nâng cấp và phục hồi tài khoản"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng nâng cấp và phục hồi tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                          <div className="demo-option-label-item">
-                            Kho lưu trữ
-                          </div>
-                        </Option>
+                        {listselect_device_owner.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -799,16 +923,15 @@ const device_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                          <div className="demo-option-label-item">
-                            Nguyễn Hoài
-                          </div>
-                        </Option>
-                        <Option value="Khắc Liêm" label="Khắc Liêm">
-                          <div className="demo-option-label-item">
-                            Khắc Liêm
-                          </div>
-                        </Option>
+                        {listselect_device_employee?.map((item) => {
+                          return (
+                            <Option value={item} label={item}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -818,133 +941,57 @@ const device_info = () => {
                       <Form.Item label="Trạng thái" name="device_status">
                         <Select
                           //mode="multiple"
-                          style={{ width: "100%" }}
+                          onChange={onChange_Status}
                           optionLabelProp="label"
+                          style={{
+                            width: "100%",
+                            color:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("device_status")
+                              ) != -1
+                                ? "red"
+                                : "",
+                            fontWeight:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("device_status")
+                              ) != -1
+                                ? "bold !important"
+                                : "",
+                          }}
                         >
-                          <Option value="Live" label="Live">
-                            <div className="demo-option-label-item">Live</div>
-                          </Option>
-                          <Option value="Active" label="Active">
-                            <div className="demo-option-label-item">Active</div>
-                          </Option>
-                          <Option value="Error" label="Error">
-                            <div className="demo-option-label-item">Error</div>
-                          </Option>
-                          <Option value="Die" label="Die">
-                            <div className="demo-option-label-item">Die</div>
-                          </Option>
+                          {listselect_device_status.map((item, index) => {
+                            return (
+                              <Option value={item} label={item} key={index}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="PC" name="device_class">
+                      <Form.Item label="Lớp Device" name="device_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          onChange={onChange_Class}
                         >
-                          <Option value="PC 1" label="PC 1">
-                            <div className="demo-option-label-item">
-                              PC 1
-                            </div>
-                          </Option>
-                          <Option value="PC 2" label="PC 2">
-                            <div className="demo-option-label-item">PC 2</div>
-                          </Option>
-                          <Option value="PC 3" label="PC 3">
-                            <div className="demo-option-label-item">PC 3</div>
-                          </Option>
-                          <Option value="PC 4" label="PC 4">
-                            <div className="demo-option-label-item">PC 4</div>
-                          </Option>
-                          <Option value="PC 5" label="PC 5">
-                            <div className="demo-option-label-item">PC 5</div>
-                          </Option>
-                          <Option value="PC 6" label="PC 6">
-                            <div className="demo-option-label-item">PC 6</div>
-                          </Option>
-                          <Option value="PC 7" label="PC 7">
-                            <div className="demo-option-label-item">PC 7</div>
-                          </Option>
-                          <Option value="PC 8" label="PC 8 Upseller">
-                            <div className="demo-option-label-item">
-                              PC 8 Upseller
-                            </div>
-                          </Option>
-                          <Option value="PC 9" label="PC 9">
-                            <div className="demo-option-label-item">PC 9</div>
-                          </Option>
-                          <Option value="PC 10" label="PC 10">
-                            <div className="demo-option-label-item">PC 10</div>
-                          </Option>
-                          <Option value="PC 11" label="PC 11">
-                            <div className="demo-option-label-item">PC 11</div>
-                          </Option>
-                          <Option value="PC 12" label="PC 12">
-                            <div className="demo-option-label-item">
-                              PC 12
-                            </div>
-                          </Option>
-                          <Option value="PC 13" label="PC 13">
-                            <div className="demo-option-label-item">PC 13</div>
-                          </Option>
-                          <Option value="PC 14" label="PC 14">
-                            <div className="demo-option-label-item">PC 14</div>
-                          </Option>
-                          <Option value="PC 15" label="PC 15">
-                            <div className="demo-option-label-item">PC 15</div>
-                          </Option>
-                          <Option value="PC 16" label="PC 16">
-                            <div className="demo-option-label-item">PC 16</div>
-                          </Option>
-                          <Option value="PC 17" label="PC 17">
-                            <div className="demo-option-label-item">PC 17</div>
-                          </Option>
-                          <Option value="PC 18" label="PC 18">
-                            <div className="demo-option-label-item">PC 18</div>
-                          </Option>
-                          <Option value="PC 19" label="PC 19">
-                            <div className="demo-option-label-item">PC 19</div>
-                          </Option>
-                          <Option value="PC 20" label="PC 20">
-                            <div className="demo-option-label-item">
-                              PC 20
-                            </div>
-                          </Option>
-                          <Option value="PC 21" label="PC 21">
-                            <div className="demo-option-label-item">
-                              PC 21
-                            </div>
-                          </Option>
-                          <Option value="PC 22" label="PC 22">
-                            <div className="demo-option-label-item">
-                              PC 22
-                            </div>
-                          </Option>
-                          <Option
-                            value="PC 23"
-                            label="PC 23"
-                          >
-                            <div className="demo-option-label-item">
-                              PC 23
-                            </div>
-                          </Option>
-                          <Option
-                            value="PC 24"
-                            label="PC 24"
-                          >
-                            <div className="demo-option-label-item">
-                              PC 24
-                            </div>
-                          </Option>
-                          <Option
-                            value="PC 25"
-                            label="PC 25"
-                          >
-                            <div className="demo-option-label-item">
-                              PC 25
-                            </div>
-                          </Option>
+                          {listselect_device_class.map((item, index) => {
+                            return (
+                              <Option
+                                value={item.value}
+                                label={item.title}
+                                key={index}
+                              >
+                                <div className="demo-option-label-item">
+                                  {item.title}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -955,23 +1002,37 @@ const device_info = () => {
                           placeholder="select one item"
                           optionLabelProp="label"
                         >
-                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                            <div className="demo-option-label-item">
-                              Nguyễn Hoài
-                            </div>
-                          </Option>
-                          <Option value="Khắc Liêm" label="Khắc Liêm">
-                            <div className="demo-option-label-item">
-                              Khắc Liêm
-                            </div>
-                          </Option>
+                          {listselect_device_employee?.map((item) => {
+                            return (
+                              <Option value={item} label={item}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Form.Item name="device_image_url">
+                      <Upload
+                        action="http://localhost:4000/api/files"
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+                    </Form.Item>
+                  </Row>
                 </Form>
               </Card>
             </Col>
+
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
                 {[
@@ -988,8 +1049,9 @@ const device_info = () => {
                     optionLabelProp="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
+                    size="large"
                   >
-                    {listInfo.map((item) => {
+                    {listselect_view_acc.map((item) => {
                       return (
                         <Option
                           value={item.title.toLocaleLowerCase() + "_id"}
@@ -1003,16 +1065,17 @@ const device_info = () => {
                     })}
                   </Select>
                 ) : null}
-
+                {/* form List_view */}
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
                   form={infoForm}
                   name="info"
+                  size="large"
                 >
                   <List
                     itemLayout="horizontal"
-                    dataSource={listInfo}
+                    dataSource={listselect_view_acc}
                     renderItem={(item) => (
                       <>
                         {selectListInfo.indexOf(
@@ -1047,11 +1110,147 @@ const device_info = () => {
                                   {item.title}
                                 </a>
                               </div>
-                              <Form.Item
-                                name={item.title.toLocaleLowerCase() + "_id"}
-                              >
-                                <Input onChange={() => infoForm.submit()} />
-                              </Form.Item>
+
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      openModalListView(
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      )
+                                    }
+                                    name={
+                                      item.title
+                                        .toLocaleLowerCase()
+                                        .split("|")[0] + "_id"
+                                    }
+                                  >
+                                    <Input disabled />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_status"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_status",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_device_status.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item}
+                                            label={item}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_class"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_class",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_device_class.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item.value}
+                                            label={item.title}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item.title}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                              </Row>
                             </div>
                           </List.Item>
                         ) : null}
@@ -1068,20 +1267,22 @@ const device_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN">
+              <Card title="THỜI GIAN: MM-DD-YYYY">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
                   name="date"
                   initialValues={dateData}
+                  size="large"
                 >
                   <Row gutter={16}>
-                    {listDate.map((item, index) => {
+                    {tablelist_device_Date.map((item, index) => {
                       return (
-                        <Col span={8} key={index}>
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              style={{ float: "right" }}
+                              format="MM-DD-YYYY HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
@@ -1096,7 +1297,7 @@ const device_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col span={24} >
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1106,23 +1307,38 @@ const device_info = () => {
                 </Row>
 
                 <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|;
+                  {info?.device_history?.split(",")?.map((data) => {
+                    return <div>{data}</div>;
+                  })}
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
-        <Tabs.TabPane tab="HƯỚNG DẪN"  key="3">
-        <p>1. PC là máy thật</p>
-        <p>2. device User: Là tên Antidetect mã DAN_12345, VPS mã DVPS_ip, gologin mã DGO_12345 (các chữ cái viết hoa)</p>
-        <p>3. Thiết bị được tạo trong phần Tool - nhập liệu - chọn DEVICE trong THÔNG TIN ITEM, Bản bên cạnh nhập tên antidetect theo dòng, chọn PC theo lớp ebay </p>
-        
-          
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+       
+          <HuongDanDevice_info />
         </Tabs.TabPane>
       </Tabs>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      <Modal
+        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
+        open={modalListView}
+        onOk={() => submitModalListView()}
+        onCancel={() => cancelListView()}
+      >
+        <Input placeholder="Input _id" onChange={setValueView}></Input>
+      </Modal>
     </Card>
   );
 };
 
-export default device_info;
+export default Device_info;

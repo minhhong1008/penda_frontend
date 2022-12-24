@@ -9,10 +9,10 @@ import { showError } from "../utils/index";
 
 function* getListebaySaga({ payload }) {
   try {
-    const response = yield call(getListebay, payload);
+    const response = yield call(getListebay, payload);4
     const { data } = response;
     yield put({ type: GET_LIST_EBAY_SUCCESS, payload: data });
-  } catch (res) {
+  } catch (err) {
     const message = "Không có quyền truy cập vào ebay";
     showError(message);
     yield put({ type: GET_LIST_EBAY_ERROR, message: message });

@@ -561,6 +561,9 @@ const Users_info = () => {
                         <Option value="info_id" label="info">
                           <div className="demo-option-label-item">info</div>
                         </Option>
+                        <Option value="person_id" label="person">
+                          <div className="demo-option-label-item">person</div>
+                        </Option>
                         <Option value="mail_id" label="mail">
                           <div className="demo-option-label-item">mail</div>
                         </Option>

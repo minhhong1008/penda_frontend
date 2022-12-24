@@ -13,6 +13,8 @@ import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
 import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
+import React from 'react';
+import { Divider } from 'antd';
 
 export const listselect_view_acc = [
   {
@@ -92,7 +94,7 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_shopee_error = ["Không login", "Sai pass", "Hack"];
+export const listselect_shopee_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
 
 export const listselect_shopee_processing = [
   "Login mail",
@@ -109,6 +111,7 @@ export const listselect_shopee_processing = [
   "Draft",
   "List",
   "Sold",
+  "Move room",
   "Quảng cáo",
   "Above Standard",
   "Top Rate",
@@ -193,11 +196,13 @@ export const listselect_shopee_type = [
   "Gỡ Suspended",
   "Above Standard",
   "Top Rate",
-  "Bán hàng",
   "Bán acc",
+  "Bán hàng",
+
 ];
 
 export const listselect_shopee_sell_status = [
+  "Đang chuẩn bị",
   "Đủ điều kiện bán",
   "Bán tài khoản",
   "Đang giao dịch",
@@ -208,8 +213,9 @@ export const listselect_shopee_sell_status = [
 
 export const listselect_shopee_owner = [
   "Phòng sản xuất",
+  "Phòng phục hồi",
   "Phòng Kinh doanh",
-  "Phòng nâng cấp và phục hồi tài khoản",
+  "Phòng nâng cấp",
   "Kho lưu trữ",
 ];
 
@@ -251,11 +257,11 @@ export const listselect_shopee_class = [
     value: "Lớp 7",
   },
   {
-    title: "Lớp 8 Seller",
+    title: "Lớp 8",
     value: "Lớp 8",
   },
   {
-    title: "Lớp 9",
+    title: "Lớp 9 Seller",
     value: "Lớp 9",
   },
   {
@@ -263,16 +269,12 @@ export const listselect_shopee_class = [
     value: "Lớp 10",
   },
   {
-    title: "Lớp 11",
+    title: "Lớp 11 List",
     value: "Lớp 11",
   },
   {
     title: "Lớp 12 Chuyển",
     value: "Lớp 12",
-  },
-  {
-    title: "Lớp 13",
-    value: "Lớp 13",
   },
   {
     title: "Lớp 14",
@@ -394,6 +396,10 @@ export const tablelist_shopee_Date = [
     title: "Ngày list5",
     value: "shopeedate_list5",
   },
+  {
+    title: "Ngày chuyển phòng",
+    value: "shopeedate_moveroom",
+  },
 
   {
     title: "Dự kiến seller",
@@ -419,7 +425,14 @@ export const tablelist_shopee_Date = [
     title: "Dự kiến list 5",
     value: "shopeedate_calendarlist5",
   },
-
+  {
+    title: "Ngày error",
+    value: "shopeedate_error",
+  },
+  {
+    title: "Ngày restrict",
+    value: "shopeedate_restrict",
+  },
   {
     title: "Ngày Suspended",
     value: "shopeedate_suspended",
@@ -456,9 +469,282 @@ export const tablelist_shopee_Date = [
     title: "Ngày gỡ sus 5",
     value: "shopeedate_contact5",
   },
-  
 ];
 
+export const listselect_shopee_fields = [];
+
+
+export const HuongDanShopee_info = () => {
+  return (
+    <div>
+      <p>1. Ebay mã EB_12345</p>
+      <p>
+        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        tool nhập liệu)
+      </p>
+      <p>
+        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
+        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
+      </p>
+      <p>
+        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
+        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
+        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
+      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
+      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
+      <p>
+        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>
+        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
+        suspended, tải cccd
+      </p>
+      <p>
+        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
+        chi tiết của tài nguyên đó
+      </p>
+      <br></br>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
+        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
+        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
+        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
+      </p>
+      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
+      <p>
+        Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay
+        or etsy...
+      </p>
+      <p>
+        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
+        phần tool- xử lý số liệu - filter{" "}
+      </p>
+      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
+      <br></br>
+      <p>
+        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
+        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
+      </p>
+    </div>
+  );
+};
+
+export const HuongDanShopee_table = () => {
+  return (
+    <div>
+      <p>1. Ebay mã EB_12345</p>
+      <p>
+        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        tool nhập liệu)
+      </p>
+      <p>
+        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
+        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
+      </p>
+      <p>
+        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
+        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
+        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
+      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
+      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
+      <p>
+        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>
+        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
+        suspended, tải cccd
+      </p>
+      <p>
+        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
+        chi tiết của tài nguyên đó
+      </p>
+      <br></br>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
+        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
+        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
+        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
+      </p>
+      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
+      <p>
+        Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay
+        or etsy...
+      </p>
+      <p>
+        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
+        phần tool- xử lý số liệu - filter{" "}
+      </p>
+      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
+      <br></br>
+      <p>
+        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
+        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
+      </p>
+    </div>
+  );
+};
+
+export const HuongDanShopee_class = () => {
+  return (
+    <div>
+      <p>1. Ebay mã EB_12345</p>
+      <p>
+        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        tool nhập liệu)
+      </p>
+      <p>
+        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
+        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
+      </p>
+      <p>
+        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
+        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
+        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
+      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
+      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
+      <p>
+        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
+        loại acc
+      </p>
+      <p>
+        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        tạo báo cáo, phân loại acc
+      </p>
+      <p>
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
+        suspended, tải cccd
+      </p>
+      <p>
+        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
+        chi tiết của tài nguyên đó
+      </p>
+      <br></br>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
+        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
+        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
+        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
+        tất cả các field{" "}
+      </p>
+      <p>
+        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
+        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
+      </p>
+      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
+      <p>
+        Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay
+        or etsy...
+      </p>
+      <p>
+        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
+        phần tool- xử lý số liệu - filter{" "}
+      </p>
+      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
+      <br></br>
+      <p>
+        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
+        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
+      </p>
+    </div>
+  );
+};
+
+
+
+const ContentShopee = () => (
+  <>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+    <Divider>Text</Divider>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+    <Divider orientation="left">Left Text</Divider>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+    <Divider orientation="right">Right Text</Divider>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+    <Divider orientation="left" orientationMargin="0">
+      Left Text with 0 orientationMargin
+    </Divider>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+    <Divider orientation="right" orientationMargin={50}>
+      Right Text with 50px orientationMargin
+    </Divider>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
+      probare, quae sunt a te dicta? Refert tamen, quo modo.
+    </p>
+  </>
+);
+export default ContentShopee;
 /*   const listTest1 = () => {
     let listTest = [];
     for (var i = 0; i < 10; i++) {

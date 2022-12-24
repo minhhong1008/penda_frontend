@@ -11,21 +11,51 @@ import {
   Modal,
   Avatar,
   List,
+  Upload,
 } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { getUser } from "../../utils/index";
+import { PlusOutlined } from "@ant-design/icons";
+import { showError, showSuccess } from "../../utils";
+import { useSelector } from "react-redux";
+import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
-import { getUser } from "../../utils/index";
+import moment, { now } from "moment";
+import React, { useCallback, useEffect, useState } from "react";
+
+import {
+  tablelist_facebook_Date,
+  listselect_view_acc,
+  listselect_facebook_plan,
+  listselect_facebook_block,
+  listselect_facebook_processing,
+  listselect_facebook_error,
+  listselect_facebook_type,
+  listselect_facebook_sell_status,
+  listselect_facebook_owner,
+  listselect_facebook_status,
+  listselect_facebook_class,
+  HuongDanFacebook_info,
+  ContentFacebook,
+} from "./Facebook_list";
+
 import {
   postfacebookInfo,
   getfacebookInfo,
   updatefacebookInfo,
 } from "../../api/facebook/index";
-import { showError, showSuccess } from "../../utils";
-import { useSelector } from "react-redux";
+// dùng update các field trong bảng facebook_info
+import { updateListView } from "../../api/update";
 
-const facebook_info = () => {
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
+const Facebook_info = () => {
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -34,20 +64,80 @@ const facebook_info = () => {
   const [facebookData, setfacebookData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState(["device_id"]);
+  const [selectListInfo, setSelectListInfo] = useState([]);
   const [noteValue, setNoteValue] = useState("");
-
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
+  const [listselect_facebook_employee, setListfacebook_employee] = useState();
+
+  // Tạo state để nhận dữ liệu của listview
+
+  const [listViewData, setListViewData] = useState();
+  const [modalListView, setModalListView] = useState(false);
+  const [viewData, setViewData] = useState();
+  const [valueInput, setValueInput] = useState();
+
+  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
+
+  const setValueView = (e) => {
+    setValueInput(e.target.value);
+  };
+
+  const openModalListView = (name) => {
+    setViewData(name);
+    setModalListView(true);
+  };
+
+  const submitModalListView = async () => {
+    let payload = {};
+    payload[viewData] = valueInput;
+    if (!valueInput) {
+      cancelListView();
+      return;
+    }
+    await updatefacebookInfo(payload, info.facebook_id);
+    window.location.reload();
+    showSuccess("Thành công");
+  };
+
+  const cancelListView = () => {
+    setModalListView(false);
+    setValueInput("");
+    setViewData("");
+  };
+
+  // hàm lưu lại value của class, status trong listview theo db của từng field
+  const onChangeStatusListView = async (key, value, id) => {
+    let newData = JSON.parse(JSON.stringify(listViewData));
+    newData[key] = value;
+    setListViewData(newData);
+    await updateListView(id, key, value);
+    showSuccess("Thành công");
+  };
+  // Hàm để chuyển trang sang các tài khoản khác
+  const viewInfo = useCallback(
+    (type, id) => {
+      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+    },
+    [info]
+  );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let dateValue = {};
+    tablelist_facebook_Date.map((item) => {
+      dateValue[item.value] = moment(dateData[item.value]).format(
+        "MM-DD-YYYY HH:mm"
+      );
+    });
     const newValue = {
-      ...info,
       ...values,
+      ...dateValue,
       facebook_plan: values?.facebook_plan ? values.facebook_plan.join(",") : "",
+      facebook_block: values?.facebook_block ? values.facebook_block.join(",") : "",
+      facebook_error: values?.facebook_error ? values.facebook_error.join(",") : "",
       facebook_processing: values?.facebook_processing
         ? values.facebook_processing.join(",")
         : "",
@@ -60,15 +150,10 @@ const facebook_info = () => {
         ? values.facebook_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-
-      facebookdate_start: dateData?.facebook_date_start
-        ? moment(dateData.facebook_date_start).format("MM-DD-YYYY")
-        : "",
-      facebookdate_verify: dateData?.facebook_date_verify
-        ? moment(dateData.facebook_date_verify).format("MM-DD-YYYY")
-        : "",
       facebook_note: noteValue,
+      facebook_history: info.facebook_history,
     };
+
     const response = await updatefacebookInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
@@ -76,6 +161,7 @@ const facebook_info = () => {
       showError("Sửa không thành công");
     }
   };
+
   // Hàm gể gửi dữ liệu date
   const onFinishDate = (values) => {
     setDateData(values);
@@ -84,12 +170,16 @@ const facebook_info = () => {
   const onFinishInfo = (values) => {
     setInfo(values);
   };
+
   // Hàm gọi dữ liệu về từ database
   const getInfofacebook = async () => {
-    const { data } = await getfacebookInfo(id);
+    const res = await getfacebookInfo(id);
+    let data = res.data;
     const newData = {
       ...data,
       facebook_plan: data?.facebook_plan ? data.facebook_plan.split(",") : "",
+      facebook_block: data?.facebook_block ? data.facebook_block.split(",") : "",
+      facebook_error: data?.facebook_error ? data.facebook_error.split(",") : "",
       facebook_employee: data?.facebook_employee ? data.facebook_employee.split(",") : "",
       facebook_processing: data?.facebook_processing
         ? data.facebook_processing.split(",")
@@ -99,246 +189,132 @@ const facebook_info = () => {
         ? data.facebook_sell_status.split(",")
         : "",
       facebook_owner: data?.facebook_owner ? data.facebook_owner.split(",") : "",
+
+      device_id: data?.device_id ? data?.device_id?.device_id : "",
+      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
+      info_id: data?.info_id ? data?.info_id?.info_id : "",
+      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
+      sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
+      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
+      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
+      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
+      //facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
+      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
+      shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
+      etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
+      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
+    // hàm đổ dữ liệu về khi đã liên kết field
+    setListViewData({
+      device_class: data?.device_id ? data?.device_id?.device_class : "",
+      device_status: data?.device_id ? data?.device_id?.device_status : "",
+      device_user: data?.device_id ? data?.device_id?.device_user : "",
+      device_password: data?.device_id ? data?.device_id?.device_password : "",
+
+      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
+      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
+      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
+      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
+
+      info_class: data?.info_id ? data?.info_id?.info_class : "",
+      info_status: data?.info_id ? data?.info_id?.info_status : "",
+      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
+      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
+
+      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
+      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
+      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
+      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
+
+      sim_class: data?.sim_id ? data?.sim_id?.sim_class : "",
+      sim_status: data?.sim_id ? data?.sim_id?.sim_status : "",
+      sim_user: data?.sim_id ? data?.sim_id?.sim_user : "",
+      sim_password: data?.sim_id ? data?.sim_id?.sim_password : "",
+
+      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
+      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
+      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
+      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
+
+      payoneer_class: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_class
+        : "",
+      payoneer_status: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_status
+        : "",
+      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
+      payoneer_password: data?.payoneer_id
+        ? data?.payoneer_id?.payoneer_password
+        : "",
+
+      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
+      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
+      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
+      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
+
+      pingpong_class: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_class
+        : "",
+      pingpong_status: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_status
+        : "",
+      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
+      pingpong_password: data?.pingpong_id
+        ? data?.pingpong_id?.pingpong_password
+        : "",
+
+      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
+      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
+      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
+      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
+
+      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
+      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
+      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
+      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
+
+      shopee_class: data?.shopee_id ? data?.shopee_id?.shopee_class : "",
+      shopee_status: data?.shopee_id ? data?.shopee_id?.shopee_status : "",
+      shopee_user: data?.shopee_id ? data?.shopee_id?.shopee_user : "",
+      shopee_password: data?.shopee_id ? data?.shopee_id?.shopee_password : "",
+
+      etsy_class: data?.etsy_id
+        ? data?.etsy_id?.etsy_class
+        : "",
+      etsy_status: data?.etsy_id
+        ? data?.etsy_id?.etsy_status
+        : "",
+      etsy_user: data?.etsy_id ? data?.etsy_id?.etsy_user : "",
+      etsy_password: data?.etsy_id
+        ? data?.etsy_id?.etsy_password
+        : "",
+
+      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
+      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
+      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
+      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+    });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
-    dateForm.setFieldsValue({
-      facebook_date_start: moment(data.facebook_date_start),
-      facebook_date_verify: moment(data.facebook_date_verify),
+    let dateValue = {};
+    tablelist_facebook_Date.map((item) => {
+      dateValue[item.value] = moment(data[item.value]);
     });
-    setInfo(data);
+    //console.log(dateValue);
+    dateForm.setFieldsValue(dateValue);
+    setDateData(data);
     setNoteValue(data.facebook_note);
+    setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
+    setListfacebook_employee(data.listselect_facebook_employee);
   };
-
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      {
-        window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-      }
-    },
-    [info]
-  );
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfofacebook();
   }, []);
-
-  // List danh sách các trường trong bảng INFO
-  const listInfo = [
-    {
-      title: "DEVICE",
-      thumbnail:
-        "https://www.iconbunny.com/icons/media/catalog/product/5/9/597.9-tablets-icon-iconbunny.jpg",
-      value: "",
-    },
-    {
-      title: "PROXY",
-      thumbnail:
-        "https://st2.depositphotos.com/4060975/9116/v/600/depositphotos_91164140-stock-illustration-vpn-colored-vector-illustration.jpg",
-      value: "",
-    },
-    {
-      title: "INFO",
-      thumbnail:
-        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
-      value: "",
-    },
-    {
-      title: "MAIL",
-      thumbnail:
-        "https://www.citypng.com/public/uploads/preview/-11597283936hxzfkdluih.png",
-      value: "",
-    },
-    {
-      title: "SIM",
-      thumbnail:
-        "https://static.vecteezy.com/system/resources/previews/007/140/884/original/sim-card-line-circle-background-icon-vector.jpg",
-      value: "",
-    },
-    {
-      title: "BANK",
-      thumbnail:
-        "https://previews.123rf.com/images/alexwhite/alexwhite1609/alexwhite160904656/62626176-facebook-flat-design-yellow-round-web-icon.jpg",
-      value: "",
-    },
-    {
-      title: "PAYONEER",
-      thumbnail:
-        "https://global.discourse-cdn.com/envato/optimized/3X/c/0/c0264d85b64c0c7a759374baf20a8fb9c91b1c4c_2_500x500.png",
-      value: "",
-    },
-    {
-      title: "PAYPAL",
-      thumbnail:
-        "https://www.nicepng.com/png/detail/826-8264643_paypal-logo-png-instagram-icon-png-circle.png",
-      value: "",
-    },
-    {
-      title: "PINGPONG",
-      thumbnail:
-        "https://media.gettyimages.com/id/1441770156/vector/shield-ping-pong-icon-silhouette.jpg?s=612x612&w=gi&k=20&c=6YpqT55jRbNMzq642jQy4j8aw3ZyZmw8InQadlfMTPw=",
-      value: "",
-    },
-    {
-      title: "EBAY",
-      thumbnail: "https://aux2.iconspalace.com/uploads/312694120.png",
-      value: "",
-    },
-    {
-      title: "ETSY",
-      thumbnail:
-        "https://png.pngitem.com/pimgs/s/118-1182357_circle-hd-png-download.png",
-      value: "",
-    },
-    {
-      title: "AMAZON",
-      thumbnail:
-        "https://icons-for-free.com/download-icon-amazon+icon-1320194704838275475_512.png",
-      value: "",
-    },
-    {
-      title: "SHOPEE",
-      thumbnail:
-        "https://freepngimg.com/convert-png/109014-shopee-logo-free-download-image",
-      value: "",
-    },
-    {
-      title: "FACEBOOK",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Facebook_f_logo_%282021%29.svg/2048px-Facebook_f_logo_%282021%29.svg.png",
-      value: "",
-    },
-    {
-      title: "TIKTOK",
-      thumbnail:
-        "https://image.similarpng.com/very-thumbnail/2020/10/Tiktok-icon-logo-design-on-transparent-background-PNG.png",
-      value: "",
-    },
-    {
-      title: "OTHER",
-      thumbnail:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Circle-icons-globe.svg/768px-Circle-icons-globe.svg.png",
-      value: "",
-    },
-  ];
-
-  //  List danh sách các trường trong bảng DATE
-  const listDate = [
-    {
-      title: "Ngày giao",
-      value: "facebookdate_delivery",
-    },
-    {
-      title: "Ngày tạo",
-      value: "facebookdate_start",
-    },
-    {
-      title: "Ngày chuyển lớp",
-      value: "facebookdate_nextclass",
-    },
-    {
-      title: "Ngày verify",
-      value: "facebookdate_verify",
-    },
-    {
-      title: "Ngày Seller",
-      value: "facebookdate_seller",
-    },
-    {
-      title: "Ngày verify Bank",
-      value: "facebookdate_verifybank",
-    },
-    {
-      title: "Ngày draft",
-      value: "facebookdate_draft",
-    },
-    {
-      title: "Ngày list1",
-      value: "facebookdate_list1",
-    },
-    {
-      title: "Ngày list2",
-      value: "facebookdate_list2",
-    },
-    {
-      title: "Ngày list3",
-      value: "facebookdate_list3",
-    },
-    {
-      title: "Ngày list4",
-      value: "facebookdate_list4",
-    },
-    {
-      title: "Ngày list5",
-      value: "facebookdate_list5",
-    },
-
-    {
-      title: "Dự kiến seller",
-      value: "facebookdate_expectedseller",
-    },
-    {
-      title: "Dự kiến list 1",
-      value: "facebookdate_expectedlist1",
-    },
-    {
-      title: "Dự kiến list 2",
-      value: "facebookdate_expectedlist2",
-    },
-    {
-      title: "Dự kiến list 3",
-      value: "facebookdate_expectedlist3",
-    },
-    {
-      title: "Dự kiến list 4",
-      value: "facebookdate_expectedlist4",
-    },
-    {
-      title: "Dự kiến list 5",
-      value: "facebookdate_expectedlist5",
-    },
-
-    {
-      title: "Ngày Suspended",
-      value: "facebookdate_suspended",
-    },
-    {
-      title: "Ngày check",
-      value: "facebookdate_checksus1",
-    },
-    {
-      title: "Ngày gỡ sus 1",
-      value: "facebookdate_contact1",
-    },
-    {
-      title: "Ngày gỡ sus 2",
-      value: "facebookdate_contact2",
-    },
-    {
-      title: "Ngày gỡ sus 3",
-      value: "facebookdate_contact3",
-    },
-    {
-      title: "Ngày gỡ sus 4",
-      value: "facebookdate_contact4",
-    },
-    {
-      title: "Ngày gỡ sus 5",
-      value: "facebookdate_contact5",
-    },
-    {
-      title: "Ngày check",
-      value: "facebookdate_checksus2",
-    },
-    {
-      title: "Ngày check",
-      value: "facebookdate_checksus3",
-    },
-  ];
-
   // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
     setSelectListInfo(values);
@@ -349,37 +325,321 @@ const facebook_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm viết tự động hóa
+  const onChange_Status = async (values) => {
+    if (values == "Error" || values == "Restrict" || values == "Suspended") {
+      let new_facebook_owner = form.getFieldValue("facebook_owner");
+      if (new_facebook_owner.indexOf("Phòng phục hồi") == -1) {
+        new_facebook_owner.push("Phòng phục hồi");
+      }
+      if (new_facebook_owner.indexOf("Kho lưu trữ") == -1) {
+        new_facebook_owner.push("Kho lưu trữ");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatefacebookInfo(
+        {
+          facebook_owner: new_facebook_owner.join(","),
+        },
+        info.facebook_id
+      );
+      // Tiếp tục set
+      let new_facebook_processing = form.getFieldValue("facebook_processing");
+      let old_facebook_processing = info.facebook_processing;
+      if (new_facebook_processing.indexOf(values) == -1) {
+        new_facebook_processing.push(values);
+      }
+
+      let new_facebook_class = form.getFieldValue("facebook_class");
+      if (values == "Error") {
+        (new_facebook_class = "Lớp 20"),
+          dateForm.setFieldValue("facebookdate_error", moment(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          facebookdate_error: moment(now()),
+          facebookdate_nextclass: moment(now()),
+        }); // Dùng hàm này set lại date mới lưu đc vào db
+      }
+      if (values == "Restrict") {
+        (new_facebook_class = "Lớp 23"),
+          dateForm.setFieldValue("facebookdate_restrict", moment(now()));
+        dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          facebookdate_restrict: moment(now()),
+          facebookdate_nextclass: moment(now()),
+        });
+      }
+      if (values == "Suspended") {
+        (new_facebook_class = "Lớp 26"),
+          dateForm.setFieldValue("facebookdate_suspended", moment(now()));
+        dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+        setDateData({
+          ...dateData,
+          facebookdate_suspended: moment(now()),
+          facebookdate_nextclass: moment(now()),
+        });
+      }
+
+      form.setFieldsValue({
+        facebook_class: new_facebook_class,
+        facebook_support: "Nguyễn Hoài",
+        facebook_processing: new_facebook_processing,
+        facebook_owner: new_facebook_owner,
+      }); // Dùng hàm này set lại để lưu vào db
+    }
+  };
+
+  const onChange_Processing = (values) => {
+    if (values[values.length - 1] == "Buyer") {
+      form.setFieldValue("facebook_class", "Lớp 4");
+      dateForm.setFieldValue("facebookdate_start", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_start: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Verify") {
+      form.setFieldValue("facebook_class", "Lớp 6");
+      dateForm.setFieldValue("facebookdate_verify", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_verify: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Seller") {
+      form.setFieldValue("facebook_class", "Lớp 9");
+      dateForm.setFieldValue("facebookdate_seller", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_seller: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "List") {
+      form.setFieldValue("facebook_class", "Lớp 10");
+      dateForm.setFieldValue("facebookdate_list1", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_list1: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+    if (values[values.length - 1] == "Move room") {
+      form.setFieldValue("facebook_class", "Lớp 12");
+      dateForm.setFieldValue("facebookdate_moveroom", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_moveroom: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  const onChange_Class = async (values) => {
+    dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+    setDateData({
+      ...dateData,
+      facebookdate_nextclass: moment(now()),
+    });
+
+    if (values == "Lớp 9") {
+      let new_facebook_type = form.getFieldValue("facebook_type");
+      if (new_facebook_type.indexOf("Seller") == -1) {
+        new_facebook_type.push("Seller");
+      }
+
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatefacebookInfo(
+        {
+          new_facebook_type: new_facebook_type.join(","),
+        },
+        info.facebook_id
+      );
+
+      let new_facebook_processing = form.getFieldValue("facebook_processing");
+      if (new_facebook_processing.indexOf("Seller") == -1) {
+        new_facebook_processing.push("Seller");
+      }
+
+      form.setFieldsValue({
+        facebook_processing: new_facebook_processing,
+        facebook_type: new_facebook_type,
+      });
+
+      dateForm.setFieldValue("facebookdate_seller", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_seller: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 4") {
+      let new_facebook_type = form.getFieldValue("facebook_type");
+      if (new_facebook_type.indexOf("Buyer") == -1) {
+        new_facebook_type.push("Buyer");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatefacebookInfo(
+        {
+          new_facebook_type: new_facebook_type.join(","),
+        },
+        info.facebook_id
+      );
+
+      let new_facebook_processing = form.getFieldValue("facebook_processing");
+      if (new_facebook_processing.indexOf("Buyer") == -1) {
+        new_facebook_processing.push("Buyer");
+      }
+      /*  let new_facebook_owner = form
+        .getFieldValue("facebook_owner")
+        .filter((item) => item !== ""); */
+
+      form.setFieldsValue({
+        facebook_processing: new_facebook_processing,
+        facebook_type: new_facebook_type,
+      });
+
+      dateForm.setFieldValue("facebookdate_start", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_start: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+
+    if (values == "Lớp 12") {
+      let new_facebook_type = form.getFieldValue("facebook_type");
+      if (new_facebook_type.indexOf("Bán acc") == -1) {
+        new_facebook_type.push("Bán acc");
+      }
+      let new_facebook_owner = form.getFieldValue("facebook_owner");
+      if (new_facebook_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_facebook_owner.push("Phòng Kinh doanh");
+      }
+      // lưu vào db vì quyền nhân viên không hiển thị
+      let { data } = await updatefacebookInfo(
+        {
+          new_facebook_type: new_facebook_type.join(","),
+          new_facebook_owner: new_facebook_owner.join(","),
+        },
+        info.facebook_id
+      );
+
+      let new_facebook_processing = form.getFieldValue("facebook_processing");
+      if (new_facebook_processing.indexOf("Move room") == -1) {
+        new_facebook_processing.push("Move room");
+      }
+
+      form.setFieldsValue({
+        facebook_processing: new_facebook_processing,
+        facebook_type: new_facebook_type,
+        facebook_owner: new_facebook_owner,
+      });
+
+      dateForm.setFieldValue("facebookdate_moveroom", moment(now()));
+      dateForm.setFieldValue("facebookdate_nextclass", moment(now()));
+      setDateData({
+        ...dateData,
+        facebookdate_moveroom: moment(now()),
+        facebookdate_nextclass: moment(now()),
+      });
+    }
+  };
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      url: "../asset/",
+    },
+  ]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
   return (
     <Card
-      title={id}
-      extra={<Button onClick={() => form.submit()}>Lưu thông tin</Button>}
+      title={id + " | " + (info?._id ? info?._id : "")}
+      extra={
+        <Button
+          onClick={() => form.submit()}
+          style={{
+            background: "#18a689",
+            color: "white",
+          }}
+        >
+          Lưu thông tin
+        </Button>
+      }
     >
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="SAVE"></Tabs.TabPane>
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THÔNG TIN FACEBOOK">
+            <Col span={12} >
+              <Card title="THÔNG TIN ETSY" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={facebookData}
                   autoComplete="off"
+                  // labelCol={{ span: 3 }}
+                  // layout="horizontal"
+
+                  size="large"
                 >
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item
-                        label="facebook id"
+                        label="Facebook id"
                         name="facebook_id"
+                        style={{ width: "100%" }}
                         rules={[
                           {
                             required: true,
-                            message: "Hãy nhập facebook id!",
+                            message: "Hãy nhập Facebook id!",
                           },
                         ]}
                         onClick={() =>
-                          copyToClipboard(form.getFieldValue("facebook_id"))
+                          copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
                         <Input
@@ -390,19 +650,38 @@ const facebook_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item label="facebook User" name="facebook_user">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("facebook_user"))
+                        }
+                        label="Facebook User"
+                        name="facebook_user"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="facebook Pass" name="facebook_password">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("facebook_password"))
+                        }
+                        label="Facebook Pass"
+                        name="facebook_password"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
+
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="facebook chi tiết" name="facebook_detail">
+                      <Form.Item
+                        onClick={() =>
+                          copyToClipboard(form.getFieldValue("facebook_password"))
+                        }
+                        label="Facebook chi tiết"
+                        name="facebook_detail"
+                      >
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -410,22 +689,22 @@ const facebook_info = () => {
 
                   <Row gutter={16}>
                     <Col span={6}>
-                      <Form.Item label="facebook limit" name="facebook_limit">
+                      <Form.Item label="Facebook limit" name="facebook_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="facebook items" name="facebook_item">
+                      <Form.Item label="Facebook items" name="facebook_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="facebook Sold" name="facebook_sold">
+                      <Form.Item label="Facebook Sold" name="facebook_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="facebook Feedback" name="facebook_feedback">
+                      <Form.Item label="Facebook Fb" name="facebook_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
@@ -449,154 +728,81 @@ const facebook_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phone" label="Phone">
-                          <div className="demo-option-label-item">Phone</div>
-                        </Option>
-                        <Option value="PC" label="PC">
-                          <div className="demo-option-label-item">PC</div>
-                        </Option>
-                        <Option value="Antidetect" label="Antidetect">
-                          <div className="demo-option-label-item">
-                            Antidetect
-                          </div>
-                        </Option>
-                        <Option value="Gologin" label="Gologin">
-                          <div className="demo-option-label-item">Gologin</div>
-                        </Option>
-                        <Option value="VPS" label="VPS">
-                          <div className="demo-option-label-item">VPS</div>
-                        </Option>
-                        <Option value="Windows 10" label="Windows 10">
-                          <div className="demo-option-label-item">
-                            Windows 10
-                          </div>
-                        </Option>
-                        <Option value="Windows 11" label="Windows 11">
-                          <div className="demo-option-label-item">
-                            Windows 11
-                          </div>
-                        </Option>
-                        <Option value="MAC" label="MAC">
-                          <div className="demo-option-label-item">MAC</div>
-                        </Option>
-                        <Option value="Ubuntu" label="Ubuntu">
-                          <div className="demo-option-label-item">Ubuntu</div>
-                        </Option>
-                        <Option value="Chrome" label="Chrome">
-                          <div className="demo-option-label-item">Chrome</div>
-                        </Option>
-                        <Option value="Firefox" label="Firefox">
-                          <div className="demo-option-label-item">Firefox</div>
-                        </Option>
-                        <Option value="Eagle" label="Eagle">
-                          <div className="demo-option-label-item">Eagle</div>
-                        </Option>
-                        <Option value="Safari" label="Safari">
-                          <div className="demo-option-label-item">Safari</div>
-                        </Option>
-                        <Option value="USB 4G" label="USB 4G">
-                          <div className="demo-option-label-item">USB 4G</div>
-                        </Option>
-                        <Option value="Proxy 4G" label="Proxy 4G">
-                          <div className="demo-option-label-item">Proxy 4G</div>
-                        </Option>
-                        <Option value="Proxy" label="Proxy">
-                          <div className="demo-option-label-item">Proxy</div>
-                        </Option>
-                        <Option value="Info real" label="Info real">
-                          <div className="demo-option-label-item">
-                            Info real
-                          </div>
-                        </Option>
-                        <Option value="Info gen" label="Info gen">
-                          <div className="demo-option-label-item">Info gen</div>
-                        </Option>
-                        <Option value="Quy trình 1" label="Quy trình 1">
-                          <div className="demo-option-label-item">
-                            Quy trình 1
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 2" label="Quy trình 2">
-                          <div className="demo-option-label-item">
-                            Quy trình 2
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 3" label="Quy trình 3">
-                          <div className="demo-option-label-item">
-                            Quy trình 3
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 4" label="Quy trình 4">
-                          <div className="demo-option-label-item">
-                            Quy trình 4
-                          </div>
-                        </Option>
-                        <Option value="Quy trình 5" label="Quy trình 5">
-                          <div className="demo-option-label-item">
-                            Quy trình 5
-                          </div>
-                        </Option>
+                        {listselect_facebook_plan.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  ) : null}
+
+                  {[
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Form.Item
+                      label="Facebook block"
+                      name="facebook_block"
+                      disabled={true}
+                    >
+                      <Select
+                        mode="multiple"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionLabelProp="label"
+                      >
+                        {listselect_facebook_block.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
 
                   <Form.Item label="Tiến trình" name="facebook_processing">
                     <Select
+                      onChange={onChange_Processing}
                       mode="multiple"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
+                      style={{ width: "100%", color: "green" }}
                       optionLabelProp="label"
                       //status="warning"
                     >
-                      <Option value="VN" label="VN">
-                        <div className="demo-option-label-item">VN</div>
-                      </Option>
-                      <Option value="US" label="US">
-                        <div className="demo-option-label-item">US</div>
-                      </Option>
-                      <Option value="Buyer" label="Buyer">
-                        <div className="demo-option-label-item">Buyer</div>
-                      </Option>
-                      <Option value="Avatar" label="Avatar">
-                        <div className="demo-option-label-item">Avatar</div>
-                      </Option>
-                      <Option value="Verify" label="Verify">
-                        <div className="demo-option-label-item">Verify</div>
-                      </Option>
-                      <Option value="Seller" label="Seller">
-                        <div className="demo-option-label-item">Seller</div>
-                      </Option>
-                      <Option value="Draft" label="Draft">
-                        <div className="demo-option-label-item">Draft</div>
-                      </Option>
-                      <Option value="List" label="List">
-                        <div className="demo-option-label-item">List</div>
-                      </Option>
-                      <Option value="Sold" label="Sold">
-                        <div className="demo-option-label-item">Sold</div>
-                      </Option>
-                      <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                        <div className="demo-option-label-item">
-                          Gỡ Suspended
-                        </div>
-                      </Option>
-                      <Option value="ADS" label="ADS">
-                        <div className="demo-option-label-item">Quảng cáo</div>
-                      </Option>
-                      <Option value="Above Standard" label="Above Standard">
-                        <div className="demo-option-label-item">
-                          Above Standard
-                        </div>
-                      </Option>
-                      <Option value="Top Rate" label="Top Rate">
-                        <div className="demo-option-label-item">Top Rate</div>
-                      </Option>
-                      <Option value="Restrict" label="Restrict">
-                        <div className="demo-option-label-item">Restrict</div>
-                      </Option>
-                      <Option value="Suspended" label="Suspended">
-                        <div className="demo-option-label-item">Suspended</div>
-                      </Option>
+                      {listselect_facebook_processing.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="Phát sinh" name="facebook_error">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%", color: "red" }}
+                      optionLabelProp="label"
+                      //status="warning"
+                    >
+                      {listselect_facebook_error.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </Form.Item>
 
@@ -614,48 +820,18 @@ const facebook_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="VN" label="VN">
-                          <div className="demo-option-label-item">VN</div>
-                        </Option>
-                        <Option value="US" label="US">
-                          <div className="demo-option-label-item">US</div>
-                        </Option>
-                        <Option value="Buyer" label="Buyer">
-                          <div className="demo-option-label-item">Buyer</div>
-                        </Option>
-                        <Option value="Kick Sold" label="Kick Sold">
-                          <div className="demo-option-label-item">
-                            Kick Sold
-                          </div>
-                        </Option>
-                        <Option value="Seller" label="Seller">
-                          <div className="demo-option-label-item">Seller</div>
-                        </Option>
-                        <Option value="Gỡ Suspended" label="Gỡ Suspended">
-                          <div className="demo-option-label-item">
-                            Gỡ Suspended
-                          </div>
-                        </Option>
-                        <Option value="Bán hàng" label="Bán hàng">
-                          <div className="demo-option-label-item">Bán hàng</div>
-                        </Option>
-                        <Option value="ADS" label="ADS">
-                          <div className="demo-option-label-item">
-                            Quảng cáo
-                          </div>
-                        </Option>
-                        <Option value="Above Standard" label="Above Standard">
-                          <div className="demo-option-label-item">
-                            Above Standard
-                          </div>
-                        </Option>
-                        <Option value="Top Rate" label="Top Rate">
-                          <div className="demo-option-label-item">Top Rate</div>
-                        </Option>
+                        {listselect_facebook_type.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
-
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -685,44 +861,15 @@ const facebook_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
-                          <div className="demo-option-label-item">
-                            Chuẩn bị bán
-                          </div>
-                        </Option>
-                        <Option
-                          value="Đủ điều kiện bán"
-                          label="Đủ điều kiện bán"
-                        >
-                          <div className="demo-option-label-item">
-                            Đủ điều kiện bán
-                          </div>
-                        </Option>
-
-                        <Option value="Bán tài khoản" label="Bán tài khoản">
-                          <div className="demo-option-label-item">
-                            Bán tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Đang giao dịch" label="Đang giao dịch">
-                          <div className="demo-option-label-item">
-                            Đang giao dịch
-                          </div>
-                        </Option>
-
-                        <Option value="Bán thành công" label="Bán thành công">
-                          <div className="demo-option-label-item">
-                            Bán thành công
-                          </div>
-                        </Option>
-                        <Option value="Bảo hành" label="Bảo hành">
-                          <div className="demo-option-label-item">Bảo hành</div>
-                        </Option>
-                        <Option value="Hết bảo hành" label="Hết bảo hành">
-                          <div className="demo-option-label-item">
-                            Hết bảo hành
-                          </div>
-                        </Option>
+                        {listselect_facebook_sell_status.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -749,32 +896,15 @@ const facebook_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng Kinh doanh"
-                          label="Phòng Kinh doanh"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng nâng cấp và phục hồi tài khoản"
-                          label="Phòng nâng cấp và phục hồi tài khoản"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng nâng cấp và phục hồi tài khoản
-                          </div>
-                        </Option>
-                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                          <div className="demo-option-label-item">
-                            Kho lưu trữ
-                          </div>
-                        </Option>
+                        {listselect_facebook_owner.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -793,16 +923,15 @@ const facebook_info = () => {
                         placeholder="select one item"
                         optionLabelProp="label"
                       >
-                        <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                          <div className="demo-option-label-item">
-                            Nguyễn Hoài
-                          </div>
-                        </Option>
-                        <Option value="Khắc Liêm" label="Khắc Liêm">
-                          <div className="demo-option-label-item">
-                            Khắc Liêm
-                          </div>
-                        </Option>
+                        {listselect_facebook_employee?.map((item) => {
+                          return (
+                            <Option value={item} label={item}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   ) : null}
@@ -812,145 +941,57 @@ const facebook_info = () => {
                       <Form.Item label="Trạng thái" name="facebook_status">
                         <Select
                           //mode="multiple"
-                          style={{ width: "100%" }}
+                          onChange={onChange_Status}
                           optionLabelProp="label"
+                          style={{
+                            width: "100%",
+                            color:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("facebook_status")
+                              ) != -1
+                                ? "red"
+                                : "",
+                            fontWeight:
+                              ["Suspended", "Error"].indexOf(
+                                form.getFieldValue("facebook_status")
+                              ) != -1
+                                ? "bold !important"
+                                : "",
+                          }}
                         >
-                          <Option value="Live" label="Live">
-                            <div className="demo-option-label-item">Live</div>
-                          </Option>
-                          <Option value="Error" label="Error">
-                            <div className="demo-option-label-item">Error</div>
-                          </Option>
-                          <Option value="Restrict" label="Restrict">
-                            <div className="demo-option-label-item">
-                              Restrict
-                            </div>
-                          </Option>
-                          <Option value="Suspended" label="Suspended">
-                            <div className="demo-option-label-item">
-                              Suspended
-                            </div>
-                          </Option>
-                          <Option value="Disable" label="Disable">
-                            <div className="demo-option-label-item">
-                              Disable
-                            </div>
-                          </Option>
-                          <Option value="Die" label="Die">
-                            <div className="demo-option-label-item">Die</div>
-                          </Option>
+                          {listselect_facebook_status.map((item, index) => {
+                            return (
+                              <Option value={item} label={item} key={index}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Lớp facebook" name="facebook_class">
+                      <Form.Item label="Lớp Facebook" name="facebook_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionLabelProp="label"
+                          onChange={onChange_Class}
                         >
-                          <Option value="Lớp 1" label="Lớp 1 New">
-                            <div className="demo-option-label-item">
-                              Lớp 1 New
-                            </div>
-                          </Option>
-                          <Option value="Lớp 2" label="Lớp 2">
-                            <div className="demo-option-label-item">Lớp 2</div>
-                          </Option>
-                          <Option value="Lớp 3" label="Lớp 3">
-                            <div className="demo-option-label-item">Lớp 3</div>
-                          </Option>
-                          <Option value="Lớp 4" label="Lớp 4">
-                            <div className="demo-option-label-item">Lớp 4</div>
-                          </Option>
-                          <Option value="Lớp 5" label="Lớp 5">
-                            <div className="demo-option-label-item">Lớp 5</div>
-                          </Option>
-                          <Option value="Lớp 6" label="Lớp 6">
-                            <div className="demo-option-label-item">Lớp 6</div>
-                          </Option>
-                          <Option value="Lớp 7" label="Lớp 7">
-                            <div className="demo-option-label-item">Lớp 7</div>
-                          </Option>
-                          <Option value="Lớp 8" label="Lớp 8 Upseller">
-                            <div className="demo-option-label-item">
-                              Lớp 8 Upseller
-                            </div>
-                          </Option>
-                          <Option value="Lớp 9" label="Lớp 9">
-                            <div className="demo-option-label-item">Lớp 9</div>
-                          </Option>
-                          <Option value="Lớp 10" label="Lớp 10">
-                            <div className="demo-option-label-item">Lớp 10</div>
-                          </Option>
-                          <Option value="Lớp 11" label="Lớp 11">
-                            <div className="demo-option-label-item">Lớp 11</div>
-                          </Option>
-                          <Option value="Lớp 12" label="Lớp 12 Chuyển">
-                            <div className="demo-option-label-item">
-                              Lớp 12 Chuyển
-                            </div>
-                          </Option>
-                          <Option value="Lớp 13" label="Lớp 13">
-                            <div className="demo-option-label-item">Lớp 13</div>
-                          </Option>
-                          <Option value="Lớp 14" label="Lớp 14">
-                            <div className="demo-option-label-item">Lớp 14</div>
-                          </Option>
-                          <Option value="Lớp 15" label="Lớp 15">
-                            <div className="demo-option-label-item">Lớp 15</div>
-                          </Option>
-                          <Option value="Lớp 16" label="Lớp 16">
-                            <div className="demo-option-label-item">Lớp 16</div>
-                          </Option>
-                          <Option value="Lớp 17" label="Lớp 17">
-                            <div className="demo-option-label-item">Lớp 17</div>
-                          </Option>
-                          <Option value="Lớp 18" label="Lớp 18">
-                            <div className="demo-option-label-item">Lớp 18</div>
-                          </Option>
-                          <Option value="Lớp 19" label="Lớp 19">
-                            <div className="demo-option-label-item">Lớp 19</div>
-                          </Option>
-                          <Option value="Lớp 20" label="Lớp 20 facebook error">
-                            <div className="demo-option-label-item">
-                              Lớp 20 facebook error
-                            </div>
-                          </Option>
-                          <Option value="Lớp 21" label="Lớp 21 Buyer suspended">
-                            <div className="demo-option-label-item">
-                              Lớp 21 facebook suspend
-                            </div>
-                          </Option>
-                          <Option value="Lớp 22" label="Lớp 22 Seller restrict">
-                            <div className="demo-option-label-item">
-                              Lớp 22 Seller restrict
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 23"
-                            label="Lớp 23 Seller Suspended"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 23 Seller Suspended
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 24"
-                            label="Lớp 24 Gỡ suspended ngày 1"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 24 Gỡ suspended ngày 1
-                            </div>
-                          </Option>
-                          <Option
-                            value="Lớp 25"
-                            label="Lớp 25 Gỡ suspended ngày 2"
-                          >
-                            <div className="demo-option-label-item">
-                              Lớp 25 Gỡ suspended ngày 2
-                            </div>
-                          </Option>
+                          {listselect_facebook_class.map((item, index) => {
+                            return (
+                              <Option
+                                value={item.value}
+                                label={item.title}
+                                key={index}
+                              >
+                                <div className="demo-option-label-item">
+                                  {item.title}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -961,23 +1002,37 @@ const facebook_info = () => {
                           placeholder="select one item"
                           optionLabelProp="label"
                         >
-                          <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
-                            <div className="demo-option-label-item">
-                              Nguyễn Hoài
-                            </div>
-                          </Option>
-                          <Option value="Khắc Liêm" label="Khắc Liêm">
-                            <div className="demo-option-label-item">
-                              Khắc Liêm
-                            </div>
-                          </Option>
+                          {listselect_facebook_employee?.map((item) => {
+                            return (
+                              <Option value={item} label={item}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
                   </Row>
+
+                  <Row gutter={16}>
+                    <Form.Item name="facebook_image_url">
+                      <Upload
+                        action="http://localhost:4000/api/files"
+                        listType="picture-card"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {fileList.length >= 8 ? null : uploadButton}
+                      </Upload>
+                    </Form.Item>
+                  </Row>
                 </Form>
               </Card>
             </Col>
+
             <Col span={12}>
               <Card title="THÔNG TIN TÀI NGUYÊN">
                 {[
@@ -994,8 +1049,9 @@ const facebook_info = () => {
                     optionLabelProp="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
+                    size="large"
                   >
-                    {listInfo.map((item) => {
+                    {listselect_view_acc.map((item) => {
                       return (
                         <Option
                           value={item.title.toLocaleLowerCase() + "_id"}
@@ -1009,16 +1065,17 @@ const facebook_info = () => {
                     })}
                   </Select>
                 ) : null}
-
+                {/* form List_view */}
                 <Form
                   onFinish={onFinishInfo}
                   initialValues={info}
                   form={infoForm}
                   name="info"
+                  size="large"
                 >
                   <List
                     itemLayout="horizontal"
-                    dataSource={listInfo}
+                    dataSource={listselect_view_acc}
                     renderItem={(item) => (
                       <>
                         {selectListInfo.indexOf(
@@ -1053,11 +1110,147 @@ const facebook_info = () => {
                                   {item.title}
                                 </a>
                               </div>
-                              <Form.Item
-                                name={item.title.toLocaleLowerCase() + "_id"}
-                              >
-                                <Input onChange={() => infoForm.submit()} />
-                              </Form.Item>
+
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      openModalListView(
+                                        item.title.toLocaleLowerCase() + "_id"
+                                      )
+                                    }
+                                    name={
+                                      item.title
+                                        .toLocaleLowerCase()
+                                        .split("|")[0] + "_id"
+                                    }
+                                  >
+                                    <Input disabled />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_user"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                  <Form.Item
+                                    onClick={() =>
+                                      copyToClipboard(
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      )
+                                    }
+                                  >
+                                    <Input
+                                      value={
+                                        listViewData[
+                                          item.title.toLocaleLowerCase() +
+                                            "_password"
+                                        ]
+                                      }
+                                      disabled
+                                    />
+                                  </Form.Item>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_status"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_status",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_facebook_status.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item}
+                                            label={item}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                                <Col span={4}>
+                                  <Select
+                                    //mode="multiple"
+                                    style={{ width: "100%" }}
+                                    optionLabelProp="label"
+                                    value={
+                                      listViewData[
+                                        item.title.toLocaleLowerCase() +
+                                          "_class"
+                                      ]
+                                    }
+                                    onChange={(value) =>
+                                      onChangeStatusListView(
+                                        item.title.toLocaleLowerCase() +
+                                          "_class",
+                                        value,
+                                        info[
+                                          item.title.toLocaleLowerCase() + "_id"
+                                        ].split("|")[0]
+                                      )
+                                    }
+                                  >
+                                    {listselect_facebook_class.map(
+                                      (item, index) => {
+                                        return (
+                                          <Option
+                                            value={item.value}
+                                            label={item.title}
+                                            key={index}
+                                          >
+                                            <div className="demo-option-label-item">
+                                              {item.title}
+                                            </div>
+                                          </Option>
+                                        );
+                                      }
+                                    )}
+                                  </Select>
+                                </Col>
+                              </Row>
                             </div>
                           </List.Item>
                         ) : null}
@@ -1074,20 +1267,22 @@ const facebook_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN">
+              <Card title="THỜI GIAN: MM-DD-YYYY">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
                   name="date"
                   initialValues={dateData}
+                  size="large"
                 >
                   <Row gutter={16}>
-                    {listDate.map((item, index) => {
+                    {tablelist_facebook_Date.map((item, index) => {
                       return (
-                        <Col span={8} key={index}>
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              style={{ float: "right" }}
+                              format="MM-DD-YYYY HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
@@ -1102,7 +1297,7 @@ const facebook_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col span={24} >
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1112,16 +1307,38 @@ const facebook_info = () => {
                 </Row>
 
                 <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                  2022-11-23 16:50:34|;
+                  {info?.facebook_history?.split(",")?.map((data) => {
+                    return <div>{data}</div>;
+                  })}
                 </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+       
+          <HuongDanFacebook_info />
+        </Tabs.TabPane>
       </Tabs>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      <Modal
+        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
+        open={modalListView}
+        onOk={() => submitModalListView()}
+        onCancel={() => cancelListView()}
+      >
+        <Input placeholder="Input _id" onChange={setValueView}></Input>
+      </Modal>
     </Card>
   );
 };
 
-export default facebook_info;
+export default Facebook_info;

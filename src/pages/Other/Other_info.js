@@ -640,12 +640,7 @@ import {
                   </Row>
   
                   <span>
-                    Lớp 1 => Lớp 2 | Thế Minh Hồng, 2022-11-24 00:01:42 57 => other
-                    VN | Thế Minh Hồng, 2022-11-25 16:12:36 Bùi Thị Ngát (T) =>
-                    Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:27:43 Khắc Liêm =>
-                    Khắc Liêm | Thế Minh Hồng, 2022-11-25 23:28:05 Lớp 2 => Lớp 1
-                    | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                    2022-11-23 16:50:34
+                   
                   </span>
                 </Card>
               </Col>

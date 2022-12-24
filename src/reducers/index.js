@@ -12,6 +12,7 @@ import paypalReducer from "./paypalReducer";
 import pingpongReducer from "./pingpongReducer";
 import bankReducer from "./bankReducer";
 import infoReducer from "./infoReducer";
+import personReducer from "./personReducer";
 import mailReducer from "./mailReducer";
 import simReducer from "./simReducer";
 import deviceReducer from "./deviceReducer";
@@ -37,6 +38,7 @@ const appReducer = asyncReducers =>
     shopee: shopeeReducer,
     bank: bankReducer,
     info: infoReducer,
+    person: personReducer,
     amazon: amazonReducer,
     payoneer: payoneerReducer,
     paypal: paypalReducer,

@@ -22,6 +22,12 @@ export const updateinfoInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+
+export const getCountInfo = () => {
+  const url = `/getinfo/count`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)
