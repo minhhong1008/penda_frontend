@@ -651,9 +651,7 @@ const Tiktok_info = () => {
                     </Col>
                     <Col span={10}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("tiktok_user"))
-                        }
+                       
                         label="Tiktok User"
                         name="tiktok_user"
                       >
@@ -662,9 +660,7 @@ const Tiktok_info = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("tiktok_password"))
-                        }
+                        
                         label="Tiktok Pass"
                         name="tiktok_password"
                       >
@@ -676,9 +672,7 @@ const Tiktok_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("tiktok_password"))
-                        }
+                        
                         label="Tiktok chi tiết"
                         name="tiktok_detail"
                       >

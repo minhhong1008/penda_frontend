@@ -1,3 +1,5 @@
+// phím tắt để đóng mở region : ctrl K + ctrl 0; ctrl K + ctrl J ; ctrl K + ctrl ] ; ctrl K + ctrl [ ; ctrl shifft [ ; ctrl shifft ]
+
 import {
   Button,
   Card,
@@ -13,7 +15,7 @@ import {
   List,
   Upload,
 } from "antd";
-import { getUser } from "../../utils/index";
+import { getUser, randomStr } from "../../utils/index";
 import { PlusOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
@@ -44,7 +46,6 @@ import {
   getpaypalInfo,
   updatepaypalInfo,
 } from "../../api/paypal/index";
-// dùng update các field trong bảng paypal_info
 import { updateListView } from "../../api/update";
 
 const getBase64 = (file) =>
@@ -119,13 +120,25 @@ const Paypal_info = () => {
   // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
-      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
+      window.open(
+        `${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`
+      );
     },
     [info]
   );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let paypal_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      paypal_file.push(fileUrl);
+    });
     let dateValue = {};
     tablelist_paypal_Date.map((item) => {
       dateValue[item.value] = moment(dateData[item.value]).format(
@@ -135,6 +148,7 @@ const Paypal_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+      paypal_image_url: paypal_file.length > 0 ? paypal_file.join(",") : "",
       paypal_plan: values?.paypal_plan ? values.paypal_plan.join(",") : "",
       paypal_block: values?.paypal_block ? values.paypal_block.join(",") : "",
       paypal_error: values?.paypal_error ? values.paypal_error.join(",") : "",
@@ -199,14 +213,14 @@ const Paypal_info = () => {
       payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
       etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
       pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
-      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
       //paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
+      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
       amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
       shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
       facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
       tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
     };
-    // hàm đổ dữ liệu về khi đã liên kết field
+    // hàm đổ dữ liệu về field khi đã liên kết field
     setListViewData({
       device_class: data?.device_id ? data?.device_id?.device_class : "",
       device_status: data?.device_id ? data?.device_id?.device_status : "",
@@ -302,7 +316,19 @@ const Paypal_info = () => {
     tablelist_paypal_Date.map((item) => {
       dateValue[item.value] = moment(data[item.value]);
     });
-    //console.log(dateValue);
+    if (data?.paypal_image_url) {
+      let dataImage = [];
+      let imageArr = data.paypal_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
     setNoteValue(data.paypal_note);
@@ -325,6 +351,7 @@ const Paypal_info = () => {
     setNoteValue(e.target.value);
   };
 
+  // Hàm upload
   // Hàm viết tự động hóa
   const onChange_Status = async (values) => {
     if (values == "Error" || values == "Restrict" || values == "Suspended") {
@@ -561,14 +588,7 @@ const Paypal_info = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "../asset/",
-    },
-  ]);
+  const [fileList, setFileList] = useState();
 
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -581,7 +601,9 @@ const Paypal_info = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -613,17 +635,14 @@ const Paypal_info = () => {
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12} >
-              <Card title="THÔNG TIN ETSY" >
+            <Col span={12}>
+              <Card title="THÔNG TIN PAYPAL">
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={paypalData}
                   autoComplete="off"
-                  // labelCol={{ span: 3 }}
-                  // layout="horizontal"
-
                   size="large"
                 >
                   <Row gutter={16}>
@@ -651,9 +670,6 @@ const Paypal_info = () => {
                     </Col>
                     <Col span={10}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("paypal_user"))
-                        }
                         label="Paypal User"
                         name="paypal_user"
                       >
@@ -662,9 +678,6 @@ const Paypal_info = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("paypal_password"))
-                        }
                         label="Paypal Pass"
                         name="paypal_password"
                       >
@@ -676,9 +689,6 @@ const Paypal_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("paypal_password"))
-                        }
                         label="Paypal chi tiết"
                         name="paypal_detail"
                       >
@@ -1019,13 +1029,13 @@ const Paypal_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="paypal_image_url">
                       <Upload
-                        action="http://localhost:4000/api/files"
                         listType="picture-card"
+                        action="http://42.114.177.31:4000/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}
                       >
-                        {fileList.length >= 8 ? null : uploadButton}
+                        {uploadButton}
                       </Upload>
                     </Form.Item>
                   </Row>
@@ -1297,7 +1307,7 @@ const Paypal_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24} >
+                  <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1316,7 +1326,6 @@ const Paypal_info = () => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-       
           <HuongDanPaypal_info />
         </Tabs.TabPane>
       </Tabs>

@@ -111,16 +111,31 @@ const Ebay_info = () => {
 
   // hàm lưu lại value của class, status trong listview theo db của từng field
   const onChangeStatusListView = async (key, value, id) => {
-    let newData = JSON.parse(JSON.stringify(listViewData));
-    newData[key] = value;
-    setListViewData(newData);
-    await updateListView(id, key, value);
-    showSuccess("Thành công");
+    if (key == "info_class") {
+      let update_auto = [
+        "proxy_class",
+        "info_class",
+        "mail_class",
+        "sim_class",
+        "bank_class",
+      ];
+      update_auto.forEach((item, index) => {
+        updateListView(id, item, value);
+      });
+    } else {
+      let newData = JSON.parse(JSON.stringify(listViewData));
+      newData[key] = value;
+      setListViewData(newData);
+      await updateListView(id, key, value);
+      showSuccess("Thành công");
+    }
   };
   // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
-      window.open(`${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`);
+      window.open(
+        `${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`
+      );
     },
     [info]
   );
@@ -128,15 +143,15 @@ const Ebay_info = () => {
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     let ebay_file = [];
-    fileList.map((item) => {
+    fileList?.map((item) => {
       let fileUrl = "";
-      if(item?.xhr?.response){
+      if (item?.xhr?.response) {
         fileUrl = JSON.parse(item.xhr.response).url;
       } else {
-        fileUrl = item.url
+        fileUrl = item.url;
       }
-      ebay_file.push(fileUrl)
-    })
+      ebay_file.push(fileUrl);
+    });
     let dateValue = {};
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = moment(dateData[item.value]).format(
@@ -314,17 +329,17 @@ const Ebay_info = () => {
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = moment(data[item.value]);
     });
-    if(data?.ebay_image_url){
+    if (data?.ebay_image_url) {
       let dataImage = [];
       let imageArr = data.ebay_image_url.split(",");
       imageArr.map((item, index) => {
         dataImage.push({
           uid: index,
           name: item,
-          status: 'done',
+          status: "done",
           url: item,
-        })
-      })
+        });
+      });
       setFileList(dataImage);
     }
     dateForm.setFieldsValue(dateValue);
@@ -670,24 +685,12 @@ const Ebay_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("ebay_user"))
-                        }
-                        label="eBay User"
-                        name="ebay_user"
-                      >
+                      <Form.Item label="eBay User" name="ebay_user">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("ebay_password"))
-                        }
-                        label="eBay Pass"
-                        name="ebay_password"
-                      >
+                      <Form.Item label="eBay Pass" name="ebay_password">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -695,13 +698,7 @@ const Ebay_info = () => {
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("ebay_password"))
-                        }
-                        label="eBay chi tiết"
-                        name="ebay_detail"
-                      >
+                      <Form.Item label="eBay chi tiết" name="ebay_detail">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>

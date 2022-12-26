@@ -14,7 +14,7 @@ import {
 } from "antd";
 import React, { useState } from "react";
 // gửi dữ liệu lên và nhận về từ Back_end
-import { createData, submitData } from "../../api/tooldata";
+import { createData } from "../../api/tooldata";
 import { showError, showSuccess } from "../../utils";
 // lấy dữ liệu về từ file list
 import {
@@ -45,6 +45,7 @@ const Tooldata_info = () => {
   // hiển thị lại list
   const changeSelectList_create_collection = (values) => {
     setSelectList_create_collection(values);
+    
   };
 
   const handleChange_list_rowdata = (e) => {
@@ -70,18 +71,15 @@ const Tooldata_info = () => {
     showSuccess("Đã chạy");
   };
 
-  const handleSubmitData = async () => {
-    showSuccess("Đã chạy");
-    const response = await submitData(selectList_create_collection);
-  };
   // Hàm onChange khi click vào 1 item
-  const onChange_create_type = (values) => {
-    let fields = [
+  const onChange_view = (values) => {
+    let view = [
       "device_id",
       "proxy_id",
       "info_id",
       "mail_id",
       "sim_id",
+      "bank_id",
       "payoneer_id",
       "paypal_id",
       "pingpong_id",
@@ -92,12 +90,36 @@ const Tooldata_info = () => {
       "facebook_id",
       "tiktok_id",
     ];
-
+    let plan = [
+      "PC",
+      "Antidetect",
+      "Windows 10",
+      "Chrome",
+      "USB 4G",
+      "Info real",
+      "Sim real",
+      "Bank real",
+      "Quy trình 1",
+    ];
+    let block = ["Team 1"];
+    let processing = ["New"];
+    let sell_status = ["Đang thực hiện"];
+    let type = ["VN"];
+    let owner = ["Phòng sản xuất"];
     form.setFieldsValue({
       class: "Lớp 1",
-      //owner: "Phòng sản xuất",
-      view: fields,
+      view: view,
+      plan: plan,
+      block: block,
+      processing: processing,
+      type: type,
+      sell_status: sell_status,
+      owner: owner,
+      status: "Live",
     });
+
+
+
   };
 
   return (
@@ -107,7 +129,7 @@ const Tooldata_info = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Card
-                title="TẠO TÀI KHOẢN : D_1000"
+                title="TẠO TÀI KHOẢN :"
                 extra={
                   <>
                     <Button
@@ -119,9 +141,6 @@ const Tooldata_info = () => {
                     >
                       Tạo tài khoản
                     </Button>
-                    <Button onClick={() => handleSubmitData()}>
-                      Ghép dữ liệu
-                    </Button>
                   </>
                 }
               >
@@ -131,57 +150,30 @@ const Tooldata_info = () => {
                   onFinish={onFinish}
                   autoComplete="off"
                 >
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item label="Tạo loại" name="create_type">
-                        <Select
-                          //mode="multiple"
-                          style={{ width: "100%" }}
-                          optionLabelProp="label"
-                          size="large"
-                          onChange={onChange_create_type}
-                        >
-                          <Option value="Tạo mới" label="Tạo mới">
+                  <Form.Item label="Tạo collection" name="create_collection">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionLabelProp="label"
+                      size="large"
+                      onChange={changeSelectList_create_collection}
+                      value={selectList_create_collection}
+                    >
+                      {listInfo.map((item) => {
+                        return (
+                          <Option
+                            value={item.title.toLocaleLowerCase()}
+                            label={item.title}
+                          >
                             <div className="demo-option-label-item">
-                              Tạo Mới
+                              {item.title}
                             </div>
                           </Option>
-                          <Option value="Tạo cũ" label="Tạo cũ">
-                            <div className="demo-option-label-item">Tạo cũ</div>
-                          </Option>
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        label="Tạo collection"
-                        name="create_collection"
-                      >
-                        <Select
-                          mode="multiple"
-                          style={{ width: "100%" }}
-                          placeholder="select one item"
-                          optionLabelProp="label"
-                          size="large"
-                          onChange={changeSelectList_create_collection}
-                          value={selectList_create_collection}
-                        >
-                          {listInfo.map((item) => {
-                            return (
-                              <Option
-                                value={item.title.toLocaleLowerCase()}
-                                label={item.title}
-                              >
-                                <div className="demo-option-label-item">
-                                  {item.title}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  </Row>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
 
                   <Form.Item label="List view *" name="view">
                     <Select
@@ -190,8 +182,7 @@ const Tooldata_info = () => {
                       placeholder="select one item"
                       optionLabelProp="label"
                       size="large"
-                      // defaultValue={"device_id"}
-                      //onChange={onChange_view}
+                     
                     >
                       {listselect_view_field.map((item) => {
                         return (
@@ -302,6 +293,7 @@ const Tooldata_info = () => {
                       placeholder="select one item"
                       optionLabelProp="label"
                       size="large"
+                      onChange={onChange_view}
                     >
                       {listselect_ebay_owner.map((item, index) => {
                         return (
@@ -376,27 +368,6 @@ const Tooldata_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
-                      <Form.Item label="Số lượng" name="create_number">
-                        <Select
-                          //mode="multiple"
-                          style={{ width: "100%" }}
-                          optionLabelProp="label"
-                          size="large"
-                          type="number"
-                        >
-                          {listselect_create_number.map((item, index) => {
-                            return (
-                              <Option value={item} label={item} key={index}>
-                                <div className="demo-option-label-item">
-                                  {item}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
                   </Row>
                 </Form>
               </Card>
@@ -404,12 +375,6 @@ const Tooldata_info = () => {
             <Col span={12}>
               <Card
                 title="NHẬP DỮ LIỆU"
-                extra={
-                  <>
-                    <Button onClick>Tạo tài khoản</Button>
-                    <Button onClick>Ghép dữ liệu</Button>
-                  </>
-                }
               >
                 <Form
                   form={form}
@@ -417,36 +382,13 @@ const Tooldata_info = () => {
                   onFinish={onFinish}
                   autoComplete="off"
                 >
-                  <Row gutter={16}>
-                    <Col span={6}>
-                      <Form.Item label="Số lượng" name="create_number">
-                        <Select
-                          //mode="multiple"
-                          style={{ width: "100%" }}
-                          optionLabelProp="label"
-                          size="large"
-                        >
-                          {listselect_create_number.map((item, index) => {
-                            return (
-                              <Option value={item} label={item} key={index}>
-                                <div className="demo-option-label-item">
-                                  {item}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Button onClick>Upload excel</Button>
-                    </Col>
-                  </Row>
+                 
                   <Form.Item label="List data" name="list_rowdata">
                     <Input.TextArea
                       value={noteValue}
+                      placeholder="Etsy id|Etsy User|Etsy Pass|Etsy chi tiết|Etsy limit|Etsy items|Etsy Sold|Etsy Fb"
                       onChange={handleChange_list_rowdata}
-                      rows={20}
+                      rows={15}
                     ></Input.TextArea>
                   </Form.Item>
                 </Form>
@@ -456,38 +398,39 @@ const Tooldata_info = () => {
         </Tabs.TabPane>
         <Tabs.TabPane tab="XỬ LÝ DỮ LIỆU" key="2"></Tabs.TabPane>
         <Tabs.TabPane tab="XỬ LÝ ẢNH" key="3"></Tabs.TabPane>
-        <Tabs.TabPane tab="HƯỚNG DẪN NHÂN VIÊN" key="4">
+        <Tabs.TabPane tab="HƯỚNG DẪN" key="4">
           <p>
-            TH1 - Tạo tài khoản mới: Tạo mới 1000 tài khoản device, Info, Bank,
-            Sim, Mail, Payoneer, Etsy... cùng 1 lúc
+            VD1: Tạo mới mỗi loại 100 tài khoản và liên kết các tài khoản với
+            nhau:
+          </p>
+          <p>
+            <strong>Bước 1: Tạo liên kết các loại tài khoản với nhau</strong>
+          </p>
+          <p>- Chọn Tạo collection : FULL</p>
+          <p>- Điền vào list data mã id theo dòng</p>
+          <p>
+            - Ấn nút tạo tài khoản , sau đó vào từng thư mục tài khoản để kiểm
+            tra tài khoản đó được tạo ra ở Lớp 1
           </p>
           <br></br>
           <p>
-            TH2 - Tạo thêm tài khoản (vd ebay, facebook vào bộ tài khoản có sẵn)
+            <strong>
+              Bước 2: Update dữ liệu vào từng loại tài khoản (VD ETSY)
+            </strong>
+          </p>
+          <p>- Chọn Tạo collection: (VD ETSY)</p>
+          <p>- Điền các trường khác theo mong muốn</p>
+          <p>
+            - Điền list data: Mỗi dòng là 1 tài khoản tương ứng. Cấu trúc của mỗi dòng (VD: Etsy_id|Etsy User|Etsy Pass|Etsy chi
+            tiết|Etsy limit|Etsy items|Etsy Sold|Etsy Fb) , thứ tự tương ứng
+            theo trình tự input từ trái qua phải, từ trên xuống dưới
+          </p>
+
+          <p>
+            - Ấn nút tạo tài khoản , sau đó vào từng thư mục tài khoản để kiểm
+            tra tài khoản đó đã update thông tin chuẩn chưa
           </p>
           <br></br>
-          <p>
-            minhshopebay3|Niceday893|ebay chất quá3|10003|20 item3|20 sold3| 10
-            feedback3
-          </p>
-          <br></br>
-          <p>
-            Nữ|25/7/1998|Minh Hằng|2654568888|2654568888|Phúc Yên, Vĩnh
-            Phúc|10000|Cầu Giấy, Hà Nội|Nốt ruồi mép
-            phải|25/9/2039|25/9/2021|18/12/2022
-          </p>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="HƯỚNG DẪN QUẢN LÝ" key="5">
-          <p>
-            TH1 - Tạo tài khoản mới: Tạo mới 1000 tài khoản device, Info, Bank,
-            Sim, Mail, Payoneer, Etsy... cùng 1 lúc
-          </p>
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="HƯỚNG DẪN CODE" key="6">
-          <p>Thuật toán là gì?</p>
-          <p>Tự động xóa dòng trống</p>
-          <br></br>
-          <p>Sử dụng các hàm chính nào</p>
         </Tabs.TabPane>
       </Tabs>
     </Card>

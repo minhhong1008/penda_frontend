@@ -651,9 +651,7 @@ const Bank_info = () => {
                     </Col>
                     <Col span={10}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("bank_user"))
-                        }
+                        
                         label="Bank User"
                         name="bank_user"
                       >
@@ -662,9 +660,7 @@ const Bank_info = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("bank_password"))
-                        }
+                        
                         label="Bank Pass"
                         name="bank_password"
                       >
@@ -676,9 +672,7 @@ const Bank_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("bank_password"))
-                        }
+                        
                         label="Bank chi tiết"
                         name="bank_detail"
                       >

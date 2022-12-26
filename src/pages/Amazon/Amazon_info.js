@@ -651,9 +651,7 @@ const Amazon_info = () => {
                     </Col>
                     <Col span={10}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("amazon_user"))
-                        }
+                        
                         label="Amazon User"
                         name="amazon_user"
                       >
@@ -662,9 +660,7 @@ const Amazon_info = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("amazon_password"))
-                        }
+                       
                         label="Amazon Pass"
                         name="amazon_password"
                       >
@@ -676,9 +672,7 @@ const Amazon_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item
-                        onClick={() =>
-                          copyToClipboard(form.getFieldValue("amazon_password"))
-                        }
+                        
                         label="Amazon chi tiết"
                         name="amazon_detail"
                       >
