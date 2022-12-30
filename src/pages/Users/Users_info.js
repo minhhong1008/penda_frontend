@@ -247,7 +247,7 @@ const Users_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Password" name="users_password">
+                      <Form.Item label="Password" name="users_passwords">
                         <Input size="small" placeholder="Nam" />
                       </Form.Item>
                     </Col>
@@ -454,8 +454,7 @@ const Users_info = () => {
 
                   {[
                     "Phó Giám đốc",
-                    "Trưởng phòng",
-                    "Phó Giám đốc",
+                    "Trưởng phòng",                
                     "Phó phòng",
                     "Tổ trưởng",
                     "Tổ phó",
@@ -504,6 +503,11 @@ const Users_info = () => {
                             Phòng kế hoạch
                           </div>
                         </Option>
+                        <Option value="Ban kiểm soát" label="Ban kiểm soát">
+                          <div className="demo-option-label-item">
+                            Ban kiểm soát
+                          </div>
+                        </Option>
                         <Option value="Phòng sản xuất" label="Phòng sản xuất">
                           <div className="demo-option-label-item">
                             Phòng sản xuất
@@ -518,13 +522,22 @@ const Users_info = () => {
                           </div>
                         </Option>
                         <Option
-                          value="Phòng nâng cấp và phục hồi tài khoản"
-                          label="Phòng nâng cấp và phục hồi tài khoản"
+                          value="Phòng nâng cấp"
+                          label="Phòng nâng cấp"
                         >
                           <div className="demo-option-label-item">
-                            Phòng nâng cấp và phục hồi tài khoản
+                            Phòng nâng cấp
                           </div>
                         </Option>
+                        <Option
+                          value="Phòng phục hồi"
+                          label="Phòng phục hồi"
+                        >
+                          <div className="demo-option-label-item">
+                            Phòng phục hồi
+                          </div>
+                        </Option>
+
                         <Option value="Kho lưu trữ" label="Kho lưu trữ">
                           <div className="demo-option-label-item">
                             Kho lưu trữ
@@ -779,7 +792,7 @@ const Users_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN"></Card>
+              <Card title="CHỨC NĂNG NHIỆM VỤ"></Card>
             </Col>
           </Row>
           <br></br>
@@ -841,7 +854,7 @@ const Users_info = () => {
             Phòng ban mặc định là "Phòng sản xuất", Quản lý mặc định là full các acc
           </p>
           <p>
-            3.
+            3. Yêu cầu toàn bộ thôn tin nhân viên phải đầy đủ, phải có cccd 2 mặt, ảnh cầm cccd, ảnh chân dung, ảnh thẻ....mỗi nhân viên mới đến sẽ tạo luôn 1 bộ tài khoản full trên 1 máy tính Workstasion
           </p>
         </Tabs.TabPane>
       </Tabs>

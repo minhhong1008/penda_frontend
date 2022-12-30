@@ -106,7 +106,7 @@ export const listselect_person_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -223,6 +223,7 @@ export const listselect_person_owner = [
 ];
 
 export const listselect_person_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

@@ -428,7 +428,7 @@ const Etsy_info = () => {
         etsydate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("etsy_class", "Lớp 6");
       dateForm.setFieldValue("etsydate_verify", moment(now()));
       dateForm.setFieldValue("etsydate_nextclass", moment(now()));

@@ -89,7 +89,7 @@ const Tiktok_table = () => {
                     {item}
                   </div>
                 );
-              } else if (item == "Verify" || item == "Verify Bank") {
+              } else if (item == "Verify Full" || item == "Verify Bank") {
                 return (
                   <div
                     style={{

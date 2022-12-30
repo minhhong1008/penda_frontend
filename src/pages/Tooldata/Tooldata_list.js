@@ -16,7 +16,6 @@ import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
 import React from 'react';
 import { Divider } from 'antd';
 
-export const listselect_employee = ["Thái Sơn", "Quốc Tuấn", "Tiến Anh"];
 
 export const listselect_processing = [
   "New",
@@ -26,7 +25,7 @@ export const listselect_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -91,7 +90,19 @@ export const listselect_plan = [
 ];
 export const listInfo = [
   {
-    title: "FULL",
+    title: "CREATE",
+    value: "",
+  },
+  {
+    title: "UPDATE",
+    value: "",
+  },
+  {
+    title: "LINK",
+    value: "",
+  },
+  {
+    title: "--------------",
     value: "",
   },
   {
@@ -154,6 +165,10 @@ export const listInfo = [
   },
   {
     title: "TIKTOK",
+    value: "",
+  },
+  {
+    title: "CUSTOMER",
     value: "",
   },
 ];

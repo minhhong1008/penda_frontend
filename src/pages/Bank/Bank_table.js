@@ -13,6 +13,7 @@ import {
   Collapse,
   Space,
   TreeSelect,
+  Tag,
 } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -87,9 +88,11 @@ const Bank_table = () => {
                     }}
                   >
                     {item}
+                    
                   </div>
+                  
                 );
-              } else if (item == "Verify" || item == "Verify Bank") {
+              } else if (item == "Verify Full" || item == "Verify Bank") {
                 return (
                   <div
                     style={{
@@ -104,6 +107,7 @@ const Bank_table = () => {
                 );
               } else if (item == "Restrict" || item == "Suspended") {
                 return (
+                  
                   <div
                     style={{
                       textAlign: "center",
@@ -115,6 +119,7 @@ const Bank_table = () => {
                   >
                     {item}
                   </div>
+                  
                 );
               } else {
                 return (

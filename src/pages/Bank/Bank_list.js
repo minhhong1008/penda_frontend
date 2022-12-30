@@ -103,7 +103,7 @@ export const listselect_bank_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -189,16 +189,19 @@ export const listselect_bank_block = [
 export const listselect_bank_type = [
   "VN",
   "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
-
+  "Card",
+  "Bank",
+  "Real",
+  "Gen",
+  "ACB",
+  "SHB",
+  "VCB",
+  "TCB",
+  "SeaBank",
+  "BIDV",
+  "Sacombank",
+  "VPB",
+  "MB",
 ];
 
 export const listselect_bank_sell_status = [
@@ -220,6 +223,7 @@ export const listselect_bank_owner = [
 ];
 
 export const listselect_bank_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

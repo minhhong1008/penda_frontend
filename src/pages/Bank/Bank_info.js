@@ -12,6 +12,8 @@ import {
   Avatar,
   List,
   Upload,
+  Space,
+  Badge,
 } from "antd";
 import { getUser } from "../../utils/index";
 import { PlusOutlined } from "@ant-design/icons";
@@ -401,7 +403,7 @@ const Bank_info = () => {
         bankdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("bank_class", "Lớp 6");
       dateForm.setFieldValue("bankdate_verify", moment(now()));
       dateForm.setFieldValue("bankdate_nextclass", moment(now()));

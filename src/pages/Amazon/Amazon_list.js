@@ -103,7 +103,7 @@ export const listselect_amazon_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -220,6 +220,7 @@ export const listselect_amazon_owner = [
 ];
 
 export const listselect_amazon_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

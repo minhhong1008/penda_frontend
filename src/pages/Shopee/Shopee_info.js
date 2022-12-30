@@ -428,7 +428,7 @@ const Shopee_info = () => {
         shopeedate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("shopee_class", "Lớp 6");
       dateForm.setFieldValue("shopeedate_verify", moment(now()));
       dateForm.setFieldValue("shopeedate_nextclass", moment(now()));

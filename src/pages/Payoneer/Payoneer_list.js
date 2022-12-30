@@ -94,27 +94,20 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_payoneer_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_payoneer_error = ["error login", "Sai pass","error code","Không thấy sim","error verify"];
 
 export const listselect_payoneer_processing = [
   "Login mail",
   "Verify Mail",
   "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify",
-  "Avatar",
-  "Add to cart",
-  "Seller",
+  "Verify mail",
+  "Verify phone",
   "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
+  "Send cccd",
+  "Verify cccd",
+  "Send Doc",
+  "Verify Doc",
+  "Seller",
   "Restrict",
   "Suspended",
 ];
@@ -189,16 +182,6 @@ export const listselect_payoneer_block = [
 export const listselect_payoneer_type = [
   "VN",
   "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
-
 ];
 
 export const listselect_payoneer_sell_status = [
@@ -220,6 +203,7 @@ export const listselect_payoneer_owner = [
 ];
 
 export const listselect_payoneer_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

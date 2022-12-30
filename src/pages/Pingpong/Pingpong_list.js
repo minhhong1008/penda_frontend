@@ -103,7 +103,7 @@ export const listselect_pingpong_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -220,6 +220,7 @@ export const listselect_pingpong_owner = [
 ];
 
 export const listselect_pingpong_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

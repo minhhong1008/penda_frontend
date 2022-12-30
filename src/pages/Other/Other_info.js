@@ -102,7 +102,7 @@ import {
                         <Option value="Buyer" label="Buyer">
                           <div className="demo-option-label-item">Buyer</div>
                         </Option>
-                        <Option value="Verify" label="Verify">
+                        <Option value="Verify Full" label="Verify Full">
                           <div className="demo-option-label-item">Verify</div>
                         </Option>
                         <Option value="Seller" label="Seller">

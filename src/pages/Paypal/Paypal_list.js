@@ -94,27 +94,20 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_paypal_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_paypal_error = ["error login", "Sai pass","error code","Không thấy sim","error verify"];
 
 export const listselect_paypal_processing = [
   "Login mail",
   "Verify Mail",
   "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify",
-  "Avatar",
-  "Add to cart",
-  "Seller",
+  "Verify mail",
+  "Verify phone",
   "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
+  "Send cccd",
+  "Verify cccd",
+  "Send Doc",
+  "Verify Doc",
+  "Seller",
   "Restrict",
   "Suspended",
 ];
@@ -220,6 +213,7 @@ export const listselect_paypal_owner = [
 ];
 
 export const listselect_paypal_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

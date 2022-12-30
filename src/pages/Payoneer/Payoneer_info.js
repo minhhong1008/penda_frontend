@@ -428,7 +428,7 @@ const Payoneer_info = () => {
         payoneerdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("payoneer_class", "Lớp 6");
       dateForm.setFieldValue("payoneerdate_verify", moment(now()));
       dateForm.setFieldValue("payoneerdate_nextclass", moment(now()));

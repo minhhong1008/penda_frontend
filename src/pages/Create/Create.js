@@ -156,7 +156,7 @@ const Create = () => {
             <Col span={12}>
               <Card title="THÔNG TIN ITEM" extra={
         <>
-          <Button onClick={() => form.submit()}>Tạo tài khoản</Button>
+          <Button onClick={() => form.submit("Tạo tài khoản")}>Tạo tài khoản</Button>
           <Button onClick={() => handleSubmitData()}>Ghép dữ liệu</Button>
         </>
       }>

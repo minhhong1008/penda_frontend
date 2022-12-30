@@ -428,7 +428,7 @@ const Paypal_info = () => {
         paypaldate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("paypal_class", "Lớp 6");
       dateForm.setFieldValue("paypaldate_verify", moment(now()));
       dateForm.setFieldValue("paypaldate_nextclass", moment(now()));

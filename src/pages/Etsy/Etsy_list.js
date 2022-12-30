@@ -103,7 +103,7 @@ export const listselect_etsy_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -220,6 +220,7 @@ export const listselect_etsy_owner = [
 ];
 
 export const listselect_etsy_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

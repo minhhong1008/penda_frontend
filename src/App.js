@@ -121,10 +121,25 @@ import Ebayitem_info from "./pages/Ebayitem/Ebayitem_info";
 import Etsyitem_class from "./pages/Etsyitem/Etsyitem_class";
 import Etsyitem_table from "./pages/Etsyitem/Etsyitem_table";
 import Etsyitem_info from "./pages/Etsyitem/Etsyitem_info";
+
+
 import { getToken } from "./utils";
 import { verifyToken } from "./api/auth";
 import { useDispatch } from "react-redux";
 import { getRoleAction } from "./actions/authActions";
+
+// Report
+import Report_overview from "./pages/Report/Report_overview";
+//Bill
+import Bill_class from "./pages/Bill/Bill_class";
+import Bill_table from "./pages/Bill/Bill_table";
+
+
+// Customer
+import Customer_class from "./pages/Customer/Customer_class";
+import Customer_table from "./pages/Customer/Customer_table";
+import Customer_info from "./pages/Customer/Customer_info";
+
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -134,7 +149,7 @@ const App = () => {
   const dispatch = useDispatch();
   const verify = async () => {
     let token = getToken();
-    dispatch(getRoleAction(token))
+    dispatch(getRoleAction(token));
     // let response = await verifyToken({
     //   token: token,
     // });
@@ -246,7 +261,11 @@ const App = () => {
             component={Paypal_info}
           />
           {/* Pingpong */}
-          <Route path="/products/pingpong_class" exact component={Pingpong_class} />
+          <Route
+            path="/products/pingpong_class"
+            exact
+            component={Pingpong_class}
+          />
           <Route
             path="/products/pingpong_class/table"
             exact
@@ -281,7 +300,6 @@ const App = () => {
             exact
             component={Info_info}
           />
-         
 
           {/* Person */}
           <Route path="/products/person_class" exact component={Person_class} />
@@ -382,11 +400,27 @@ const App = () => {
           />
 
           <Route path="/products/create" exact component={Create} />
-          <Route path="/products/tooldata_info" exact component={Tooldata_info} />
+          <Route
+            path="/products/tooldata_info"
+            exact
+            component={Tooldata_info}
+          />
 
           <Route path="/products/tools" exact component={Tools_list} />
 
           <Route path="/products/cccd" exact component={CCCD} />
+
+          <Route
+            path="/products/report_overview"
+            exact
+            component={Report_overview}
+          />
+
+          {/*Bill */}
+          <Route path="/finance/bill_class" exact component={Bill_class} />
+
+          <Route path="/finance/bill_table" exact component={Bill_table} />
+
           {/*---------------------------------quản trị nhân sự-------------------------------- */}
           {/*Users */}
           <Route path="/personnel/users_class" exact component={Users_class} />
@@ -467,6 +501,24 @@ const App = () => {
             exact
             component={Etsyitem_info}
           />
+
+          {/* Customer */}
+          <Route
+            path="/business/customer_class"
+            exact
+            component={Customer_class}
+          />
+          <Route
+            path="/business/customer_class/table"
+            exact
+            component={Customer_table}
+          />
+          <Route
+            path="/business/customer_class/table/:id"
+            exact
+            component={Customer_info}
+          />
+
 
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />

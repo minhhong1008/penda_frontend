@@ -428,7 +428,7 @@ const Mail_info = () => {
         maildate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("mail_class", "Lớp 6");
       dateForm.setFieldValue("maildate_verify", moment(now()));
       dateForm.setFieldValue("maildate_nextclass", moment(now()));
@@ -698,23 +698,23 @@ const Mail_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={6}>
-                      <Form.Item label="Mail limit" name="mail_limit">
+                    <Col span={8}>
+                      <Form.Item label="Mail recover" name="mail_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
-                      <Form.Item label="Mail items" name="mail_item">
+                    <Col span={8}>
+                      <Form.Item label="Mail forward" name="mail_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Mail Sold" name="mail_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
-                      <Form.Item label="Mail Fb" name="mail_feedback">
+                    <Col span={8}>
+                      <Form.Item label="Mail pass" name="mail_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>

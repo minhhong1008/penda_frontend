@@ -50,7 +50,7 @@ function Footer() {
               </li>
               <li className="nav-item">
                 <a
-                  href={process.env.APP_URL + "/log-out"}
+                  href="http://localhost:3000/log-out"
                   className="nav-link pe-0 text-muted"
                   target="_blank"
                 >

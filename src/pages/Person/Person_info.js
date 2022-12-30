@@ -1,18 +1,4 @@
-import {
-  Button,
-  Card,
-  Tabs,
-  Row,
-  Col,
-  Form,
-  Input,
-  DatePicker,
-  Select,
-  Modal,
-  Avatar,
-  List,
-  Upload,
-} from "antd";
+import {Button,Card,Tabs,Row,Col,Form,Input,DatePicker,Select,Modal,Avatar,List,Upload,} from "antd";
 import { getUser } from "../../utils/index";
 import { PlusOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
@@ -401,7 +387,7 @@ const Person_info = () => {
         persondate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("person_class", "Lớp 6");
       dateForm.setFieldValue("persondate_verify", moment(now()));
       dateForm.setFieldValue("persondate_nextclass", moment(now()));
@@ -621,9 +607,6 @@ const Person_info = () => {
                   onFinish={onFinish}
                   initialValues={personData}
                   autoComplete="off"
-                  // labelCol={{ span: 3 }}
-                  // layout="horizontal"
-
                   size="large"
                 >
 
@@ -640,17 +623,17 @@ const Person_info = () => {
                           },
                         ]}
                       >
-                        <Input size="small" placeholder="I_1000" />
+                        <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Giới tính" name="person_sex">
-                        <Input size="small" placeholder="Nam" />
+                        <Input placeholder="Nam" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày sinh" name="persondate_birthday">
-                        <Input size="small" placeholder="27/7/2000" />
+                        <Input placeholder="27/7/2000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -658,17 +641,17 @@ const Person_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Họ tên" name="person_fullname">
-                        <Input size="small" placeholder="Thế Minh Hồng" />
+                        <Input placeholder="Thế Minh Hồng" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Passport" name="person_passport">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="SSN" name="person_ssn">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -676,7 +659,7 @@ const Person_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Nơi thường trú" name="person_residence">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -684,12 +667,12 @@ const Person_info = () => {
                   <Row gutter={16}>
                     <Col span={18}>
                       <Form.Item label="Quê quán........" name="person_origin">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="code" name="person_code">
-                        <Input size="small" placeholder="100000" />
+                        <Input placeholder="100000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -701,14 +684,14 @@ const Person_info = () => {
                         name="person_identifying"
                       >
                         <Input
-                          size="small"
+                        
                           placeholder="Nốt ruồi c: 2cm dưới mép trái"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Password" name="person_password">
-                        <Input size="small" placeholder="012345678910" />
+                        <Input placeholder="012345678910" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -718,17 +701,17 @@ const Person_info = () => {
                         label="CCCD giá trị đến"
                         name="persondate_expiry"
                       >
-                        <Input size="small" placeholder="25/7/2041" />
+                        <Input placeholder="25/7/2041" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày làm CCCD" name="persondate_start">
-                        <Input size="small" placeholder="29/4/2021" />
+                        <Input placeholder="29/4/2021" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày nhập" name="persondate_import">
-                        <Input size="small" placeholder="07/12/2022" />
+                        <Input placeholder="07/12/2022" />
                       </Form.Item>
                     </Col>
                   </Row>

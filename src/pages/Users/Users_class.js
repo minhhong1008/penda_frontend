@@ -6,7 +6,7 @@ const Users_class = () => {
   const history = useHistory();
   const columns = [
     {
-      title: "Lớp",
+      title: "Trạng thái",
       dataIndex: "class",
       key: "class",
       render: (text) => <a onClick={() => history.push(`users_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,

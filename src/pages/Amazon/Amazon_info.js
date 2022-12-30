@@ -401,7 +401,7 @@ const Amazon_info = () => {
         amazondate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("amazon_class", "Lớp 6");
       dateForm.setFieldValue("amazondate_verify", moment(now()));
       dateForm.setFieldValue("amazondate_nextclass", moment(now()));

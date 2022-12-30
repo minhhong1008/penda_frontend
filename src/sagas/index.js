@@ -25,6 +25,9 @@ import etsyorderSaga from "./etsyorder";
 import ebayitemSaga from "./ebayitem";
 import etsyitemSaga from "./etsyitem";
 
+import reportSaga from "./report";
+import billSaga from "./bill";
+import customerSaga from "./customer";
 export default function* rootSaga() {
   yield all([
     testSaga(),
@@ -51,6 +54,9 @@ export default function* rootSaga() {
     ebayorderSaga(),
     etsyorderSaga(),
     ebayitemSaga(),
-    etsyitemSaga()
+    etsyitemSaga(),
+    reportSaga(),
+    billSaga(),
+    customerSaga()
   ])
 }

@@ -94,29 +94,16 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_device_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_device_error = ["Lỗi Win", "Sai pass","Lỗi PC","Lỗi brower", "thiếu dung lượng"];
 
 export const listselect_device_processing = [
-  "Login mail",
-  "Verify Mail",
-  "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify",
-  "Avatar",
-  "Add to cart",
-  "Seller",
-  "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
-  "Restrict",
-  "Suspended",
+  "Setup info",
+  "Cài windows",
+  "Cài tool",
+  "Chạy tool",
+  "Kiểm tra",
+  "Fix lỗi",
+  "Hoàn thành",
 ];
 
 export const listselect_device_plan = [
@@ -187,18 +174,9 @@ export const listselect_device_block = [
   "Block 25",
 ];
 export const listselect_device_type = [
-  "VN",
-  "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
-
+  "Andidetect",
+  "Gologin",
+  "VPS",
 ];
 
 export const listselect_device_sell_status = [
@@ -220,6 +198,7 @@ export const listselect_device_owner = [
 ];
 
 export const listselect_device_status = [
+    "Null",
   "Live",
   "Active",
   "Error",
@@ -229,120 +208,120 @@ export const listselect_device_status = [
 
 export const listselect_device_class = [
   {
-    title: "Lớp 1 New",
-    value: "Lớp 1",
+    title: "PC 1 New",
+    value: "PC 1",
   },
   {
-    title: "Lớp 2",
-    value: "Lớp 2",
+    title: "PC 2",
+    value: "PC 2",
   },
   {
-    title: "Lớp 3",
-    value: "Lớp 3",
+    title: "PC 3",
+    value: "PC 3",
   },
   {
-    title: "Lớp 4",
-    value: "Lớp 4",
+    title: "PC 4",
+    value: "PC 4",
   },
   {
-    title: "Lớp 5",
-    value: "Lớp 5",
+    title: "PC 5",
+    value: "PC 5",
   },
   {
-    title: "Lớp 6",
-    value: "Lớp 6",
+    title: "PC 6",
+    value: "PC 6",
   },
   {
-    title: "Lớp 7",
-    value: "Lớp 7",
+    title: "PC 7",
+    value: "PC 7",
   },
   {
-    title: "Lớp 8",
-    value: "Lớp 8",
+    title: "PC 8",
+    value: "PC 8",
   },
   {
-    title: "Lớp 9 Seller",
-    value: "Lớp 9",
+    title: "PC 9",
+    value: "PC 9",
   },
   {
-    title: "Lớp 10 List",
-    value: "Lớp 10",
+    title: "PC 10",
+    value: "PC 10",
   },
   {
-    title: "Lớp 11 List",
-    value: "Lớp 11",
+    title: "PC 11",
+    value: "PC 11",
   },
   {
-    title: "Lớp 12 Chuyển",
-    value: "Lớp 12",
+    title: "PC 12",
+    value: "PC 12",
   },
   {
-    title: "Lớp 14",
-    value: "Lớp 14",
+    title: "PC 14",
+    value: "PC 14",
   },
   {
-    title: "Lớp 15",
-    value: "Lớp 15",
+    title: "PC 15",
+    value: "PC 15",
   },
   {
-    title: "Lớp 16",
-    value: "Lớp 16",
+    title: "PC 16",
+    value: "PC 16",
   },
   {
-    title: "Lớp 17",
-    value: "Lớp 17",
+    title: "PC 17",
+    value: "PC 17",
   },
   {
-    title: "Lớp 18",
-    value: "Lớp 18",
+    title: "PC 18",
+    value: "PC 18",
   },
   {
-    title: "Lớp 19",
-    value: "Lớp 19",
+    title: "PC 19",
+    value: "PC 19",
   },
   {
-    title: "Lớp 20 Error",
-    value: "Lớp 20",
+    title: "PC 20",
+    value: "PC 20",
   },
   {
-    title: "Lớp 21 Buyer Suspended",
-    value: "Lớp 21",
+    title: "PC 21",
+    value: "PC 21",
   },
   {
-    title: "Lớp 22 Buyer Suspended verify",
-    value: "Lớp 22",
+    title: "PC 22",
+    value: "PC 22",
   },
   {
-    title: "Lớp 23 Seller restrict",
-    value: "Lớp 23",
+    title: "PC 23",
+    value: "PC 23",
   },
   {
-    title: "Lớp 24 Seller restrict list",
-    value: "Lớp 24",
+    title: "PC 24",
+    value: "PC 24",
   },
   {
-    title: "Lớp 25 Seller restrict Sold",
-    value: "Lớp 25",
+    title: "PC 25",
+    value: "PC 25",
   },
   {
-    title: "Lớp 26 Seller Suspended",
-    value: "Lớp 26",
+    title: "PC 26",
+    value: "PC 26",
   },
   {
-    title: "Lớp 27 Seller Suspended list",
-    value: "Lớp 27",
+    title: "PC 27",
+    value: "PC 27",
   },
   {
-    title: "Lớp 28 Seller Suspended Sold",
-    value: "Lớp 28",
+    title: "PC 28",
+    value: "PC 28",
   },
   {
-    title: "Lớp 29",
-    value: "Lớp 29",
+    title: "PC 29",
+    value: "PC 29",
   },
   {
-    title: "Lớp 30",
-    value: "Lớp 30",
+    title: "PC 30",
+    value: "PC 30",
   },
 ];
 

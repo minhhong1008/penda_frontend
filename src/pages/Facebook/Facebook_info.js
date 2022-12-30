@@ -428,7 +428,7 @@ const Facebook_info = () => {
         facebookdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("facebook_class", "Lớp 6");
       dateForm.setFieldValue("facebookdate_verify", moment(now()));
       dateForm.setFieldValue("facebookdate_nextclass", moment(now()));

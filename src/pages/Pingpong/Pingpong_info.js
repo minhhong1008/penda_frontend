@@ -428,7 +428,7 @@ const Pingpong_info = () => {
         pingpongdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("pingpong_class", "Lớp 6");
       dateForm.setFieldValue("pingpongdate_verify", moment(now()));
       dateForm.setFieldValue("pingpongdate_nextclass", moment(now()));

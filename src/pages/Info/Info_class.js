@@ -127,7 +127,7 @@ const Info_class = () => {
       info_count: "0",
       content_complete: (
         <div>
-          <strong> Đã có mail</strong>
+          <strong> Đã có ảnh CCCD</strong>
         </div>
       ),
       content_time: <div>1 ngày</div>,
@@ -304,7 +304,7 @@ const Info_class = () => {
       info_count: "0",
       content_complete: (
         <div>
-          <strong> ĐÃ LÊN SELLER</strong>
+          <strong> ĐÃ CÓ BANK, CARD, SIM</strong>
         </div>
       ),
       content_time: <div>1-10 ngày</div>,

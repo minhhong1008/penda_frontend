@@ -72,7 +72,6 @@ const Proxy_info = () => {
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
   const [listselect_proxy_employee, setListproxy_employee] = useState();
-
   // Tạo state để nhận dữ liệu của listview
 
   const [listViewData, setListViewData] = useState();
@@ -428,7 +427,7 @@ const Proxy_info = () => {
         proxydate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("proxy_class", "Lớp 6");
       dateForm.setFieldValue("proxydate_verify", moment(now()));
       dateForm.setFieldValue("proxydate_nextclass", moment(now()));

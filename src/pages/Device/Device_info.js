@@ -428,7 +428,7 @@ const Device_info = () => {
         devicedate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("device_class", "Lớp 6");
       dateForm.setFieldValue("devicedate_verify", moment(now()));
       dateForm.setFieldValue("devicedate_nextclass", moment(now()));
@@ -698,22 +698,22 @@ const Device_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Device limit" name="device_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Device items" name="device_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Device Sold" name="device_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Device Fb" name="device_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>

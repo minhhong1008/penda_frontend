@@ -392,7 +392,7 @@ import {
                         <Option value="Avatar" label="Avatar">
                           <div className="demo-option-label-item">Avatar</div>
                         </Option>
-                        <Option value="Verify" label="Verify">
+                        <Option value="Verify Full" label="Verify Full">
                           <div className="demo-option-label-item">Verify</div>
                         </Option>
                         <Option value="Seller" label="Seller">

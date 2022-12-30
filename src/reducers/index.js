@@ -27,6 +27,10 @@ import etsyorderReducer from "./etsyorderReducer";
 import ebayitemReducer from "./ebayitemReducer";
 import etsyitemReducer from "./etsyitemReducer";
 
+import reportReducer from "./reportReducer";
+import billReducer from "./billReducer";
+import customerReducer from "./customerReducer";
+
 const appReducer = asyncReducers =>
   combineReducers({
     test: testReducer,
@@ -55,6 +59,10 @@ const appReducer = asyncReducers =>
     etsyorder: etsyorderReducer,
     ebayitem: ebayitemReducer,
     etsyitem: etsyitemReducer,
+
+    report: reportReducer,
+    bill:  billReducer,
+    customer:  customerReducer,
 
     ...asyncReducers
   });

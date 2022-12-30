@@ -401,7 +401,7 @@ const Tiktok_info = () => {
         tiktokdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("tiktok_class", "Lớp 6");
       dateForm.setFieldValue("tiktokdate_verify", moment(now()));
       dateForm.setFieldValue("tiktokdate_nextclass", moment(now()));

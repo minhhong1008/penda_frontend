@@ -350,8 +350,6 @@ const Sim_info = () => {
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);
   };
-
-  // Hàm upload
   // Hàm viết tự động hóa
   const onChange_Status = async (values) => {
     if (values == "Error" || values == "Restrict" || values == "Suspended") {
@@ -428,7 +426,7 @@ const Sim_info = () => {
         simdate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("sim_class", "Lớp 6");
       dateForm.setFieldValue("simdate_verify", moment(now()));
       dateForm.setFieldValue("simdate_nextclass", moment(now()));
@@ -698,22 +696,22 @@ const Sim_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={6}>
-                      <Form.Item label="Sim limit" name="sim_limit">
+                    <Col span={8}>
+                      <Form.Item label="Sim Số tiền" name="sim_limit">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
-                      <Form.Item label="Sim items" name="sim_item">
+                    <Col span={8}>
+                      <Form.Item label="Sim khóa 1 chiều" name="sim_item">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
-                      <Form.Item label="Sim Sold" name="sim_sold">
+                    <Col span={8}>
+                      <Form.Item label="Sim khóa 2 chiều" name="sim_sold">
                         <Input size="small" placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                       <Form.Item label="Sim Fb" name="sim_feedback">
                         <Input size="small" placeholder="0" />
                       </Form.Item>

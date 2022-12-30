@@ -94,16 +94,16 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_sim_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_sim_error = ["Không gửi code", "Không nhận code","Không có sóng","Yêu cầu verify","khóa 1 chiều","khóa 2 chiều"];
 
 export const listselect_sim_processing = [
-  "Login mail",
+  "Check",
   "Verify Mail",
   "Buyer",
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -189,15 +189,14 @@ export const listselect_sim_block = [
 export const listselect_sim_type = [
   "VN",
   "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
+  "Viettel",
+  "Vinaphone",
+  "Mobiphone",
+  "Vietnammobile",
+  "Gphone",
+  "Khác",
+  "Mua dịch vụ",
+  "Tự đăng ký",
 
 ];
 
@@ -220,6 +219,7 @@ export const listselect_sim_owner = [
 ];
 
 export const listselect_sim_status = [
+    "Null",
   "Live",
   "Active",
   "Error",
@@ -261,19 +261,19 @@ export const listselect_sim_class = [
     value: "Lớp 8",
   },
   {
-    title: "Lớp 9 Seller",
+    title: "Lớp 9",
     value: "Lớp 9",
   },
   {
-    title: "Lớp 10 List",
+    title: "Lớp 10",
     value: "Lớp 10",
   },
   {
-    title: "Lớp 11 List",
+    title: "Lớp 11",
     value: "Lớp 11",
   },
   {
-    title: "Lớp 12 Chuyển",
+    title: "Lớp 12",
     value: "Lớp 12",
   },
   {
@@ -301,39 +301,39 @@ export const listselect_sim_class = [
     value: "Lớp 19",
   },
   {
-    title: "Lớp 20 Error",
+    title: "Lớp 20",
     value: "Lớp 20",
   },
   {
-    title: "Lớp 21 Buyer Suspended",
+    title: "Lớp 21 Khóa 1 chiều",
     value: "Lớp 21",
   },
   {
-    title: "Lớp 22 Buyer Suspended verify",
+    title: "Lớp 22 khóa 2 chiều",
     value: "Lớp 22",
   },
   {
-    title: "Lớp 23 Seller restrict",
+    title: "Lớp 23",
     value: "Lớp 23",
   },
   {
-    title: "Lớp 24 Seller restrict list",
+    title: "Lớp 24",
     value: "Lớp 24",
   },
   {
-    title: "Lớp 25 Seller restrict Sold",
+    title: "Lớp 25",
     value: "Lớp 25",
   },
   {
-    title: "Lớp 26 Seller Suspended",
+    title: "Lớp 26",
     value: "Lớp 26",
   },
   {
-    title: "Lớp 27 Seller Suspended list",
+    title: "Lớp 27",
     value: "Lớp 27",
   },
   {
-    title: "Lớp 28 Seller Suspended Sold",
+    title: "Lớp 28",
     value: "Lớp 28",
   },
   {

@@ -6,6 +6,7 @@ import Sidenav from "./Sidenav";
 import SideBarProduct from "../sidebar/SideBarProducts";
 import SideBarBussiness from "../sidebar/SideBarBusiness";
 import SideBarPersonnel from "../sidebar/SideBarPersonnel";
+import SideBarFinance from "../sidebar/SideBarFinance";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -91,6 +92,9 @@ function Main({ children }) {
         ) : null}
         {pathname.split("/")[0] == "personnel" ? (
           <SideBarPersonnel color={sidenavColor}></SideBarPersonnel>
+        ) : null}
+        {pathname.split("/")[0] == "finance" ? (
+          <SideBarFinance color={sidenavColor}></SideBarFinance>
         ) : null}
       </Sider>
       <Layout>

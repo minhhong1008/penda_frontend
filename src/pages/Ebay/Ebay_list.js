@@ -13,10 +13,16 @@ import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
 import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
+import iconcustomer from "../../assets/images/iconSocial/iconcustomer.png";
 import React from 'react';
 import { Divider } from 'antd';
 
 export const listselect_view_acc = [
+  {
+    title: "CUSTOMER",
+    thumbnail: iconcustomer,
+    value: "customer_id",
+  },
   {
     title: "DEVICE",
     thumbnail: icondevice,
@@ -92,6 +98,7 @@ export const listselect_view_acc = [
     thumbnail: icontiktok,
     value: "tiktok_id",
   },
+  
 ];
 
 export const listselect_ebay_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
@@ -103,7 +110,7 @@ export const listselect_ebay_processing = [
   "View",
   "Like",
   "Policies",
-  "Verify",
+  "Verify Full",
   "Avatar",
   "Add to cart",
   "Seller",
@@ -221,6 +228,7 @@ export const listselect_ebay_owner = [
 ];
 
 export const listselect_ebay_status = [
+    "Null",
   "Live",
   "Active",
   "Error",

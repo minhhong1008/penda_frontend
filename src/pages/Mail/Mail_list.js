@@ -13,8 +13,8 @@ import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
 import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
-import React from 'react';
-import { Divider } from 'antd';
+import React from "react";
+import { Divider } from "antd";
 
 export const listselect_view_acc = [
   {
@@ -94,27 +94,26 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_mail_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_mail_error = [
+  "error login",
+  "Sai pass",
+  "error code",
+  "Không thấy sim",
+  "error verify",
+];
 
 export const listselect_mail_processing = [
   "Login mail",
-  "Verify Mail",
+  "avatar",
+  "change info",
+  "change pass",
+  "change phone",
+  "add recover",
+  "add forward",
+  "2 FA",
   "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify",
-  "Avatar",
-  "Add to cart",
+  "Verify Full",
   "Seller",
-  "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
   "Restrict",
   "Suspended",
 ];
@@ -189,16 +188,15 @@ export const listselect_mail_block = [
 export const listselect_mail_type = [
   "VN",
   "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
-
+  "Reg",
+  "Buy",
+  "Gmail",
+  "Hotmail",
+  "Yahoo",
+  "Proton Mail",
+  "Outlook",
+  "New",
+  "Old",
 ];
 
 export const listselect_mail_sell_status = [
@@ -220,6 +218,7 @@ export const listselect_mail_owner = [
 ];
 
 export const listselect_mail_status = [
+    "Null",
   "Live",
   "Active",
   "Error",
@@ -261,19 +260,19 @@ export const listselect_mail_class = [
     value: "Lớp 8",
   },
   {
-    title: "Lớp 9 Seller",
+    title: "Lớp 9",
     value: "Lớp 9",
   },
   {
-    title: "Lớp 10 List",
+    title: "Lớp 10",
     value: "Lớp 10",
   },
   {
-    title: "Lớp 11 List",
+    title: "Lớp 11",
     value: "Lớp 11",
   },
   {
-    title: "Lớp 12 Chuyển",
+    title: "Lớp 12",
     value: "Lớp 12",
   },
   {
@@ -472,7 +471,6 @@ export const tablelist_mail_Date = [
 ];
 
 export const listselect_mail_fields = [];
-
 
 export const HuongDanMail_info = () => {
   return (
@@ -705,42 +703,46 @@ export const HuongDanMail_class = () => {
   );
 };
 
-
-
 const ContentMail = () => (
   <>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider>Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left">Left Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right">Right Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left" orientationMargin="0">
       Left Text with 0 orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right" orientationMargin={50}>
       Right Text with 50px orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
   </>
 );

@@ -130,12 +130,19 @@ const Ebay_info = () => {
       showSuccess("Thành công");
     }
   };
+
   // Hàm để chuyển trang sang các tài khoản khác
   const viewInfo = useCallback(
     (type, id) => {
-      window.open(
-        `${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`
-      );
+      if (type == "customer") {
+        window.open(
+          `${process.env.REACT_APP_URL}/business/${type}_class/table/${id}`
+        );
+      } else {
+        window.open(
+          `${process.env.REACT_APP_URL}/products/${type}_class/table/${id}`
+        );
+      }
     },
     [info]
   );
@@ -232,6 +239,7 @@ const Ebay_info = () => {
       shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
       facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
       tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
+      customer_id: data?.customer_id ? data?.customer_id?.customer_id : "",
     };
     // hàm đổ dữ liệu về khi đã liên kết field
     setListViewData({
@@ -322,6 +330,17 @@ const Ebay_info = () => {
       tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
       tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
       tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
+
+      customer_class: data?.customer_id
+        ? data?.customer_id?.customer_class
+        : "",
+      customer_status: data?.customer_id
+        ? data?.customer_id?.customer_status
+        : "",
+      customer_user: data?.customer_id ? data?.customer_id?.customer_user : "",
+      customer_phone1: data?.customer_id
+        ? data?.customer_id?.customer_phone1
+        : "",
     });
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
@@ -441,7 +460,7 @@ const Ebay_info = () => {
         ebaydate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("ebay_class", "Lớp 6");
       dateForm.setFieldValue("ebaydate_verify", moment(now()));
       dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
@@ -649,16 +668,26 @@ const Ebay_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN EBAY">
+              <Card
+                title="THÔNG TIN EBAY"
+                extra={
+                  <Button
+                    onClick={() => form.submit()}
+                    style={{
+                      background: "#f8ac59",
+                      color: "white",
+                    }}
+                  >
+                    Copy re
+                  </Button>
+                }
+              >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
                   initialValues={ebayData}
                   autoComplete="off"
-                  // labelCol={{ span: 3 }}
-                  // layout="horizontal"
-
                   size="large"
                 >
                   <Row gutter={16}>

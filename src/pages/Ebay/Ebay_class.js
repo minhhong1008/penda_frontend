@@ -672,9 +672,6 @@ const Ebay_class = () => {
     setDataClass(baseData);
   };
 
-  const onChange = (key) => {
-    console.log(key);
-  };
 
   useEffect(() => {
     countEbay();

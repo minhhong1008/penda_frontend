@@ -7,7 +7,7 @@ export const listselect_processing = [
     "View",
     "Like",
     "Policies",
-    "Verify",
+    "Verify Full",
     "Avatar",
     "Add to cart",
     "Seller",

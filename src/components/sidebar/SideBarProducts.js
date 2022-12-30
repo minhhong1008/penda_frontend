@@ -344,22 +344,8 @@ const SideBarProducts = ({ color }) => {
               <span className="label">Info</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="611">
-            <NavLink to="/products/person_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/person_class" ? color : "",
-                }}
-              >
-                {profile}
-               
-              </span>
-              <span className="label">Person</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="628">
+          
+          <Menu.Item key="62">
             <NavLink to="/products/mail_class">
               <span
                 className="icon"
@@ -373,7 +359,7 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="629">
+          <Menu.Item key="63">
             <NavLink to="/products/sim_class">
               <span
                 className="icon"
@@ -432,21 +418,7 @@ const SideBarProducts = ({ color }) => {
               <span className="label">Tool</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="93">
-            <NavLink to="/products/tooldata_info">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/tooldata_info" ? color : "",
-                }}
-              >
-                {profile}
-              </span>
-              <span className="label">Tool data</span>
-            </NavLink>
-          </Menu.Item>
-
-
+         
           <Menu.Item key="94">
             <NavLink to="/log-out">
               <span className="icon">{signup}</span>

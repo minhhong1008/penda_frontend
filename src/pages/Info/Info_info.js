@@ -428,7 +428,7 @@ const Info_info = () => {
         infodate_nextclass: moment(now()),
       });
     }
-    if (values[values.length - 1] == "Verify") {
+    if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("info_class", "Lớp 6");
       dateForm.setFieldValue("infodate_verify", moment(now()));
       dateForm.setFieldValue("infodate_nextclass", moment(now()));
