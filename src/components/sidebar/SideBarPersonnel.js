@@ -70,11 +70,11 @@ const SideBarPersonnel = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="2">
-            <NavLink to="/personnel/timekeeping_class">
+            <NavLink to="/personnel/users_timesheets">
               <span
                 className="icon"
                 style={{
-                  background: page === "personnel/timekeeping_class" ? color : "",
+                  background: page === "personnel/users_timesheets" ? color : "",
                 }}
               >
                 {dashboard}

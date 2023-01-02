@@ -12,10 +12,16 @@ export const getusersInfo = (id) => {
 
 export const getListusers = (payload) => {
   let queryString = genQueryString(payload);
+  console.log(queryString)
   const url = `/users/list?${queryString}`;
   return axiosClient.get(url);
 }
 
+export const getListusers_timesheets = (payload) => {
+  let queryString = genQueryString(payload);
+  const url = `/users/list_timesheets`;
+  return axiosClient.get(url);
+}
 
 export const updateusersInfo = (payload, id) => {
   const url = `/users/update?id=${id}`;

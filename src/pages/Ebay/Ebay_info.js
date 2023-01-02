@@ -383,7 +383,6 @@ const Ebay_info = () => {
     setNoteValue(e.target.value);
   };
 
-  // Hàm upload
   // Hàm viết tự động hóa
   const onChange_Status = async (values) => {
     if (values == "Error" || values == "Restrict" || values == "Suspended") {

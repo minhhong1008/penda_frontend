@@ -101,6 +101,7 @@ import CCCD from "./pages/Tools/cccd/cccd";
 import Users_class from "./pages/Users/Users_class";
 import Users_table from "./pages/Users/Users_table";
 import Users_info from "./pages/Users/Users_info";
+import Users_timesheets from "./pages/Users/Users_timesheets";
 
 // Ebayorder
 import Ebayorder_class from "./pages/Ebayorder/Ebayorder_class";
@@ -122,7 +123,6 @@ import Etsyitem_class from "./pages/Etsyitem/Etsyitem_class";
 import Etsyitem_table from "./pages/Etsyitem/Etsyitem_table";
 import Etsyitem_info from "./pages/Etsyitem/Etsyitem_info";
 
-
 import { getToken } from "./utils";
 import { verifyToken } from "./api/auth";
 import { useDispatch } from "react-redux";
@@ -133,13 +133,13 @@ import Report_overview from "./pages/Report/Report_overview";
 //Bill
 import Bill_class from "./pages/Bill/Bill_class";
 import Bill_table from "./pages/Bill/Bill_table";
+import Salary_table from "./pages/Bill/Salary_table";
 
 
 // Customer
 import Customer_class from "./pages/Customer/Customer_class";
 import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
-
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -420,6 +420,7 @@ const App = () => {
           <Route path="/finance/bill_class" exact component={Bill_class} />
 
           <Route path="/finance/bill_table" exact component={Bill_table} />
+          <Route path="/finance/salary_table" exact component={Salary_table} />
 
           {/*---------------------------------quản trị nhân sự-------------------------------- */}
           {/*Users */}
@@ -433,6 +434,12 @@ const App = () => {
             path="/personnel/users_class/table/:id"
             exact
             component={Users_info}
+          />
+
+          <Route
+            path="/personnel/users_timesheets"
+            exact
+            component={Users_timesheets}
           />
 
           {/*---------------------------------Business-------------------------------- */}
@@ -518,7 +525,6 @@ const App = () => {
             exact
             component={Customer_info}
           />
-
 
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />

@@ -21,20 +21,7 @@ const Users_table = () => {
       key: "index",
       render: (text, record, index) => index + 1,
     },
-    /* {
-      title: "#",
-      dataIndex: "users_id",
-      key: "users_id",
-      render: (text, record) => (
-        <a
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.users_id)}`)
-          }
-        >
-          {text}
-        </a>
-      ),
-    }, */
+    
     {
       title: "Tên",
       dataIndex: "users_name",
@@ -84,11 +71,7 @@ const Users_table = () => {
       dataIndex: "users_function",
       key: "users_function",
     },
-    {
-      title: "Phòng ban",
-      dataIndex: "users_owner",
-      key: "users_owner",
-    },
+    
   ];
 
   const handleChangeFilter = (values) => {

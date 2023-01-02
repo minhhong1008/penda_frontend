@@ -71,11 +71,11 @@ const SideBarFinance = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="2">
-            <NavLink to="/finance/salary_class">
+            <NavLink to="/finance/salary_table">
               <span
                 className="icon"
                 style={{
-                  background: page === "finance/salary_class" ? color : "",
+                  background: page === "finance/salary_table" ? color : "",
                 }}
               >
                 {dashboard}

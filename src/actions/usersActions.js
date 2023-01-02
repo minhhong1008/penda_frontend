@@ -8,3 +8,10 @@ export const getListusersActions = (payload) => {
         payload: payload
     }
 }
+
+export const getListusers_timesheetsActions = (payload) => {
+    return {
+        type: GET_LIST_USERS,
+        payload: payload
+    }
+}

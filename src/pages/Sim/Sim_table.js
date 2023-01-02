@@ -23,7 +23,8 @@ const Sim_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const { sims } = useSelector((state) => state.sim);
-  const class_name = urlParams.get("class");
+  const class_name = urlParams.get();
+  console.log(class_name)
   const dispatch = useDispatch();
   const history = useHistory();
 

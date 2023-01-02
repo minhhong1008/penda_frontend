@@ -12,7 +12,11 @@ import {
   Avatar,
   List,
   Upload,
+  Timeline,
+  Alert,
+  Space,
 } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
@@ -282,10 +286,7 @@ const Users_info = () => {
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
                         <Form.Item label="Mail" name="users_mail">
-                          <Input
-                            size="small"
-                            placeholder=""
-                          />
+                          <Input size="small" placeholder="" />
                         </Form.Item>
                       ) : null}
                     </Col>
@@ -303,11 +304,8 @@ const Users_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Other" name="users_other">
-                        <Input
-                          size="small"
-                          placeholder=""
-                        />
+                      <Form.Item label="Sắp xếp" name="users_sort">
+                        <Input size="small" placeholder="" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -384,7 +382,6 @@ const Users_info = () => {
                   </Row>
 
                   {[
-
                     "Phó Giám đốc",
                     "Trưởng phòng",
                     "Phó phòng",
@@ -454,7 +451,7 @@ const Users_info = () => {
 
                   {[
                     "Phó Giám đốc",
-                    "Trưởng phòng",                
+                    "Trưởng phòng",
                     "Phó phòng",
                     "Tổ trưởng",
                     "Tổ phó",
@@ -521,18 +518,12 @@ const Users_info = () => {
                             Phòng Kinh doanh
                           </div>
                         </Option>
-                        <Option
-                          value="Phòng nâng cấp"
-                          label="Phòng nâng cấp"
-                        >
+                        <Option value="Phòng nâng cấp" label="Phòng nâng cấp">
                           <div className="demo-option-label-item">
                             Phòng nâng cấp
                           </div>
                         </Option>
-                        <Option
-                          value="Phòng phục hồi"
-                          label="Phòng phục hồi"
-                        >
+                        <Option value="Phòng phục hồi" label="Phòng phục hồi">
                           <div className="demo-option-label-item">
                             Phòng phục hồi
                           </div>
@@ -675,7 +666,7 @@ const Users_info = () => {
                         "Tập sự",
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Lương" name="users_class">
+                        <Form.Item label="Lương" name="users_salary">
                           <Select
                             //mode="multiple"
                             //disabled={true}
@@ -792,7 +783,66 @@ const Users_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="CHỨC NĂNG NHIỆM VỤ"></Card>
+              <Card title="CHỨC NĂNG NHIỆM VỤ">
+                <Col span={24}>
+                 
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Alert message="Success Text" type="success" />
+                    <Alert message="Info Text" type="info" />
+                    <Alert message="Warning Text" type="warning" />
+                    <Alert message="Error Text" type="error" />
+                    <Alert message="Success Text" type="success" />
+                    <Alert message="Info Text" type="info" />
+                    <Alert message="Warning Text" type="warning" />
+                    <Alert message="Error Text" type="error" />
+
+                  </Space>
+                </Col>
+                <br></br>
+                <br></br>
+                <Col span={24}>
+                 
+                  <Timeline mode="alternate">
+                    <Timeline.Item>
+                      Create a services site 2015-09-01
+                    </Timeline.Item>
+                    <Timeline.Item color="green">
+                      Solve initial network problems 2015-09-01
+                    </Timeline.Item>
+                    <Timeline.Item
+                      dot={
+                        <ClockCircleOutlined
+                          style={{
+                            fontSize: "26px",
+                          }}
+                        />
+                      }
+                    >
+                      Sed ut perspiciatis unde omnis iste natus error sit
+                      voluptatem accusantium doloremque laudantium, totam rem
+                      aperiam, eaque ipsa quae ab illo inventore veritatis et
+                      quasi architecto beatae vitae dicta sunt explicabo.
+                    </Timeline.Item>
+                    <Timeline.Item color="red">
+                      Network problems being solved 2015-09-01
+                    </Timeline.Item>
+                    <Timeline.Item>
+                      Create a services site 2015-09-01
+                    </Timeline.Item>
+                    <Timeline.Item
+                      dot={
+                        <ClockCircleOutlined
+                          style={{
+                            fontSize: "26px",
+                          }}
+                        />
+                      }
+                    >
+                      Technical testing 2015-09-01
+                    </Timeline.Item>
+                  </Timeline>
+                </Col>
+              </Card>
             </Col>
           </Row>
           <br></br>
@@ -848,13 +898,16 @@ const Users_info = () => {
 
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
           <p>1. Mail chính là user đăng nhập</p>
-          <p>2. Phân quyền view, edit theo : Chức vụ, phòng ban, quản lý.
-            Giám đốc sắp xếp chức vụ và phòng ban,
-            Từ tổ trưởng trở lên được sửa quản lý của nhân viên, và trạng thái nhân viên,
-            Phòng ban mặc định là "Phòng sản xuất", Quản lý mặc định là full các acc
+          <p>
+            2. Phân quyền view, edit theo : Chức vụ, phòng ban, quản lý. Giám
+            đốc sắp xếp chức vụ và phòng ban, Từ tổ trưởng trở lên được sửa quản
+            lý của nhân viên, và trạng thái nhân viên, Phòng ban mặc định là
+            "Phòng sản xuất", Quản lý mặc định là full các acc
           </p>
           <p>
-            3. Yêu cầu toàn bộ thôn tin nhân viên phải đầy đủ, phải có cccd 2 mặt, ảnh cầm cccd, ảnh chân dung, ảnh thẻ....mỗi nhân viên mới đến sẽ tạo luôn 1 bộ tài khoản full trên 1 máy tính Workstasion
+            3. Yêu cầu toàn bộ thôn tin nhân viên phải đầy đủ, phải có cccd 2
+            mặt, ảnh cầm cccd, ảnh chân dung, ảnh thẻ....mỗi nhân viên mới đến
+            sẽ tạo luôn 1 bộ tài khoản full trên 1 máy tính Workstasion
           </p>
         </Tabs.TabPane>
       </Tabs>

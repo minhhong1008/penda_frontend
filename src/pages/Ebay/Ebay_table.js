@@ -13,6 +13,7 @@ import {
   Collapse,
   Space,
   TreeSelect,
+  Checkbox,
 } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,12 +27,28 @@ const Ebay_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
   const columns = [
     {
       title: "STT",
       key: "index",
-      render: (text, record, index) => index + 1,
+      fixed: "left",
+      width: 10,
+      render: (text, record, index) => <Checkbox onChange={onChange}>{index + 1}</Checkbox>,
+      filters: [
+        {
+          text: "CheckAll",
+          value: "CheckAll",
+        },
+        {
+          text: "Copy id",
+          value: "Copy id",
+        },
+      ],
+      onFilter: (value, record) => record.name.indexOf(value) === 0,
+     
     },
     {
       title: "#",

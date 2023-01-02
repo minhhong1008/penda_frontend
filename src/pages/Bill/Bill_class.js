@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
+  //------------------------------------------------
 const Bill_class = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,7 +35,15 @@ const Bill_class = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work",
-      render: (text) => <a onClick={() => history.push(`bill_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
+      render: (text) => (
+        <a
+          onClick={() =>
+            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+          }
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Số tiền",
@@ -50,73 +59,72 @@ const Bill_class = () => {
       key: "1",
       Stt: "1",
       bill_work: "Tổng tiền",
-      bill_total:"220,000,000",
+      bill_total: "220,000,000",
       bill_density: "100%",
     },
     {
       key: "2",
       Stt: "2",
       bill_work: "Mua device, proxy & gia hạn",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "3",
       Stt: "3",
       bill_work: "Mua info",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "4",
       Stt: "4",
       bill_work: "Mua sim, phone & gia hạn",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "5",
       Stt: "5",
       bill_work: "Mua mail",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
-    
-    
+
     {
       key: "6",
       Stt: "6",
       bill_work: "Thanh toán lương, thưởng hoa hồng",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
-    
+
     {
       key: "7",
       Stt: "7",
       bill_work: "Chi phí văn phòng",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "8",
       Stt: "8",
       bill_work: "Chi phí vận chuyển",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "9",
       Stt: "9",
       bill_work: "Chi phí checkout, tracking",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "10",
       Stt: "10",
       bill_work: "Chi phí Kicksold",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
   ];
@@ -129,7 +137,15 @@ const Bill_class = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work",
-      render: (text) => <a onClick={() => history.push(`bill_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
+      render: (text) => (
+        <a
+          onClick={() =>
+            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+          }
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Số tiền",
@@ -145,25 +161,25 @@ const Bill_class = () => {
       key: "1",
       Stt: "1",
       bill_work: "Thu tiền bán hàng",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "2",
       Stt: "2",
       bill_work: "Thu tiền bán tài nguyên",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "3",
       Stt: "3",
       bill_work: "Thu tiền khác",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
   ];
-//------------------------------------------------
+  //--------------------------------
   const columns_pay = [
     {
       title: "Stt",
@@ -172,7 +188,15 @@ const Bill_class = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work_pay",
-      render: (text) => <a onClick={() => history.push(`bill_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
+      render: (text) => (
+        <a
+          onClick={() =>
+            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+          }
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Số tiền",
@@ -188,105 +212,105 @@ const Bill_class = () => {
       key: "1",
       Stt: "1",
       bill_work_pay: "Mua device",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "2",
       Stt: "2",
       bill_work_pay: "Mua proxy",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "3",
       Stt: "3",
       bill_work_pay: "Mua info",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "4",
       Stt: "4",
       bill_work_pay: "Mua phone",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "5",
       Stt: "5",
       bill_work_pay: "Mua mail",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "6",
       Stt: "6",
       bill_work_pay: "Mua sim",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "7",
       Stt: "7",
       bill_work_pay: "Gia hạn device",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "8",
       Stt: "8",
       bill_work_pay: "Gia hạn proxy",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "9",
       Stt: "9",
       bill_work_pay: "Gia hạn sim",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "10",
       Stt: "10",
       bill_work_pay: "Thanh toán lương",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "11",
       Stt: "11",
       bill_work_pay: "Chi Phí văn phòng",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "12",
       Stt: "12",
       bill_work_pay: "Chi phí vận chuyển",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "13",
       Stt: "13",
       bill_work_pay: "Chi phí checkout",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "14",
       Stt: "14",
       bill_work_pay: "Chi phí Kicksold",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
     {
       key: "15",
       Stt: "15",
       bill_work_pay: "Chi phí tracking",
-      bill_total_pay:"20,000,000",
+      bill_total_pay: "20,000,000",
       bill_density_pay: "1,5%",
     },
   ];
@@ -299,7 +323,15 @@ const Bill_class = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work",
-      render: (text) => <a onClick={() => history.push(`bill_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
+      render: (text) => (
+        <a
+          onClick={() =>
+            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+          }
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Số tiền",
@@ -316,24 +348,25 @@ const Bill_class = () => {
       key: "1",
       Stt: "1",
       bill_work: "Thu tiền bán hàng",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "2",
       Stt: "2",
       bill_work: "Thu tiền bán tài nguyên",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
     {
       key: "3",
       Stt: "3",
       bill_work: "Thu tiền khác",
-      bill_total:"20,000,000",
+      bill_total: "20,000,000",
       bill_density: "1,5%",
     },
   ];
+  //--------------------------------
   return (
     //https://ant.design/components/date-picker --Preset Ranges
     <div>
@@ -365,16 +398,16 @@ const Bill_class = () => {
                   }
                 >
                   <Form
+                    form={form}
                     name="basic"
                     autoComplete="off"
                     size="large"
-                    form={form}
                   >
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item
                           label="Bill id"
-                          name="bil_id"
+                          name="bill_id"
                           style={{ width: "100%" }}
                           rules={[
                             {
@@ -605,9 +638,17 @@ const Bill_class = () => {
                   }
                 >
                   <Divider>BẢNG ĐỀ XUẤT CHI </Divider>
-                  <Table columns={columns_suggest_pay} dataSource={data_suggest_pay} size="middle" />
+                  <Table
+                    columns={columns_suggest_pay}
+                    dataSource={data_suggest_pay}
+                    size="middle"
+                  />
                   <Divider>BẢNG ĐỀ XUẤT THU </Divider>
-                  <Table columns={columns_suggest_collect} dataSource={data_suggest_collect} size="middle" />
+                  <Table
+                    columns={columns_suggest_collect}
+                    dataSource={data_suggest_collect}
+                    size="middle"
+                  />
                 </Card>
               </Col>
               <Col span={12}>
@@ -645,9 +686,17 @@ const Bill_class = () => {
                   }
                 >
                   <Divider>BẢNG CHI TIỀN</Divider>
-                  <Table columns={columns_pay} dataSource={data_pay} size="middle" />
+                  <Table
+                    columns={columns_pay}
+                    dataSource={data_pay}
+                    size="middle"
+                  />
                   <Divider>BẢNG THU TIỀN</Divider>
-                  <Table columns={columns_collect} dataSource={data_collect} size="middle" />
+                  <Table
+                    columns={columns_collect}
+                    dataSource={data_collect}
+                    size="middle"
+                  />
                 </Card>
               </Col>
             </Row>
