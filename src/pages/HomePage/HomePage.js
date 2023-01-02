@@ -8,7 +8,7 @@ const HomePage = () => {
   const { users_function, users_name, users_owner } = useSelector(
     (state) => state.auth
   );
-  let new_users_owner = users_owner.split(",");
+  let new_users_owner = users_owner?.split(",");
   console.log(users_function);
   const handleClick = (link) => {
     history.push(link);
@@ -37,7 +37,7 @@ const HomePage = () => {
           </div>
         </Col>
 
-        {new_users_owner.indexOf("Phòng sản xuất") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng sản xuất") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -60,7 +60,7 @@ const HomePage = () => {
           </Col>
         ) : null}
 
-        {new_users_owner.indexOf("Phòng Kinh doanh") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng Kinh doanh") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -82,7 +82,7 @@ const HomePage = () => {
             </div>
           </Col>
         ) : null}
-        {new_users_owner.indexOf("Phòng hành chính nhân sự") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng hành chính nhân sự") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -110,7 +110,7 @@ const HomePage = () => {
       <br></br>
       <br></br>
       <Row gutter={4}>
-        {new_users_owner.indexOf("Phòng kế toán quản trị") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng kế toán quản trị") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -132,7 +132,7 @@ const HomePage = () => {
             </div>
           </Col>
         ) : null}
-        {new_users_owner.indexOf("Ban kiểm soát") !== -1 ? (
+        {new_users_owner?.indexOf("Ban kiểm soát") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -154,7 +154,7 @@ const HomePage = () => {
             </div>
           </Col>
         ) : null}
-        {new_users_owner.indexOf("Phòng kế hoạch") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng kế hoạch") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card
@@ -176,7 +176,7 @@ const HomePage = () => {
             </div>
           </Col>
         ) : null}
-        {new_users_owner.indexOf("Phòng phục hồi") !== -1 ? (
+        {new_users_owner?.indexOf("Phòng phục hồi") !== -1 ? (
           <Col className="gutter-row" span={6}>
             <div>
               <Card

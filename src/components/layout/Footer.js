@@ -1,9 +1,11 @@
 import React from "react";
 import { Layout, Row, Col } from "antd";
 import { HeartFilled } from "@ant-design/icons";
+import { useHistory } from 'react-router-dom'
 
 function Footer() {
   const { Footer: AntFooter } = Layout;
+  const history = useHistory();
 
   return (
     <AntFooter style={{ background: "#fafafa" }}>
@@ -50,7 +52,7 @@ function Footer() {
               </li>
               <li className="nav-item">
                 <a
-                  href="http://localhost:3000/log-out"
+                  onClick={() => history.push('/log-out')}
                   className="nav-link pe-0 text-muted"
                   target="_blank"
                 >
