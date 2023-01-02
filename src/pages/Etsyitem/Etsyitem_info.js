@@ -14,7 +14,7 @@ import {
   } from "antd";
   import React, { useCallback, useEffect, useState } from "react";
   import { useParams } from "react-router-dom";
-  import moment from "moment";
+  import dayjs from "dayjs";
   import {
     postetsyitemInfo,
     getetsyitemInfo,
@@ -59,10 +59,10 @@ import {
         list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
         
         etsyitem_date_start: dateData?.etsyitem_date_start
-          ? moment(dateData.etsyitem_date_start).format("MM-DD-YYYY")
+          ? dayjs(dateData.etsyitem_date_start).format("YYYY-MM-DD")
           : "",
         etsyitem_date_verify: dateData?.etsyitem_date_verify
-          ? moment(dateData.etsyitem_date_verify).format("MM-DD-YYYY")
+          ? dayjs(dateData.etsyitem_date_verify).format("YYYY-MM-DD")
           : "",
         etsyitem_note: noteValue,
       };
@@ -96,8 +96,8 @@ import {
       form.setFieldsValue(newData);
       infoForm.setFieldsValue(newData);
       dateForm.setFieldsValue({
-        etsyitem_date_start: moment(data.etsyitem_date_start),
-        etsyitem_date_verify: moment(data.etsyitem_date_verify),
+        etsyitem_date_start: dayjs(data.etsyitem_date_start),
+        etsyitem_date_verify: dayjs(data.etsyitem_date_verify),
       });
       setInfo(data);
       setNoteValue(data.etsyitem_note);
@@ -768,7 +768,7 @@ import {
                           <Col span={8} key={index}>
                             <Form.Item label={item.title} name={item.value}>
                               <DatePicker
-                                format="MM-DD-YYYY"
+                                format="YYYY-MM-DD"
                                 onChange={() => dateForm.submit()}
                               />
                             </Form.Item>

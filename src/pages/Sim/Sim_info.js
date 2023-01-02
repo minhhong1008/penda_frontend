@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -141,8 +141,8 @@ const Sim_info = () => {
     });
     let dateValue = {};
     tablelist_sim_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -314,7 +314,7 @@ const Sim_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_sim_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.sim_image_url) {
       let dataImage = [];
@@ -377,32 +377,32 @@ const Sim_info = () => {
       let new_sim_class = form.getFieldValue("sim_class");
       if (values == "Error") {
         (new_sim_class = "Lớp 20"),
-          dateForm.setFieldValue("simdate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+          dateForm.setFieldValue("simdate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          simdate_error: moment(now()),
-          simdate_nextclass: moment(now()),
+          simdate_error: dayjs(now()),
+          simdate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_sim_class = "Lớp 23"),
-          dateForm.setFieldValue("simdate_restrict", moment(now()));
-        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+          dateForm.setFieldValue("simdate_restrict", dayjs(now()));
+        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          simdate_restrict: moment(now()),
-          simdate_nextclass: moment(now()),
+          simdate_restrict: dayjs(now()),
+          simdate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_sim_class = "Lớp 26"),
-          dateForm.setFieldValue("simdate_suspended", moment(now()));
-        dateForm.setFieldValue("simdate_nextclass", moment(now()));
+          dateForm.setFieldValue("simdate_suspended", dayjs(now()));
+        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          simdate_suspended: moment(now()),
-          simdate_nextclass: moment(now()),
+          simdate_suspended: dayjs(now()),
+          simdate_nextclass: dayjs(now()),
         });
       }
 
@@ -418,61 +418,61 @@ const Sim_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("sim_class", "Lớp 4");
-      dateForm.setFieldValue("simdate_start", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_start", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_start: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_start: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("sim_class", "Lớp 6");
-      dateForm.setFieldValue("simdate_verify", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_verify", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_verify: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_verify: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("sim_class", "Lớp 9");
-      dateForm.setFieldValue("simdate_seller", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_seller", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_seller: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_seller: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("sim_class", "Lớp 10");
-      dateForm.setFieldValue("simdate_list1", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_list1", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_list1: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_list1: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("sim_class", "Lớp 12");
-      dateForm.setFieldValue("simdate_moveroom", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_moveroom: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_moveroom: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("simdate_nextclass", moment(now()));
+    dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      simdate_nextclass: moment(now()),
+      simdate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -499,12 +499,12 @@ const Sim_info = () => {
         sim_type: new_sim_type,
       });
 
-      dateForm.setFieldValue("simdate_seller", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_seller", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_seller: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_seller: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
 
@@ -534,12 +534,12 @@ const Sim_info = () => {
         sim_type: new_sim_type,
       });
 
-      dateForm.setFieldValue("simdate_start", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_start", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_start: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_start: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
 
@@ -572,12 +572,12 @@ const Sim_info = () => {
         sim_owner: new_sim_owner,
       });
 
-      dateForm.setFieldValue("simdate_moveroom", moment(now()));
-      dateForm.setFieldValue("simdate_nextclass", moment(now()));
+      dateForm.setFieldValue("simdate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        simdate_moveroom: moment(now()),
-        simdate_nextclass: moment(now()),
+        simdate_moveroom: dayjs(now()),
+        simdate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1275,7 +1275,7 @@ const Sim_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1290,7 +1290,7 @@ const Sim_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

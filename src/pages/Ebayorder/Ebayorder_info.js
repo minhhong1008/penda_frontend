@@ -14,7 +14,7 @@ import {
   } from "antd";
   import React, { useCallback, useEffect, useState } from "react";
   import { useParams } from "react-router-dom";
-  import moment from "moment";
+  import dayjs from "dayjs";
   import {
     postebayorderInfo,
     getebayorderInfo,
@@ -58,10 +58,10 @@ import {
           : "",
         list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
         ebayorder_date_start: dateData?.ebayorder_date_start
-          ? moment(dateData.ebayorder_date_start).format("MM-DD-YYYY")
+          ? dayjs(dateData.ebayorder_date_start).format("YYYY-MM-DD")
           : "",
         ebayorder_date_verify: dateData?.ebayorder_date_verify
-          ? moment(dateData.ebayorder_date_verify).format("MM-DD-YYYY")
+          ? dayjs(dateData.ebayorder_date_verify).format("YYYY-MM-DD")
           : "",
         ebayorder_note: noteValue,
       };
@@ -95,8 +95,8 @@ import {
       form.setFieldsValue(newData);
       infoForm.setFieldsValue(newData);
       dateForm.setFieldsValue({
-        ebayorder_date_start: moment(data.ebayorder_date_start),
-        ebayorder_date_verify: moment(data.ebayorder_date_verify),
+        ebayorder_date_start: dayjs(data.ebayorder_date_start),
+        ebayorder_date_verify: dayjs(data.ebayorder_date_verify),
       });
       setInfo(data);
       setNoteValue(data.ebayorder_note);
@@ -815,7 +815,7 @@ import {
                           <Col span={8} key={index}>
                             <Form.Item label={item.title} name={item.value}>
                               <DatePicker
-                                format="MM-DD-YYYY"
+                                format="YYYY-MM-DD"
                                 onChange={() => dateForm.submit()}
                               />
                             </Form.Item>

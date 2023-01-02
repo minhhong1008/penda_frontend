@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -141,8 +141,8 @@ const Mail_info = () => {
     });
     let dateValue = {};
     tablelist_mail_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -314,7 +314,7 @@ const Mail_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_mail_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.mail_image_url) {
       let dataImage = [];
@@ -379,32 +379,32 @@ const Mail_info = () => {
       let new_mail_class = form.getFieldValue("mail_class");
       if (values == "Error") {
         (new_mail_class = "Lớp 20"),
-          dateForm.setFieldValue("maildate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("maildate_nextclass", moment(now()));
+          dateForm.setFieldValue("maildate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          maildate_error: moment(now()),
-          maildate_nextclass: moment(now()),
+          maildate_error: dayjs(now()),
+          maildate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_mail_class = "Lớp 23"),
-          dateForm.setFieldValue("maildate_restrict", moment(now()));
-        dateForm.setFieldValue("maildate_nextclass", moment(now()));
+          dateForm.setFieldValue("maildate_restrict", dayjs(now()));
+        dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          maildate_restrict: moment(now()),
-          maildate_nextclass: moment(now()),
+          maildate_restrict: dayjs(now()),
+          maildate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_mail_class = "Lớp 26"),
-          dateForm.setFieldValue("maildate_suspended", moment(now()));
-        dateForm.setFieldValue("maildate_nextclass", moment(now()));
+          dateForm.setFieldValue("maildate_suspended", dayjs(now()));
+        dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          maildate_suspended: moment(now()),
-          maildate_nextclass: moment(now()),
+          maildate_suspended: dayjs(now()),
+          maildate_nextclass: dayjs(now()),
         });
       }
 
@@ -420,61 +420,61 @@ const Mail_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("mail_class", "Lớp 4");
-      dateForm.setFieldValue("maildate_start", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_start", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_start: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_start: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("mail_class", "Lớp 6");
-      dateForm.setFieldValue("maildate_verify", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_verify", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_verify: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_verify: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("mail_class", "Lớp 9");
-      dateForm.setFieldValue("maildate_seller", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_seller", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_seller: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_seller: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("mail_class", "Lớp 10");
-      dateForm.setFieldValue("maildate_list1", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_list1", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_list1: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_list1: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("mail_class", "Lớp 12");
-      dateForm.setFieldValue("maildate_moveroom", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_moveroom: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_moveroom: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("maildate_nextclass", moment(now()));
+    dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      maildate_nextclass: moment(now()),
+      maildate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Mail_info = () => {
         mail_type: new_mail_type,
       });
 
-      dateForm.setFieldValue("maildate_seller", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_seller", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_seller: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_seller: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
 
@@ -536,12 +536,12 @@ const Mail_info = () => {
         mail_type: new_mail_type,
       });
 
-      dateForm.setFieldValue("maildate_start", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_start", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_start: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_start: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
 
@@ -574,12 +574,12 @@ const Mail_info = () => {
         mail_owner: new_mail_owner,
       });
 
-      dateForm.setFieldValue("maildate_moveroom", moment(now()));
-      dateForm.setFieldValue("maildate_nextclass", moment(now()));
+      dateForm.setFieldValue("maildate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("maildate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        maildate_moveroom: moment(now()),
-        maildate_nextclass: moment(now()),
+        maildate_moveroom: dayjs(now()),
+        maildate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1277,7 +1277,7 @@ const Mail_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1292,7 +1292,7 @@ const Mail_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

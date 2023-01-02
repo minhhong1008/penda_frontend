@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {

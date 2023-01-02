@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -141,8 +141,8 @@ const Device_info = () => {
     });
     let dateValue = {};
     tablelist_device_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -314,7 +314,7 @@ const Device_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_device_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.device_image_url) {
       let dataImage = [];
@@ -379,32 +379,32 @@ const Device_info = () => {
       let new_device_class = form.getFieldValue("device_class");
       if (values == "Error") {
         (new_device_class = "Lớp 20"),
-          dateForm.setFieldValue("devicedate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+          dateForm.setFieldValue("devicedate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          devicedate_error: moment(now()),
-          devicedate_nextclass: moment(now()),
+          devicedate_error: dayjs(now()),
+          devicedate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_device_class = "Lớp 23"),
-          dateForm.setFieldValue("devicedate_restrict", moment(now()));
-        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+          dateForm.setFieldValue("devicedate_restrict", dayjs(now()));
+        dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          devicedate_restrict: moment(now()),
-          devicedate_nextclass: moment(now()),
+          devicedate_restrict: dayjs(now()),
+          devicedate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_device_class = "Lớp 26"),
-          dateForm.setFieldValue("devicedate_suspended", moment(now()));
-        dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+          dateForm.setFieldValue("devicedate_suspended", dayjs(now()));
+        dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          devicedate_suspended: moment(now()),
-          devicedate_nextclass: moment(now()),
+          devicedate_suspended: dayjs(now()),
+          devicedate_nextclass: dayjs(now()),
         });
       }
 
@@ -420,61 +420,61 @@ const Device_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("device_class", "Lớp 4");
-      dateForm.setFieldValue("devicedate_start", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_start", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_start: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_start: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("device_class", "Lớp 6");
-      dateForm.setFieldValue("devicedate_verify", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_verify", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_verify: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_verify: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("device_class", "Lớp 9");
-      dateForm.setFieldValue("devicedate_seller", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_seller", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_seller: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_seller: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("device_class", "Lớp 10");
-      dateForm.setFieldValue("devicedate_list1", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_list1", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_list1: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_list1: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("device_class", "Lớp 12");
-      dateForm.setFieldValue("devicedate_moveroom", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_moveroom: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_moveroom: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+    dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      devicedate_nextclass: moment(now()),
+      devicedate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Device_info = () => {
         device_type: new_device_type,
       });
 
-      dateForm.setFieldValue("devicedate_seller", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_seller", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_seller: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_seller: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
 
@@ -536,12 +536,12 @@ const Device_info = () => {
         device_type: new_device_type,
       });
 
-      dateForm.setFieldValue("devicedate_start", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_start", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_start: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_start: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
 
@@ -574,12 +574,12 @@ const Device_info = () => {
         device_owner: new_device_owner,
       });
 
-      dateForm.setFieldValue("devicedate_moveroom", moment(now()));
-      dateForm.setFieldValue("devicedate_nextclass", moment(now()));
+      dateForm.setFieldValue("devicedate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("devicedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        devicedate_moveroom: moment(now()),
-        devicedate_nextclass: moment(now()),
+        devicedate_moveroom: dayjs(now()),
+        devicedate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1277,7 +1277,7 @@ const Device_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1292,7 +1292,7 @@ const Device_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

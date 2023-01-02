@@ -11,14 +11,16 @@ import {
   DatePicker,
   Select,
   Collapse,
+  Popover,
   Space,
   TreeSelect,
   Checkbox,
 } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListebayActions } from "../../actions/ebayActions";
+import { copyToClipboard } from "../../utils";
 import { HuongDanEbay_table } from "./Ebay_list";
 const Ebay_table = () => {
   const queryString = window.location.search;
@@ -27,50 +29,38 @@ const Ebay_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-  const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const copyEbayId = () => {
+    copyToClipboard(selectedRowKeys.join("\n"));
   };
   const columns = [
     {
-      title: "STT",
+      title: <Button onClick={copyEbayId}>Copy ID</Button>,
       key: "index",
       fixed: "left",
       width: 10,
-      render: (text, record, index) => <Checkbox onChange={onChange}>{index + 1}</Checkbox>,
-      filters: [
-        {
-          text: "CheckAll",
-          value: "CheckAll",
-        },
-        {
-          text: "Copy id",
-          value: "Copy id",
-        },
-      ],
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
-     
+      render: (text, record, index) => {
+        return index + 1;
+      },
     },
     {
       title: "#",
       dataIndex: "ebay_id",
       key: "ebay_id",
       render: (text, record) => (
-        
-        <a 
-        style={{
-          borderRadius: "6px",
-          padding: "8px 8px",
-          background: "#1c84c6",
-          color: "white",
-        }}
-        
+        <a
+          style={{
+            borderRadius: "6px",
+            padding: "8px 8px",
+            background: "#1c84c6",
+            color: "white",
+          }}
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.ebay_id)}`)
           }
         >
           {text}
         </a>
-        
       ),
       sorter: (a, b) => {
         return a.ebay_id.localeCompare(b.ebay_id);
@@ -161,10 +151,10 @@ const Ebay_table = () => {
       dataIndex: "ebay_error",
       key: "ebay_error",
       render: (record) => {
-        if (!record){
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -189,17 +179,15 @@ const Ebay_table = () => {
         return a.ebay_user.localeCompare(b.ebay_class);
       },
     },
-
     {
       title: "NHÂN VIÊN",
       dataIndex: "ebay_employee",
       key: "ebay_employee",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -224,7 +212,6 @@ const Ebay_table = () => {
         return a.ebay_user.localeCompare(b.ebay_employee);
       },
     },
-
     {
       title: "GHI CHÚ",
       dataIndex: "ebay_note",
@@ -255,6 +242,17 @@ const Ebay_table = () => {
   useEffect(() => {
     getListEbay();
   }, [class_name]);
+
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
 
   return (
     <div>
@@ -302,6 +300,7 @@ const Ebay_table = () => {
               <Table
                 columns={columns}
                 dataSource={ebays}
+                rowSelection={rowSelection}
                 pagination={{
                   pageSizeOptions: [
                     "10",

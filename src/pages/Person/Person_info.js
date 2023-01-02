@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -114,8 +114,8 @@ const Person_info = () => {
   const onFinish = async (values) => {
     let dateValue = {};
     tablelist_person_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -286,7 +286,7 @@ const Person_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_person_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     //console.log(dateValue);
     dateForm.setFieldsValue(dateValue);
@@ -338,32 +338,32 @@ const Person_info = () => {
       let new_person_class = form.getFieldValue("person_class");
       if (values == "Error") {
         (new_person_class = "Lớp 20"),
-          dateForm.setFieldValue("persondate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("persondate_nextclass", moment(now()));
+          dateForm.setFieldValue("persondate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_error: moment(now()),
-          persondate_nextclass: moment(now()),
+          persondate_error: dayjs(now()),
+          persondate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_person_class = "Lớp 23"),
-          dateForm.setFieldValue("persondate_restrict", moment(now()));
-        dateForm.setFieldValue("persondate_nextclass", moment(now()));
+          dateForm.setFieldValue("persondate_restrict", dayjs(now()));
+        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_restrict: moment(now()),
-          persondate_nextclass: moment(now()),
+          persondate_restrict: dayjs(now()),
+          persondate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_person_class = "Lớp 26"),
-          dateForm.setFieldValue("persondate_suspended", moment(now()));
-        dateForm.setFieldValue("persondate_nextclass", moment(now()));
+          dateForm.setFieldValue("persondate_suspended", dayjs(now()));
+        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_suspended: moment(now()),
-          persondate_nextclass: moment(now()),
+          persondate_suspended: dayjs(now()),
+          persondate_nextclass: dayjs(now()),
         });
       }
 
@@ -379,61 +379,61 @@ const Person_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("person_class", "Lớp 4");
-      dateForm.setFieldValue("persondate_start", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_start", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_start: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_start: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("person_class", "Lớp 6");
-      dateForm.setFieldValue("persondate_verify", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_verify", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_verify: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_verify: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("person_class", "Lớp 9");
-      dateForm.setFieldValue("persondate_seller", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_seller", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_seller: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_seller: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("person_class", "Lớp 10");
-      dateForm.setFieldValue("persondate_list1", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_list1", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_list1: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_list1: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("person_class", "Lớp 12");
-      dateForm.setFieldValue("persondate_moveroom", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_moveroom: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_moveroom: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("persondate_nextclass", moment(now()));
+    dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      persondate_nextclass: moment(now()),
+      persondate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -460,12 +460,12 @@ const Person_info = () => {
         person_type: new_person_type,
       });
 
-      dateForm.setFieldValue("persondate_seller", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_seller", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_seller: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_seller: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
 
@@ -495,12 +495,12 @@ const Person_info = () => {
         person_type: new_person_type,
       });
 
-      dateForm.setFieldValue("persondate_start", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_start", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_start: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_start: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
 
@@ -533,12 +533,12 @@ const Person_info = () => {
         person_owner: new_person_owner,
       });
 
-      dateForm.setFieldValue("persondate_moveroom", moment(now()));
-      dateForm.setFieldValue("persondate_nextclass", moment(now()));
+      dateForm.setFieldValue("persondate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_moveroom: moment(now()),
-        persondate_nextclass: moment(now()),
+        persondate_moveroom: dayjs(now()),
+        persondate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1273,7 +1273,7 @@ const Person_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1288,7 +1288,7 @@ const Person_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

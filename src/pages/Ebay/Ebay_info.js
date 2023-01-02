@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs"
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -161,8 +161,8 @@ const Ebay_info = () => {
     });
     let dateValue = {};
     tablelist_ebay_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -346,7 +346,7 @@ const Ebay_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_ebay_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.ebay_image_url) {
       let dataImage = [];
@@ -410,32 +410,32 @@ const Ebay_info = () => {
       let new_ebay_class = form.getFieldValue("ebay_class");
       if (values == "Error") {
         (new_ebay_class = "Lớp 20"),
-          dateForm.setFieldValue("ebaydate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+          dateForm.setFieldValue("ebaydate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          ebaydate_error: moment(now()),
-          ebaydate_nextclass: moment(now()),
+          ebaydate_error: dayjs(now()),
+          ebaydate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_ebay_class = "Lớp 23"),
-          dateForm.setFieldValue("ebaydate_restrict", moment(now()));
-        dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+          dateForm.setFieldValue("ebaydate_restrict", dayjs(now()));
+        dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          ebaydate_restrict: moment(now()),
-          ebaydate_nextclass: moment(now()),
+          ebaydate_restrict: dayjs(now()),
+          ebaydate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_ebay_class = "Lớp 26"),
-          dateForm.setFieldValue("ebaydate_suspended", moment(now()));
-        dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+          dateForm.setFieldValue("ebaydate_suspended", dayjs(now()));
+        dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          ebaydate_suspended: moment(now()),
-          ebaydate_nextclass: moment(now()),
+          ebaydate_suspended: dayjs(now()),
+          ebaydate_nextclass: dayjs(now()),
         });
       }
 
@@ -451,61 +451,61 @@ const Ebay_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("ebay_class", "Lớp 4");
-      dateForm.setFieldValue("ebaydate_start", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_start", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_start: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_start: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("ebay_class", "Lớp 6");
-      dateForm.setFieldValue("ebaydate_verify", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_verify", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_verify: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_verify: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("ebay_class", "Lớp 9");
-      dateForm.setFieldValue("ebaydate_seller", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_seller", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_seller: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_seller: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("ebay_class", "Lớp 10");
-      dateForm.setFieldValue("ebaydate_list1", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_list1", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_list1: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_list1: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("ebay_class", "Lớp 12");
-      dateForm.setFieldValue("ebaydate_moveroom", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_moveroom: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_moveroom: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+    dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      ebaydate_nextclass: moment(now()),
+      ebaydate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -532,12 +532,12 @@ const Ebay_info = () => {
         ebay_type: new_ebay_type,
       });
 
-      dateForm.setFieldValue("ebaydate_seller", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_seller", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_seller: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_seller: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
 
@@ -567,12 +567,12 @@ const Ebay_info = () => {
         ebay_type: new_ebay_type,
       });
 
-      dateForm.setFieldValue("ebaydate_start", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_start", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_start: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_start: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
 
@@ -605,12 +605,12 @@ const Ebay_info = () => {
         ebay_owner: new_ebay_owner,
       });
 
-      dateForm.setFieldValue("ebaydate_moveroom", moment(now()));
-      dateForm.setFieldValue("ebaydate_nextclass", moment(now()));
+      dateForm.setFieldValue("ebaydate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("ebaydate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        ebaydate_moveroom: moment(now()),
-        ebaydate_nextclass: moment(now()),
+        ebaydate_moveroom: dayjs(now()),
+        ebaydate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1312,7 +1312,7 @@ const Ebay_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1327,7 +1327,7 @@ const Ebay_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

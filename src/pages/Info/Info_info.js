@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -141,8 +141,8 @@ const Info_info = () => {
     });
     let dateValue = {};
     tablelist_info_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -314,7 +314,7 @@ const Info_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_info_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.info_image_url) {
       let dataImage = [];
@@ -379,32 +379,32 @@ const Info_info = () => {
       let new_info_class = form.getFieldValue("info_class");
       if (values == "Error") {
         (new_info_class = "Lớp 20"),
-          dateForm.setFieldValue("infodate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("infodate_nextclass", moment(now()));
+          dateForm.setFieldValue("infodate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          infodate_error: moment(now()),
-          infodate_nextclass: moment(now()),
+          infodate_error: dayjs(now()),
+          infodate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_info_class = "Lớp 23"),
-          dateForm.setFieldValue("infodate_restrict", moment(now()));
-        dateForm.setFieldValue("infodate_nextclass", moment(now()));
+          dateForm.setFieldValue("infodate_restrict", dayjs(now()));
+        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          infodate_restrict: moment(now()),
-          infodate_nextclass: moment(now()),
+          infodate_restrict: dayjs(now()),
+          infodate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_info_class = "Lớp 26"),
-          dateForm.setFieldValue("infodate_suspended", moment(now()));
-        dateForm.setFieldValue("infodate_nextclass", moment(now()));
+          dateForm.setFieldValue("infodate_suspended", dayjs(now()));
+        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          infodate_suspended: moment(now()),
-          infodate_nextclass: moment(now()),
+          infodate_suspended: dayjs(now()),
+          infodate_nextclass: dayjs(now()),
         });
       }
 
@@ -420,61 +420,61 @@ const Info_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("info_class", "Lớp 4");
-      dateForm.setFieldValue("infodate_start", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_start", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_start: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_start: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("info_class", "Lớp 6");
-      dateForm.setFieldValue("infodate_verify", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_verify", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_verify: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_verify: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("info_class", "Lớp 9");
-      dateForm.setFieldValue("infodate_seller", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_seller", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_seller: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_seller: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("info_class", "Lớp 10");
-      dateForm.setFieldValue("infodate_list1", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_list1", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_list1: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_list1: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("info_class", "Lớp 12");
-      dateForm.setFieldValue("infodate_moveroom", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_moveroom: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_moveroom: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("infodate_nextclass", moment(now()));
+    dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      infodate_nextclass: moment(now()),
+      infodate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Info_info = () => {
         info_type: new_info_type,
       });
 
-      dateForm.setFieldValue("infodate_seller", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_seller", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_seller: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_seller: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
 
@@ -536,12 +536,12 @@ const Info_info = () => {
         info_type: new_info_type,
       });
 
-      dateForm.setFieldValue("infodate_start", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_start", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_start: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_start: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
 
@@ -574,12 +574,12 @@ const Info_info = () => {
         info_owner: new_info_owner,
       });
 
-      dateForm.setFieldValue("infodate_moveroom", moment(now()));
-      dateForm.setFieldValue("infodate_nextclass", moment(now()));
+      dateForm.setFieldValue("infodate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        infodate_moveroom: moment(now()),
-        infodate_nextclass: moment(now()),
+        infodate_moveroom: dayjs(now()),
+        infodate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1311,7 +1311,7 @@ const Info_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1326,7 +1326,7 @@ const Info_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

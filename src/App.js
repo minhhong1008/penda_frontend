@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import "antd/dist/antd.css";
+import 'antd/dist/reset.css';
+import './index.css';
 import "./App.css";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { compose } from "recompose";
@@ -96,6 +97,8 @@ import Create from "./pages/Create/Create";
 import Tooldata_info from "./pages/Tooldata/Tooldata_info";
 import Tools_list from "./pages/Tools/tools_list";
 import CCCD from "./pages/Tools/cccd/cccd";
+import DOCKBANK from "./pages/Tools/docbank/docbank";
+
 
 // User
 import Users_class from "./pages/Users/Users_class";
@@ -410,6 +413,9 @@ const App = () => {
 
           <Route path="/products/cccd" exact component={CCCD} />
 
+          <Route path="/products/docbank" exact component={DOCKBANK} />
+
+
           <Route
             path="/products/report_overview"
             exact
@@ -419,7 +425,7 @@ const App = () => {
           {/*Bill */}
           <Route path="/finance/bill_class" exact component={Bill_class} />
 
-          <Route path="/finance/bill_table" exact component={Bill_table} />
+          <Route path="/finance/bill_table/:status" exact component={Bill_table} />
           <Route path="/finance/salary_table" exact component={Salary_table} />
 
           {/*---------------------------------quản trị nhân sự-------------------------------- */}

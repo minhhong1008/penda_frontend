@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment, { now } from "moment";
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -141,8 +141,8 @@ const Shopee_info = () => {
     });
     let dateValue = {};
     tablelist_shopee_Date.map((item) => {
-      dateValue[item.value] = moment(dateData[item.value]).format(
-        "MM-DD-YYYY HH:mm"
+      dateValue[item.value] = dayjs(dateData[item.value]).format(
+        "YYYY-MM-DD HH:mm"
       );
     });
     const newValue = {
@@ -314,7 +314,7 @@ const Shopee_info = () => {
     infoForm.setFieldsValue(newData);
     let dateValue = {};
     tablelist_shopee_Date.map((item) => {
-      dateValue[item.value] = moment(data[item.value]);
+      dateValue[item.value] = dayjs(data[item.value]);
     });
     if (data?.shopee_image_url) {
       let dataImage = [];
@@ -379,32 +379,32 @@ const Shopee_info = () => {
       let new_shopee_class = form.getFieldValue("shopee_class");
       if (values == "Error") {
         (new_shopee_class = "Lớp 20"),
-          dateForm.setFieldValue("shopeedate_error", moment(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+          dateForm.setFieldValue("shopeedate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          shopeedate_error: moment(now()),
-          shopeedate_nextclass: moment(now()),
+          shopeedate_error: dayjs(now()),
+          shopeedate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_shopee_class = "Lớp 23"),
-          dateForm.setFieldValue("shopeedate_restrict", moment(now()));
-        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+          dateForm.setFieldValue("shopeedate_restrict", dayjs(now()));
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          shopeedate_restrict: moment(now()),
-          shopeedate_nextclass: moment(now()),
+          shopeedate_restrict: dayjs(now()),
+          shopeedate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
         (new_shopee_class = "Lớp 26"),
-          dateForm.setFieldValue("shopeedate_suspended", moment(now()));
-        dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+          dateForm.setFieldValue("shopeedate_suspended", dayjs(now()));
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          shopeedate_suspended: moment(now()),
-          shopeedate_nextclass: moment(now()),
+          shopeedate_suspended: dayjs(now()),
+          shopeedate_nextclass: dayjs(now()),
         });
       }
 
@@ -420,61 +420,61 @@ const Shopee_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("shopee_class", "Lớp 4");
-      dateForm.setFieldValue("shopeedate_start", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_start", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_start: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_start: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("shopee_class", "Lớp 6");
-      dateForm.setFieldValue("shopeedate_verify", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_verify", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_verify: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_verify: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("shopee_class", "Lớp 9");
-      dateForm.setFieldValue("shopeedate_seller", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_seller", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_seller: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_seller: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("shopee_class", "Lớp 10");
-      dateForm.setFieldValue("shopeedate_list1", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_list1", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_list1: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_list1: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("shopee_class", "Lớp 12");
-      dateForm.setFieldValue("shopeedate_moveroom", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_moveroom: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_moveroom: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+    dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      shopeedate_nextclass: moment(now()),
+      shopeedate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Shopee_info = () => {
         shopee_type: new_shopee_type,
       });
 
-      dateForm.setFieldValue("shopeedate_seller", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_seller", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_seller: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_seller: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
 
@@ -536,12 +536,12 @@ const Shopee_info = () => {
         shopee_type: new_shopee_type,
       });
 
-      dateForm.setFieldValue("shopeedate_start", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_start", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_start: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_start: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
 
@@ -574,12 +574,12 @@ const Shopee_info = () => {
         shopee_owner: new_shopee_owner,
       });
 
-      dateForm.setFieldValue("shopeedate_moveroom", moment(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", moment(now()));
+      dateForm.setFieldValue("shopeedate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        shopeedate_moveroom: moment(now()),
-        shopeedate_nextclass: moment(now()),
+        shopeedate_moveroom: dayjs(now()),
+        shopeedate_nextclass: dayjs(now()),
       });
     }
   };
@@ -1277,7 +1277,7 @@ const Shopee_info = () => {
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THỜI GIAN: MM-DD-YYYY">
+              <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
                   onFinish={onFinishDate}
@@ -1292,7 +1292,7 @@ const Shopee_info = () => {
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
-                              format="MM-DD-YYYY HH:mm"
+                              format="YYYY-MM-DD HH:mm"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

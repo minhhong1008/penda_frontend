@@ -14,7 +14,7 @@ import {
   } from "antd";
   import React, { useCallback, useEffect, useState } from "react";
   import { useParams } from "react-router-dom";
-  import moment from "moment";
+  import dayjs from "dayjs";
   import {
     postetsyorderInfo,
     getetsyorderInfo,
@@ -59,10 +59,10 @@ import {
         list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
         
         etsyorder_date_start: dateData?.etsyorder_date_start
-          ? moment(dateData.etsyorder_date_start).format("MM-DD-YYYY")
+          ? dayjs(dateData.etsyorder_date_start).format("YYYY-MM-DD")
           : "",
         etsyorder_date_verify: dateData?.etsyorder_date_verify
-          ? moment(dateData.etsyorder_date_verify).format("MM-DD-YYYY")
+          ? dayjs(dateData.etsyorder_date_verify).format("YYYY-MM-DD")
           : "",
         etsyorder_note: noteValue,
       };
@@ -96,8 +96,8 @@ import {
       form.setFieldsValue(newData);
       infoForm.setFieldsValue(newData);
       dateForm.setFieldsValue({
-        etsyorder_date_start: moment(data.etsyorder_date_start),
-        etsyorder_date_verify: moment(data.etsyorder_date_verify),
+        etsyorder_date_start: dayjs(data.etsyorder_date_start),
+        etsyorder_date_verify: dayjs(data.etsyorder_date_verify),
       });
       setInfo(data);
       setNoteValue(data.etsyorder_note);
@@ -768,7 +768,7 @@ import {
                           <Col span={8} key={index}>
                             <Form.Item label={item.title} name={item.value}>
                               <DatePicker
-                                format="MM-DD-YYYY"
+                                format="YYYY-MM-DD"
                                 onChange={() => dateForm.submit()}
                               />
                             </Form.Item>

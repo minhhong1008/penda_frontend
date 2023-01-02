@@ -1,6 +1,6 @@
 import "./cccd.css";
 import { Button, Col, Form, Input, Row, Select } from "antd";
-import "antd/dist/antd.css";
+import 'antd/dist/reset.css';
 import img1 from "./assets/mat_truoc.jpg";
 import img2 from "./assets/mat_sau.jpg";
 import img3 from "./assets/finger/van-tay-1.png";
@@ -12,7 +12,7 @@ import nen3 from "./assets/background/nen_3.jpg";
 import { createRef, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { useScreenshot, createFileName } from "use-react-screenshot";
-import moment from "moment";
+import dayjs from "dayjs";
 
 function CCCD() {
   const inRef = createRef(null);

@@ -13,7 +13,7 @@ import {
   } from "antd";
   import React, { useEffect, useState } from "react";
   import { useParams } from "react-router-dom";
-  import moment from "moment";
+  import dayjs from "dayjs";
   import { postOtherInfo, getOtherInfo } from "../../api/other/index";
   const Other_info = () => {
     const [otherData, setOtherData] = useState({
@@ -24,7 +24,7 @@ import {
     const [form] = Form.useForm();
     const { Option } = Select;
     const onFinish = async (values) => {
-      values.birth_date = moment(values.birth_date).format("DD/MM/YYYY");
+      values.birth_date = dayjs(values.birth_date).format("DD/MM/YYYY");
       //values.status = values.status.join(",");
       const data = await postOtherInfo(values);
       console.log(data);

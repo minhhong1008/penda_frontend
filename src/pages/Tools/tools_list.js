@@ -58,7 +58,7 @@ const Tools_list = () => {
           <Col className="gutter-row" span={6}>
             <div>
               <Card
-                onClick={() => handleClick("/products/tools/docbank")}
+                onClick={() => handleClick("/products/docbank")}
                 hoverable
                 style={{ width: 240 }}
                 cover={

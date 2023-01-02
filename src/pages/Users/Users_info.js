@@ -19,7 +19,7 @@ import {
 import { ClockCircleOutlined } from "@ant-design/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import moment from "moment";
+import dayjs from "dayjs";
 import {
   postusersInfo,
   getusersInfo,
@@ -61,10 +61,10 @@ const Users_info = () => {
       //users_class: values?.users_class ? values.users_class.join(",") : "",
 
       users_date_start: dateData?.users_date_start
-        ? moment(dateData.users_date_start).format("MM-DD-YYYY")
+        ? dayjs(dateData.users_date_start).format("YYYY-MM-DD")
         : "",
       users_date_verify: dateData?.users_date_verify
-        ? moment(dateData.users_date_verify).format("MM-DD-YYYY")
+        ? dayjs(dateData.users_date_verify).format("YYYY-MM-DD")
         : "",
       users_note: noteValue,
     };
@@ -98,8 +98,8 @@ const Users_info = () => {
     form.setFieldsValue(newData);
     //infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
-      users_date_start: moment(data.users_date_start),
-      users_date_verify: moment(data.users_date_verify),
+      users_date_start: dayjs(data.users_date_start),
+      users_date_verify: dayjs(data.users_date_verify),
     });
     setInfo(data);
     setNoteValue(data.users_note);
@@ -864,7 +864,7 @@ const Users_info = () => {
                         <Col span={8} key={index}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              format="YYYY-MM-DD"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>

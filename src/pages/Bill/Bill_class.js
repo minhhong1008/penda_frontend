@@ -13,16 +13,24 @@ import {
   Space,
   TreeSelect,
   Divider,
+  InputNumber,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
-  //------------------------------------------------
+import dayjs from "dayjs";
+import { createBill, getPayAndCollect, updateBill } from "../../api/bill";
+import { showError, showSuccess } from "../../utils";
+//------------------------------------------------
+
+// useState để tạo kho dữ liệu trong nội bộ components !== biến thường là khi dữ liệu được cập nhật thì UI thay đổi theo
+
 const Bill_class = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
+  const [formProduct] = Form.useForm();
   useEffect(() => {
     //countReport();
   }, []);
@@ -180,6 +188,7 @@ const Bill_class = () => {
     },
   ];
   //--------------------------------
+
   const columns_pay = [
     {
       title: "Stt",
@@ -190,9 +199,7 @@ const Bill_class = () => {
       dataIndex: "bill_work_pay",
       render: (text) => (
         <a
-          onClick={() =>
-            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
-          }
+          onClick={() => history.push(`bill_table/${encodeURIComponent(text)}`)}
         >
           {text}
         </a>
@@ -207,113 +214,7 @@ const Bill_class = () => {
       dataIndex: "bill_density_pay",
     },
   ];
-  const data_pay = [
-    {
-      key: "1",
-      Stt: "1",
-      bill_work_pay: "Mua device",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "2",
-      Stt: "2",
-      bill_work_pay: "Mua proxy",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "3",
-      Stt: "3",
-      bill_work_pay: "Mua info",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "4",
-      Stt: "4",
-      bill_work_pay: "Mua phone",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "5",
-      Stt: "5",
-      bill_work_pay: "Mua mail",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "6",
-      Stt: "6",
-      bill_work_pay: "Mua sim",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "7",
-      Stt: "7",
-      bill_work_pay: "Gia hạn device",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "8",
-      Stt: "8",
-      bill_work_pay: "Gia hạn proxy",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "9",
-      Stt: "9",
-      bill_work_pay: "Gia hạn sim",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "10",
-      Stt: "10",
-      bill_work_pay: "Thanh toán lương",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "11",
-      Stt: "11",
-      bill_work_pay: "Chi Phí văn phòng",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "12",
-      Stt: "12",
-      bill_work_pay: "Chi phí vận chuyển",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "13",
-      Stt: "13",
-      bill_work_pay: "Chi phí checkout",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "14",
-      Stt: "14",
-      bill_work_pay: "Chi phí Kicksold",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-    {
-      key: "15",
-      Stt: "15",
-      bill_work_pay: "Chi phí tracking",
-      bill_total_pay: "20,000,000",
-      bill_density_pay: "1,5%",
-    },
-  ];
+  const [data_pay, setDataPay] = useState();
 
   const columns_collect = [
     {
@@ -366,9 +267,118 @@ const Bill_class = () => {
       bill_density: "1,5%",
     },
   ];
+
+  // Bước 1: Lấy dữ liệu từ FORM
+  const onFinish = (values) => {
+    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
+    let productData = formProduct.getFieldsValue();
+    let newValue = {
+      ...values,
+      ...productData,
+    };
+    postBill(newValue);
+  };
+
+  const test = () => {
+    let productData = formProduct.getFieldsValue();
+    console.log(productData);
+    postupdateBill(productData);
+  };
+  // Bước 2: Gửi dữ liệu lên server
+  // Xử lý bất đồng bộ: dùng async await
+  const postBill = async (bill) => {
+    // Gọi API để gửi dữ liệu đi
+    const response = await createBill(bill);
+    if (response.status == 200) {
+      showSuccess("Thêm bill thành công");
+    } else {
+      showError("Thêm bill thất bại");
+    }
+  };
+
+  const postupdateBill = async (productData) => {
+    // Gọi API để gửi dữ liệu đi
+    const response = await updateBill(productData);
+    if (response.status == 200) {
+      showSuccess("Thêm bill thành công");
+    } else {
+      showError("Thêm bill thất bại");
+    }
+  };
   //--------------------------------
+
+  // Hàm tính tổng tiền:
+
+  const renderTotalMoney = () => {
+    let quantity = formProduct.getFieldValue("bill_number");
+    let price = formProduct.getFieldValue("bill_price");
+    if (quantity && price) {
+      formProduct.setFieldValue("bill_total", quantity * price);
+    } else {
+      formProduct.setFieldValue("bill_total", 0);
+    }
+  };
+
+  // Hàm gọi dữ liệu thu chi về
+
+  const getDataBill = async () => {
+    let response = await getPayAndCollect();
+    if (response.status == 200) {
+      const { data } = response;
+      let arrPayKey = [];
+      let arrCollect = [];
+      let totalMoney = 0;
+      data?.map((item) => {
+        if (
+          !arrPayKey.some((key) => {
+            return key == item.bill_work;
+          })
+        ) {
+          arrPayKey.push(item.bill_work);
+        }
+      });
+      let arrPay = [];
+      arrPayKey.map((key, index) => {
+        let bill_work_pay = key;
+        let bill_total_pay = 0;
+        let bill_density_pay = "1,5%";
+        data.map((item) => {
+          if (item.bill_work == key) {
+            bill_total_pay += parseInt(item.bill_total);
+          }
+        });
+        arrPay.push({
+          key: index + 2,
+          Stt: index + 2,
+          bill_work_pay: bill_work_pay,
+          bill_total_pay: bill_total_pay,
+          bill_density_pay: bill_density_pay,
+        });
+      });
+      arrPay.map((item) => {
+        totalMoney += parseInt(item.bill_total_pay);
+      })
+      arrPay.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_pay: "Tổng tiền",
+        bill_total_pay: totalMoney,
+        bill_density_pay: "100%",
+      });
+
+      setDataPay(arrPay);
+      setTablePay(arrPay);
+      setTableCollect(arrCollect);
+    } else {
+      showError("Có lỗi xảy ra");
+    }
+  };
+
+  useEffect(() => {
+    getDataBill();
+  }, []);
+
   return (
-    //https://ant.design/components/date-picker --Preset Ranges
     <div>
       <Card>
         <Tabs defaultActiveKey="1">
@@ -386,15 +396,20 @@ const Bill_class = () => {
                     </strong>
                   }
                   extra={
-                    <Button
-                      onClick={() => form.submit()}
-                      style={{
-                        background: "#1890FD",
-                        color: "white",
-                      }}
-                    >
-                      Tạo hóa đơn
-                    </Button>
+                    <>
+                      <Button
+                        onClick={() => {
+                          form.submit();
+                        }}
+                        style={{
+                          background: "#1890FD",
+                          color: "white",
+                        }}
+                      >
+                        Tạo hóa đơn
+                      </Button>
+                      <Button onClick={() => test()}>Test</Button>
+                    </>
                   }
                 >
                   <Form
@@ -402,33 +417,14 @@ const Bill_class = () => {
                     name="basic"
                     autoComplete="off"
                     size="large"
+                    onFinish={onFinish}
                   >
                     <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item
-                          label="Bill id"
-                          name="bill_id"
-                          style={{ width: "100%" }}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Hãy nhập Bill id!",
-                            },
-                          ]}
-                        >
-                          <Input
-                            disabled={true}
-                            size="small"
-                            placeholder="input here"
-                          />
-                        </Form.Item>
-                      </Col>
                       <Col span={8}>
                         <Form.Item label="Ngày tháng" name="bill_date">
                           <DatePicker
                             style={{ float: "right" }}
-                            format="MM-DD-YYYY HH:mm"
-                            onChange={() => dateForm.submit()}
+                            format="YYYY-MM-DD"
                           />
                         </Form.Item>
                       </Col>
@@ -449,7 +445,6 @@ const Bill_class = () => {
                         </Form.Item>
                       </Col>
                     </Row>
-
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Hành động" name="bill_action">
@@ -538,23 +533,12 @@ const Bill_class = () => {
                       CHI TIẾT HÀNG HÓA
                     </strong>
                   }
-                  extra={
-                    <Button
-                      onClick={() => form.submit()}
-                      style={{
-                        background: "#18a689",
-                        color: "white",
-                      }}
-                    >
-                      Thêm hàng hóa
-                    </Button>
-                  }
                 >
                   <Form
+                    form={formProduct}
                     name="basic"
                     autoComplete="off"
                     size="large"
-                    form={form}
                   >
                     <Row gutter={16}>
                       <Col span={12}>
@@ -582,17 +566,25 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Col span={6}>
                         <Form.Item label="Số lượng" name="bill_number">
-                          <Input size="small" placeholder="1000" />
+                          <InputNumber
+                            size="large"
+                            placeholder="1000"
+                            onChange={renderTotalMoney}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={9}>
                         <Form.Item label="Giá tiền" name="bill_price">
-                          <Input size="small" placeholder="50.000" />
+                          <InputNumber
+                            size="large"
+                            placeholder="50.000"
+                            onChange={renderTotalMoney}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={9}>
                         <Form.Item label="Thành tiền" name="bill_total">
-                          <Input size="small" placeholder="50.000.000" />
+                          <InputNumber size="large" disabled />
                         </Form.Item>
                       </Col>
                     </Row>

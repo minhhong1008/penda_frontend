@@ -19,7 +19,7 @@ import profilavatar from "../assets/images/face-1.jpg";
 import { getUser } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileAction, updateProfileAction } from "../actions/userActions";
-import moment from "moment";
+import dayjs from "dayjs";
 
 function Profile() {
   const user = useSelector((state) => state.user);
@@ -91,7 +91,7 @@ function Profile() {
         _id,
         values: {
           ...values,
-          birth_date: moment(values.birth_date).format("DD-MM-YYYY"),
+          birth_date: dayjs(values.birth_date).format("DD-MM-YYYY"),
         },
       })
     );
@@ -174,7 +174,7 @@ function Profile() {
               initialValues={{
                 ...user.profile,
                 birth_date: user?.profile?.birth_date
-                  ? moment(user?.profile?.birth_date)
+                  ? dayjs(user?.profile?.birth_date)
                   : "",
               }}
               name="nest-messages"

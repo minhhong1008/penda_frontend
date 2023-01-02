@@ -262,7 +262,7 @@ function Header({
       brecrum = brecrum + "/" + item;
       brc.push(
         <Breadcrumb.Item key={index}>
-          <NavLink to={item == 'table' ? brecrum + "?class=" + encodeURIComponent(param) : brecrum}>{item}</NavLink>
+          <NavLink to={item == 'table' ? brecrum + "?class=" + encodeURIComponent(param) : brecrum}>{decodeURIComponent(item)}</NavLink>
         </Breadcrumb.Item>
       );
     });

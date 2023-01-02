@@ -15,7 +15,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import moment from "moment";
+import dayjs from "dayjs";
 import { getUser } from "../../utils/index";
 import {
   postebayitemInfo,
@@ -62,10 +62,10 @@ const ebayitem_info = () => {
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
 
       ebayitemdate_start: dateData?.ebayitem_date_start
-        ? moment(dateData.ebayitem_date_start).format("MM-DD-YYYY")
+        ? dayjs(dateData.ebayitem_date_start).format("YYYY-MM-DD")
         : "",
       ebayitemdate_verify: dateData?.ebayitem_date_verify
-        ? moment(dateData.ebayitem_date_verify).format("MM-DD-YYYY")
+        ? dayjs(dateData.ebayitem_date_verify).format("YYYY-MM-DD")
         : "",
       ebayitem_note: noteValue,
     };
@@ -103,8 +103,8 @@ const ebayitem_info = () => {
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
-      ebayitem_date_start: moment(data.ebayitem_date_start),
-      ebayitem_date_verify: moment(data.ebayitem_date_verify),
+      ebayitem_date_start: dayjs(data.ebayitem_date_start),
+      ebayitem_date_verify: dayjs(data.ebayitem_date_verify),
     });
     setInfo(data);
     setNoteValue(data.ebayitem_note);
@@ -1087,7 +1087,7 @@ const ebayitem_info = () => {
                         <Col span={8} key={index}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
-                              format="MM-DD-YYYY"
+                              format="YYYY-MM-DD"
                               onChange={() => dateForm.submit()}
                             />
                           </Form.Item>
