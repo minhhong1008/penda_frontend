@@ -8,10 +8,17 @@ const initialState = {
 function paypalReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_PAYPAL_SUCCESS: {
+      let newData = [];
+      action?.payload?.map((item) => {
+        newData.push({
+          ...item,
+          key: item?.paypal_id
+        })
+      })
       return {
         ...state,
-        paypals: action.payload
-      }
+        paypals: newData,
+      };
     }
     default: {
       return state;

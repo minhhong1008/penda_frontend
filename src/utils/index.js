@@ -21,7 +21,7 @@ export const copyToClipboard = (text) => {
     console.error("Unable to copy to clipboard", err);
   }
   document.body.removeChild(textArea);
-  showSuccess("Copy: " + text);
+  showSuccess("Copy: "+ "\n" + text);
 };
 
 export const createActionTypes = (base, actions = []) =>

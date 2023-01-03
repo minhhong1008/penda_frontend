@@ -8,10 +8,17 @@ const initialState = {
 function infoReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_INFO_SUCCESS: {
+      let newData = [];
+      action?.payload?.map((item) => {
+        newData.push({
+          ...item,
+          key: item?.info_id
+        })
+      })
       return {
         ...state,
-        infos: action.payload
-      }
+        infos: newData,
+      };
     }
     default: {
       return state;

@@ -8,10 +8,17 @@ const initialState = {
 function deviceReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_DEVICE_SUCCESS: {
+      let newData = [];
+      action?.payload?.map((item) => {
+        newData.push({
+          ...item,
+          key: item?.device_id
+        })
+      })
       return {
         ...state,
-        devices: action.payload
-      }
+        devices: newData,
+      };
     }
     default: {
       return state;

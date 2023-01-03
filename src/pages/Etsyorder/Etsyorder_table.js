@@ -111,7 +111,7 @@ const Etsyorder_table = () => {
           mode="multiple"
           onChange={handleChangeFilter}
           multiple
-          optionLabelProp="label"
+          optionlabelprop="label"
           treeData={[
             {
               title: "Lớp",

@@ -15,7 +15,8 @@ import {
   TreeSelect,
   Tag,
 } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { copyToClipboard } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListbankActions } from "../../actions/bankActions";
@@ -27,10 +28,18 @@ const Bank_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-
+  // nut checked
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const copy_Id = () => {
+    copyToClipboard(selectedRowKeys.join("\n"));
+  };
   const columns = [
     {
-      title: "STT",
+      title: (
+        <Tag color="#2db7f5" onClick={copy_Id}>
+          Copy
+        </Tag>
+      ),
       key: "index",
       render: (text, record, index) => index + 1,
     },
@@ -39,22 +48,19 @@ const Bank_table = () => {
       dataIndex: "bank_id",
       key: "bank_id",
       render: (text, record) => (
-        
-        <a 
-        style={{
-          borderRadius: "6px",
-          padding: "8px 8px",
-          background: "#1c84c6",
-          color: "white",
-        }}
-        
+        <a
+          style={{
+            borderRadius: "6px",
+            padding: "8px 8px",
+            background: "#1c84c6",
+            color: "white",
+          }}
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.bank_id)}`)
           }
         >
           {text}
         </a>
-        
       ),
       sorter: (a, b) => {
         return a.bank_id.localeCompare(b.bank_id);
@@ -88,9 +94,7 @@ const Bank_table = () => {
                     }}
                   >
                     {item}
-                    
                   </div>
-                  
                 );
               } else if (item == "Verify Full" || item == "Verify Bank") {
                 return (
@@ -107,7 +111,6 @@ const Bank_table = () => {
                 );
               } else if (item == "Restrict" || item == "Suspended") {
                 return (
-                  
                   <div
                     style={{
                       textAlign: "center",
@@ -119,7 +122,6 @@ const Bank_table = () => {
                   >
                     {item}
                   </div>
-                  
                 );
               } else {
                 return (
@@ -149,11 +151,10 @@ const Bank_table = () => {
       dataIndex: "bank_error",
       key: "bank_error",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -184,11 +185,10 @@ const Bank_table = () => {
       dataIndex: "bank_employee",
       key: "bank_employee",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -244,7 +244,15 @@ const Bank_table = () => {
   useEffect(() => {
     getListBank();
   }, [class_name]);
-
+  // nut checked copy cái này trong ant.design
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  //--------
   return (
     <div>
       <Card>
@@ -253,7 +261,7 @@ const Bank_table = () => {
             mode="multiple"
             onChange={handleChangeFilter}
             multiple
-            optionLabelProp="label"
+            optionlabelprop="label"
             treeData={[
               {
                 title: "Lớp",
@@ -291,6 +299,7 @@ const Bank_table = () => {
               <Table
                 columns={columns}
                 dataSource={banks}
+                rowSelection={rowSelection}
                 pagination={{
                   pageSizeOptions: [
                     "10",

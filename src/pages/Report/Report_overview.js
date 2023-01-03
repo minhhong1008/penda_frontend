@@ -879,13 +879,13 @@ const Report_overview = () => {
 
           <Tabs.TabPane tab="CÀI ĐẶT" key="15">
             <Form.Item label="Chọn Collection">
-              <TreeSelect mode="multiple" multiple optionLabelProp="label" />
+              <TreeSelect mode="multiple" multiple optionlabelprop="label" />
             </Form.Item>
             <Form.Item label="Chọn columns">
               <TreeSelect
                 mode="multiple"
                 multiple
-                optionLabelProp="label"
+                optionlabelprop="label"
                 treeData={[
                   {
                     title: "Lớp",
@@ -918,7 +918,7 @@ const Report_overview = () => {
               <TreeSelect
                 mode="multiple"
                 multiple
-                optionLabelProp="label"
+                optionlabelprop="label"
                 treeData={[
                   {
                     title: "Lớp",
@@ -951,7 +951,7 @@ const Report_overview = () => {
               <TreeSelect
                 mode="multiple"
                 multiple
-                optionLabelProp="label"
+                optionlabelprop="label"
                 treeData={[
                   {
                     title: "Lớp",

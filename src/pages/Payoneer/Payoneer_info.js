@@ -736,7 +736,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_plan.map((item, index) => {
                           return (
@@ -767,7 +767,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_block.map((item, index) => {
                           return (
@@ -787,7 +787,7 @@ const Payoneer_info = () => {
                       onChange={onChange_Processing}
                       mode="multiple"
                       style={{ width: "100%", color: "green" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_payoneer_processing.map((item, index) => {
@@ -803,7 +803,7 @@ const Payoneer_info = () => {
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_payoneer_error.map((item, index) => {
@@ -828,7 +828,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_type.map((item, index) => {
                           return (
@@ -869,7 +869,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_sell_status.map((item, index) => {
                           return (
@@ -904,7 +904,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_owner.map((item, index) => {
                           return (
@@ -931,7 +931,7 @@ const Payoneer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_payoneer_employee?.map((item) => {
                           return (
@@ -952,7 +952,7 @@ const Payoneer_info = () => {
                         <Select
                           //mode="multiple"
                           onChange={onChange_Status}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           style={{
                             width: "100%",
                             color:
@@ -986,7 +986,7 @@ const Payoneer_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           onChange={onChange_Class}
                         >
                           {listselect_payoneer_class.map((item, index) => {
@@ -1010,7 +1010,7 @@ const Payoneer_info = () => {
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           {listselect_payoneer_employee?.map((item) => {
                             return (
@@ -1056,7 +1056,7 @@ const Payoneer_info = () => {
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="select one item"
-                    optionLabelProp="label"
+                    optionlabelprop="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
                     size="large"
@@ -1186,7 +1186,7 @@ const Payoneer_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +
@@ -1225,7 +1225,7 @@ const Payoneer_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +

@@ -98,6 +98,30 @@ const Ebay_class = () => {
   ];
   const baseData = [
     {
+      key: "0",
+      class: "Lớp 0",
+      ebay_count: "0",
+      content_complete: (
+        <div>
+          <strong>TÀI NGUYÊN MỚI</strong>
+          <br></br> Device, brower, info, mail, sim, bank..
+        </div>
+      ),
+      content_time: <div>1-10 ngày</div>,
+      content_check: (
+        <div>
+          <strong>Kiểm tra tài nguyên</strong>
+          <br></br> Liên hệ quản lý
+        </div>
+      ),
+      content_action: (
+        <div>
+          <strong>Reg mail, or login mail, xử lý tài nguyên</strong>
+          <br></br> Chuyển Lớp 2
+        </div>
+      ),
+    },
+    {
       key: "1",
       class: "Lớp 1",
       ebay_count: "0",

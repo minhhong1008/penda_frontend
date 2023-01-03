@@ -123,7 +123,7 @@ import {
               mode="multiple"
               onChange={handleChangeFilter}
               multiple
-              optionLabelProp="label"
+              optionlabelprop="label"
               treeData={[
                 {
                   title: "Lớp",

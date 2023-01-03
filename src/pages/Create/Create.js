@@ -170,7 +170,7 @@ const Create = () => {
                     <Select
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       onChange={changeSelectListInfo}
                       value={selectListInfo}
                       size="large"
@@ -196,7 +196,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       onChange={onChangeTypeAcc}
                       size="large"
                     >
@@ -253,7 +253,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       classNamePrefix="select"
                       size="large"
                     >
@@ -272,7 +272,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       classNamePrefix="select"
                       size="large"
                     >
@@ -291,7 +291,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       size="large"
                     >
                       {listselect_processing.map((item, index) => {
@@ -309,7 +309,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       size="large"
                     >
                       {listselect_ebay_type.map((item, index) => {
@@ -327,7 +327,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       size="large"
                     >
                       <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
@@ -343,7 +343,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       size="large"
                     >
                       {listselect_ebay_owner.map((item, index) => {
@@ -361,7 +361,7 @@ const Create = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       size="large"
                     >
                       {listselect_employee.map((item, index) => {
@@ -380,7 +380,7 @@ const Create = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_ebay_status.map((item, index) => {
@@ -400,7 +400,7 @@ const Create = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_ebay_class.map((item, index) => {

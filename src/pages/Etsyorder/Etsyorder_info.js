@@ -324,7 +324,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                         //status="warning"
                       >
                         <Option value="Chrome" label="Chrome">
@@ -380,7 +380,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                         //status="warning"
                       >
                          <Option value="VN" label="VN">
@@ -435,7 +435,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="VN" label="VN">
                           <div className="demo-option-label-item">VN</div>
@@ -481,7 +481,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
                           <div className="demo-option-label-item">
@@ -526,7 +526,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Phòng sản xuất" label="Phòng sản xuất">
                           <div className="demo-option-label-item">
@@ -559,7 +559,7 @@ import {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
                           <div className="demo-option-label-item">
@@ -578,7 +578,7 @@ import {
                           <Select
                             //mode="multiple"
                             style={{ width: "100%" }}
-                            optionLabelProp="label"
+                            optionlabelprop="label"
                           >
                             <Option value="Live" label="Live">
                               <div className="demo-option-label-item">Live</div>
@@ -607,7 +607,7 @@ import {
                           <Select
                             //mode="multiple"
                             style={{ width: "100%" }}
-                            optionLabelProp="label"
+                            optionlabelprop="label"
                           >
                             <Option value="Lớp 1" label="Lớp 1 New">
                               <div className="demo-option-label-item">
@@ -674,7 +674,7 @@ import {
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="select one item"
-                    optionLabelProp="label"
+                    optionlabelprop="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
                   >

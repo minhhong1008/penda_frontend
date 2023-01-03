@@ -13,15 +13,26 @@ import {
   Space,
   TreeSelect,
   Divider,
+  Modal,
   InputNumber,
+  Upload,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
 import dayjs from "dayjs";
-import { createBill, getPayAndCollect, updateBill } from "../../api/bill";
 import { showError, showSuccess } from "../../utils";
+import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
+import { Create, getPayAndCollect, updateBill } from "../../api/bill";
+// Liên quan upload ảnh
+import { PlusOutlined } from "@ant-design/icons";
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 //------------------------------------------------
 
 // useState để tạo kho dữ liệu trong nội bộ components !== biến thường là khi dữ liệu được cập nhật thì UI thay đổi theo
@@ -29,12 +40,82 @@ import { showError, showSuccess } from "../../utils";
 const Bill_class = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { RangePicker } = DatePicker;
+  const rangePresets = [
+    {
+      label: "Tháng trước",
+      value: [dayjs().add(-7, "d"), dayjs()],
+    },
+    {
+      label: "Last 7 Days",
+      value: [dayjs().add(-7, "d"), dayjs()],
+    },
+    {
+      label: "Last 14 Days",
+      value: [dayjs().add(-14, "d"), dayjs()],
+    },
+    {
+      label: "Last 30 Days",
+      value: [dayjs().add(-30, "d"), dayjs()],
+    },
+    {
+      label: "Last 90 Days",
+      value: [dayjs().add(-90, "d"), dayjs()],
+    },
+  ];
+  const [filterDate, setFilterDate] = useState();
+  // có 2 form : TẠO HÓA ĐƠN THU CHI và CHI TIẾT HÀNG HÓA nên tạo
   const [form] = Form.useForm();
   const [formProduct] = Form.useForm();
-  useEffect(() => {
-    //countReport();
-  }, []);
 
+  // Hàm tính tổng tiền:
+  const renderTotalMoney = () => {
+    let quantity = formProduct.getFieldValue("bill_number");
+    let price = formProduct.getFieldValue("bill_price");
+    if (quantity && price) {
+      formProduct.setFieldValue("bill_total", quantity * price);
+    } else {
+      formProduct.setFieldValue("bill_total", 0);
+    }
+  };
+
+  // Bước 1: onFinish Lấy dữ liệu (values) từ FORM, sau đó xử lý và gửi dữ liêu lên server bằng phương thức post. dùng hàm postData_sever
+  const onFinish = (values) => {
+    let bill_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      bill_file.push(fileUrl);
+    });
+
+    // Xử lý dữ liệu ngày tháng, multi select, earewa trước
+    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
+    let productValues = formProduct.getFieldsValue();
+    // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
+    let newData = {
+      ...values,
+      ...productValues,
+      bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
+    };
+    postData_server(newData);
+  };
+
+  // Bước 2: Gửi dữ liệu lên server Xử lý bất đồng bộ: dùng async await
+  const postData_server = async (newData) => {
+    // Gọi API để gửi dữ liệu đi
+    const response = await Create(newData);
+    if (response.status == 200) {
+      showSuccess("Thêm bill thành công");
+    } else {
+      showError("Thêm bill thất bại");
+    }
+  };
+
+  //---------------Bảng-------------------
   const columns_suggest_pay = [
     {
       title: "Stt",
@@ -42,11 +123,13 @@ const Bill_class = () => {
     },
     {
       title: "Công việc",
-      dataIndex: "bill_work",
+      dataIndex: "bill_work_suggest_pay",
       render: (text) => (
         <a
           onClick={() =>
-            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+            history.push(
+              `bill_table/${encodeURIComponent(text + " ?action= Đề xuất")}`
+            )
           }
         >
           {text}
@@ -55,87 +138,14 @@ const Bill_class = () => {
     },
     {
       title: "Số tiền",
-      dataIndex: "bill_total",
+      dataIndex: "bill_total_suggest_pay",
     },
     {
       title: "Tỷ trọng",
-      dataIndex: "bill_density",
+      dataIndex: "bill_density_suggest_pay",
     },
   ];
-  const data_suggest_pay = [
-    {
-      key: "1",
-      Stt: "1",
-      bill_work: "Tổng tiền",
-      bill_total: "220,000,000",
-      bill_density: "100%",
-    },
-    {
-      key: "2",
-      Stt: "2",
-      bill_work: "Mua device, proxy & gia hạn",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "3",
-      Stt: "3",
-      bill_work: "Mua info",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "4",
-      Stt: "4",
-      bill_work: "Mua sim, phone & gia hạn",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "5",
-      Stt: "5",
-      bill_work: "Mua mail",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-
-    {
-      key: "6",
-      Stt: "6",
-      bill_work: "Thanh toán lương, thưởng hoa hồng",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-
-    {
-      key: "7",
-      Stt: "7",
-      bill_work: "Chi phí văn phòng",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "8",
-      Stt: "8",
-      bill_work: "Chi phí vận chuyển",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "9",
-      Stt: "9",
-      bill_work: "Chi phí checkout, tracking",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "10",
-      Stt: "10",
-      bill_work: "Chi phí Kicksold",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-  ];
+  const [data_suggest_pay, setDataSuggestPay] = useState();
 
   const columns_suggest_collect = [
     {
@@ -144,11 +154,13 @@ const Bill_class = () => {
     },
     {
       title: "Công việc",
-      dataIndex: "bill_work",
+      dataIndex: "bill_work_suggest_collect",
       render: (text) => (
         <a
           onClick={() =>
-            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+            history.push(
+              `bill_table/${encodeURIComponent(text + " ?action= Đề xuất")}`
+            )
           }
         >
           {text}
@@ -157,36 +169,14 @@ const Bill_class = () => {
     },
     {
       title: "Số tiền",
-      dataIndex: "bill_total",
+      dataIndex: "bill_total_suggest_collect",
     },
     {
       title: "Tỷ trọng",
-      dataIndex: "bill_density",
+      dataIndex: "bill_density_suggest_collect",
     },
   ];
-  const data_suggest_collect = [
-    {
-      key: "1",
-      Stt: "1",
-      bill_work: "Thu tiền bán hàng",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "2",
-      Stt: "2",
-      bill_work: "Thu tiền bán tài nguyên",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "3",
-      Stt: "3",
-      bill_work: "Thu tiền khác",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-  ];
+  const [data_suggest_collect, setDataSuggestCollect] = useState();
   //--------------------------------
 
   const columns_pay = [
@@ -199,7 +189,11 @@ const Bill_class = () => {
       dataIndex: "bill_work_pay",
       render: (text) => (
         <a
-          onClick={() => history.push(`bill_table/${encodeURIComponent(text)}`)}
+          onClick={() =>
+            history.push(
+              `bill_table/${encodeURIComponent(text + " ?action= Thực hiện")}`
+            )
+          }
         >
           {text}
         </a>
@@ -223,11 +217,13 @@ const Bill_class = () => {
     },
     {
       title: "Công việc",
-      dataIndex: "bill_work",
+      dataIndex: "bill_work_collect",
       render: (text) => (
         <a
           onClick={() =>
-            history.push(`bill_class/table?status=${encodeURIComponent(text)}`)
+            history.push(
+              `bill_table/${encodeURIComponent(text + " ?action= Thực hiện")}`
+            )
           }
         >
           {text}
@@ -236,66 +232,20 @@ const Bill_class = () => {
     },
     {
       title: "Số tiền",
-      dataIndex: "bill_total",
+      dataIndex: "bill_total_collect",
     },
     {
       title: "Tỷ trọng",
-      dataIndex: "bill_density",
+      dataIndex: "bill_density_collect",
     },
   ];
+  const [data_collect, setDataCollect] = useState();
 
-  const data_collect = [
-    {
-      key: "1",
-      Stt: "1",
-      bill_work: "Thu tiền bán hàng",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "2",
-      Stt: "2",
-      bill_work: "Thu tiền bán tài nguyên",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-    {
-      key: "3",
-      Stt: "3",
-      bill_work: "Thu tiền khác",
-      bill_total: "20,000,000",
-      bill_density: "1,5%",
-    },
-  ];
-
-  // Bước 1: Lấy dữ liệu từ FORM
-  const onFinish = (values) => {
-    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
-    let productData = formProduct.getFieldsValue();
-    let newValue = {
-      ...values,
-      ...productData,
-    };
-    postBill(newValue);
-  };
-
-  const test = () => {
+  /* const test = () => {
     let productData = formProduct.getFieldsValue();
     console.log(productData);
     postupdateBill(productData);
-  };
-  // Bước 2: Gửi dữ liệu lên server
-  // Xử lý bất đồng bộ: dùng async await
-  const postBill = async (bill) => {
-    // Gọi API để gửi dữ liệu đi
-    const response = await createBill(bill);
-    if (response.status == 200) {
-      showSuccess("Thêm bill thành công");
-    } else {
-      showError("Thêm bill thất bại");
-    }
-  };
-
+  }; 
   const postupdateBill = async (productData) => {
     // Gọi API để gửi dữ liệu đi
     const response = await updateBill(productData);
@@ -304,76 +254,227 @@ const Bill_class = () => {
     } else {
       showError("Thêm bill thất bại");
     }
-  };
+  }; */
+
   //--------------------------------
-
-  // Hàm tính tổng tiền:
-
-  const renderTotalMoney = () => {
-    let quantity = formProduct.getFieldValue("bill_number");
-    let price = formProduct.getFieldValue("bill_price");
-    if (quantity && price) {
-      formProduct.setFieldValue("bill_total", quantity * price);
+  const onRangeChange = (dates, dateStrings) => {
+    if (dates) {
+      setFilterDate({
+        from: dateStrings[0],
+        to: dateStrings[1],
+      });
     } else {
-      formProduct.setFieldValue("bill_total", 0);
+      console.log("Clear");
     }
   };
-
   // Hàm gọi dữ liệu thu chi về
 
   const getDataBill = async () => {
     let response = await getPayAndCollect();
     if (response.status == 200) {
       const { data } = response;
-      let arrPayKey = [];
-      let arrCollect = [];
-      let totalMoney = 0;
+      let arrKey_bill_work = [];
+      let totalMoney_pay = 0;
+      let totalMoney_collect = 0;
+      let totalMoney_suggest_pay = 0;
+      let totalMoney_suggest_collect = 0;
+
       data?.map((item) => {
         if (
-          !arrPayKey.some((key) => {
+          !arrKey_bill_work.some((key) => {
             return key == item.bill_work;
           })
         ) {
-          arrPayKey.push(item.bill_work);
+          arrKey_bill_work.push(item.bill_work);
         }
       });
+
+      let listbill_collect = [
+        "Thu tiền bán hàng",
+        "Thu tiền bán tài nguyên",
+        "Thu tiền khác",
+        "Thu tiền đi vay",
+      ];
       let arrPay = [];
-      arrPayKey.map((key, index) => {
-        let bill_work_pay = key;
-        let bill_total_pay = 0;
-        let bill_density_pay = "1,5%";
-        data.map((item) => {
-          if (item.bill_work == key) {
-            bill_total_pay += parseInt(item.bill_total);
-          }
-        });
-        arrPay.push({
-          key: index + 2,
-          Stt: index + 2,
-          bill_work_pay: bill_work_pay,
-          bill_total_pay: bill_total_pay,
-          bill_density_pay: bill_density_pay,
-        });
+      let arrSuggestPay = [];
+      let arrCollect = [];
+      let arrSuggestCollect = [];
+      arrKey_bill_work.map((key, index) => {
+        if (listbill_collect.indexOf(key) == -1) {
+          let bill_work_pay = key;
+          let bill_total_pay = 0;
+          let bill_density_pay = "1,5%";
+
+          let bill_work_suggest_pay = key;
+          let bill_total_suggest_pay = 0;
+          let bill_density_suggest_pay = "1,5%";
+
+          data.map((item) => {
+            if (item.bill_action == "Thực hiện") {
+              if (item.bill_work == key) {
+                bill_total_pay += parseInt(item.bill_total);
+              }
+            } else {
+              if (item.bill_work == key) {
+                bill_total_suggest_pay += parseInt(item.bill_total);
+              }
+            }
+          });
+
+          arrPay.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_pay: bill_work_pay,
+            bill_total_pay: VND.format(bill_total_pay),
+            bill_density_pay: bill_density_pay,
+          });
+
+          arrSuggestPay.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_suggest_pay: bill_work_suggest_pay,
+            bill_total_suggest_pay: VND.format(bill_total_suggest_pay),
+            bill_density_suggest_pay: bill_density_suggest_pay,
+          });
+        } else {
+          let bill_work_collect = key;
+          let bill_total_collect = 0;
+          let bill_density_collect = "1,5%";
+
+          let bill_suggest_work_collect = key;
+          let bill_suggest_total_collect = 0;
+          let bill_suggest_density_collect = "1,5%";
+
+          data.map((item) => {
+            if (item.bill_action == "Thực hiện") {
+              if (item.bill_work == key) {
+                bill_total_collect += parseInt(item.bill_total);
+              }
+            } else {
+              if (item.bill_work == key) {
+                bill_suggest_total_collect += parseInt(item.bill_total);
+              }
+            }
+          });
+
+          arrCollect.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_collect: bill_work_collect,
+            bill_total_collect: VND.format(bill_total_collect),
+            bill_density_collect: bill_density_collect,
+          });
+
+          arrSuggestCollect.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_suggest_collect: bill_suggest_work_collect,
+            bill_total_suggest_collect: VND.format(bill_suggest_total_collect),
+            bill_density_suggest_collect: bill_suggest_density_collect,
+          });
+        }
       });
+
       arrPay.map((item) => {
-        totalMoney += parseInt(item.bill_total_pay);
-      })
+        totalMoney_pay += parseInt(item.bill_total_pay);
+      });
+
       arrPay.unshift({
         key: 1,
         Stt: 1,
         bill_work_pay: "Tổng tiền",
-        bill_total_pay: totalMoney,
+        bill_total_pay: VND.format(totalMoney_pay),
         bill_density_pay: "100%",
       });
-
       setDataPay(arrPay);
-      setTablePay(arrPay);
-      setTableCollect(arrCollect);
+
+      arrSuggestPay.map((item) => {
+        totalMoney_suggest_pay += parseInt(item.bill_total_suggest_pay);
+      });
+
+      arrSuggestPay.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_suggest_pay: "Tổng tiền",
+        bill_total_suggest_pay: VND.format(totalMoney_suggest_pay),
+        bill_density_suggest_pay: "100%",
+      });
+      setDataSuggestPay(arrSuggestPay);
+
+      arrCollect.map((item) => {
+        totalMoney_collect += parseInt(item.bill_total_collect);
+      });
+
+      arrCollect.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_collect: "Tổng tiền",
+        bill_total_collect: VND.format(totalMoney_collect),
+        bill_density_collect: "100%",
+      });
+
+      setDataCollect(arrCollect);
+
+      arrSuggestCollect.map((item) => {
+        totalMoney_suggest_collect += parseInt(item.bill_total_suggest_collect);
+      });
+
+      arrSuggestCollect.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_suggest_collect: "Tổng tiền",
+        bill_total_suggest_collect: VND.format(totalMoney_suggest_collect),
+        bill_density_suggest_collect: "100%",
+      });
+
+      setDataSuggestCollect(arrSuggestCollect);
+
+      //setTablePay(arrPay);
+      //setTableCollect(arrCollect);
     } else {
       showError("Có lỗi xảy ra");
     }
   };
 
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState();
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
+  // Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getDataBill();
   }, []);
@@ -382,7 +483,107 @@ const Bill_class = () => {
     <div>
       <Card>
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="1">
+          <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
+            <Row gutter={16}>
+              <Col span={12}>
+                <Card
+                  title={
+                    <strong
+                      style={{
+                        color: "#18a689",
+                      }}
+                    >
+                      BẢNG ĐỀ XUẤT
+                    </strong>
+                  }
+                  extra={
+                    <>
+                      <Row gutter={16}>
+                        <Col span={16}>
+                          <RangePicker
+                            presets={rangePresets}
+                            onChange={onRangeChange}
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Button
+                            style={{
+                              background: "#18a689",
+                              color: "white",
+                            }}
+                          >
+                            Kết quả
+                          </Button>
+                        </Col>
+                      </Row>
+                    </>
+                  }
+                >
+                  <Divider>BẢNG ĐỀ XUẤT CHI </Divider>
+                  <Table
+                    columns={columns_suggest_pay}
+                    dataSource={data_suggest_pay}
+                    size="middle"
+                  />
+                  <Divider>BẢNG ĐỀ XUẤT THU </Divider>
+                  <Table
+                    columns={columns_suggest_collect}
+                    dataSource={data_suggest_collect}
+                    size="middle"
+                  />
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card
+                  title={
+                    <strong
+                      style={{
+                        color: "#1890FD",
+                      }}
+                    >
+                      BẢNG THU CHI
+                    </strong>
+                  }
+                  extra={
+                    <>
+                      <Row gutter={16}>
+                        <Col span={16}>
+                          <RangePicker
+                            presets={rangePresets}
+                            onChange={onRangeChange}
+                          />
+                        </Col>
+                        <Col span={8}>
+                          <Button
+                            style={{
+                              background: "#1890FD",
+                              color: "white",
+                            }}
+                          >
+                            Kết quả
+                          </Button>
+                        </Col>
+                      </Row>
+                    </>
+                  }
+                >
+                  <Divider>BẢNG CHI TIỀN</Divider>
+                  <Table
+                    columns={columns_pay}
+                    dataSource={data_pay}
+                    size="middle"
+                  />
+                  <Divider>BẢNG THU TIỀN</Divider>
+                  <Table
+                    columns={columns_collect}
+                    dataSource={data_collect}
+                    size="middle"
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="2">
             <Row gutter={16}>
               <Col span={12}>
                 <Card
@@ -408,7 +609,7 @@ const Bill_class = () => {
                       >
                         Tạo hóa đơn
                       </Button>
-                      <Button onClick={() => test()}>Test</Button>
+                      {/* <Button onClick={() => test()}>Test</Button> */}
                     </>
                   }
                 >
@@ -430,7 +631,7 @@ const Bill_class = () => {
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Hạng mục" name="bill_type">
-                          <Select optionLabelProp="label">
+                          <Select optionlabelprop="label">
                             <Option value="Phiếu chi" label="Phiếu chi">
                               <div className="demo-option-label-item">
                                 Phiếu chi
@@ -448,7 +649,7 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Hành động" name="bill_action">
-                          <Select optionLabelProp="label">
+                          <Select optionlabelprop="label">
                             <Option value="Đề xuất" label="Đề xuất">
                               <div className="demo-option-label-item">
                                 Đề xuất
@@ -465,7 +666,7 @@ const Bill_class = () => {
 
                       <Col span={8}>
                         <Form.Item label="Phòng ban" name="bill_owner">
-                          <Select optionLabelProp="label">
+                          <Select optionlabelprop="label">
                             {listselect_bill_owner.map((item, index) => {
                               return (
                                 <Option value={item} label={item} key={index}>
@@ -519,6 +720,19 @@ const Bill_class = () => {
                         </Form.Item>
                       </Col>
                     </Row>
+                    <Row gutter={16}>
+                      <Form.Item name="bill_image_url">
+                        <Upload
+                          listType="picture-card"
+                          action="http://42.114.177.31:4000/api/files"
+                          fileList={fileList}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                        >
+                          {uploadButton}
+                        </Upload>
+                      </Form.Item>
+                    </Row>
                   </Form>
                 </Card>
               </Col>
@@ -543,7 +757,7 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Col span={12}>
                         <Form.Item label="Công việc" name="bill_work">
-                          <Select optionLabelProp="label">
+                          <Select optionlabelprop="label">
                             {listselect_bill_work.map((item, index) => {
                               return (
                                 <Option value={item} label={item} key={index}>
@@ -593,110 +807,19 @@ const Bill_class = () => {
               </Col>
             </Row>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="BÁO CÁO THU CHI" key="2">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#18a689",
-                      }}
-                    >
-                      BẢNG ĐỀ XUẤT
-                    </strong>
-                  }
-                  extra={
-                    <>
-                      <Row gutter={16}>
-                        <Col span={16}>
-                          <Input
-                            size="small"
-                            placeholder="1/5/2025 - 30/7/2025"
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Button
-                            style={{
-                              background: "#18a689",
-                              color: "white",
-                            }}
-                          >
-                            Kết quả
-                          </Button>
-                        </Col>
-                      </Row>
-                    </>
-                  }
-                >
-                  <Divider>BẢNG ĐỀ XUẤT CHI </Divider>
-                  <Table
-                    columns={columns_suggest_pay}
-                    dataSource={data_suggest_pay}
-                    size="middle"
-                  />
-                  <Divider>BẢNG ĐỀ XUẤT THU </Divider>
-                  <Table
-                    columns={columns_suggest_collect}
-                    dataSource={data_suggest_collect}
-                    size="middle"
-                  />
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#1890FD",
-                      }}
-                    >
-                      BẢNG THU CHI
-                    </strong>
-                  }
-                  extra={
-                    <>
-                      <Row gutter={16}>
-                        <Col span={16}>
-                          <Input
-                            size="small"
-                            placeholder="1/5/2025 - 30/7/2025"
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Button
-                            style={{
-                              background: "#1890FD",
-                              color: "white",
-                            }}
-                          >
-                            Kết quả
-                          </Button>
-                        </Col>
-                      </Row>
-                    </>
-                  }
-                >
-                  <Divider>BẢNG CHI TIỀN</Divider>
-                  <Table
-                    columns={columns_pay}
-                    dataSource={data_pay}
-                    size="middle"
-                  />
-                  <Divider>BẢNG THU TIỀN</Divider>
-                  <Table
-                    columns={columns_collect}
-                    dataSource={data_collect}
-                    size="middle"
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Tabs.TabPane>
+
           <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
             <p>Mỗi nhà cung cấp phải tạo 1 phiếu khác nhau</p>
           </Tabs.TabPane>
         </Tabs>
+        <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
       </Card>
     </div>
   );

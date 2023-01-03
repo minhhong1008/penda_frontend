@@ -13,11 +13,13 @@ import {
   Collapse,
   Space,
   TreeSelect,
+  Tag,
 } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListamazonActions } from "../../actions/amazonActions";
+import { copyToClipboard } from "../../utils";
 import { HuongDanAmazon_table } from "./Amazon_list";
 const Amazon_table = () => {
   const queryString = window.location.search;
@@ -26,10 +28,14 @@ const Amazon_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-
+  // nut checked
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const copy_Id = () => {
+    copyToClipboard(selectedRowKeys.join("\n"));
+  };
   const columns = [
     {
-      title: "STT",
+      title:<Tag color="#2db7f5" onClick={copy_Id}>Copy</Tag>,
       key: "index",
       render: (text, record, index) => index + 1,
     },
@@ -239,7 +245,15 @@ const Amazon_table = () => {
   useEffect(() => {
     getListAmazon();
   }, [class_name]);
-
+// nut checked copy cái này trong ant.design
+const onSelectChange = (newSelectedRowKeys) => {
+  setSelectedRowKeys(newSelectedRowKeys);
+};
+const rowSelection = {
+  selectedRowKeys,
+  onChange: onSelectChange,
+};
+//--------
   return (
     <div>
       <Card>
@@ -248,7 +262,7 @@ const Amazon_table = () => {
             mode="multiple"
             onChange={handleChangeFilter}
             multiple
-            optionLabelProp="label"
+            optionlabelprop="label"
             treeData={[
               {
                 title: "Lớp",
@@ -286,6 +300,7 @@ const Amazon_table = () => {
               <Table
                 columns={columns}
                 dataSource={amazons}
+                rowSelection={rowSelection}
                 pagination={{
                   pageSizeOptions: [
                     "10",

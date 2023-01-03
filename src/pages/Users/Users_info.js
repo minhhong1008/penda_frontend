@@ -8,13 +8,13 @@ import {
   Input,
   DatePicker,
   Select,
-  Modal,
   Avatar,
   List,
-  Upload,
   Timeline,
   Alert,
   Space,
+  Upload,
+  Modal,
 } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import React, { useCallback, useEffect, useState } from "react";
@@ -26,8 +26,18 @@ import {
   updateusersInfo,
 } from "../../api/users/index";
 import { showError, showSuccess } from "../../utils";
-import { PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+
+// Liên quan upload ảnh
+import { PlusOutlined } from "@ant-design/icons";
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 
 const Users_info = () => {
   const { Option } = Select;
@@ -48,9 +58,21 @@ const Users_info = () => {
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    let users_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      users_file.push(fileUrl);
+    });
+
     const newValue = {
       ...info,
       ...values,
+      users_image_url: users_file.length > 0 ? users_file.join(",") : "",
       //users_level: values?.users_level ? values.users_level.join(",") : "",
       manage_view: values?.manage_view ? values.manage_view.join(",") : "",
       users_function: values?.users_function
@@ -94,25 +116,31 @@ const Users_info = () => {
         : "",
       users_owner: data?.users_owner ? data.users_owner.split(",") : "",
     };
-
+    if (data?.users_image_url) {
+      let dataImage = [];
+      let imageArr = data.users_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
     form.setFieldsValue(newData);
     //infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
       users_date_start: dayjs(data.users_date_start),
       users_date_verify: dayjs(data.users_date_verify),
     });
-    setInfo(data);
+    setInfo(newData);
     setNoteValue(data.users_note);
     //setSelectListInfo(data.list_view.split(","));
   };
 
-  // Hàm để chuyển trang sang các tài khoản khác
-
-  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
-  useEffect(() => {
-    getInfousers();
-  }, []);
-
+   
   //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
@@ -134,6 +162,118 @@ const Users_info = () => {
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);
   };
+
+  const renderTimeLine = () => {
+    let arr = [
+      {
+        time: "01/01/2023",
+        title: "Up seller",
+      },
+      {
+        time: "01/01/2023",
+        title: "Up seller",
+      },
+      {
+        time: "01/01/2023",
+        title: "Up seller",
+      },
+      {
+        time: "01/01/2023",
+        title: "Up seller",
+      },
+      {
+        time: "01/01/2023",
+        title: "Up seller",
+      },
+    ];
+
+    return (
+      <Col span={24}>
+        <Timeline mode="alternate">
+          {arr.map((item, index) => {
+            return (
+              <Timeline.Item key={index}>
+                {" "}
+                {item.title + " " + item.time}
+              </Timeline.Item>
+            );
+          })}
+          <Timeline.Item color="green">
+            Solve initial network problems 2015-09-01
+          </Timeline.Item>
+          <Timeline.Item
+            dot={
+              <ClockCircleOutlined
+                style={{
+                  fontSize: "26px",
+                }}
+              />
+            }
+          >
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+            quae ab illo inventore veritatis et quasi architecto beatae vitae
+            dicta sunt explicabo.
+          </Timeline.Item>
+          <Timeline.Item color="red">
+            Network problems being solved 2015-09-01
+          </Timeline.Item>
+          <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
+          <Timeline.Item
+            dot={
+              <ClockCircleOutlined
+                style={{
+                  fontSize: "26px",
+                }}
+              />
+            }
+          >
+            Technical testing 2015-09-01
+          </Timeline.Item>
+        </Timeline>
+      </Col>
+    );
+  };
+
+
+   // Upload ảnh
+   const [previewOpen, setPreviewOpen] = useState(false);
+   const [previewImage, setPreviewImage] = useState("");
+   const [previewTitle, setPreviewTitle] = useState("");
+   const [fileList, setFileList] = useState();
+ 
+   const handleCancel = () => setPreviewOpen(false);
+   const handlePreview = async (file) => {
+     if (!file.url && !file.preview) {
+       file.preview = await getBase64(file.originFileObj);
+     }
+     setPreviewImage(file.url || file.preview);
+     setPreviewOpen(true);
+     setPreviewTitle(
+       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+     );
+   };
+   const handleChange = async ({ fileList }) => {
+     setFileList(fileList);
+   };
+   const uploadButton = (
+     <div>
+       <PlusOutlined />
+       <div
+         style={{
+           marginTop: 8,
+         }}
+       >
+         Upload
+       </div>
+     </div>
+   );
+
+ //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
+ useEffect(() => {
+   getInfousers();
+ }, []);
+
 
   return (
     <Card
@@ -316,7 +456,7 @@ const Users_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           <Option
                             value="Lao động phổ thông"
@@ -359,7 +499,7 @@ const Users_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           <Option value="Marketing" label="Marketing">
                             <div className="demo-option-label-item">
@@ -397,7 +537,7 @@ const Users_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                         // disabled={true}
                       >
                         <Option value="Giám đốc" label="Giám đốc">
@@ -466,7 +606,7 @@ const Users_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Phòng IT" label="Phòng IT">
                           <div className="demo-option-label-item">Phòng IT</div>
@@ -553,7 +693,7 @@ const Users_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                         //status="warning"
                       >
                         <Option value="device_id" label="device">
@@ -627,7 +767,7 @@ const Users_info = () => {
                             //mode="multiple"
                             //disabled={true}
                             style={{ width: "100%" }}
-                            optionLabelProp="label"
+                            optionlabelprop="label"
                           >
                             <Option value="Active" label="Active">
                               <div className="demo-option-label-item">
@@ -671,7 +811,7 @@ const Users_info = () => {
                             //mode="multiple"
                             //disabled={true}
                             style={{ width: "100%" }}
-                            optionLabelProp="label"
+                            optionlabelprop="label"
                           >
                             <Option value="6000000" label="6.000.000">
                               <div className="demo-option-label-item">
@@ -763,20 +903,18 @@ const Users_info = () => {
                       ) : null}
                     </Col>
                   </Row>
-                  <Row>
-                    {/* <Col span={24}>
-                        <Form.Item name="users_image">
-                          <Upload
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            listType="picture-card"
-                            fileList={fileList}
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                          >
-                            {fileList.length >= 8 ? null : uploadButton}
-                          </Upload>
-                        </Form.Item>
-                      </Col> */}
+                  <Row gutter={16}>
+                    <Form.Item name="users_image_url">
+                      <Upload
+                        listType="picture-card"
+                        action="http://42.114.177.31:4000/api/files"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {uploadButton}
+                      </Upload>
+                    </Form.Item>
                   </Row>
                 </Form>
               </Card>
@@ -785,7 +923,6 @@ const Users_info = () => {
             <Col span={12}>
               <Card title="CHỨC NĂNG NHIỆM VỤ">
                 <Col span={24}>
-                 
                   <Space direction="vertical" style={{ width: "100%" }}>
                     <Alert message="Success Text" type="success" />
                     <Alert message="Info Text" type="info" />
@@ -795,53 +932,11 @@ const Users_info = () => {
                     <Alert message="Info Text" type="info" />
                     <Alert message="Warning Text" type="warning" />
                     <Alert message="Error Text" type="error" />
-
                   </Space>
                 </Col>
                 <br></br>
                 <br></br>
-                <Col span={24}>
-                 
-                  <Timeline mode="alternate">
-                    <Timeline.Item>
-                      Create a services site 2015-09-01
-                    </Timeline.Item>
-                    <Timeline.Item color="green">
-                      Solve initial network problems 2015-09-01
-                    </Timeline.Item>
-                    <Timeline.Item
-                      dot={
-                        <ClockCircleOutlined
-                          style={{
-                            fontSize: "26px",
-                          }}
-                        />
-                      }
-                    >
-                      Sed ut perspiciatis unde omnis iste natus error sit
-                      voluptatem accusantium doloremque laudantium, totam rem
-                      aperiam, eaque ipsa quae ab illo inventore veritatis et
-                      quasi architecto beatae vitae dicta sunt explicabo.
-                    </Timeline.Item>
-                    <Timeline.Item color="red">
-                      Network problems being solved 2015-09-01
-                    </Timeline.Item>
-                    <Timeline.Item>
-                      Create a services site 2015-09-01
-                    </Timeline.Item>
-                    <Timeline.Item
-                      dot={
-                        <ClockCircleOutlined
-                          style={{
-                            fontSize: "26px",
-                          }}
-                        />
-                      }
-                    >
-                      Technical testing 2015-09-01
-                    </Timeline.Item>
-                  </Timeline>
-                </Col>
+                {renderTimeLine()}
               </Card>
             </Col>
           </Row>
@@ -911,20 +1006,15 @@ const Users_info = () => {
           </p>
         </Tabs.TabPane>
       </Tabs>
-      {/* <Modal
-          open={previewOpen}
-          title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img
-            alt="example"
-            style={{
-              width: "100%",
-            }}
-            src={previewImage}
-          />
-        </Modal> */}
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
+      
     </Card>
   );
 };

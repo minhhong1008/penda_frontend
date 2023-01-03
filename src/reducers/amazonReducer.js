@@ -8,10 +8,17 @@ const initialState = {
 function amazonReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_AMAZON_SUCCESS: {
+      let newData = [];
+      action?.payload?.map((item) => {
+        newData.push({
+          ...item,
+          key: item?.amazon_id
+        })
+      })
       return {
         ...state,
-        amazons: action.payload
-      }
+        amazons: newData,
+      };
     }
     default: {
       return state;

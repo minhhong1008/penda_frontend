@@ -15,17 +15,33 @@ import {
   Divider,
   Modal,
   InputNumber,
+  Upload,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
-import { getListBill, postBillUpdate } from "../../api/bill";
 import dayjs from "dayjs";
 import { showError, showSuccess } from "../../utils";
+import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
+import { getListBill, postBillUpdate } from "../../api/bill";
+
+// Liên quan upload ảnh
+import { PlusOutlined } from "@ant-design/icons";
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 const Bill_table = () => {
   const { RangePicker } = DatePicker;
   const rangePresets = [
+    {
+      label: "Tháng trước",
+      value: [dayjs().add(-7, "d"), dayjs()],
+    },
     {
       label: "Last 7 Days",
       value: [dayjs().add(-7, "d"), dayjs()],
@@ -44,6 +60,7 @@ const Bill_table = () => {
     },
   ];
   let { status } = useParams();
+
   const dispatch = useDispatch();
   const history = useHistory();
   const [form] = Form.useForm();
@@ -52,16 +69,20 @@ const Bill_table = () => {
   const [data, setData] = useState();
   const [selectedBill, setSelectedBill] = useState();
   const [openModal, setOpenModal] = useState(false);
+
   const getListBillTable = async () => {
     let { data } = await getListBill({
       status: status,
     });
+    //data.bill_total = VND.format(data.bill_total)
+  
     setData(data);
   };
 
-  useEffect(() => {
-    getListBillTable();
-  }, []);
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 
   const columns = [
     {
@@ -111,9 +132,21 @@ const Bill_table = () => {
           onClick={() => {
             record.bill_date = dayjs(record.bill_date);
             setSelectedBill(record);
+            if (record?.bill_image_url) {
+              let dataImage = [];
+              let imageArr = record.bill_image_url.split(",");
+              imageArr.map((item, index) => {
+                dataImage.push({
+                  uid: index,
+                  name: item,
+                  status: "done",
+                  url: item,
+                });
+              });
+              setFileList(dataImage);
+            }
             setOpenModal(true);
           }}
-          size="small"
         >
           Sửa
         </Button>
@@ -136,17 +169,30 @@ const Bill_table = () => {
   };
 
   const onFinish = async (values) => {
+    let bill_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      bill_file.push(fileUrl);
+    });
+   
     values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
     let productData = formProduct.getFieldsValue();
     let newValue = {
       ...values,
       ...productData,
+      bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
       _id: selectedBill._id,
     };
 
     let response = await postBillUpdate(newValue);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
+
     } else {
       showError("Sửa không thành công");
     }
@@ -156,8 +202,8 @@ const Bill_table = () => {
     if (dates) {
       setFilterDate({
         from: dateStrings[0],
-        to: dateStrings[1]
-      })
+        to: dateStrings[1],
+      });
     } else {
       console.log("Clear");
     }
@@ -169,13 +215,52 @@ const Bill_table = () => {
       ...filterDate,
     });
     setData(data);
-  }
+  };
+
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState();
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+  // Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
+  useEffect(() => {
+   
+    getListBillTable();
+  }, []);
 
   return (
     <div>
       <Card>
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
+          <Tabs.TabPane tab="BÁO CÁO CHI TIẾT" key="1">
             <Row gutter={16}>
               <Col span={24}>
                 <Card
@@ -217,48 +302,15 @@ const Bill_table = () => {
               </Col>
             </Row>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="BÁO CÁO ĐỀ XUẤT" key="2">
-            <Row gutter={16}>
-              <Col span={24}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#18a689",
-                      }}
-                    >
-                      MUA DEVICE
-                    </strong>
-                  }
-                  extra={
-                    <>
-                      <Row gutter={16}>
-                        <Col span={16}>
-                          <Input
-                            size="small"
-                            placeholder="1/5/2025 - 30/7/2025"
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Button
-                            style={{
-                              background: "#18a689",
-                              color: "white",
-                            }}
-                          >
-                            Kết quả
-                          </Button>
-                        </Col>
-                      </Row>
-                    </>
-                  }
-                >
-                  <Table columns={columns} dataSource={data} size="small" />
-                </Card>
-              </Col>
-            </Row>
-          </Tabs.TabPane>
         </Tabs>
+        <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img alt="example" style={{ width: "100%" }} src={previewImage} />
+      </Modal>
         <Modal
           width={1600}
           open={openModal}
@@ -290,14 +342,12 @@ const Bill_table = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Ngày tháng" name="bill_date">
-                        <DatePicker
-                          style={{ float: "right" }}
-                        />
+                        <DatePicker style={{ float: "right" }} />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Hạng mục" name="bill_type">
-                        <Select optionLabelProp="label">
+                        <Select optionlabelprop="label">
                           <Option value="Phiếu chi" label="Phiếu chi">
                             <div className="demo-option-label-item">
                               Phiếu chi
@@ -315,7 +365,7 @@ const Bill_table = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Hành động" name="bill_action">
-                        <Select optionLabelProp="label">
+                        <Select optionlabelprop="label">
                           <Option value="Đề xuất" label="Đề xuất">
                             <div className="demo-option-label-item">
                               Đề xuất
@@ -332,7 +382,7 @@ const Bill_table = () => {
 
                     <Col span={8}>
                       <Form.Item label="Phòng ban" name="bill_owner">
-                        <Select optionLabelProp="label">
+                        <Select optionlabelprop="label">
                           {listselect_bill_owner.map((item, index) => {
                             return (
                               <Option value={item} label={item} key={index}>
@@ -386,6 +436,19 @@ const Bill_table = () => {
                       </Form.Item>
                     </Col>
                   </Row>
+                  <Row gutter={16}>
+                    <Form.Item name="bill_image_url">
+                      <Upload
+                        listType="picture-card"
+                        action="http://42.114.177.31:4000/api/files"
+                        fileList={fileList}
+                        onPreview={handlePreview}
+                        onChange={handleChange}
+                      >
+                        {uploadButton}
+                      </Upload>
+                    </Form.Item>
+                  </Row>
                 </Form>
               </Card>
             </Col>
@@ -411,7 +474,7 @@ const Bill_table = () => {
                   <Row gutter={16}>
                     <Col span={12}>
                       <Form.Item label="Công việc" name="bill_work">
-                        <Select optionLabelProp="label">
+                        <Select optionlabelprop="label">
                           {listselect_bill_work.map((item, index) => {
                             return (
                               <Option value={item} label={item} key={index}>

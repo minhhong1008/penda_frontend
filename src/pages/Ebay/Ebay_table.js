@@ -15,12 +15,13 @@ import {
   Space,
   TreeSelect,
   Checkbox,
+  Tag,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import { copyToClipboard } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListebayActions } from "../../actions/ebayActions";
-import { copyToClipboard } from "../../utils";
 import { HuongDanEbay_table } from "./Ebay_list";
 const Ebay_table = () => {
   const queryString = window.location.search;
@@ -29,22 +30,21 @@ const Ebay_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
+  // nut checked, sửa cả trong file ebayReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const copyEbayId = () => {
+  const copyId = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
   };
   const columns = [
     {
-      title: <Button onClick={copyEbayId}>Copy ID</Button>,
+      title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
       key: "index",
       fixed: "left",
-      width: 10,
-      render: (text, record, index) => {
-        return index + 1;
-      },
+      width: 1,
+      render: (text, record, index) => index + 1,
     },
     {
-      title: "#",
+      title: "ID",
       dataIndex: "ebay_id",
       key: "ebay_id",
       render: (text, record) => (
@@ -243,16 +243,15 @@ const Ebay_table = () => {
     getListEbay();
   }, [class_name]);
 
+// nut checked copy cái này trong ant.design
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-
-
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
+//--------
 
   return (
     <div>
@@ -262,7 +261,7 @@ const Ebay_table = () => {
             mode="multiple"
             onChange={handleChangeFilter}
             multiple
-            optionLabelProp="label"
+            optionlabelprop="label"
             treeData={[
               {
                 title: "Lớp",

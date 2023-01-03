@@ -12,9 +12,9 @@ function ebayReducer(state = initialState, action) {
       action?.payload?.map((item) => {
         newEbay.push({
           ...item,
-          key: item?.ebay_id
-        })
-      })
+          key: item?.ebay_id,
+        });
+      });
       return {
         ...state,
         ebays: newEbay,

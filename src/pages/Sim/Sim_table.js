@@ -11,10 +11,14 @@ import {
   DatePicker,
   Select,
   Collapse,
+  Popover,
   Space,
   TreeSelect,
+  Checkbox,
+  Tag,
 } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { copyToClipboard } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListsimActions } from "../../actions/simActions";
@@ -23,15 +27,20 @@ const Sim_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const { sims } = useSelector((state) => state.sim);
-  const class_name = urlParams.get();
-  console.log(class_name)
+  const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-
+  // nut checked, sửa cả trong file ebayReducer
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const copyId = () => {
+    copyToClipboard(selectedRowKeys.join("\n"));
+  };
   const columns = [
     {
-      title: "STT",
+      title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
       key: "index",
+      fixed: "left",
+      width: 1,
       render: (text, record, index) => index + 1,
     },
     {
@@ -240,7 +249,15 @@ const Sim_table = () => {
   useEffect(() => {
     getListSim();
   }, [class_name]);
-
+// nut checked copy cái này trong ant.design
+const onSelectChange = (newSelectedRowKeys) => {
+  setSelectedRowKeys(newSelectedRowKeys);
+};
+const rowSelection = {
+  selectedRowKeys,
+  onChange: onSelectChange,
+};
+//--------
   return (
     <div>
       <Card>
@@ -249,7 +266,7 @@ const Sim_table = () => {
             mode="multiple"
             onChange={handleChangeFilter}
             multiple
-            optionLabelProp="label"
+            optionlabelprop="label"
             treeData={[
               {
                 title: "Lớp",
@@ -287,6 +304,7 @@ const Sim_table = () => {
               <Table
                 columns={columns}
                 dataSource={sims}
+                rowSelection={rowSelection}
                 pagination={{
                   pageSizeOptions: [
                     "10",

@@ -7,17 +7,16 @@ export const listselect_bill_owner = [
   ];
 
   export const listselect_bill_work = [
+    
     "Thu tiền bán hàng",
     "Thu tiền bán tài nguyên",
     "Thu tiền khác",
     "Thu tiền đi vay",
     "------------",
     "Mua device, proxy & gia hạn",
-    "Mua proxy & gia hạn",
-    "Mua info",
     "Mua sim, phone & gia hạn",
+    "Mua info",
     "Mua mail",
-    "Mua sim & gia hạn",
     "Thanh toán lương, thưởng hoa hồng",
     "Chi phí văn phòng",
     "Chi phí vận chuyển",

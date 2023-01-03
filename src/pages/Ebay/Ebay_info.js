@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import dayjs, { now } from "dayjs"
+import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -667,20 +667,7 @@ const Ebay_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card
-                title="THÔNG TIN EBAY"
-                extra={
-                  <Button
-                    onClick={() => form.submit()}
-                    style={{
-                      background: "#f8ac59",
-                      color: "white",
-                    }}
-                  >
-                    Copy re
-                  </Button>
-                }
-              >
+              <Card title="THÔNG TIN EBAY">
                 <Form
                   form={form}
                   name="basic"
@@ -771,7 +758,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_plan.map((item, index) => {
                           return (
@@ -802,7 +789,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_block.map((item, index) => {
                           return (
@@ -822,7 +809,7 @@ const Ebay_info = () => {
                       onChange={onChange_Processing}
                       mode="multiple"
                       style={{ width: "100%", color: "green" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_ebay_processing.map((item, index) => {
@@ -838,7 +825,7 @@ const Ebay_info = () => {
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_ebay_error.map((item, index) => {
@@ -863,7 +850,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_type.map((item, index) => {
                           return (
@@ -904,7 +891,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_sell_status.map((item, index) => {
                           return (
@@ -939,7 +926,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_owner.map((item, index) => {
                           return (
@@ -966,7 +953,7 @@ const Ebay_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_ebay_employee?.map((item) => {
                           return (
@@ -987,7 +974,7 @@ const Ebay_info = () => {
                         <Select
                           //mode="multiple"
                           onChange={onChange_Status}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           style={{
                             width: "100%",
                             color:
@@ -1021,7 +1008,7 @@ const Ebay_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           onChange={onChange_Class}
                         >
                           {listselect_ebay_class.map((item, index) => {
@@ -1045,7 +1032,7 @@ const Ebay_info = () => {
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           {listselect_ebay_employee?.map((item) => {
                             return (
@@ -1091,7 +1078,7 @@ const Ebay_info = () => {
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="select one item"
-                    optionLabelProp="label"
+                    optionlabelprop="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
                     size="large"
@@ -1221,7 +1208,7 @@ const Ebay_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +
@@ -1260,7 +1247,7 @@ const Ebay_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +

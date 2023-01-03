@@ -180,7 +180,9 @@ const Tiktok_info = () => {
       tiktok_plan: data?.tiktok_plan ? data.tiktok_plan.split(",") : "",
       tiktok_block: data?.tiktok_block ? data.tiktok_block.split(",") : "",
       tiktok_error: data?.tiktok_error ? data.tiktok_error.split(",") : "",
-      tiktok_employee: data?.tiktok_employee ? data.tiktok_employee.split(",") : "",
+      tiktok_employee: data?.tiktok_employee
+        ? data.tiktok_employee.split(",")
+        : "",
       tiktok_processing: data?.tiktok_processing
         ? data.tiktok_processing.split(",")
         : "",
@@ -613,8 +615,8 @@ const Tiktok_info = () => {
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12} >
-              <Card title="THÔNG TIN ETSY" >
+            <Col span={12}>
+              <Card title="THÔNG TIN ETSY">
                 <Form
                   form={form}
                   name="basic"
@@ -650,20 +652,12 @@ const Tiktok_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item
-                       
-                        label="Tiktok User"
-                        name="tiktok_user"
-                      >
+                      <Form.Item label="Tiktok User" name="tiktok_user">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item
-                        
-                        label="Tiktok Pass"
-                        name="tiktok_password"
-                      >
+                      <Form.Item label="Tiktok Pass" name="tiktok_password">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -671,11 +665,7 @@ const Tiktok_info = () => {
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item
-                        
-                        label="Tiktok chi tiết"
-                        name="tiktok_detail"
-                      >
+                      <Form.Item label="Tiktok chi tiết" name="tiktok_detail">
                         <Input size="small" placeholder="input here" />
                       </Form.Item>
                     </Col>
@@ -720,7 +710,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_plan.map((item, index) => {
                           return (
@@ -751,7 +741,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_block.map((item, index) => {
                           return (
@@ -771,7 +761,7 @@ const Tiktok_info = () => {
                       onChange={onChange_Processing}
                       mode="multiple"
                       style={{ width: "100%", color: "green" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_tiktok_processing.map((item, index) => {
@@ -787,7 +777,7 @@ const Tiktok_info = () => {
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_tiktok_error.map((item, index) => {
@@ -812,7 +802,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_type.map((item, index) => {
                           return (
@@ -853,7 +843,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_sell_status.map((item, index) => {
                           return (
@@ -888,7 +878,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_owner.map((item, index) => {
                           return (
@@ -915,7 +905,7 @@ const Tiktok_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_tiktok_employee?.map((item) => {
                           return (
@@ -936,7 +926,7 @@ const Tiktok_info = () => {
                         <Select
                           //mode="multiple"
                           onChange={onChange_Status}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           style={{
                             width: "100%",
                             color:
@@ -970,7 +960,7 @@ const Tiktok_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           onChange={onChange_Class}
                         >
                           {listselect_tiktok_class.map((item, index) => {
@@ -994,7 +984,7 @@ const Tiktok_info = () => {
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           {listselect_tiktok_employee?.map((item) => {
                             return (
@@ -1040,7 +1030,7 @@ const Tiktok_info = () => {
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="select one item"
-                    optionLabelProp="label"
+                    optionlabelprop="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
                     size="large"
@@ -1170,7 +1160,7 @@ const Tiktok_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +
@@ -1209,7 +1199,7 @@ const Tiktok_info = () => {
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
-                                    optionLabelProp="label"
+                                    optionlabelprop="label"
                                     value={
                                       listViewData[
                                         item.title.toLocaleLowerCase() +
@@ -1291,7 +1281,7 @@ const Tiktok_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24} >
+                  <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1310,7 +1300,6 @@ const Tiktok_info = () => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-       
           <HuongDanTiktok_info />
         </Tabs.TabPane>
       </Tabs>

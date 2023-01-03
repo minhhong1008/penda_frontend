@@ -8,7 +8,7 @@ import { getListamazon } from "../api/amazon/index.js";
 function* getListamazonSaga({ payload }) {
   try {
     const response = yield call(getListamazon, payload);
-    console.log(response);
+    
     const { data } = response;
     yield put({ type: GET_LIST_AMAZON_SUCCESS, payload: data });
   } catch (res) {

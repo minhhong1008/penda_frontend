@@ -447,7 +447,7 @@ const ebayitem_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Phone" label="Phone">
                           <div className="demo-option-label-item">Phone</div>
@@ -545,7 +545,7 @@ const ebayitem_info = () => {
                       mode="multiple"
                       style={{ width: "100%" }}
                       placeholder="select one item"
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       <Option value="VN" label="VN">
@@ -612,7 +612,7 @@ const ebayitem_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="VN" label="VN">
                           <div className="demo-option-label-item">VN</div>
@@ -683,7 +683,7 @@ const ebayitem_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Chuẩn bị bán" label="Chuẩn bị bán">
                           <div className="demo-option-label-item">
@@ -747,7 +747,7 @@ const ebayitem_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Phòng sản xuất" label="Phòng sản xuất">
                           <div className="demo-option-label-item">
@@ -791,7 +791,7 @@ const ebayitem_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
                           <div className="demo-option-label-item">
@@ -813,7 +813,7 @@ const ebayitem_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           <Option value="Live" label="Live">
                             <div className="demo-option-label-item">Live</div>
@@ -847,7 +847,7 @@ const ebayitem_info = () => {
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           <Option value="Lớp 1" label="Lớp 1 New">
                             <div className="demo-option-label-item">
@@ -959,7 +959,7 @@ const ebayitem_info = () => {
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
                             <div className="demo-option-label-item">
@@ -991,7 +991,7 @@ const ebayitem_info = () => {
                     mode="multiple"
                     style={{ width: "100%" }}
                     placeholder="select one item"
-                    optionLabelProp="label"
+                    optionlabelprop="label"
                     onChange={changeSelectListInfo}
                     value={selectListInfo}
                   >

@@ -8,10 +8,17 @@ const initialState = {
 function bankReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_BANK_SUCCESS: {
+      let newData = [];
+      action?.payload?.map((item) => {
+        newData.push({
+          ...item,
+          key: item?.bank_id
+        })
+      })
       return {
         ...state,
-        banks: action.payload
-      }
+        banks: newData,
+      };
     }
     default: {
       return state;

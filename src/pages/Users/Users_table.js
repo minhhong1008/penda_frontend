@@ -102,7 +102,7 @@ const Users_table = () => {
           mode="multiple"
           onChange={handleChangeFilter}
           multiple
-          optionLabelProp="label"
+          optionlabelprop="label"
           treeData={[
             {
               title: "Trạng thái",

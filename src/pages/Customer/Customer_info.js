@@ -303,7 +303,7 @@ const Customer_info = () => {
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "green" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_customer_processing.map((item, index) => {
@@ -319,7 +319,7 @@ const Customer_info = () => {
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
-                      optionLabelProp="label"
+                      optionlabelprop="label"
                       //status="warning"
                     >
                       {listselect_customer_error.map((item, index) => {
@@ -344,7 +344,7 @@ const Customer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_customer_type.map((item, index) => {
                           return (
@@ -379,7 +379,7 @@ const Customer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_customer_owner.map((item, index) => {
                           return (
@@ -406,7 +406,7 @@ const Customer_info = () => {
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
-                        optionLabelProp="label"
+                        optionlabelprop="label"
                       >
                         {listselect_customer_employee?.map((item) => {
                           return (
@@ -425,7 +425,7 @@ const Customer_info = () => {
                     <Col span={8}>
                       <Form.Item label="Trạng thái" name="customer_status">
                         <Select
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           style={{
                             width: "100%",
                             color:
@@ -458,7 +458,7 @@ const Customer_info = () => {
                       <Form.Item label="Lớp Customer" name="customer_class">
                         <Select
                           style={{ width: "100%" }}
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           {listselect_customer_class.map((item, index) => {
                             return (
@@ -481,7 +481,7 @@ const Customer_info = () => {
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                         >
                           {listselect_customer_employee?.map((item) => {
                             return (

@@ -158,7 +158,7 @@ const Tooldata_info = () => {
                           }}
                           onClick={() => form.submit()}
                         >
-                          Tạo tài khoản
+                          Hành động
                         </Button>
                       </>
                     }
@@ -178,7 +178,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                           onChange={changeSelectList_create_collection}
                           value={selectList_create_collection}
@@ -203,7 +203,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_view_field.map((item) => {
@@ -223,7 +223,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                           classNamePrefix="select"
                         >
@@ -244,7 +244,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                           classNamePrefix="select"
                         >
@@ -265,7 +265,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_processing.map((item, index) => {
@@ -285,7 +285,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_ebay_type.map((item, index) => {
@@ -305,7 +305,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                           onChange={onChange_view}
                         >
@@ -322,7 +322,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_ebay_owner.map((item, index) => {
@@ -342,7 +342,7 @@ const Tooldata_info = () => {
                           mode="multiple"
                           style={{ width: "100%" }}
                           placeholder="select one item"
-                          optionLabelProp="label"
+                          optionlabelprop="label"
                           size="large"
                         >
                           {listselect_employee?.map((item) => {
@@ -363,7 +363,7 @@ const Tooldata_info = () => {
                             <Select
                               //mode="multiple"
                               style={{ width: "100%" }}
-                              optionLabelProp="label"
+                              optionlabelprop="label"
                               size="large"
                             >
                               {listselect_ebay_status.map((item, index) => {
@@ -383,7 +383,7 @@ const Tooldata_info = () => {
                             <Select
                               //mode="multiple"
                               style={{ width: "100%" }}
-                              optionLabelProp="label"
+                              optionlabelprop="label"
                               size="large"
                             >
                               {listselect_ebay_class.map((item, index) => {
