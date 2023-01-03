@@ -257,7 +257,7 @@ function Header({
     let brc = [];
     let data_name = name.split("/");
     let brecrum = "";
-    let param = new URL(location.href).searchParams.get("class");
+    let param = new URL(window.location.href).searchParams.get("class");
     data_name.map((item, index) => {
       brecrum = brecrum + "/" + item;
       brc.push(

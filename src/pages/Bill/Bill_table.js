@@ -36,6 +36,7 @@ const getBase64 = (file) =>
   });
 
 const Bill_table = () => {
+  const { Option } = Select;
   const { RangePicker } = DatePicker;
   const rangePresets = [
     {

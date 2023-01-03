@@ -4,6 +4,7 @@ import {
 } from "../actions/infoActions"
 
 import { getListinfo } from "../api/info/index.js";
+import { showError } from "../utils";
 
 function* getListinfoSaga({ payload }) {
   try {

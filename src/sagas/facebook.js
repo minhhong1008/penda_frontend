@@ -4,6 +4,7 @@ import {
 } from "../actions/facebookActions"
 
 import { getListfacebook } from "../api/facebook/index.js";
+import { showError } from "../utils";
 
 function* getListfacebookSaga({ payload }) {
   try {

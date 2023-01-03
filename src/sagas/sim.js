@@ -4,6 +4,7 @@ import {
 } from "../actions/simActions"
 
 import { getListsim } from "../api/sim/index.js";
+import { showError } from "../utils";
 
 function* getListsimSaga({ payload }) {
   try {

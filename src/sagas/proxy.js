@@ -4,6 +4,7 @@ import {
 } from "../actions/proxyActions"
 
 import { getListproxy } from "../api/proxy/index.js";
+import { showError } from "../utils";
 
 function* getListproxySaga({ payload }) {
   try {

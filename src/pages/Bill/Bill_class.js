@@ -38,6 +38,7 @@ const getBase64 = (file) =>
 // useState để tạo kho dữ liệu trong nội bộ components !== biến thường là khi dữ liệu được cập nhật thì UI thay đổi theo
 
 const Bill_class = () => {
+  const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
   const { RangePicker } = DatePicker;
