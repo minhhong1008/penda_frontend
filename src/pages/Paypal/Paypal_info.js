@@ -663,7 +663,7 @@ const Paypal_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -673,7 +673,7 @@ const Paypal_info = () => {
                         label="Paypal User"
                         name="paypal_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -681,7 +681,7 @@ const Paypal_info = () => {
                         label="Paypal Pass"
                         name="paypal_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -692,7 +692,7 @@ const Paypal_info = () => {
                         label="Paypal chi tiết"
                         name="paypal_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -700,22 +700,22 @@ const Paypal_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Paypal limit" name="paypal_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Paypal items" name="paypal_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Paypal Sold" name="paypal_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Paypal Fb" name="paypal_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>

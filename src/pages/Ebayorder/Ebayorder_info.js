@@ -270,24 +270,24 @@ import {
                           ]}
                           
                         >
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={10}>
                         <Form.Item label="eBayorder User" name="ebayorder_user">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="eBayorder Pass" name="ebayorder_password">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
                         <Form.Item label="eBayorder chi tiết" name="ebayorder_detail">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -298,22 +298,22 @@ import {
                           label="eBayorder limit"
                           name="ebayorder_limit"
                         >
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="eBayorder items" name="ebayorder_item">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="eBayorder Sold" name="ebayorder_sold">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="eBayorder Fb" name="ebayorder_feedback">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                     </Row>

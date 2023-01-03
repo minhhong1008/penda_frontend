@@ -646,19 +646,19 @@ const Tiktok_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
                       <Form.Item label="Tiktok User" name="tiktok_user">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Tiktok Pass" name="tiktok_password">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -666,7 +666,7 @@ const Tiktok_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Tiktok chi tiết" name="tiktok_detail">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -674,22 +674,22 @@ const Tiktok_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Tiktok limit" name="tiktok_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok items" name="tiktok_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok Sold" name="tiktok_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok Fb" name="tiktok_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>

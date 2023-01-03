@@ -207,7 +207,15 @@ const Customer_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN CUSTOMER">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   THÔNG TIN KHÁCH HÀNG
+                  </strong>
+                }>
                 <Form
                   form={form}
                   name="basic"
@@ -234,19 +242,19 @@ const Customer_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
                       <Form.Item label="Tên" name="customer_user">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Di động" name="customer_phone1">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -254,7 +262,7 @@ const Customer_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Điện thoại" name="customer_phone2">
-                        <Input size="small" />
+                        <Input  />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -262,12 +270,12 @@ const Customer_info = () => {
                         label="Facebook"
                         name="customer_facebook"
                       >
-                        <Input size="small" />
+                        <Input  />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Website" name="customer_website">
-                        <Input size="small"  />
+                        <Input   />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -278,7 +286,7 @@ const Customer_info = () => {
                         label="Địa chỉ"
                         name="customer_address"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
@@ -286,7 +294,7 @@ const Customer_info = () => {
                         label="Thanh toán"
                         name="customer_payment"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={24}>
@@ -294,7 +302,7 @@ const Customer_info = () => {
                         label="Chi tiết"
                         name="customer_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -514,7 +522,15 @@ const Customer_info = () => {
               </Card>
             </Col>
             <Col span={12}>
-              <Card title="LỊCH SỬ">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   LỊCH SỬ
+                  </strong>
+                }>
                 <Row>
                   <Col span={24}>
                     <Input.TextArea

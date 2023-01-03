@@ -78,12 +78,12 @@ import {
                             },
                           ]}
                         >
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={12}>
                         <Form.Item label="other Pass" name="other_password">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -359,17 +359,17 @@ import {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="other Info" name="info_other">
-                          <Input size="small" placeholder="Phùng Văn Minh" />
+                          <Input  placeholder="Phùng Văn Minh" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Ngày sinh" name="info_birthday">
-                          <Input size="small" placeholder="17/08/1984" />
+                          <Input  placeholder="17/08/1984" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Trạng thái" name="Info_status">
-                          <Input size="small" placeholder="Đã sử dụng" />
+                          <Input  placeholder="Đã sử dụng" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -377,17 +377,17 @@ import {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="other Phone" name="phone_other">
-                          <Input size="small" placeholder="09833333333" />
+                          <Input  placeholder="09833333333" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Hạn dử dụng" name="phone_datelimit">
-                          <Input size="small" placeholder="17/12/2022" />
+                          <Input  placeholder="17/12/2022" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Trạng thái" name="phone_status">
-                          <Input size="small" placeholder="Khóa 1 chiều" />
+                          <Input  placeholder="Khóa 1 chiều" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -396,19 +396,19 @@ import {
                       <Col span={8}>
                         <Form.Item label="other Mail" name="mail_other">
                           <Input
-                            size="small"
+                            
                             placeholder="phungvanminh@gmail.com"
                           />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Password" name="mail_password">
-                          <Input size="small" placeholder="vanminh@123" />
+                          <Input  placeholder="vanminh@123" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Trạng thái" name="mail_status">
-                          <Input size="small" placeholder="Live" />
+                          <Input  placeholder="Live" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -416,20 +416,20 @@ import {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="other Bank" name="bank_other">
-                          <Input size="small" placeholder="Payoneer" />
+                          <Input  placeholder="Payoneer" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Number" name="bank_number">
                           <Input
-                            size="small"
+                            
                             placeholder="4046 4825 4281 2969|01-26|304|Nguyen Thi Hoai"
                           />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Trạng thái" name="bank_status">
-                          <Input size="small" placeholder="Đã sử dụng" />
+                          <Input  placeholder="Đã sử dụng" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -437,17 +437,17 @@ import {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="other Device" name="device_other">
-                          <Input size="small" placeholder="PC06" />
+                          <Input  placeholder="PC06" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="other Vbox" name="device_vbox">
-                          <Input size="small" placeholder="E_88888" />
+                          <Input  placeholder="E_88888" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Trạng thái" name="device_status">
-                          <Input size="small" placeholder="Đang hoạt động" />
+                          <Input  placeholder="Đang hoạt động" />
                         </Form.Item>
                       </Col>
                     </Row>

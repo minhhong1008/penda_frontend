@@ -148,18 +148,29 @@ const Payoneer_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
-      payoneer_image_url: payoneer_file.length > 0 ? payoneer_file.join(",") : "",
-      payoneer_plan: values?.payoneer_plan ? values.payoneer_plan.join(",") : "",
-      payoneer_block: values?.payoneer_block ? values.payoneer_block.join(",") : "",
-      payoneer_error: values?.payoneer_error ? values.payoneer_error.join(",") : "",
+      payoneer_image_url:
+        payoneer_file.length > 0 ? payoneer_file.join(",") : "",
+      payoneer_plan: values?.payoneer_plan
+        ? values.payoneer_plan.join(",")
+        : "",
+      payoneer_block: values?.payoneer_block
+        ? values.payoneer_block.join(",")
+        : "",
+      payoneer_error: values?.payoneer_error
+        ? values.payoneer_error.join(",")
+        : "",
       payoneer_processing: values?.payoneer_processing
         ? values.payoneer_processing.join(",")
         : "",
-      payoneer_type: values?.payoneer_type ? values.payoneer_type.join(",") : "",
+      payoneer_type: values?.payoneer_type
+        ? values.payoneer_type.join(",")
+        : "",
       payoneer_sell_status: values?.payoneer_sell_status
         ? values.payoneer_sell_status.join(",")
         : "",
-      payoneer_owner: values?.payoneer_owner ? values.payoneer_owner.join(",") : "",
+      payoneer_owner: values?.payoneer_owner
+        ? values.payoneer_owner.join(",")
+        : "",
       payoneer_employee: values?.payoneer_employee
         ? values.payoneer_employee.join(",")
         : "",
@@ -192,9 +203,15 @@ const Payoneer_info = () => {
     const newData = {
       ...data,
       payoneer_plan: data?.payoneer_plan ? data.payoneer_plan.split(",") : "",
-      payoneer_block: data?.payoneer_block ? data.payoneer_block.split(",") : "",
-      payoneer_error: data?.payoneer_error ? data.payoneer_error.split(",") : "",
-      payoneer_employee: data?.payoneer_employee ? data.payoneer_employee.split(",") : "",
+      payoneer_block: data?.payoneer_block
+        ? data.payoneer_block.split(",")
+        : "",
+      payoneer_error: data?.payoneer_error
+        ? data.payoneer_error.split(",")
+        : "",
+      payoneer_employee: data?.payoneer_employee
+        ? data.payoneer_employee.split(",")
+        : "",
       payoneer_processing: data?.payoneer_processing
         ? data.payoneer_processing.split(",")
         : "",
@@ -202,7 +219,9 @@ const Payoneer_info = () => {
       payoneer_sell_status: data?.payoneer_sell_status
         ? data.payoneer_sell_status.split(",")
         : "",
-      payoneer_owner: data?.payoneer_owner ? data.payoneer_owner.split(",") : "",
+      payoneer_owner: data?.payoneer_owner
+        ? data.payoneer_owner.split(",")
+        : "",
 
       device_id: data?.device_id ? data?.device_id?.device_id : "",
       proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
@@ -252,16 +271,10 @@ const Payoneer_info = () => {
       bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
       bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
 
-      etsy_class: data?.etsy_id
-        ? data?.etsy_id?.etsy_class
-        : "",
-      etsy_status: data?.etsy_id
-        ? data?.etsy_id?.etsy_status
-        : "",
+      etsy_class: data?.etsy_id ? data?.etsy_id?.etsy_class : "",
+      etsy_status: data?.etsy_id ? data?.etsy_id?.etsy_status : "",
       etsy_user: data?.etsy_id ? data?.etsy_id?.etsy_user : "",
-      etsy_password: data?.etsy_id
-        ? data?.etsy_id?.etsy_password
-        : "",
+      etsy_password: data?.etsy_id ? data?.etsy_id?.etsy_password : "",
 
       paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
       paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
@@ -636,7 +649,17 @@ const Payoneer_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN PAYONEER">
+              <Card
+                title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN PAYONEER
+                  </strong>
+                }
+              >
                 <Form
                   form={form}
                   name="basic"
@@ -661,27 +684,17 @@ const Payoneer_info = () => {
                           copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
-                        <Input
-                          disabled={true}
-                          size="small"
-                          placeholder="input here"
-                        />
+                        <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item
-                        label="Payoneer User"
-                        name="payoneer_user"
-                      >
-                        <Input size="small" placeholder="input here" />
+                      <Form.Item label="Payoneer User" name="payoneer_user">
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item
-                        label="Payoneer Pass"
-                        name="payoneer_password"
-                      >
-                        <Input size="small" placeholder="input here" />
+                      <Form.Item label="Payoneer Pass" name="payoneer_password">
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -692,7 +705,7 @@ const Payoneer_info = () => {
                         label="Payoneer chi tiết"
                         name="payoneer_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -700,22 +713,22 @@ const Payoneer_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Payoneer limit" name="payoneer_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Payoneer items" name="payoneer_item">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Payoneer Sold" name="payoneer_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Payoneer Fb" name="payoneer_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1044,7 +1057,15 @@ const Payoneer_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }>
                 {[
                   "Tổ phó",
                   "Chuyên viên",

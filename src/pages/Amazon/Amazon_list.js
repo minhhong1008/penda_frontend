@@ -234,6 +234,10 @@ export const listselect_amazon_status = [
 
 export const listselect_amazon_class = [
   {
+    title: "Lớp 0 ",
+    value: "Lớp 0",
+  },
+  {
     title: "Lớp 1 New",
     value: "Lớp 1",
   },

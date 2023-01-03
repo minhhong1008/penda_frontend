@@ -636,7 +636,15 @@ const Info_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN INFO">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                  THÔNG TIN INFO
+                  </strong>
+                }>
                 <Form
                   form={form}
                   name="basic"
@@ -659,19 +667,19 @@ const Info_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="I_1000"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Giới tính" name="info_sex">
-                        <Input size="small" placeholder="Nam" />
+                        <Input  placeholder="Nam" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày sinh" name="infodate_birthday">
-                        <Input size="small" placeholder="27/7/2000" />
+                        <Input  placeholder="27/7/2000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -679,17 +687,17 @@ const Info_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Họ tên" name="info_fullname">
-                        <Input size="small" placeholder="Thế Minh Hồng" />
+                        <Input  placeholder="Thế Minh Hồng" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Passport" name="info_passport">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input  placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="SSN" name="info_ssn">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input  placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -697,7 +705,7 @@ const Info_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Nơi thường trú" name="info_residence">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input  placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -705,12 +713,12 @@ const Info_info = () => {
                   <Row gutter={16}>
                     <Col span={18}>
                       <Form.Item label="Quê quán........" name="info_origin">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input  placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="code" name="info_code">
-                        <Input size="small" placeholder="100000" />
+                        <Input  placeholder="100000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -722,14 +730,14 @@ const Info_info = () => {
                         name="info_identifying"
                       >
                         <Input
-                          size="small"
+                          
                           placeholder="Nốt ruồi c: 2cm dưới mép trái"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Password" name="info_password">
-                        <Input size="small" placeholder="012345678910" />
+                        <Input  placeholder="012345678910" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -739,17 +747,17 @@ const Info_info = () => {
                         label="CCCD giá trị đến"
                         name="infodate_expiry"
                       >
-                        <Input size="small" placeholder="25/7/2041" />
+                        <Input  placeholder="25/7/2041" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày làm CCCD" name="infodate_start">
-                        <Input size="small" placeholder="29/4/2021" />
+                        <Input  placeholder="29/4/2021" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày nhập" name="infodate_import">
-                        <Input size="small" placeholder="07/12/2022" />
+                        <Input  placeholder="07/12/2022" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1078,7 +1086,15 @@ const Info_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                  THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }>
                 {[
                   "Tổ phó",
                   "Chuyên viên",

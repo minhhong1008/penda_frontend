@@ -636,7 +636,15 @@ const Mail_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN MAIL">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   THÔNG TIN MAIL
+                  </strong>
+                }>
                 <Form
                   form={form}
                   name="basic"
@@ -663,7 +671,7 @@ const Mail_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -673,7 +681,7 @@ const Mail_info = () => {
                         label="Mail User"
                         name="mail_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -681,7 +689,7 @@ const Mail_info = () => {
                         label="Mail Pass"
                         name="mail_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -692,7 +700,7 @@ const Mail_info = () => {
                         label="Mail chi tiết"
                         name="mail_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -700,22 +708,22 @@ const Mail_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Mail recover" name="mail_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Mail forward" name="mail_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Mail Sold" name="mail_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Mail pass" name="mail_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1044,7 +1052,15 @@ const Mail_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                  THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }>
                 {[
                   "Tổ phó",
                   "Chuyên viên",

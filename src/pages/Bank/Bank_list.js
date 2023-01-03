@@ -14,7 +14,7 @@ import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
 import React from 'react';
-import { Divider } from 'antd';
+import { Alert, Divider, Space } from "antd";
 
 export const listselect_view_acc = [
   {
@@ -480,232 +480,351 @@ export const listselect_bank_fields = [];
 
 export const HuongDanBank_info = () => {
   return (
-    <div>
-      <p>1. Ebay mã EB_12345</p>
-      <p>
-        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
-      </p>
-      <p>
-        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
-      </p>
-      <p>
-        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
-        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
-        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
-      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
-      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
-      <p>
-        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>
-        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
-        suspended, tải cccd
-      </p>
-      <p>
-        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
-        chi tiết của tài nguyên đó
-      </p>
-      <br></br>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
-        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
-        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
-        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
-      </p>
-      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
-      <p>
-        Để tạo 1 acc ebay or bank... trên 1 device thì vào device đó ấn tạo ebay
-        or bank...
-      </p>
-      <p>
-        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
-        phần tool- xử lý số liệu - filter{" "}
-      </p>
-      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
-      <br></br>
-      <p>
-        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
-        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
-      </p>
-    </div>
+    <Space
+      direction="vertical"
+      style={{
+        width: "100%",
+      }}
+    >
+      <Alert
+        message="ID"
+        description={
+          <>
+            <p>1. 1 Bộ tài khoản sẽ cùng ID với nhau và liên kết với nhau</p>
+            <p>2. ID nhân viên: VN_1 - VN_1000</p>
+            <p>
+              3. ID Theo tháng: 3T1_1 - 3T1_1000, 3T2_1 - 3T2_1000 (3 là năm,T1
+              là tháng 1, tương tự với T2...)
+            </p>
+            <p>4. ID Tài nguyên cũ: E_12345 - E_99999</p>
+          </>
+        }
+        type="success"
+      />
+      <Alert
+        message="Hướng dẫn các trường"
+        description={
+          <>
+            <p>
+              1. 1 Bộ tài khoản bao gồm: Tài nguyên + phương thức thanh toán +
+              các loại tài khoản
+            </p>
+            <p>
+              2. id là mã của tài khoản, dùng để phân biết các tài khoản với
+              nhau
+            </p>
+            <p>3. User là tên của tài khoản</p>
+            <p>4. Pass là mật khẩu của tài khoản, 1 bộ tài khoản </p>
+
+            <p>
+              5. Quy trình: là kế hoạch triển khai tài khoản theo các yêu cầu
+              định sẵn. Quy trình được tạo ngay từ đầu bằng Tooldata nhập liệu
+            </p>
+            <p>
+              6. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ
+              tiến trình ta biết được tài khoản đang làm đến hạng mục nào, nếu
+              suspend thì biết được suspend ở hạng mục nào, dùng để tạo báo cáo,
+              phân loại tài khoản
+            </p>
+            <p>
+              7. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo,
+              phân loại tài khoản
+            </p>
+            <p>
+              8. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh
+              doanh
+            </p>
+            <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo tài khoản</p>
+            <p>7. Nhân viên: Dùng để phân quyền nhân viên theo tài khoản</p>
+            <p>
+              9. Trạng thái: Dùng để xác định trạng thái của tài khoản, tạo báo
+              cáo, phân loại tài khoản
+            </p>
+            <p>
+              10. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển
+              khai, dùng tạo báo cáo, phân loại tài khoản
+            </p>
+            <p>
+              11. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh tài
+              khoản suspended, tải cccd, doc bank...
+            </p>
+            <p>
+              12. Click vào loại tài khoản trong bảng THÔNG TIN TÀI NGUYÊN:
+              chuyển đến trang chi tiết của tài khoản đó
+            </p>
+            <br></br>
+          </>
+        }
+        type="info"
+      />
+      <Alert
+        message="Tính năng tự động "
+        description={
+          <>
+            <p>1. Khi chọn trạng thái:</p>
+            <p>
+              - "error" : Tự động chuyển tài khoản về lớp 20, tự động điền ngày
+              lỗi, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+
+            <p>
+              - "Restrict " : Tự động chuyển tài khoản về lớp 23, tự động điền
+              ngày Suspended, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+            <p>
+              - "Suspended " : Tự động chuyển tài khoản về lớp 26, tự động điền
+              ngày Suspended, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+
+            <p>
+              2. Khi chọn lớp: Có các lớp tự động Lớp 4, Lớp 6, Lớp 9, Lớp 12 tự
+              động điền ngày lên lớp và thêm các trường vào tiến trình
+            </p>
+            <p>
+              3. Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến
+              trình được chọn, tự động điền ngày chuyển lớp khi chuyển lớp
+            </p>
+            <p>
+              4. Khi chọn lớp của Info - Tự động thay đổi lớp của tài nguyên
+              theo lớp Info
+            </p>
+            <p>
+              5. Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng
+            </p>
+            <p>
+              6. Tài khoản được tạo từ Tooldata (có hướng dẫn tạo tài khoản bên
+              Tooldata nhập liệu)
+            </p>
+            <p>
+              7.Để thay đổi field của nhiều tài khoản 1 lúc, hoặc xem báo cáo cơ
+              bản thì vào phần Tooldata- xử lý số liệu - filter
+            </p>
+          </>
+        }
+        type="warning"
+      />
+      <Alert
+        message="Kiểm tra & xử lý số liệu"
+        description={
+          <>
+            <p>
+              1. Kiểm tra tiến trình của tài khoản có phù hợp với lớp không?
+            </p>
+            <p>2. Kiểm tra và xử lý các phát sinh của tài khoản</p>
+          </>
+        }
+        type="error"
+      />
+    </Space>
   );
 };
 
 export const HuongDanBank_table = () => {
   return (
-    <div>
-      <p>1. Ebay mã EB_12345</p>
-      <p>
-        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
-      </p>
-      <p>
-        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
-      </p>
-      <p>
-        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
-        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
-        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
-      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
-      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
-      <p>
-        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>
-        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
-        suspended, tải cccd
-      </p>
-      <p>
-        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
-        chi tiết của tài nguyên đó
-      </p>
-      <br></br>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
-        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
-        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
-        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
-      </p>
-      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
-      <p>
-        Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay
-        or etsy...
-      </p>
-      <p>
-        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
-        phần tool- xử lý số liệu - filter{" "}
-      </p>
-      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
-      <br></br>
-      <p>
-        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
-        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
-      </p>
-    </div>
+    <Space
+      direction="vertical"
+      style={{
+        width: "100%",
+      }}
+    >
+      <Alert
+        message="ID"
+        description={
+          <>
+            <p>1. 1 Bộ tài khoản sẽ cùng ID với nhau và liên kết với nhau</p>
+            <p>2. ID nhân viên: VN_1 - VN_1000</p>
+            <p>
+              3. ID Theo tháng: 3T1_1 - 3T1_1000, 3T2_1 - 3T2_1000 (3 là năm,T1
+              là tháng 1, tương tự với T2...)
+            </p>
+            <p>4. ID Tài nguyên cũ: E_12345 - E_99999</p>
+          </>
+        }
+        type="success"
+      />
+      <Alert
+        message="Checked & Previous page"
+        description={
+          <>
+            <p>
+              1. Chọn checked để thự hiện copy ID của tài khoản, phục vụ công
+              tác xử lý số liệu trong bảng Tooldata
+            </p>
+            <p>
+              2. Previous page chọn số lượng để hiển thị tài khoản theo số lượng
+            </p>
+          </>
+        }
+        type="info"
+      />
+      <Alert
+        message="Phân quyền & Lọc "
+        description={
+          <>
+            <p>
+              1. Vị trí trưởng phòng trở lên có thể xem được tất cả các tài
+              khoản của nhận viên
+            </p>
+            <p>2. Nhân viên chỉ xem được những tài khoản do mình quản lý</p>
+            <p>3. Lọc sẽ lọc theo Block và nhân viên ( đang phát triển)</p>
+          </>
+        }
+        type="warning"
+      />
+      <Alert
+        message="Kiểm tra & xử lý số liệu"
+        description={
+          <>
+            <p>
+              1. Kiểm tra tiến trình của tài khoản có phù hợp với lớp không?
+            </p>
+            <p>2. Kiểm tra và xử lý các phát sinh của tài khoản</p>
+          </>
+        }
+        type="error"
+      />
+    </Space>
   );
 };
 
 export const HuongDanBank_class = () => {
   return (
-    <div>
-      <p>1. Ebay mã EB_12345</p>
-      <p>
-        1. Ebay được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop ebay chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
-      </p>
-      <p>
-        2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Ebay từ tool nhập liệu
-      </p>
-      <p>
-        3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
-        trình ta biết được acc đang làm đến hạng mục nào, nếu suspend thì biết
-        được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        4. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
-      <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
-      <p>7. Nhân viên: Dùng để phân quyền nhân viên theo acc</p>
-      <p>
-        8. Trạng thái: Dùng để xác định trạng thái của acc, tạo báo cáo, phân
-        loại acc
-      </p>
-      <p>
-        9. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
-      </p>
-      <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh ebay
-        suspended, tải cccd
-      </p>
-      <p>
-        11. Click vào loại acc trong bảng THÔNG TIN TÀI NGUYÊN: chuyển đến trang
-        chi tiết của tài nguyên đó
-      </p>
-      <br></br>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp nhỏ hơn 9 - tự động
-        chuyển acc về lớp 20, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Tính năng: Khi chọn suspend + upload ảnh + Lớp lớn hơn 8 - tự động
-        chuyển acc về lớp 21, tự động điền ngày suspend, tự động chọn suspended
-        trong tiến trình,tự động thêm phòng phục hồi tài khoản, tự động disable
-        tất cả các field{" "}
-      </p>
-      <p>
-        Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến trình được
-        chọn, tự động điền ngày chuyển lớp khi chuyển lớp{" "}
-      </p>
-      <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
-      <p>
-        Để tạo 1 acc ebay or etsy... trên 1 device thì vào device đó ấn tạo ebay
-        or etsy...
-      </p>
-      <p>
-        Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
-        phần tool- xử lý số liệu - filter{" "}
-      </p>
-      <p>Thông tin tài nguyên: acc nào suspend thì icon chuyển về mầu xám</p>
-      <br></br>
-      <p>
-        Ctrl + /;Shift + Alt + A (comment);Ctrl + Shift + [;Ctrl + K, Ctrl +
-        0;Ctrl + K, Ctrl + J;Ctrl + K, Ctrl + [;Ctrl + K, Ctrl + ];{" "}
-      </p>
-    </div>
+    <Space
+      direction="vertical"
+      style={{
+        width: "100%",
+      }}
+    >
+      <Alert
+        message="ID"
+        description={
+          <>
+            <p>1. 1 Bộ tài khoản sẽ cùng ID với nhau và liên kết với nhau</p>
+            <p>2. ID nhân viên: VN_1 - VN_1000</p>
+            <p>
+              3. ID Theo tháng: 3T1_1 - 3T1_1000, 3T2_1 - 3T2_1000 (3 là năm,T1
+              là tháng 1, tương tự với T2...)
+            </p>
+            <p>4. ID Tài nguyên cũ: E_12345 - E_99999</p>
+          </>
+        }
+        type="success"
+      />
+      <Alert
+        message="Hướng dẫn các trường"
+        description={
+          <>
+            <p>
+              1. 1 Bộ tài khoản bao gồm: Tài nguyên + phương thức thanh toán +
+              các loại tài khoản
+            </p>
+            <p>
+              2. id là mã của tài khoản, dùng để phân biết các tài khoản với
+              nhau
+            </p>
+            <p>3. User là tên của tài khoản</p>
+            <p>4. Pass là mật khẩu của tài khoản, 1 bộ tài khoản </p>
+
+            <p>
+              5. Quy trình: là kế hoạch triển khai tài khoản theo các yêu cầu
+              định sẵn. Quy trình được tạo ngay từ đầu bằng Tooldata nhập liệu
+            </p>
+            <p>
+              6. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ
+              tiến trình ta biết được tài khoản đang làm đến hạng mục nào, nếu
+              suspend thì biết được suspend ở hạng mục nào, dùng để tạo báo cáo,
+              phân loại tài khoản
+            </p>
+            <p>
+              7. Loại ebay: Là tổng quan 1 tài khoản ebay, dùng để tạo báo cáo,
+              phân loại tài khoản
+            </p>
+            <p>
+              8. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh
+              doanh
+            </p>
+            <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo tài khoản</p>
+            <p>7. Nhân viên: Dùng để phân quyền nhân viên theo tài khoản</p>
+            <p>
+              9. Trạng thái: Dùng để xác định trạng thái của tài khoản, tạo báo
+              cáo, phân loại tài khoản
+            </p>
+            <p>
+              10. Lớp ebay: Dùng để xác định tổng quan các hạng mục đã triển
+              khai, dùng tạo báo cáo, phân loại tài khoản
+            </p>
+            <p>
+              11. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh tài
+              khoản suspended, tải cccd, doc bank...
+            </p>
+            <p>
+              12. Click vào loại tài khoản trong bảng THÔNG TIN TÀI NGUYÊN:
+              chuyển đến trang chi tiết của tài khoản đó
+            </p>
+            <br></br>
+          </>
+        }
+        type="info"
+      />
+      <Alert
+        message="Tính năng tự động "
+        description={
+          <>
+            <p>1. Khi chọn trạng thái:</p>
+            <p>
+              - "error" : Tự động chuyển tài khoản về lớp 20, tự động điền ngày
+              lỗi, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+
+            <p>
+              - "Restrict " : Tự động chuyển tài khoản về lớp 23, tự động điền
+              ngày Suspended, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+            <p>
+              - "Suspended " : Tự động chuyển tài khoản về lớp 26, tự động điền
+              ngày Suspended, tự động thêm người hỗ trợ và thêm phòng phục hồi
+            </p>
+
+            <p>
+              2. Khi chọn lớp: Có các lớp tự động Lớp 4, Lớp 6, Lớp 9, Lớp 12 tự
+              động điền ngày lên lớp và thêm các trường vào tiến trình
+            </p>
+            <p>
+              3. Khi chọn tiến trình thì tự động điền ngày tưng ứng với tiến
+              trình được chọn, tự động điền ngày chuyển lớp khi chuyển lớp
+            </p>
+            <p>
+              4. Khi chọn lớp của Info - Tự động thay đổi lớp của tài nguyên
+              theo lớp Info
+            </p>
+            <p>
+              5. Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng
+            </p>
+            <p>
+              6. Tài khoản được tạo từ Tooldata (có hướng dẫn tạo tài khoản bên
+              Tooldata nhập liệu)
+            </p>
+            <p>
+              7.Để thay đổi field của nhiều tài khoản 1 lúc, hoặc xem báo cáo cơ
+              bản thì vào phần Tooldata- xử lý số liệu - filter
+            </p>
+          </>
+        }
+        type="warning"
+      />
+      <Alert
+        message="Kiểm tra & xử lý số liệu"
+        description={
+          <>
+            <p>
+              1. Kiểm tra tiến trình của tài khoản có phù hợp với lớp không?
+            </p>
+            <p>2. Kiểm tra và xử lý các phát sinh của tài khoản</p>
+          </>
+        }
+        type="error"
+      />
+    </Space>
   );
 };
 

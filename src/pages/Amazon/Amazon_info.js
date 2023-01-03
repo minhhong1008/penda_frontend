@@ -614,7 +614,15 @@ const Amazon_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12} >
-              <Card title="THÔNG TIN ETSY" >
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN ETSY
+                  </strong>
+                }>
                 <Form
                   form={form}
                   name="basic"
@@ -644,7 +652,7 @@ const Amazon_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -655,7 +663,7 @@ const Amazon_info = () => {
                         label="Amazon User"
                         name="amazon_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -664,7 +672,7 @@ const Amazon_info = () => {
                         label="Amazon Pass"
                         name="amazon_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -676,7 +684,7 @@ const Amazon_info = () => {
                         label="Amazon chi tiết"
                         name="amazon_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -684,22 +692,22 @@ const Amazon_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Amazon limit" name="amazon_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Amazon items" name="amazon_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Amazon Sold" name="amazon_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Amazon Fb" name="amazon_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1028,7 +1036,15 @@ const Amazon_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }>
                 {[
                   "Tổ phó",
                   "Chuyên viên",

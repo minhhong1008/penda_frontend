@@ -635,7 +635,15 @@ const Proxy_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN PROXY">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                  THÔNG TIN PROXY
+                  </strong>
+                }>
                 <Form
                   form={form}
                   name="basic"
@@ -662,7 +670,7 @@ const Proxy_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -672,7 +680,7 @@ const Proxy_info = () => {
                         label="Proxy User"
                         name="proxy_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -680,7 +688,7 @@ const Proxy_info = () => {
                         label="Proxy Pass"
                         name="proxy_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -691,7 +699,7 @@ const Proxy_info = () => {
                         label="Proxy chi tiết"
                         name="proxy_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -699,22 +707,22 @@ const Proxy_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Proxy limit" name="proxy_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Proxy items" name="proxy_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Proxy Sold" name="proxy_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Proxy Fb" name="proxy_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1043,7 +1051,15 @@ const Proxy_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                   THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }>
                 {[
                   "Tổ phó",
                   "Chuyên viên",

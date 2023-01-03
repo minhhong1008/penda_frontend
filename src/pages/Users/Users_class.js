@@ -6,13 +6,21 @@ const Users_class = () => {
   const history = useHistory();
   const columns = [
     {
-      title: "Trạng thái",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>TRẠNG THÁI</strong>
+        </div>
+      ),
       dataIndex: "class",
       key: "class",
       render: (text) => <a onClick={() => history.push(`users_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
     },
     {
-      title: "Nội dung",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NỘI DUNG</strong>
+        </div>
+      ),
       dataIndex: "content",
       key: "content",
     },

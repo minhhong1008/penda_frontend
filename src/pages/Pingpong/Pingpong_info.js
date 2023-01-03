@@ -663,7 +663,7 @@ const Pingpong_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -673,7 +673,7 @@ const Pingpong_info = () => {
                         label="Pingpong User"
                         name="pingpong_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -681,7 +681,7 @@ const Pingpong_info = () => {
                         label="Pingpong Pass"
                         name="pingpong_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -692,7 +692,7 @@ const Pingpong_info = () => {
                         label="Pingpong chi tiết"
                         name="pingpong_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -700,22 +700,22 @@ const Pingpong_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Pingpong limit" name="pingpong_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Pingpong items" name="pingpong_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Pingpong Sold" name="pingpong_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Pingpong Fb" name="pingpong_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>

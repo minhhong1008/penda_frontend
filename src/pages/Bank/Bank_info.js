@@ -615,8 +615,18 @@ const Bank_info = () => {
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
-            <Col span={12} >
-              <Card title="THÔNG TIN ETSY" >
+            <Col span={12}>
+              <Card
+                title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN ETSY
+                  </strong>
+                }
+              >
                 <Form
                   form={form}
                   name="basic"
@@ -644,41 +654,25 @@ const Bank_info = () => {
                           copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
-                        <Input
-                          disabled={true}
-                          size="small"
-                          placeholder="input here"
-                        />
+                        <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
-                      <Form.Item
-                        
-                        label="Bank User"
-                        name="bank_user"
-                      >
-                        <Input size="small" placeholder="input here" />
+                      <Form.Item label="Bank User" name="bank_user">
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item
-                        
-                        label="Bank Pass"
-                        name="bank_password"
-                      >
-                        <Input size="small" placeholder="input here" />
+                      <Form.Item label="Bank Pass" name="bank_password">
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item
-                        
-                        label="Bank chi tiết"
-                        name="bank_detail"
-                      >
-                        <Input size="small" placeholder="input here" />
+                      <Form.Item label="Bank chi tiết" name="bank_detail">
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -686,22 +680,22 @@ const Bank_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Bank limit" name="bank_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Bank items" name="bank_item">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Bank Sold" name="bank_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Bank Fb" name="bank_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1030,7 +1024,17 @@ const Bank_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card
+                title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }
+              >
                 {[
                   "Tổ phó",
                   "Chuyên viên",
@@ -1293,7 +1297,7 @@ const Bank_info = () => {
             <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24} >
+                  <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1312,7 +1316,6 @@ const Bank_info = () => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-       
           <HuongDanBank_info />
         </Tabs.TabPane>
       </Tabs>

@@ -44,7 +44,11 @@ const Ebay_table = () => {
       render: (text, record, index) => index + 1,
     },
     {
-      title: "ID",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>ID</strong>
+        </div>
+      ),
       dataIndex: "ebay_id",
       key: "ebay_id",
       render: (text, record) => (
@@ -67,7 +71,11 @@ const Ebay_table = () => {
       },
     },
     {
-      title: "TÀI KHOẢN",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>TÀI KHOẢN</strong>
+        </div>
+      ),
       dataIndex: "ebay_user",
       key: "ebay_user",
       sorter: (a, b) => {
@@ -75,7 +83,11 @@ const Ebay_table = () => {
       },
     },
     {
-      title: "TIẾN TRÌNH",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>TIẾN TRÌNH</strong>
+        </div>
+      ),
       dataIndex: "ebay_processing",
       key: "ebay_processing",
       render: (record) => {
@@ -147,7 +159,11 @@ const Ebay_table = () => {
       },
     },
     {
-      title: "PHÁT SINH",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>PHÁT SINH</strong>
+        </div>
+      ),
       dataIndex: "ebay_error",
       key: "ebay_error",
       render: (record) => {
@@ -180,7 +196,11 @@ const Ebay_table = () => {
       },
     },
     {
-      title: "NHÂN VIÊN",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NHÂN VIÊN</strong>
+        </div>
+      ),
       dataIndex: "ebay_employee",
       key: "ebay_employee",
       render: (record) => {
@@ -213,7 +233,11 @@ const Ebay_table = () => {
       },
     },
     {
-      title: "GHI CHÚ",
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>GHI CHÚ</strong>
+        </div>
+      ),
       dataIndex: "ebay_note",
       key: "ebay_note",
       sorter: (a, b) => {

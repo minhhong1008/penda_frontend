@@ -26,7 +26,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>LỚP</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>LỚP</strong>
         </div>
       ),
       dataIndex: "class",
@@ -44,7 +44,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>TỔNG</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>TỔNG</strong>
         </div>
       ),
       dataIndex: "ebay_count",
@@ -53,7 +53,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>ĐÃ HOÀN THÀNH</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>ĐÃ HOÀN THÀNH</strong>
         </div>
       ),
       dataIndex: "content_complete",
@@ -62,7 +62,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>THỜI GIAN</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>THỜI GIAN</strong>
         </div>
       ),
       dataIndex: "content_time",
@@ -71,7 +71,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>KPI</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>KPI</strong>
         </div>
       ),
       dataIndex: "content_kpi",
@@ -80,7 +80,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>CẦN KIỂM TRA & XỬ LÝ</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN KIỂM TRA & XỬ LÝ</strong>
         </div>
       ),
       dataIndex: "content_check",
@@ -89,7 +89,7 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong>CẦN THỰC HIỆN</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN THỰC HIỆN</strong>
         </div>
       ),
       dataIndex: "content_action",
@@ -103,7 +103,7 @@ const Ebay_class = () => {
       ebay_count: "0",
       content_complete: (
         <div>
-          <strong>TÀI NGUYÊN MỚI</strong>
+          <strong >TÀI NGUYÊN MỚI</strong>
           <br></br> Device, brower, info, mail, sim, bank..
         </div>
       ),

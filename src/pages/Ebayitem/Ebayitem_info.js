@@ -384,26 +384,26 @@ const ebayitem_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
                       <Form.Item label="ebayitem User" name="ebayitem_user">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="ebayitem Pass" name="ebayitem_password">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="ebayitem chi tiết" name="ebayitem_detail">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -411,22 +411,22 @@ const ebayitem_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="ebayitem limit" name="ebayitem_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="ebayitem items" name="ebayitem_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="ebayitem Sold" name="ebayitem_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="ebayitem Feedback" name="ebayitem_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>

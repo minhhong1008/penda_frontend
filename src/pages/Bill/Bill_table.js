@@ -298,7 +298,7 @@ const Bill_table = () => {
                     </>
                   }
                 >
-                  <Table columns={columns} dataSource={data} size="small" />
+                  <Table columns={columns} dataSource={data}  />
                 </Card>
               </Col>
             </Row>
@@ -398,7 +398,7 @@ const Bill_table = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Nhà cung cấp" name="bill_supplier">
-                        <Input size="small" placeholder="Antidetect" />
+                        <Input  placeholder="Antidetect" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -406,34 +406,34 @@ const Bill_table = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Liên hệ" name="bill_contact_phone">
-                        <Input size="small" placeholder="antidetect.online" />
+                        <Input  placeholder="antidetect.online" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Liên hệ" name="bill_contact_social1">
-                        <Input size="small" placeholder="fb.com/antidetect" />
+                        <Input  placeholder="fb.com/antidetect" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Liên hệ" name="bill_contact_social2">
-                        <Input size="small" placeholder="0983339558" />
+                        <Input  placeholder="0983339558" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Thanh toán" name="bill_payment">
-                        <Input size="small" placeholder="40.000.000" />
+                        <Input  placeholder="40.000.000" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Công nợ" name="bill_debt">
-                        <Input size="small" placeholder="10.000.000" />
+                        <Input  placeholder="10.000.000" />
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Ghi chú" name="bill_note">
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -490,7 +490,7 @@ const Bill_table = () => {
                     </Col>
                     <Col span={12}>
                       <Form.Item label="Nội dung" name="bill_content">
-                        <Input size="small" placeholder="Mua key tháng 12" />
+                        <Input  placeholder="Mua key tháng 12" />
                       </Form.Item>
                     </Col>
                   </Row>

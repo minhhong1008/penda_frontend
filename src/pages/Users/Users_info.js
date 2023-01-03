@@ -25,6 +25,9 @@ import {
   getusersInfo,
   updateusersInfo,
 } from "../../api/users/index";
+import {
+  HuongDanUsers_info,
+} from "./Users_list";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
 
@@ -37,7 +40,6 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
 
 const Users_info = () => {
   const { Option } = Select;
@@ -140,7 +142,6 @@ const Users_info = () => {
     //setSelectListInfo(data.list_view.split(","));
   };
 
-   
   //  List danh sách các trường trong bảng DATE
   const listDate = [
     {
@@ -163,117 +164,93 @@ const Users_info = () => {
     setNoteValue(e.target.value);
   };
 
+  const [mode, setMode] = useState("left");
   const renderTimeLine = () => {
     let arr = [
       {
-        time: "01/01/2023",
+        value: "users_date_start",
+        title: "Ngày vào làm",
+      },
+      {
+        value: "users_date_verify",
+        title: "Ngày tăng lương",
+      },
+      {
+        value: "01/01/2023",
         title: "Up seller",
       },
       {
-        time: "01/01/2023",
+        value: "01/01/2023",
         title: "Up seller",
       },
       {
-        time: "01/01/2023",
-        title: "Up seller",
-      },
-      {
-        time: "01/01/2023",
-        title: "Up seller",
-      },
-      {
-        time: "01/01/2023",
+        value: "01/01/2023",
         title: "Up seller",
       },
     ];
 
     return (
       <Col span={24}>
-        <Timeline mode="alternate">
+        <Timeline mode={mode}>
           {arr.map((item, index) => {
             return (
-              <Timeline.Item key={index}>
-                {" "}
-                {item.title + " " + item.time}
+              <Timeline.Item
+                label={item.value}
+                key={index}
+                dot={
+                  <ClockCircleOutlined
+                    style={{
+                      fontSize: "20px",
+                    }}
+                  />
+                }
+              >
+                {item.title}
               </Timeline.Item>
             );
           })}
-          <Timeline.Item color="green">
-            Solve initial network problems 2015-09-01
-          </Timeline.Item>
-          <Timeline.Item
-            dot={
-              <ClockCircleOutlined
-                style={{
-                  fontSize: "26px",
-                }}
-              />
-            }
-          >
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-            quae ab illo inventore veritatis et quasi architecto beatae vitae
-            dicta sunt explicabo.
-          </Timeline.Item>
-          <Timeline.Item color="red">
-            Network problems being solved 2015-09-01
-          </Timeline.Item>
-          <Timeline.Item>Create a services site 2015-09-01</Timeline.Item>
-          <Timeline.Item
-            dot={
-              <ClockCircleOutlined
-                style={{
-                  fontSize: "26px",
-                }}
-              />
-            }
-          >
-            Technical testing 2015-09-01
-          </Timeline.Item>
         </Timeline>
       </Col>
     );
   };
 
+  // Upload ảnh
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState();
 
-   // Upload ảnh
-   const [previewOpen, setPreviewOpen] = useState(false);
-   const [previewImage, setPreviewImage] = useState("");
-   const [previewTitle, setPreviewTitle] = useState("");
-   const [fileList, setFileList] = useState();
- 
-   const handleCancel = () => setPreviewOpen(false);
-   const handlePreview = async (file) => {
-     if (!file.url && !file.preview) {
-       file.preview = await getBase64(file.originFileObj);
-     }
-     setPreviewImage(file.url || file.preview);
-     setPreviewOpen(true);
-     setPreviewTitle(
-       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-     );
-   };
-   const handleChange = async ({ fileList }) => {
-     setFileList(fileList);
-   };
-   const uploadButton = (
-     <div>
-       <PlusOutlined />
-       <div
-         style={{
-           marginTop: 8,
-         }}
-       >
-         Upload
-       </div>
-     </div>
-   );
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
 
- //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
- useEffect(() => {
-   getInfousers();
- }, []);
-
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
+  useEffect(() => {
+    getInfousers();
+  }, []);
 
   return (
     <Card
@@ -309,21 +286,17 @@ const Users_info = () => {
                           },
                         ]}
                       >
-                        <Input
-                          disabled={true}
-                          size="small"
-                          placeholder="I_1000"
-                        />
+                        <Input disabled={true} placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Giới tính" name="users_sex">
-                        <Input size="small" placeholder="Nam" />
+                        <Input placeholder="Nam" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày sinh" name="usersdate_birthday">
-                        <Input size="small" placeholder="27/7/1945" />
+                        <Input placeholder="27/7/1945" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -331,17 +304,17 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Họ tên" name="users_fullname">
-                        <Input size="small" placeholder="Thế Minh Hồng" />
+                        <Input placeholder="Thế Minh Hồng" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Passport" name="users_passport">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="SSN" name="users_ssn">
-                        <Input size="small" placeholder="028094999999" />
+                        <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -349,19 +322,19 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={18}>
                       <Form.Item label="Quê quán........" name="users_origin">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="code" name="users_code">
-                        <Input size="small" placeholder="100000" />
+                        <Input placeholder="100000" />
                       </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Nơi thường trú" name="users_residence">
-                        <Input size="small" placeholder="I_1000" />
+                        <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -369,17 +342,17 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Có giá trị đến" name="usersdate_expiry">
-                        <Input size="small" placeholder="25/7/2041" />
+                        <Input placeholder="25/7/2041" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày CCCD" name="usersdate_start">
-                        <Input size="small" placeholder="29/4/2021" />
+                        <Input placeholder="29/4/2021" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Ngày vào làm" name="usersdate_begin">
-                        <Input size="small" placeholder="25/12/2022" />
+                        <Input placeholder="25/12/2022" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -387,17 +360,17 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Users" name="users_name">
-                        <Input size="small" placeholder="nguyenhoai" />
+                        <Input placeholder="nguyenhoai" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Password" name="users_passwords">
-                        <Input size="small" placeholder="Nam" />
+                        <Input placeholder="Nam" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Biệt danh" name="users_aliases">
-                        <Input size="small" placeholder="Nguyễn Hoài" />
+                        <Input placeholder="Nguyễn Hoài" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -405,15 +378,12 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Điện thoại" name="users_phone">
-                        <Input size="small" placeholder="0994238888" />
+                        <Input placeholder="0994238888" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Facebook" name="users_fb">
-                        <Input
-                          size="small"
-                          placeholder="fb.com/theminhhong1008a"
-                        />
+                        <Input placeholder="fb.com/theminhhong1008a" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -426,7 +396,7 @@ const Users_info = () => {
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
                         <Form.Item label="Mail" name="users_mail">
-                          <Input size="small" placeholder="" />
+                          <Input placeholder="" />
                         </Form.Item>
                       ) : null}
                     </Col>
@@ -435,17 +405,17 @@ const Users_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item label="Ngân hàng" name="users_bank">
-                        <Input size="small" placeholder="ACB" />
+                        <Input placeholder="ACB" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Số tài khoản" name="users_banknumber">
-                        <Input size="small" placeholder="76668888" />
+                        <Input placeholder="76668888" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Sắp xếp" name="users_sort">
-                        <Input size="small" placeholder="" />
+                        <Input placeholder="" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -923,15 +893,32 @@ const Users_info = () => {
             <Col span={12}>
               <Card title="CHỨC NĂNG NHIỆM VỤ">
                 <Col span={24}>
-                  <Space direction="vertical" style={{ width: "100%" }}>
-                    <Alert message="Success Text" type="success" />
-                    <Alert message="Info Text" type="info" />
-                    <Alert message="Warning Text" type="warning" />
-                    <Alert message="Error Text" type="error" />
-                    <Alert message="Success Text" type="success" />
-                    <Alert message="Info Text" type="info" />
-                    <Alert message="Warning Text" type="warning" />
-                    <Alert message="Error Text" type="error" />
+                  <Space
+                    direction="vertical"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <Alert
+                      message="Success Text"
+                      description={<><p>1. Ebay mã EB_12345</p><p>1. Ebay mã EB_12345</p></>}
+                      type="success"
+                    />
+                    <Alert
+                      message="Info Text"
+                      description="Info Description Info Description Info Description Info Description"
+                      type="info"
+                    />
+                    <Alert
+                      message="Warning Text"
+                      description="Warning Description Warning Description Warning Description Warning Description"
+                      type="warning"
+                    />
+                    <Alert
+                      message="Error Text"
+                      description="Error Description Error Description Error Description Error Description"
+                      type="error"
+                    />
                   </Space>
                 </Col>
                 <br></br>
@@ -982,28 +969,13 @@ const Users_info = () => {
                     />
                   </Col>
                 </Row>
-
-                <span>
-                  | Thế Minh Hồng, 2022-11-26 14:34:04 Cập nhật lần cuối:
-                </span>
               </Card>
             </Col>
           </Row>
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-          <p>1. Mail chính là user đăng nhập</p>
-          <p>
-            2. Phân quyền view, edit theo : Chức vụ, phòng ban, quản lý. Giám
-            đốc sắp xếp chức vụ và phòng ban, Từ tổ trưởng trở lên được sửa quản
-            lý của nhân viên, và trạng thái nhân viên, Phòng ban mặc định là
-            "Phòng sản xuất", Quản lý mặc định là full các acc
-          </p>
-          <p>
-            3. Yêu cầu toàn bộ thôn tin nhân viên phải đầy đủ, phải có cccd 2
-            mặt, ảnh cầm cccd, ảnh chân dung, ảnh thẻ....mỗi nhân viên mới đến
-            sẽ tạo luôn 1 bộ tài khoản full trên 1 máy tính Workstasion
-          </p>
+        <HuongDanUsers_info />
         </Tabs.TabPane>
       </Tabs>
       <Modal
@@ -1014,7 +986,6 @@ const Users_info = () => {
       >
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
-      
     </Card>
   );
 };

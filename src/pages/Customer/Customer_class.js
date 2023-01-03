@@ -98,6 +98,30 @@ import {
     ];
     const baseData = [
       {
+        key: "0",
+        class: "Lớp 0",
+        customer_count: "0",
+        content_complete: (
+          <div>
+            <strong>TÀI NGUYÊN MỚI</strong>
+            <br></br> Device, brower, info, mail, sim, customer..
+          </div>
+        ),
+        content_time: <div>1 ngày</div>,
+        content_check: (
+          <div>
+            <strong>Kiểm tra tài nguyên</strong>
+            <br></br> Liên hệ quản lý
+          </div>
+        ),
+        content_action: (
+          <div>
+            <strong>Reg mail, or login mail, xử lý tài nguyên</strong>
+            <br></br> Chuyển Lớp 2
+          </div>
+        ),
+      },
+      {
         key: "1",
         class: "Lớp 1",
         customer_count: "0",

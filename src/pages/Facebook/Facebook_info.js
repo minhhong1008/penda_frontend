@@ -663,7 +663,7 @@ const Facebook_info = () => {
                       >
                         <Input
                           disabled={true}
-                          size="small"
+                          
                           placeholder="input here"
                         />
                       </Form.Item>
@@ -673,7 +673,7 @@ const Facebook_info = () => {
                         label="Facebook User"
                         name="facebook_user"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -681,7 +681,7 @@ const Facebook_info = () => {
                         label="Facebook Pass"
                         name="facebook_password"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -692,7 +692,7 @@ const Facebook_info = () => {
                         label="Facebook chi tiết"
                         name="facebook_detail"
                       >
-                        <Input size="small" placeholder="input here" />
+                        <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -700,22 +700,22 @@ const Facebook_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Facebook limit" name="facebook_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Facebook items" name="facebook_item">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Facebook Sold" name="facebook_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Facebook Fb" name="facebook_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>

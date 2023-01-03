@@ -271,24 +271,24 @@ import {
                             },
                           ]}
                         >
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={10}>
                         <Form.Item label="etsyorder User" name="etsyorder_user">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="etsyorder Pass" name="etsyorder_password">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
                         <Form.Item label="etsyorder chi tiết" name="etsyorder_detail">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -299,22 +299,22 @@ import {
                           label="etsyorder limit"
                           name="etsyorder_limit"
                         >
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyorder items" name="etsyorder_item">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyorder Sold" name="etsyorder_sold">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyorder Feedback" name="etsyorder_feedback">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                     </Row>

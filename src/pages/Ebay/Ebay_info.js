@@ -652,13 +652,7 @@ const Ebay_info = () => {
     <Card
       title={id + " | " + (info?._id ? info?._id : "")}
       extra={
-        <Button
-          onClick={() => form.submit()}
-          style={{
-            background: "#18a689",
-            color: "white",
-          }}
-        >
+        <Button onClick={() => form.submit()} type="primary">
           Lưu thông tin
         </Button>
       }
@@ -667,7 +661,17 @@ const Ebay_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN EBAY">
+              <Card
+                title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN EBAY
+                  </strong>
+                }
+              >
                 <Form
                   form={form}
                   name="basic"
@@ -692,21 +696,17 @@ const Ebay_info = () => {
                           copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
-                        <Input
-                          disabled={true}
-                          size="small"
-                          placeholder="input here"
-                        />
+                        <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
                       <Form.Item label="eBay User" name="ebay_user">
-                        <Input size="small" placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="eBay Pass" name="ebay_password">
-                        <Input size="small" placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -714,7 +714,7 @@ const Ebay_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="eBay chi tiết" name="ebay_detail">
-                        <Input size="small" placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -722,22 +722,22 @@ const Ebay_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="eBay limit" name="ebay_limit">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="eBay items" name="ebay_item">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="eBay Sold" name="ebay_sold">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="eBay Fb" name="ebay_feedback">
-                        <Input size="small" placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1066,7 +1066,17 @@ const Ebay_info = () => {
             </Col>
 
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
+              <Card
+                title={
+                  <strong
+                    style={{
+                      color: "#1890FD",
+                    }}
+                  >
+                    THÔNG TIN TÀI NGUYÊN
+                  </strong>
+                }
+              >
                 {[
                   "Tổ phó",
                   "Chuyên viên",

@@ -271,24 +271,24 @@ import {
                             },
                           ]}
                         >
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={10}>
                         <Form.Item label="etsyitem User" name="etsyitem_user">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="etsyitem Pass" name="etsyitem_password">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
                         <Form.Item label="etsyitem chi tiết" name="etsyitem_detail">
-                          <Input size="small" placeholder="input here" />
+                          <Input  placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -299,22 +299,22 @@ import {
                           label="etsyitem limit"
                           name="etsyitem_limit"
                         >
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyitem items" name="etsyitem_item">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyitem Sold" name="etsyitem_sold">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="etsyitem Feedback" name="etsyitem_feedback">
-                          <Input size="small" placeholder="0" />
+                          <Input  placeholder="0" />
                         </Form.Item>
                       </Col>
                     </Row>
