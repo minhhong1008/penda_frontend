@@ -23,7 +23,13 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { showError, showSuccess } from "../../utils";
 import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
-import { Create, getPayAndCollect, updateBill } from "../../api/bill";
+import {
+  Create,
+  getPayAndCollect,
+  updateBill,
+  getListBill,
+  getEmployee,
+} from "../../api/bill";
 // Liên quan upload ảnh
 import { PlusOutlined } from "@ant-design/icons";
 const getBase64 = (file) =>
@@ -42,6 +48,9 @@ const Bill_class = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { RangePicker } = DatePicker;
+  const [listselect_bill_work_new, setListBillWorkNew] = useState(
+    listselect_bill_work
+  );
   const rangePresets = [
     {
       label: "Tháng trước",
@@ -69,14 +78,44 @@ const Bill_class = () => {
   const [form] = Form.useForm();
   const [formProduct] = Form.useForm();
 
-  // Hàm tính tổng tiền:
+  const [listselect_employee, setlistselect_employee] = useState();
+
+  // AUTO trong html:
   const renderTotalMoney = () => {
     let quantity = formProduct.getFieldValue("bill_number");
     let price = formProduct.getFieldValue("bill_price");
-    if (quantity && price) {
-      formProduct.setFieldValue("bill_total", quantity * price);
+    let bill_total = quantity * price;
+    formProduct.setFieldValue("bill_total", bill_total);
+    form.setFieldValue("bill_payment", bill_total);
+    let payment = form.getFieldValue("bill_payment");
+    let debt = payment - bill_total;
+    form.setFieldValue("bill_debt", debt);
+  };
+  const renderpayment = () => {
+    let bill_payment = form.getFieldValue("bill_payment");
+    let bill_total = formProduct.getFieldValue("bill_total");
+    form.setFieldValue("bill_debt", bill_payment - bill_total);
+  };
+  const rendertype = (value) => {
+    if (value == "Phiếu chi") {
+      setListBillWorkNew([
+        "Mua device, proxy & gia hạn",
+        "Mua sim, phone & gia hạn",
+        "Mua info",
+        "Mua mail",
+        "Thanh toán lương, thưởng hoa hồng",
+        "Chi phí văn phòng",
+        "Chi phí vận chuyển",
+        "Chi phí checkout, tracking",
+        "Chi phí Kicksold",
+      ]);
     } else {
-      formProduct.setFieldValue("bill_total", 0);
+      setListBillWorkNew([
+        "Thu tiền bán hàng",
+        "Thu tiền bán tài nguyên",
+        "Thu tiền khác",
+        "Thu tiền đi vay",
+      ]);
     }
   };
 
@@ -102,11 +141,11 @@ const Bill_class = () => {
       ...productValues,
       bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
     };
-    postData_server(newData);
+    postData_Create(newData);
   };
 
   // Bước 2: Gửi dữ liệu lên server Xử lý bất đồng bộ: dùng async await
-  const postData_server = async (newData) => {
+  const postData_Create = async (newData) => {
     // Gọi API để gửi dữ liệu đi
     const response = await Create(newData);
     if (response.status == 200) {
@@ -114,6 +153,13 @@ const Bill_class = () => {
     } else {
       showError("Thêm bill thất bại");
     }
+  };
+
+  // Hàm gọi dữ liệu về từ database
+  const gettooldata = async () => {
+    const res = await getEmployee();
+    let data = res.data;
+    setlistselect_employee(data);
   };
 
   //---------------Bảng-------------------
@@ -140,6 +186,9 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_suggest_pay",
+      render: (text) => (
+        VND.format(text)
+      )
     },
     {
       title: "Tỷ trọng",
@@ -171,6 +220,9 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_suggest_collect",
+      render: (text) => (
+        VND.format(text)
+      )
     },
     {
       title: "Tỷ trọng",
@@ -203,6 +255,9 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_pay",
+      render: (text) => (
+        VND.format(text)
+      )
     },
     {
       title: "Tỷ trọng",
@@ -234,6 +289,9 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_collect",
+      render: (text) => (
+        VND.format(text)
+      )
     },
     {
       title: "Tỷ trọng",
@@ -268,10 +326,34 @@ const Bill_class = () => {
       console.log("Clear");
     }
   };
+
+  const handleFilter = async () => {
+    let { data } = await getListBill({
+      status: status,
+      ...filterDate,
+    });
+    setData(data);
+  };
+
   // Hàm gọi dữ liệu thu chi về
 
   const getDataBill = async () => {
-    let response = await getPayAndCollect();
+    let filter = [
+      dayjs()
+        .add(-30, "d")
+        .format("YYYY-MM-DD"),
+      dayjs().format("YYYY-MM-DD"),
+    ];
+    setFilterDate({
+      from: filter[0],
+      to: filter[1],
+    });
+    let response = await getPayAndCollect({
+      from: filter[0],
+      to: filter[1],
+    });
+    console.log(response.status);
+
     if (response.status == 200) {
       const { data } = response;
       let arrKey_bill_work = [];
@@ -326,7 +408,7 @@ const Bill_class = () => {
             key: index + 2,
             Stt: index + 2,
             bill_work_pay: bill_work_pay,
-            bill_total_pay: VND.format(bill_total_pay),
+            bill_total_pay: bill_total_pay,
             bill_density_pay: bill_density_pay,
           });
 
@@ -334,7 +416,7 @@ const Bill_class = () => {
             key: index + 2,
             Stt: index + 2,
             bill_work_suggest_pay: bill_work_suggest_pay,
-            bill_total_suggest_pay: VND.format(bill_total_suggest_pay),
+            bill_total_suggest_pay: bill_total_suggest_pay,
             bill_density_suggest_pay: bill_density_suggest_pay,
           });
         } else {
@@ -362,7 +444,7 @@ const Bill_class = () => {
             key: index + 2,
             Stt: index + 2,
             bill_work_collect: bill_work_collect,
-            bill_total_collect: VND.format(bill_total_collect),
+            bill_total_collect: bill_total_collect,
             bill_density_collect: bill_density_collect,
           });
 
@@ -370,7 +452,7 @@ const Bill_class = () => {
             key: index + 2,
             Stt: index + 2,
             bill_work_suggest_collect: bill_suggest_work_collect,
-            bill_total_suggest_collect: VND.format(bill_suggest_total_collect),
+            bill_total_suggest_collect: bill_suggest_total_collect,
             bill_density_suggest_collect: bill_suggest_density_collect,
           });
         }
@@ -384,7 +466,7 @@ const Bill_class = () => {
         key: 1,
         Stt: 1,
         bill_work_pay: "Tổng tiền",
-        bill_total_pay: VND.format(totalMoney_pay),
+        bill_total_pay: totalMoney_pay,
         bill_density_pay: "100%",
       });
       setDataPay(arrPay);
@@ -397,7 +479,7 @@ const Bill_class = () => {
         key: 1,
         Stt: 1,
         bill_work_suggest_pay: "Tổng tiền",
-        bill_total_suggest_pay: VND.format(totalMoney_suggest_pay),
+        bill_total_suggest_pay: totalMoney_suggest_pay,
         bill_density_suggest_pay: "100%",
       });
       setDataSuggestPay(arrSuggestPay);
@@ -410,7 +492,7 @@ const Bill_class = () => {
         key: 1,
         Stt: 1,
         bill_work_collect: "Tổng tiền",
-        bill_total_collect: VND.format(totalMoney_collect),
+        bill_total_collect: totalMoney_collect,
         bill_density_collect: "100%",
       });
 
@@ -424,14 +506,11 @@ const Bill_class = () => {
         key: 1,
         Stt: 1,
         bill_work_suggest_collect: "Tổng tiền",
-        bill_total_suggest_collect: VND.format(totalMoney_suggest_collect),
+        bill_total_suggest_collect: totalMoney_suggest_collect,
         bill_density_suggest_collect: "100%",
       });
 
       setDataSuggestCollect(arrSuggestCollect);
-
-      //setTablePay(arrPay);
-      //setTableCollect(arrCollect);
     } else {
       showError("Có lỗi xảy ra");
     }
@@ -478,6 +557,7 @@ const Bill_class = () => {
   // Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getDataBill();
+    gettooldata();
   }, []);
 
   return (
@@ -502,8 +582,10 @@ const Bill_class = () => {
                       <Row gutter={16}>
                         <Col span={16}>
                           <RangePicker
+                            size="large"
                             presets={rangePresets}
                             onChange={onRangeChange}
+                            defaultValue={[dayjs().add(-30, "d"), dayjs()]}
                           />
                         </Col>
                         <Col span={8}>
@@ -550,8 +632,10 @@ const Bill_class = () => {
                       <Row gutter={16}>
                         <Col span={16}>
                           <RangePicker
+                            size="large"
                             presets={rangePresets}
                             onChange={onRangeChange}
+                            defaultValue={[dayjs().add(-30, "d"), dayjs()]}
                           />
                         </Col>
                         <Col span={8}>
@@ -560,6 +644,7 @@ const Bill_class = () => {
                               background: "#1890FD",
                               color: "white",
                             }}
+                            onClick={() => handleFilter()}
                           >
                             Kết quả
                           </Button>
@@ -627,12 +712,13 @@ const Bill_class = () => {
                           <DatePicker
                             style={{ float: "right" }}
                             format="YYYY-MM-DD"
+                            defaultValue={dayjs()}
                           />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Hạng mục" name="bill_type">
-                          <Select optionlabelprop="label">
+                          <Select optionlabelprop="label" onChange={rendertype}>
                             <Option value="Phiếu chi" label="Phiếu chi">
                               <div className="demo-option-label-item">
                                 Phiếu chi
@@ -646,8 +732,6 @@ const Bill_class = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                    </Row>
-                    <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Hành động" name="bill_action">
                           <Select optionlabelprop="label">
@@ -664,7 +748,8 @@ const Bill_class = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-
+                    </Row>
+                    <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Phòng ban" name="bill_owner">
                           <Select optionlabelprop="label">
@@ -681,8 +766,29 @@ const Bill_class = () => {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
+                        <Form.Item label="Nhân viên" name="bill_employee">
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                            size="large"
+                          >
+                            {listselect_employee?.map((item) => {
+                              return (
+                                <Option value={item} label={item}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      </Col>
+
+                      <Col span={8}>
                         <Form.Item label="Nhà cung cấp" name="bill_supplier">
-                          <Input  placeholder="Antidetect" />
+                          <Input placeholder="Antidetect" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -690,34 +796,55 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Liên hệ" name="bill_contact_phone">
-                          <Input  placeholder="antidetect.online" />
+                          <Input placeholder="antidetect.online" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Liên hệ" name="bill_contact_social1">
-                          <Input  placeholder="fb.com/antidetect" />
+                          <Input placeholder="fb.com/antidetect" />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Liên hệ" name="bill_contact_social2">
-                          <Input  placeholder="0983339558" />
+                          <Input placeholder="0983339558" />
                         </Form.Item>
                       </Col>
+                    </Row>
+                    <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Thanh toán" name="bill_payment">
-                          <Input  placeholder="40.000.000" />
+                          <InputNumber
+                            style={{
+                              width: "100%",
+                            }}
+                            step="10000"
+                            formatter={(value) =>
+                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            onChange={renderpayment}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Công nợ" name="bill_debt">
-                          <Input  placeholder="10.000.000" />
+                          <InputNumber
+                            style={{
+                              width: "100%",
+                            }}
+                            formatter={(value) =>
+                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            disabled
+                          />
                         </Form.Item>
                       </Col>
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
                         <Form.Item label="Ghi chú" name="bill_note">
-                          <Input  placeholder="input here" />
+                          <Input placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -759,7 +886,7 @@ const Bill_class = () => {
                       <Col span={12}>
                         <Form.Item label="Công việc" name="bill_work">
                           <Select optionlabelprop="label">
-                            {listselect_bill_work.map((item, index) => {
+                            {listselect_bill_work_new.map((item, index) => {
                               return (
                                 <Option value={item} label={item} key={index}>
                                   <div className="demo-option-label-item">
@@ -773,7 +900,7 @@ const Bill_class = () => {
                       </Col>
                       <Col span={12}>
                         <Form.Item label="Nội dung" name="bill_content">
-                          <Input  placeholder="Mua key tháng 12" />
+                          <Input placeholder="Mua key tháng 12" />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -782,6 +909,9 @@ const Bill_class = () => {
                       <Col span={6}>
                         <Form.Item label="Số lượng" name="bill_number">
                           <InputNumber
+                            style={{
+                              width: "100%",
+                            }}
                             size="large"
                             placeholder="1000"
                             onChange={renderTotalMoney}
@@ -791,15 +921,35 @@ const Bill_class = () => {
                       <Col span={9}>
                         <Form.Item label="Giá tiền" name="bill_price">
                           <InputNumber
+                            style={{
+                              width: "100%",
+                            }}
+                            step="10000"
                             size="large"
-                            placeholder="50.000"
+                            formatter={(value) =>
+                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             onChange={renderTotalMoney}
                           />
                         </Form.Item>
                       </Col>
                       <Col span={9}>
                         <Form.Item label="Thành tiền" name="bill_total">
-                          <InputNumber size="large" disabled />
+                          <InputNumber
+                            style={{
+                              width: "100%",
+                            }}
+                            size="large"
+                            formatter={(value) =>
+                              ` ${value} đ`.replace(
+                                /\B(?=(\d{3})+(?!\d))/g,
+                                ","
+                              )
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            disabled
+                          />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -814,13 +964,13 @@ const Bill_class = () => {
           </Tabs.TabPane>
         </Tabs>
         <Modal
-        open={previewOpen}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <img alt="example" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
+          open={previewOpen}
+          title={previewTitle}
+          footer={null}
+          onCancel={handleCancel}
+        >
+          <img alt="example" style={{ width: "100%" }} src={previewImage} />
+        </Modal>
       </Card>
     </div>
   );

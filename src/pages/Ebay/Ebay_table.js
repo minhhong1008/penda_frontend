@@ -16,6 +16,7 @@ import {
   TreeSelect,
   Checkbox,
   Tag,
+  Tooltip,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { copyToClipboard } from "../../utils";
@@ -29,6 +30,7 @@ const Ebay_table = () => {
   const { ebays } = useSelector((state) => state.ebay);
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
+  const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
   // nut checked, sửa cả trong file ebayReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -37,7 +39,11 @@ const Ebay_table = () => {
   };
   const columns = [
     {
-      title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
+      title: (
+        <Tag color="#2db7f5" onClick={copyId}>
+          Copy
+        </Tag>
+      ),
       key: "index",
       fixed: "left",
       width: 1,
@@ -85,7 +91,9 @@ const Ebay_table = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>TIẾN TRÌNH</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            TIẾN TRÌNH
+          </strong>
         </div>
       ),
       dataIndex: "ebay_processing",
@@ -240,11 +248,49 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_note",
       key: "ebay_note",
+      render: (text, record, index) => (
+        <div>
+          {selectedNote == record._id ? (
+            <Input
+              key={index}
+              onPressEnter={(e) => {
+                handleChangeNote(record._id, e.target.value);
+                
+              }}
+              onMouseLeave={(e) => {
+                handleChangeNote(record._id, e.target.value);
+                setSelectedNote()
+              }}
+              defaultValue={text}
+            ></Input>
+          ) : (
+            <div onClick={() => setSelectedNote(record._id)}>
+              <Tooltip title={text}>
+                <div
+                  style={{
+                    whiteSpace: "nowrap",
+                    width: "50px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {text}
+                </div>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      ),
       sorter: (a, b) => {
         return a.ebay_user.localeCompare(b.ebay_note);
       },
     },
   ];
+
+  const handleChangeNote = (id, value) => {
+    console.log(id, value);
+    setSelectedNote()
+  };
 
   const handleChangeFilter = (values) => {
     let newValue = values.join(",");
@@ -267,7 +313,7 @@ const Ebay_table = () => {
     getListEbay();
   }, [class_name]);
 
-// nut checked copy cái này trong ant.design
+  // nut checked copy cái này trong ant.design
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
@@ -275,7 +321,7 @@ const Ebay_table = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-//--------
+  //--------
 
   return (
     <div>

@@ -26,7 +26,7 @@ const Bank_class = () => {
     {
       title: (
         <div>
-          <strong>LỚP</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>LỚP</strong>
         </div>
       ),
       dataIndex: "class",

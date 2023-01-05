@@ -1,85 +1,54 @@
 //import React from 'react'
-import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
-import React, { useEffect } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Form,
+  Modal,
+  Row,
+  Select,
+  Space,
+  Table,
+  Tag,
+  TreeSelect,
+} from "antd";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { getListusers_timesheetsActions } from "../../actions/usersActions";
+import { getListusersActions } from "../../actions/usersActions";
+import { createSession, getSessions } from "../../api/timeSheet";
+import { showError, showSuccess } from "../../utils";
 
 const Users_timesheets = () => {
-  const { users_function } = useSelector((state) => state.auth);
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const status_name = urlParams.get("timesheets");
+  const { users_function, users_id } = useSelector((state) => state.auth);
   const { userss } = useSelector((state) => state.users);
-
+  const [data, setData] = useState();
   const dispatch = useDispatch();
-  const history = useHistory();
-  /* const columns = [
-    {
-      title: "STT",
-      key: "index",
-      render: (text, record, index) => index + 1,
-    },
-    
-    {
-      title: "Tên",
-      dataIndex: "users_name",
-      key: "users_name",
-      render: (text, record) => (
-        <a
-          onClick={() =>
-            history.push(`users_class/table/${encodeURIComponent(record.users_id)}`)
-          }
-        >
-          {text}
-        </a>
-      ),
-    },
-    {
-      title: "Giới tính",
-      dataIndex: "users_sex",
-      key: "users_sex",
-    },
-    {
-      title: "CCCD",
-      dataIndex: "users_passport",
-      key: "users_passport",
-    },
-    {
-      title: "Ngày sinh",
-      dataIndex: "usersdate_birthday",
-      key: "usersdate_birthday",
-    },
-    {
-      title: "Ngày vào làm",
-      dataIndex: "usersdate_begin",
-      key: "usersdate_begin",
-    },
-    {
-      title: "Điện thoại",
-      dataIndex: "users_phone",
-      key: "users_phone",
-    },
-    {
-      title: "Trình độ ",
-      dataIndex: "users_level",
-      key: "users_level",
-    },
-    {
-      title: "Chức vụ",
-      dataIndex: "users_function",
-      key: "users_function",
-    },
-    
-  ]; */
-
+  const [form] = Form.useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { Option } = Select;
+  const [filterDate, setFilterDate] = useState({
+    month: dayjs().format("MM"),
+    year: dayjs().format("YYYY"),
+  });
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    form.submit();
+    // setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const columns = [
     {
       title: "STT",
       key: "index",
       fixed: "left",
       width: 7,
-      render: (text, record, index) => index + 1,
+      render: (text, record, index) => (index + 1),
     },
     {
       title: "Họ tên",
@@ -102,340 +71,15 @@ const Users_timesheets = () => {
     },
     {
       title: "Ngày trong tháng",
-      children: [
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-        {
-          title: "1",
-          children: [
-            {
-              title: "T2",
-              dataIndex: "signup",
-              key: "signup",
-              width: 10,
-            },
-          ],
-        },
-      ],
+      children: handleDateTime(
+        dayjs(
+          filterDate?.year + "-" + filterDate?.month,
+          "YYYY-MM"
+        ).daysInMonth(),
+        filterDate?.year,
+        filterDate?.month
+      ),
     },
-
     {
       title: "Total",
       dataIndex: "total",
@@ -445,27 +89,73 @@ const Users_timesheets = () => {
     },
   ];
 
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      name: "John Brown",
-      signup: "S",
-      total: "56",
+  const onChangeDate = (date, dateString) => {
+    setFilterDate({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
     });
-  }
+    getListSession({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
+    });
+  };
 
-  const getListusers = () => {
-    dispatch(
-      getListusers_timesheetsActions({
-        users_status: "Active",
-      })
-    );
+  const onFinish = async (values) => {
+    values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
+    let response = await createSession({
+      user_id: users_id,
+      working_session: values.working_session,
+      working_date: values.working_date,
+    });
+    if (response.status == "200") {
+      let { data } = response;
+      showSuccess(
+        "Đăng ký ca làm " +
+          (data.working_session == "S" ? "sáng " : "chiều ") +
+          data.working_date
+      );
+    } else {
+      showError("Đăng ký thất bại");
+    }
+  };
+
+  const getListSession = async (time) => {
+    let response = await getSessions(time);
+    if (response.status == 200) {
+      let { data } = response;
+      let newData = [];
+      data.map((user, index) => {
+        let item = {};
+        item["total"] = user.sessions.length;
+        item["users_name"] = userss?.filter((item) => item._id == user._id)[0]?.users_name;
+        item["index"] = parseInt(userss?.filter((item) => item._id == user._id)[0]?.users_sort)
+        user.sessions.map((session, index) => {
+          if (item[session.day]) {
+            item[session.day] =
+              item[session.day] + "-" + session.working_session;
+          } else {
+            item[session.day] = session.working_session;
+          }
+        });
+        newData.push(item);
+      });
+      setData(newData.sort((a,b) => a.index - b.index));
+    } else {
+      showError("Có lỗi xảy ra");
+    }
   };
 
   useEffect(() => {
-    getListusers();
-  }, [status_name]);
+    dispatch(
+      getListusersActions({
+        users_status: "Active",
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    getListSession(filterDate);
+  }, [userss]);
 
   return (
     <div>
@@ -478,21 +168,112 @@ const Users_timesheets = () => {
         "Nhân viên",
         "Tập sự",
         "Thử việc",
-      ].indexOf(users_function) == -1 ? (
-        <Card type="inner">
-          <Table
-            columns={columns}
-            dataSource={data}
-            bordered
-            size="small"
-            pagination={{
-              defaultPageSize: 50,
-            }}
-          />
-        </Card>
+      ].indexOf(users_function) == -1 || true ? (
+        <>
+          <Card
+            type="inner"
+            title="Bảng chấm công"
+            extra={
+              <div style={{ display: "flex", gap: "8px" }}>
+                <DatePicker
+                  onChange={onChangeDate}
+                  defaultValue={dayjs(
+                    filterDate?.year + "-" + filterDate?.month,
+                    "YYYY-MM"
+                  )}
+                  format={"YYYY-MM"}
+                  picker="month"
+                />
+                <Button onClick={() => showModal()}>Đăng ký ca</Button>
+              </div>
+            }
+          >
+            <Table
+              columns={columns}
+              dataSource={data}
+              bordered
+              size="small"
+              pagination={{
+                position: ["topRight"],
+                showSizeChanger: true,
+              }}
+            />
+          </Card>
+          <Modal
+            title="Đăng ký ca làm việc"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          >
+            <Card>
+              <Form
+                form={form}
+                name="basic"
+                autoComplete="off"
+                size="large"
+                onFinish={onFinish}
+                initialValues={{
+                  working_session: "S",
+                  working_date: dayjs(),
+                }}
+              >
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item label="Đăng ký" name="working_session">
+                      <Select optionlabelprop="label">
+                        <Option value="S" label="Ca sáng">
+                          <div className="demo-option-label-item">Ca sáng</div>
+                        </Option>
+                        <Option value="C" label="Ca chiều">
+                          <div className="demo-option-label-item">Ca chiều</div>
+                        </Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item label="Ngày tháng" name="working_date">
+                      <DatePicker
+                        style={{ float: "right" }}
+                        format="YYYY-MM-DD"
+                        defaultValue={dayjs()}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+          </Modal>
+        </>
       ) : null}
     </div>
   );
+};
+
+const handleDateTime = (countDays, year, month) => {
+  let arrDate = [];
+  for (var i = 1; i <= countDays; i++) {
+    let dataIndex = i;
+    arrDate.push({
+      title: i,
+      children: [
+        {
+          title: dayjs(
+            year + "-" + month + "-" + (i <= 9 ? "0" + i : i),
+            "YYYY-MM-DD"
+          ).format("dd"),
+          dataIndex: i,
+          key: i,
+          width: 10,
+          render: (text) => {
+            return (
+              <div style={{ color: dayjs().format("D") == (dataIndex) ? "blue" : "", fontWeight: dayjs().format("D") == (dataIndex) ? "bold" : "" }}>{text}</div>
+            )
+          }
+        },
+      ],
+    });
+  }
+  return arrDate;
 };
 
 export default Users_timesheets;

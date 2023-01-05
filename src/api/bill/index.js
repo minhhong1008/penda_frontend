@@ -6,9 +6,8 @@ export const Create = (newData) => {
   const url = `/bill_class/create`;
   return axiosClient.post(url, newData);
 };
-export const getPayAndCollect = () => {
-  
-  const url = `/bill_class/pay_collect`;
+export const getPayAndCollect = (payload) => {
+  const url = `/bill_class/pay_collect?${genQueryString(payload)}`;
   return axiosClient.get(url);
 };
 
@@ -25,6 +24,11 @@ export const getListBill = (payload) => {
 export const updateBill = (bill) => {
   const url = `/billadsds/upate`;
   return axiosClient.post(url, bill);
+};
+
+export const getEmployee = () => {
+  const url = `/bill/getemployee`;
+  return axiosClient.get(url);
 };
 
 const genQueryString = function(obj) {

@@ -15,6 +15,7 @@ const initialState = {
   isLogin: false,
   users_name: "",
   users_function: "",
+  users_id: "",
   users_owner: "",
   manage_view: "",
   loading: false,
@@ -83,6 +84,7 @@ function authReducer(state = initialState, action) {
     case GET_ROLE_SUCCESS: {
       return {
         ...state,
+        users_id : action.payload.users_id,
         users_function: action.payload.users_function,
         users_name: action.payload.users_name,
         users_owner: action.payload.users_owner,
