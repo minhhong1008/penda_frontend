@@ -21,13 +21,20 @@ import { createSession, getSessions } from "../../api/timeSheet";
 import { showError, showSuccess } from "../../utils";
 
 const Users_timesheets = () => {
-  const { users_function, users_id } = useSelector((state) => state.auth);
+  const { users_function, users_id, users_name } = useSelector(
+    (state) => state.auth
+  );
   const { userss } = useSelector((state) => state.users);
+  let listselect_employee = [];
+  userss.map((user, index) => {
+    listselect_employee.push(user.users_name);
+  });
   const [data, setData] = useState();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { Option } = Select;
+
   const [filterDate, setFilterDate] = useState({
     month: dayjs().format("MM"),
     year: dayjs().format("YYYY"),
@@ -48,7 +55,7 @@ const Users_timesheets = () => {
       key: "index",
       fixed: "left",
       width: 7,
-      render: (text, record, index) => (index + 1),
+      render: (text, record, index) => index + 1,
     },
     {
       title: "Họ tên",
@@ -57,20 +64,9 @@ const Users_timesheets = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
-      filters: [
-        {
-          text: "Joe",
-          value: "Joe",
-        },
-        {
-          text: "John",
-          value: "John",
-        },
-      ],
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
     },
     {
-      title: "Ngày trong tháng",
+      title: "NGÀY TRONG THÁNG" + "-" + filterDate?.month,
       children: handleDateTime(
         dayjs(
           filterDate?.year + "-" + filterDate?.month,
@@ -79,6 +75,7 @@ const Users_timesheets = () => {
         filterDate?.year,
         filterDate?.month
       ),
+      sorter: (a, b) => a.age - b.age,
     },
     {
       title: "Total",
@@ -102,8 +99,30 @@ const Users_timesheets = () => {
 
   const onFinish = async (values) => {
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
+
+    if (
+      ["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) != -1
+    ) {
+      let response = await createSession({
+        users_function: users_function,
+        users_name: values.working_employee,
+        working_session: values.working_session,
+        working_date: values.working_date,
+      });
+      if (response.status == "200") {
+        let { data } = response;
+        showSuccess(
+          "Đăng ký ca làm " +
+            (data.working_session == "S" ? "sáng " : "chiều ") +
+            data.working_date
+        );
+      } else {
+        showError("Đăng ký thất bại");
+      }
+    }
     let response = await createSession({
-      user_id: users_id,
+      users_function: users_function,
+      users_name: users_name,
       working_session: values.working_session,
       working_date: values.working_date,
     });
@@ -127,8 +146,12 @@ const Users_timesheets = () => {
       data.map((user, index) => {
         let item = {};
         item["total"] = user.sessions.length;
-        item["users_name"] = userss?.filter((item) => item._id == user._id)[0]?.users_name;
-        item["index"] = parseInt(userss?.filter((item) => item._id == user._id)[0]?.users_sort)
+        item["users_name"] = userss?.filter(
+          (item) => item.users_name == user._id
+        )[0]?.users_name;
+        item["index"] = parseInt(
+          userss?.filter((item) => item.users_name == user._id)[0]?.users_sort
+        );
         user.sessions.map((session, index) => {
           if (item[session.day]) {
             item[session.day] =
@@ -139,12 +162,15 @@ const Users_timesheets = () => {
         });
         newData.push(item);
       });
-      setData(newData.sort((a,b) => a.index - b.index));
+      setData(newData.sort((a, b) => a.index - b.index));
     } else {
       showError("Có lỗi xảy ra");
     }
   };
-
+  const Nexttime = () => {
+    let working_date_new = form.getFieldValue("working_date");
+    form.setFieldValue("working_date", dayjs(working_date_new.add("1", "day")));
+  };
   useEffect(() => {
     dispatch(
       getListusersActions({
@@ -160,7 +186,6 @@ const Users_timesheets = () => {
   return (
     <div>
       {[
-        "Trưởng phòng",
         "Phó phòng",
         "Tổ trưởng",
         "Tổ phó",
@@ -172,7 +197,7 @@ const Users_timesheets = () => {
         <>
           <Card
             type="inner"
-            title="Bảng chấm công"
+            title="BẢNG CHẤM CÔNG"
             extra={
               <div style={{ display: "flex", gap: "8px" }}>
                 <DatePicker
@@ -194,8 +219,22 @@ const Users_timesheets = () => {
               bordered
               size="small"
               pagination={{
-                position: ["topRight"],
+                pageSizeOptions: [
+                  "10",
+                  "20",
+                  "30",
+                  "50",
+                  "100",
+                  "200",
+                  "300",
+                  "500",
+                  "1000",
+                  "2000",
+                ],
+                position: ["bottomRight", "topRight"],
+                size: "large",
                 showSizeChanger: true,
+                defaultPageSize: 100,
               }}
             />
           </Card>
@@ -204,6 +243,7 @@ const Users_timesheets = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
+            extra={<div style={{ display: "flex", gap: "8px" }}></div>}
           >
             <Card>
               <Form
@@ -215,11 +255,18 @@ const Users_timesheets = () => {
                 initialValues={{
                   working_session: "S",
                   working_date: dayjs(),
+                  working_employee: users_name,
                 }}
               >
                 <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item label="Đăng ký" name="working_session">
+                  <Col span={10}>
+                    <Form.Item
+                      label="Đăng ký"
+                      name="working_session"
+                      style={{
+                        width: "100%",
+                      }}
+                    >
                       <Select optionlabelprop="label">
                         <Option value="S" label="Ca sáng">
                           <div className="demo-option-label-item">Ca sáng</div>
@@ -227,17 +274,67 @@ const Users_timesheets = () => {
                         <Option value="C" label="Ca chiều">
                           <div className="demo-option-label-item">Ca chiều</div>
                         </Option>
+                        <Option value="T" label="Ca tối">
+                          <div className="demo-option-label-item">Ca tối</div>
+                        </Option>
+                        <Option value="delete" label="Xóa ngày">
+                          <div className="demo-option-label-item">Xóa ngày</div>
+                        </Option>
                       </Select>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
-                    <Form.Item label="Ngày tháng" name="working_date">
+                  <Col span={14}>
+                    <Form.Item
+                      label="Ngày tháng"
+                      name="working_date"
+                      style={{
+                        width: "100%",
+                      }}
+                    >
                       <DatePicker
                         style={{ float: "right" }}
                         format="YYYY-MM-DD"
                         defaultValue={dayjs()}
                       />
                     </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  {[
+                    "Phó phòng",
+                    "Tổ trưởng",
+                    "Tổ phó",
+                    "Chuyên viên",
+                    "Nhân viên",
+                    "Tập sự",
+                    "Thử việc",
+                  ].indexOf(users_function) == -1 ? (
+                    <Col span={16}>
+                      <Form.Item label="Nhân viên" name="working_employee">
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder="select one item"
+                          optionlabelprop="label"
+                          size="large"
+                        >
+                          {listselect_employee?.map((item) => {
+                            return (
+                              <Option value={item} label={item}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                  ) : null}
+
+                  <Col span={2} style={{ float: "right" }}>
+                    <Tag color="#108ee9" onClick={() => Nexttime()}>
+                      Next
+                    </Tag>
                   </Col>
                 </Row>
               </Form>
@@ -266,9 +363,16 @@ const handleDateTime = (countDays, year, month) => {
           width: 10,
           render: (text) => {
             return (
-              <div style={{ color: dayjs().format("D") == (dataIndex) ? "blue" : "", fontWeight: dayjs().format("D") == (dataIndex) ? "bold" : "" }}>{text}</div>
-            )
-          }
+              <div
+                style={{
+                  color: dayjs().format("D") == dataIndex ? "blue" : "",
+                  fontWeight: dayjs().format("D") == dataIndex ? "bold" : "",
+                }}
+              >
+                {text}
+              </div>
+            );
+          },
         },
       ],
     });

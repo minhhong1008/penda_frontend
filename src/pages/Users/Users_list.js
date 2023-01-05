@@ -11,7 +11,15 @@ export const HuongDanUsers_info = () => {
         <Alert
           message="Tổng quan"
           description={
-            <>
+            <><p>
+            1. Không được đổi User, chỉ được đổi pass. User không được trùng nhau, User sẽ là tên hiển thị ra tất cả các bảng nên đặt tên ngắn gọn 
+          </p>
+            <p>
+            2. Tài khoản trưởng phòng trở lên hỗ trợ được các tài khoản khác chấm công
+          </p>
+          <p>
+            2. Phải chấm công, chỉnh sửa trước 2 ngày trở lên 
+          </p>
               
             </>
           }
