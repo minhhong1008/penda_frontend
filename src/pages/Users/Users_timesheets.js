@@ -169,7 +169,7 @@ const Users_timesheets = () => {
   };
   const Nexttime = () => {
     let working_date_new = form.getFieldValue("working_date");
-    form.setFieldValue("working_date", dayjs(working_date_new.add("1", "day")));
+    form.setFieldValue("working_date", dayjs(working_date_new.add("3", "day")));
   };
   useEffect(() => {
     dispatch(

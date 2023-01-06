@@ -495,7 +495,7 @@ const Bill_class = () => {
       dayjs()
         .add(-30, "d")
         .format("YYYY-MM-DD"),
-      dayjs().format("YYYY-MM-DD"),
+      dayjs().add(+30, "d").format("YYYY-MM-DD"),
     ];
     setFilterDate({
       from: filter[0],
@@ -737,7 +737,7 @@ const Bill_class = () => {
                             size="large"
                             presets={rangePresets}
                             onChange={onRangeChange}
-                            defaultValue={[dayjs().add(-30, "d"), dayjs()]}
+                            defaultValue={[dayjs().add(-30, "d"), dayjs().add(30, "d")]}
                           />
                         </Col>
                         <Col span={8}>

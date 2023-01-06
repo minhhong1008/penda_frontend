@@ -70,6 +70,9 @@ const Bill_table = () => {
   const [selectedBill, setSelectedBill] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [listselect_employee, setList_employee] = useState();
+  const [listselect_bill_work_new, setListBillWorkNew] = useState(
+    listselect_bill_work
+  );
   // Hàm gọi dữ liệu employee về từ database
   const gettooldata = async () => {
     const res = await getEmployee();
@@ -82,7 +85,7 @@ const Bill_table = () => {
       dayjs()
         .add(-30, "d")
         .format("YYYY-MM-DD"),
-      dayjs().format("YYYY-MM-DD"),
+      dayjs().add(+30, "d").format("YYYY-MM-DD"),
     ];
     setFilterDate({
       from: filter[0],
@@ -101,7 +104,28 @@ const Bill_table = () => {
     style: "currency",
     currency: "VND",
   });
-
+  const rendertype = (value) => {
+    if (value == "Phiếu chi") {
+      setListBillWorkNew([
+        "Mua device, proxy & gia hạn",
+        "Mua sim, phone & gia hạn",
+        "Mua info",
+        "Mua mail",
+        "Thanh toán lương, thưởng hoa hồng",
+        "Chi phí văn phòng",
+        "Chi phí vận chuyển",
+        "Chi phí checkout, tracking",
+        "Chi phí Kicksold",
+      ]);
+    } else {
+      setListBillWorkNew([
+        "Thu tiền bán hàng",
+        "Thu tiền bán tài nguyên",
+        "Thu tiền khác",
+        "Thu tiền đi vay",
+      ]);
+    }
+  };
   // Hàm tính tổng tiền:
   const renderTotalMoney = () => {
     let quantity = formProduct.getFieldValue("bill_number");
@@ -311,7 +335,7 @@ const Bill_table = () => {
                           <RangePicker
                             size="large"
                             presets={rangePresets}
-                            defaultValue={[dayjs().add(-30, "d"), dayjs()]}
+                            defaultValue={[dayjs().add(-30, "d"), dayjs().add(+30, "d")]}
                             onChange={onRangeChange}
                           />
                         </Col>
@@ -380,7 +404,7 @@ const Bill_table = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Hạng mục" name="bill_type">
-                        <Select optionlabelprop="label">
+                        <Select optionlabelprop="label" onChange={rendertype}>
                           <Option value="Phiếu chi" label="Phiếu chi">
                             <div className="demo-option-label-item">
                               Phiếu chi
@@ -546,7 +570,7 @@ const Bill_table = () => {
                     <Col span={12}>
                       <Form.Item label="Công việc" name="bill_work">
                         <Select optionlabelprop="label">
-                          {listselect_bill_work.map((item, index) => {
+                          {listselect_bill_work_new.map((item, index) => {
                             return (
                               <Option value={item} label={item} key={index}>
                                 <div className="demo-option-label-item">
