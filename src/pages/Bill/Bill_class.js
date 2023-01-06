@@ -28,7 +28,6 @@ import {
   getPayAndCollect,
   updateBill,
   getListBill,
-  
   getEmployee,
 } from "../../api/bill";
 // Liên quan upload ảnh
@@ -55,16 +54,8 @@ const Bill_class = () => {
   );
   const rangePresets = [
     {
-      label: "Next 60 Days",
-      value: [dayjs(),dayjs().add(+ 60, "d")],
-    },
-    {
-      label: "Last 7 Days",
-      value: [dayjs().add(-7, "d"), dayjs()],
-    },
-    {
-      label: "Last 14 Days",
-      value: [dayjs().add(-14, "d"), dayjs()],
+      label: "Default",
+      value: [dayjs().add(- 30, "d"), dayjs().add( 30, "d")],
     },
     {
       label: "Last 30 Days",
@@ -135,15 +126,21 @@ const Bill_class = () => {
     });
 
     // Xử lý dữ liệu ngày tháng, multi select, earewa trước
-    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
-    let productValues = formProduct.getFieldsValue();
-    // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
-    let newData = {
-      ...values,
-      ...productValues,
-      bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
-    };
-    postData_Create(newData);
+    if (values.bill_date != null) {
+      values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
+      values.bill_expiry_date = dayjs(values.bill_expiry_date).format("YYYY-MM-DD");
+      
+      let productValues = formProduct.getFieldsValue();
+      // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
+      let newData = {
+        ...values,
+        ...productValues,
+        bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
+      };
+      postData_Create(newData);
+    } else {
+      alert("chọn ngày tháng");
+    }
   };
 
   // Bước 2: Gửi dữ liệu lên server Xử lý bất đồng bộ: dùng async await
@@ -322,7 +319,6 @@ const Bill_class = () => {
   };
 
   const handleFilter = async () => {
-    
     let response = await getPayAndCollect({
       ...filterDate,
     });
@@ -495,7 +491,9 @@ const Bill_class = () => {
       dayjs()
         .add(-30, "d")
         .format("YYYY-MM-DD"),
-      dayjs().add(+30, "d").format("YYYY-MM-DD"),
+      dayjs()
+        .add(+30, "d")
+        .format("YYYY-MM-DD"),
     ];
     setFilterDate({
       from: filter[0],
@@ -737,7 +735,10 @@ const Bill_class = () => {
                             size="large"
                             presets={rangePresets}
                             onChange={onRangeChange}
-                            defaultValue={[dayjs().add(-30, "d"), dayjs().add(30, "d")]}
+                            defaultValue={[
+                              dayjs().add(-30, "d"),
+                              dayjs().add(30, "d"),
+                            ]}
                           />
                         </Col>
                         <Col span={8}>
@@ -746,7 +747,6 @@ const Bill_class = () => {
                               background: "#18a689",
                               color: "white",
                             }}
-                           
                             onClick={() => handleFilter()}
                           >
                             Kết quả
@@ -781,7 +781,6 @@ const Bill_class = () => {
                       BẢNG THU CHI
                     </strong>
                   }
-                 
                 >
                   <Divider>BẢNG CHI TIỀN</Divider>
                   <Table
@@ -835,6 +834,15 @@ const Bill_class = () => {
                     autoComplete="off"
                     size="large"
                     onFinish={onFinish}
+                    initialValues={{
+                      bill_date: dayjs(),
+                      bill_type: "Phiếu chi",
+                      bill_action: "Đề xuất",
+                      bill_owner: "Phòng sản xuất",
+                      bill_employee: "Khắc Liêm",
+                      bill_payment: "0",
+                      bill_debt: "0",
+                    }}
                   >
                     <Row gutter={16}>
                       <Col span={8}>
@@ -917,7 +925,7 @@ const Bill_class = () => {
                       </Col>
 
                       <Col span={8}>
-                        <Form.Item label="Nhà cung cấp" name="bill_supplier">
+                        <Form.Item label="NCC" name="bill_supplier">
                           <Input placeholder="Antidetect" />
                         </Form.Item>
                       </Col>
@@ -925,18 +933,18 @@ const Bill_class = () => {
 
                     <Row gutter={16}>
                       <Col span={8}>
-                        <Form.Item label="Liên hệ" name="bill_contact_phone">
-                          <Input placeholder="antidetect.online" />
+                        <Form.Item label="Điện thoại" name="bill_contact_phone">
+                          <Input  />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label="Liên hệ" name="bill_contact_social1">
-                          <Input placeholder="fb.com/antidetect" />
+                        <Form.Item label="Web" name="bill_contact_social1">
+                          <Input  />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label="Liên hệ" name="bill_contact_social2">
-                          <Input placeholder="0983339558" />
+                        <Form.Item label="Social" name="bill_contact_social2">
+                          <Input  />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -970,6 +978,16 @@ const Bill_class = () => {
                           />
                         </Form.Item>
                       </Col>
+                      <Col span={8}>
+                      <Form.Item label="Thời hạn" name="bill_expiry_date">
+                          <DatePicker
+                            style={{ float: "right" }}
+                            format="YYYY-MM-DD"
+                            defaultValue={dayjs()}
+                          />
+                        </Form.Item>
+                      </Col>
+                      
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
@@ -1011,6 +1029,12 @@ const Bill_class = () => {
                     name="basic"
                     autoComplete="off"
                     size="large"
+                    initialValues={{
+                      bill_work: "Mua device, proxy & gia hạn",
+                      bill_number: "0",
+                      bill_price: "0",
+                      bill_total: "0",
+                    }}
                   >
                     <Row gutter={16}>
                       <Col span={12}>

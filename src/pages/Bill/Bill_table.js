@@ -39,16 +39,8 @@ const Bill_table = () => {
   const { RangePicker } = DatePicker;
   const rangePresets = [
     {
-      label: "Next 60 Days",
-      value: [dayjs(),dayjs().add(+60, "d") ],
-    },
-    {
-      label: "Last 7 Days",
-      value: [dayjs().add(-7, "d"), dayjs()],
-    },
-    {
-      label: "Last 14 Days",
-      value: [dayjs().add(-14, "d"), dayjs()],
+      label: "Default",
+      value: [dayjs().add(- 30, "d"), dayjs().add( 30, "d")],
     },
     {
       label: "Last 30 Days",
@@ -85,7 +77,9 @@ const Bill_table = () => {
       dayjs()
         .add(-30, "d")
         .format("YYYY-MM-DD"),
-      dayjs().add(+30, "d").format("YYYY-MM-DD"),
+      dayjs()
+        .add(+30, "d")
+        .format("YYYY-MM-DD"),
     ];
     setFilterDate({
       from: filter[0],
@@ -187,6 +181,11 @@ const Bill_table = () => {
       render: (text) => VND.format(text),
     },
     {
+      title: "Thời hạn",
+      dataIndex: "bill_expiry_date",
+      
+    },
+    {
       title: "Tính năng",
       dataIndex: "",
       render: (record) => (
@@ -233,21 +232,24 @@ const Bill_table = () => {
       }
       bill_file.push(fileUrl);
     });
-
-    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
-    let productData = formProduct.getFieldsValue();
-    let newValue = {
-      ...values,
-      ...productData,
-      bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
-      _id: selectedBill._id,
-    };
-
-    let response = await postBillUpdate(newValue);
-    if (response.status == 200) {
-      showSuccess("Sửa thành công");
-    } else {
-      showError("Sửa không thành công");
+    if (values.bill_date != null) {
+      values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
+      values.bill_expiry_date = dayjs(values.bill_expiry_date).format(
+        "YYYY-MM-DD"
+      );
+      let productData = formProduct.getFieldsValue();
+      let newValue = {
+        ...values,
+        ...productData,
+        bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
+        _id: selectedBill._id,
+      };
+      let response = await postBillUpdate(newValue);
+      if (response.status == 200) {
+        showSuccess("Sửa thành công");
+      } else {
+        showError("Sửa không thành công");
+      }
     }
   };
 
@@ -335,7 +337,10 @@ const Bill_table = () => {
                           <RangePicker
                             size="large"
                             presets={rangePresets}
-                            defaultValue={[dayjs().add(-30, "d"), dayjs().add(+30, "d")]}
+                            defaultValue={[
+                              dayjs().add(-30, "d"),
+                              dayjs().add(+30, "d"),
+                            ]}
                             onChange={onRangeChange}
                           />
                         </Col>
@@ -472,7 +477,7 @@ const Bill_table = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Nhà cung cấp" name="bill_supplier">
+                      <Form.Item label="NCC" name="bill_supplier">
                         <Input placeholder="Antidetect" />
                       </Form.Item>
                     </Col>
@@ -480,18 +485,18 @@ const Bill_table = () => {
 
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item label="Liên hệ" name="bill_contact_phone">
+                      <Form.Item label="Điện thoại" name="bill_contact_phone">
                         <Input placeholder="antidetect.online" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Liên hệ" name="bill_contact_social1">
-                        <Input placeholder="fb.com/antidetect" />
+                      <Form.Item label="Web" name="bill_contact_social1">
+                        <Input/>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Liên hệ" name="bill_contact_social2">
-                        <Input placeholder="0983339558" />
+                      <Form.Item label="Social" name="bill_contact_social2">
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -522,6 +527,11 @@ const Bill_table = () => {
                           disabled
                         />
                       </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                      {/* <Form.Item label="Thời hạn" name="bill_expiry_date">
+                        <DatePicker style={{ float: "right" }}  />
+                      </Form.Item> */}
                     </Col>
                   </Row>
                   <Row gutter={16}>

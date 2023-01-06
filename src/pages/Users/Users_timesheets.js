@@ -119,23 +119,25 @@ const Users_timesheets = () => {
       } else {
         showError("Đăng ký thất bại");
       }
+    }else{
+      let response = await createSession({
+        users_function: users_function,
+        users_name: users_name,
+        working_session: values.working_session,
+        working_date: values.working_date,
+      });
+      if (response.status == "200") {
+        let { data } = response;
+        showSuccess(
+          "Đăng ký ca làm " +
+            (data.working_session == "S" ? "sáng " : "chiều ") +
+            data.working_date
+        );
+      } else {
+        showError("Đăng ký thất bại");
+      }
     }
-    let response = await createSession({
-      users_function: users_function,
-      users_name: users_name,
-      working_session: values.working_session,
-      working_date: values.working_date,
-    });
-    if (response.status == "200") {
-      let { data } = response;
-      showSuccess(
-        "Đăng ký ca làm " +
-          (data.working_session == "S" ? "sáng " : "chiều ") +
-          data.working_date
-      );
-    } else {
-      showError("Đăng ký thất bại");
-    }
+    
   };
 
   const getListSession = async (time) => {
@@ -169,7 +171,7 @@ const Users_timesheets = () => {
   };
   const Nexttime = () => {
     let working_date_new = form.getFieldValue("working_date");
-    form.setFieldValue("working_date", dayjs(working_date_new.add("3", "day")));
+    form.setFieldValue("working_date", dayjs(working_date_new.add("1", "day")));
   };
   useEffect(() => {
     dispatch(
