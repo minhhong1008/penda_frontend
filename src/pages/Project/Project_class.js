@@ -16,9 +16,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getCountPerson } from "../../api/person/index";
-import { HuongDanPerson_class } from "./Person_list";
-const Person_class = () => {
+import { getCountProject } from "../../api/project/index";
+import { HuongDanProject_class } from "./Project_list";
+const Project_class = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -34,7 +34,7 @@ const Person_class = () => {
       render: (text) => (
         <a
           onClick={() =>
-            history.push(`person_class/table?class=${encodeURIComponent(text)}`)
+            history.push(`project_class/table?class=${encodeURIComponent(text)}`)
           }
         >
           {text}
@@ -47,8 +47,8 @@ const Person_class = () => {
           <strong>TỔNG</strong>
         </div>
       ),
-      dataIndex: "person_count",
-      key: "person_count",
+      dataIndex: "project_count",
+      key: "project_count",
     },
     {
       title: (
@@ -100,7 +100,7 @@ const Person_class = () => {
     {
       key: "1",
       class: "Lớp 1",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>ĐÃ CÓ TÀI NGUYÊN</strong>
@@ -124,7 +124,7 @@ const Person_class = () => {
     {
       key: "2",
       class: "Lớp 2",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> Đã có mail</strong>
@@ -150,7 +150,7 @@ const Person_class = () => {
     {
       key: "3",
       class: "Lớp 3",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> Đã change info mail, đã đầy đủ tài nguyên</strong>
@@ -174,11 +174,11 @@ const Person_class = () => {
     {
       key: "4",
       class: "Lớp 4",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> ĐÃ TẠO BUYER</strong>
-          <br></br>Person, person, shopee, amazone..
+          <br></br>Project, project, shopee, amazone..
         </div>
       ),
       content_check: (
@@ -199,7 +199,7 @@ const Person_class = () => {
     {
       key: "5",
       class: "Lớp 5",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> Mail hoàn thành, buyer đủ điều kiện verify</strong>
@@ -223,11 +223,11 @@ const Person_class = () => {
     {
       key: "6",
       class: "Lớp 6",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> ĐÃ VERIFY BUYER</strong>
-          <br></br>Person, person, shopee, amazone, payoneer, paypal
+          <br></br>Project, project, shopee, amazone, payoneer, paypal
         </div>
       ),
       content_time: <div>1 ngày</div>,
@@ -247,7 +247,7 @@ const Person_class = () => {
     {
       key: "7",
       class: "Lớp 7",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Đủ điều kiện lên seller</strong>
@@ -274,7 +274,7 @@ const Person_class = () => {
     {
       key: "8",
       class: "Lớp 8",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Đã đầy đủ điều kiến lên seller</strong>
@@ -301,7 +301,7 @@ const Person_class = () => {
     {
       key: "9",
       class: "Lớp 9",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> ĐÃ LÊN SELLER</strong>
@@ -325,7 +325,7 @@ const Person_class = () => {
     {
       key: "10",
       class: "Lớp 10",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> Đầy đủ điều kiện list</strong>
@@ -349,7 +349,7 @@ const Person_class = () => {
     {
       key: "11",
       class: "Lớp 11",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> List sản phẩm</strong> <br></br> Tạo drap
@@ -373,7 +373,7 @@ const Person_class = () => {
     {
       key: "12",
       class: "Lớp 12",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> CHUYỂN PHÒNG</strong>
@@ -396,7 +396,7 @@ const Person_class = () => {
     {
       key: "14",
       class: "Lớp 14",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Đã chọn phòng kinh doanh</strong>
@@ -426,7 +426,7 @@ const Person_class = () => {
     {
       key: "15",
       class: "Lớp 15",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Tài khoản có vấn đề</strong>
@@ -453,7 +453,7 @@ const Person_class = () => {
     {
       key: "16",
       class: "Lớp 16",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Tài khoản chuẩn</strong>
@@ -478,7 +478,7 @@ const Person_class = () => {
     {
       key: "17",
       class: "Lớp 17",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Tài khoản đủ điều kiện bán</strong>
@@ -503,7 +503,7 @@ const Person_class = () => {
     {
       key: "18",
       class: "Lớp 18",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong>Khách đã đặt hàng</strong>
@@ -528,7 +528,7 @@ const Person_class = () => {
     {
       key: "19",
       class: "Lớp 19",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> ĐÃ BÁN TÀI KHOẢN</strong>
@@ -548,7 +548,7 @@ const Person_class = () => {
     {
       key: "20",
       class: "Lớp 20",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> ERROR</strong>
@@ -565,7 +565,7 @@ const Person_class = () => {
     {
       key: "21",
       class: "Lớp 21",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> BUYER SUSPENDED</strong>
@@ -577,7 +577,7 @@ const Person_class = () => {
     {
       key: "22",
       class: "Lớp 22",
-      person_count: "0",
+      project_count: "0",
       content_complete: "BUYER SUSPENDED VERIFY",
       content_check: "",
       content_action: "",
@@ -585,7 +585,7 @@ const Person_class = () => {
     {
       key: "23",
       class: "Lớp 23",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> SELLER RESTRICT</strong>
@@ -597,7 +597,7 @@ const Person_class = () => {
     {
       key: "24",
       class: "Lớp 24",
-      person_count: "0",
+      project_count: "0",
       content_complete: "SELLER RESTRICT LIST",
       content_check: "",
       content_action: "",
@@ -605,7 +605,7 @@ const Person_class = () => {
     {
       key: "25",
       class: "Lớp 25",
-      person_count: "0",
+      project_count: "0",
       content_complete: "SELLER RESTRICT SOLD",
       content_check: "",
       content_action: "",
@@ -613,7 +613,7 @@ const Person_class = () => {
     {
       key: "26",
       class: "Lớp 26",
-      person_count: "0",
+      project_count: "0",
       content_complete: (
         <div>
           <strong> SELLER SUSPENDED</strong>
@@ -625,7 +625,7 @@ const Person_class = () => {
     {
       key: "27",
       class: "Lớp 27",
-      person_count: "0",
+      project_count: "0",
       content_complete: "SELLER SUSPENDED LIST",
       content_check: "",
       content_action: "",
@@ -633,7 +633,7 @@ const Person_class = () => {
     {
       key: "28",
       class: "Lớp 28",
-      person_count: "0",
+      project_count: "0",
       content_complete: "SELLER SUSPENDED SOLD",
       content_check: "",
       content_action: "",
@@ -641,7 +641,7 @@ const Person_class = () => {
     {
       key: "29",
       class: "Lớp 29",
-      person_count: "0",
+      project_count: "0",
       content_complete: "",
       content_check: "",
       content_action: "",
@@ -649,7 +649,7 @@ const Person_class = () => {
     {
       key: "30",
       class: "Lớp 30",
-      person_count: "0",
+      project_count: "0",
       content_complete: <div>
       <strong> CHUYỂN PHÒNG</strong>
     </div>,
@@ -660,12 +660,12 @@ const Person_class = () => {
 
   const [dataClass, setDataClass] = useState();
 
-  const countPerson = async () => {
-    let { data } = await getCountPerson();
+  const countProject = async () => {
+    let { data } = await getCountProject();
     baseData.forEach((item) => {
       data?.data?.forEach((data) => {
         if (data._id == item.class) {
-          item.person_count = data.count.toString();
+          item.project_count = data.count.toString();
         }
       });
     });
@@ -677,7 +677,7 @@ const Person_class = () => {
   };
 
   useEffect(() => {
-    countPerson();
+    countProject();
   }, []);
 
   return (
@@ -710,7 +710,7 @@ const Person_class = () => {
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
-            <HuongDanPerson_class />
+            <HuongDanProject_class />
           </Tabs.TabPane>
         </Tabs>
       </Card>
@@ -718,4 +718,4 @@ const Person_class = () => {
   );
 };
 
-export default Person_class;
+export default Project_class;

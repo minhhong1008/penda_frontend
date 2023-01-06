@@ -17,12 +17,12 @@ import {
   import React, { useEffect } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { useHistory, useParams } from "react-router-dom";
-  import { getListpersonActions } from "../../actions/personActions";
-  import { HuongDanPerson_table } from "./Person_list";
-  const Person_table = () => {
+  import { getListprojectActions } from "../../actions/projectActions";
+  import { HuongDanProject_table } from "./Project_list";
+  const Project_table = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const { persons } = useSelector((state) => state.person);
+    const { projects } = useSelector((state) => state.project);
     const class_name = urlParams.get("class");
     const dispatch = useDispatch();
     const history = useHistory();
@@ -35,61 +35,61 @@ import {
       },
       {
         title: "#",
-        dataIndex: "person_id",
-        key: "person_id",
+        dataIndex: "project_id",
+        key: "project_id",
         render: (text, record) => (
           <a
             onClick={() =>
-              history.push(`table/${encodeURIComponent(record.person_id)}`)
+              history.push(`table/${encodeURIComponent(record.project_id)}`)
             }
           >
             {text}
           </a>
         ),
         sorter: (a, b) => {
-          return a.person_id.localeCompare(b.person_id);
+          return a.project_id.localeCompare(b.project_id);
         },
       },
       {
         title: "TÀI KHOẢN",
-        dataIndex: "person_user",
-        key: "person_user",
+        dataIndex: "project_user",
+        key: "project_user",
         sorter: (a, b) => {
-          return a.person_user.localeCompare(b.person_user);
+          return a.project_user.localeCompare(b.project_user);
         },
       },
       {
         title: "TIẾN TRÌNH",
-        dataIndex: "person_processing",
-        key: "person_processing",
+        dataIndex: "project_processing",
+        key: "project_processing",
         sorter: (a, b) => {
-          return a.person_user.localeCompare(b.person_device);
+          return a.project_user.localeCompare(b.project_device);
         },
       },
       {
         title: "PHÁT SINH",
-        dataIndex: "person_error",
-        key: "person_error",
+        dataIndex: "project_error",
+        key: "project_error",
         sorter: (a, b) => {
-          return a.person_user.localeCompare(b.person_class);
+          return a.project_user.localeCompare(b.project_class);
         },
       },
   
       {
         title: "NHÂN VIÊN",
-        dataIndex: "person_employee",
-        key: "person_employee",
+        dataIndex: "project_employee",
+        key: "project_employee",
         sorter: (a, b) => {
-          return a.person_user.localeCompare(b.person_employee);
+          return a.project_user.localeCompare(b.project_employee);
         },
       },
   
       {
         title: "GHI CHÚ",
-        dataIndex: "person_note",
-        key: "person_note",
+        dataIndex: "project_note",
+        key: "project_note",
         sorter: (a, b) => {
-          return a.person_user.localeCompare(b.person_note);
+          return a.project_user.localeCompare(b.project_note);
         },
       },
     ];
@@ -97,22 +97,22 @@ import {
     const handleChangeFilter = (values) => {
       let newValue = values.join(",");
       dispatch(
-        getListpersonActions({
-          person_employee: newValue,
+        getListprojectActions({
+          project_employee: newValue,
         })
       );
     };
   
-    const getListPerson = () => {
+    const getListProject = () => {
       dispatch(
-        getListpersonActions({
-          person_class: class_name,
+        getListprojectActions({
+          project_class: class_name,
         })
       );
     };
   
     useEffect(() => {
-      getListPerson();
+      getListProject();
     }, [class_name]);
   
     return (
@@ -127,7 +127,7 @@ import {
               treeData={[
                 {
                   title: "Lớp",
-                  value: "person_class",
+                  value: "project_class",
                   children: [
                     { title: "Lớp 1", value: "Lớp 1" },
                     { title: "Lớp 2", value: "Lớp 2" },
@@ -135,7 +135,7 @@ import {
                 },
                 {
                   title: "Thiết bị",
-                  value: "person_device",
+                  value: "project_device",
                   children: [
                     { title: "PC06", value: "PC06" },
                     { title: "PC07", value: "PC07" },
@@ -143,7 +143,7 @@ import {
                 },
                 {
                   title: "Nhân viên",
-                  value: "person_employee",
+                  value: "project_employee",
                   children: [
                     { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
                     { title: "Khắc Liêm", value: "Khắc Liêm" },
@@ -154,13 +154,13 @@ import {
           </Form.Item>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane
-              tab={"BẢNG LỚP PERSON : " + class_name.toUpperCase()}
+              tab={"BẢNG LỚP project : " + class_name.toUpperCase()}
               key="1"
             >
               <Card type="inner">
                 <Table
                   columns={columns}
-                  dataSource={persons}
+                  dataSource={projects}
                   pagination={{
                     pageSizeOptions: [
                       "10",
@@ -182,7 +182,7 @@ import {
               </Card>
             </Tabs.TabPane>
             <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
-              <HuongDanPerson_table />
+              <HuongDanProject_table />
             </Tabs.TabPane>
           </Tabs>
         </Card>
@@ -190,5 +190,5 @@ import {
     );
   };
   
-  export default Person_table;
+  export default Project_table;
   

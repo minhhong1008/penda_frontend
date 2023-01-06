@@ -99,6 +99,23 @@ const Ebay_class = () => {
   const baseData = [
     {
       key: "0",
+      class: "Tổng",
+      ebay_count: "0",
+      content_complete: "",
+      content_time: <div></div>,
+      content_check: (
+        <div>
+          
+        </div>
+      ),
+      content_action: (
+        <div>
+         
+        </div>
+      ),
+    },
+    {
+      key: "0",
       class: "Lớp 0",
       ebay_count: "0",
       content_complete: (

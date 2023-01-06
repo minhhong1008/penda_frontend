@@ -101,7 +101,7 @@ const columnsExport = [
   },
 ];
 
-function PersonelManager() {
+function projectelManager() {
   const dispatch = useDispatch();
   const { _id } = JSON.parse(getUser());
   const { data } = useSelector((state) => state.user.listUser);
@@ -224,4 +224,4 @@ function PersonelManager() {
   );
 }
 
-export default PersonelManager;
+export default projectelManager;

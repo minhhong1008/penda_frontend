@@ -58,10 +58,10 @@ import Bank_info from "./pages/Bank/Bank_info";
 import Info_class from "./pages/Info/Info_class";
 import Info_table from "./pages/Info/Info_table";
 import Info_info from "./pages/Info/Info_info";
-// Person
-import Person_class from "./pages/Person/Person_class";
-import Person_table from "./pages/Person/Person_table";
-import Person_info from "./pages/Person/Person_info";
+// project
+import Project_class from "./pages/Project/Project_class";
+import Project_table from "./pages/Project/Project_table";
+import Project_info from "./pages/Project/Project_info";
 // Mail
 import Mail_class from "./pages/Mail/Mail_class";
 import Mail_table from "./pages/Mail/Mail_table";
@@ -305,17 +305,17 @@ const App = () => {
             component={Info_info}
           />
 
-          {/* Person */}
-          <Route path="/products/person_class" exact component={Person_class} />
+          {/* project */}
+          <Route path="/products/project_class" exact component={Project_class} />
           <Route
-            path="/products/person_class/table"
+            path="/products/project_class/table"
             exact
-            component={Person_table}
+            component={Project_table}
           />
           <Route
-            path="/products/person_class/table/:id"
+            path="/products/project_class/table/:id"
             exact
-            component={Person_info}
+            component={Project_info}
           />
           {/* Mail */}
           <Route path="/products/mail_class" exact component={Mail_class} />

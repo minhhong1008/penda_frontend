@@ -439,6 +439,20 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
+          <Menu.Item key="65">
+            <NavLink to="/products/project_class">
+              <span
+                className="icon"
+                style={{
+                  background: page === "products/project_class" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Project</span>
+            </NavLink>
+          </Menu.Item>
+
           <Menu.Item className="menu-item-header" key="90">
             Công cụ
           </Menu.Item>

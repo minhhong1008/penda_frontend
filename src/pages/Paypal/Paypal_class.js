@@ -98,8 +98,8 @@ const Paypal_class = () => {
   ];
   const baseData = [
     {
-      key: "1",
-      class: "Lớp 1",
+      key: "0",
+      class: "Lớp 0",
       paypal_count: "0",
       content_complete: (
         <div>

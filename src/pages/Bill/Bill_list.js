@@ -23,3 +23,10 @@ export const listselect_bill_owner = [
     "Chi phí checkout, tracking",
     "Chi phí Kicksold",
   ];
+
+
+  export const renderpayment = () => {
+    let bill_payment = form.getFieldValue("bill_payment");
+    let bill_total = formProduct.getFieldValue("bill_total");
+    form.setFieldValue("bill_debt", bill_payment - bill_total);
+  };

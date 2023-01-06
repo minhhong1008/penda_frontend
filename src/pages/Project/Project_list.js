@@ -31,7 +31,7 @@ export const listselect_view_acc = [
     value: "",
   },
   {
-    title: "PERSON",
+    title: "project",
     thumbnail: iconinfo,
     value: "",
   },
@@ -97,9 +97,9 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_person_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_project_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
 
-export const listselect_person_processing = [
+export const listselect_project_processing = [
   "Login mail",
   "Verify Mail",
   "Buyer",
@@ -122,7 +122,7 @@ export const listselect_person_processing = [
   "Suspended",
 ];
 
-export const listselect_person_plan = [
+export const listselect_project_plan = [
   "Phone",
   "PC",
   "Antidetect",
@@ -158,7 +158,7 @@ export const listselect_person_plan = [
   "Quy trình 11",
   "Quy trình 12",
 ];
-export const listselect_person_block = [
+export const listselect_project_block = [
   "Team 1",
   "Team 2",
   "Team 3",
@@ -189,7 +189,7 @@ export const listselect_person_block = [
   "Block 24",
   "Block 25",
 ];
-export const listselect_person_type = [
+export const listselect_project_type = [
   "VN",
   "US",
   "Buyer",
@@ -204,7 +204,7 @@ export const listselect_person_type = [
 
 ];
 
-export const listselect_person_sell_status = [
+export const listselect_project_sell_status = [
   "Đang chuẩn bị",
   "Đủ điều kiện bán",
   "Bán tài khoản",
@@ -214,7 +214,7 @@ export const listselect_person_sell_status = [
   "Hết bảo hành",
 ];
 
-export const listselect_person_owner = [
+export const listselect_project_owner = [
   "Phòng sản xuất",
   "Phòng phục hồi",
   "Phòng Kinh doanh",
@@ -222,7 +222,7 @@ export const listselect_person_owner = [
   "Kho lưu trữ",
 ];
 
-export const listselect_person_status = [
+export const listselect_project_status = [
     "Null",
   "Live",
   "Active",
@@ -231,7 +231,7 @@ export const listselect_person_status = [
   "Suspended",
 ];
 
-export const listselect_person_class = [
+export const listselect_project_class = [
   {
     title: "Lớp 1 New",
     value: "Lớp 1",
@@ -351,32 +351,32 @@ export const listselect_person_class = [
 ];
 
 //  List danh sách các trường trong bảng DATE
-export const tablelist_person_Date = [
+export const tablelist_project_Date = [
   {
     title: "Ngày giao",
-    value: "persondate_delivery",
+    value: "projectdate_delivery",
   },
   {
     title: "Ngày chuyển lớp",
-    value: "persondate_nextclass",
+    value: "projectdate_nextclass",
   },
 ];
 
-export const listselect_person_fields = [];
+export const listselect_project_fields = [];
 
 
-export const HuongDanPerson_info = () => {
+export const HuongDanProject_info = () => {
   return (
     <div>
-      <p>1. Person mã EB_12345</p>
+      <p>1. project mã EB_12345</p>
       <p>
-        1. Person được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop person chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
         tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Person từ tool nhập liệu
+        hoạch được tạo khi tạo mã project từ tool nhập liệu
       </p>
       <p>
         3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
@@ -384,7 +384,7 @@ export const HuongDanPerson_info = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại person: Là tổng quan 1 tài khoản person, dùng để tạo báo cáo, phân
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
         loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
@@ -395,11 +395,11 @@ export const HuongDanPerson_info = () => {
         loại acc
       </p>
       <p>
-        9. Lớp person: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
         tạo báo cáo, phân loại acc
       </p>
       <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh person
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
         suspended, tải cccd
       </p>
       <p>
@@ -425,7 +425,7 @@ export const HuongDanPerson_info = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc person or etsy... trên 1 device thì vào device đó ấn tạo person
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
         or etsy...
       </p>
       <p>
@@ -442,18 +442,18 @@ export const HuongDanPerson_info = () => {
   );
 };
 
-export const HuongDanPerson_table = () => {
+export const HuongDanProject_table = () => {
   return (
     <div>
-      <p>1. Person mã EB_12345</p>
+      <p>1. project mã EB_12345</p>
       <p>
-        1. Person được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop person chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
         tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Person từ tool nhập liệu
+        hoạch được tạo khi tạo mã project từ tool nhập liệu
       </p>
       <p>
         3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
@@ -461,7 +461,7 @@ export const HuongDanPerson_table = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại person: Là tổng quan 1 tài khoản person, dùng để tạo báo cáo, phân
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
         loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
@@ -472,11 +472,11 @@ export const HuongDanPerson_table = () => {
         loại acc
       </p>
       <p>
-        9. Lớp person: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
         tạo báo cáo, phân loại acc
       </p>
       <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh person
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
         suspended, tải cccd
       </p>
       <p>
@@ -502,7 +502,7 @@ export const HuongDanPerson_table = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc person or etsy... trên 1 device thì vào device đó ấn tạo person
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
         or etsy...
       </p>
       <p>
@@ -519,18 +519,18 @@ export const HuongDanPerson_table = () => {
   );
 };
 
-export const HuongDanPerson_class = () => {
+export const HuongDanProject_class = () => {
   return (
     <div>
-      <p>1. Person mã EB_12345</p>
+      <p>1. project mã EB_12345</p>
       <p>
-        1. Person được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop person chuẩn bị sẵn, có hướng dẫn tạo acc bên
+        1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
         tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
-        hoạch được tạo khi tạo mã Person từ tool nhập liệu
+        hoạch được tạo khi tạo mã project từ tool nhập liệu
       </p>
       <p>
         3. Tiến trình: Là quá trình thực hiện công việc của nhân viên. Từ tiến
@@ -538,7 +538,7 @@ export const HuongDanPerson_class = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại person: Là tổng quan 1 tài khoản person, dùng để tạo báo cáo, phân
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
         loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
@@ -549,11 +549,11 @@ export const HuongDanPerson_class = () => {
         loại acc
       </p>
       <p>
-        9. Lớp person: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
         tạo báo cáo, phân loại acc
       </p>
       <p>
-        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh person
+        10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
         suspended, tải cccd
       </p>
       <p>
@@ -579,7 +579,7 @@ export const HuongDanPerson_class = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc person or etsy... trên 1 device thì vào device đó ấn tạo person
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
         or etsy...
       </p>
       <p>

@@ -10,27 +10,27 @@ import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
-  tablelist_person_Date,
+  tablelist_project_Date,
   listselect_view_acc,
-  listselect_person_plan,
-  listselect_person_block,
-  listselect_person_processing,
-  listselect_person_error,
-  listselect_person_type,
-  listselect_person_sell_status,
-  listselect_person_owner,
-  listselect_person_status,
-  listselect_person_class,
-  HuongDanPerson_info,
-  ContentPerson,
-} from "./Person_list";
+  listselect_project_plan,
+  listselect_project_block,
+  listselect_project_processing,
+  listselect_project_error,
+  listselect_project_type,
+  listselect_project_sell_status,
+  listselect_project_owner,
+  listselect_project_status,
+  listselect_project_class,
+  HuongDanProject_info,
+  ContentProject,
+} from "./Project_list";
 
 import {
-  postpersonInfo,
-  getpersonInfo,
-  updatepersonInfo,
-} from "../../api/person/index";
-// dùng update các field trong bảng person_info
+  postprojectInfo,
+  getprojectInfo,
+  updateprojectInfo,
+} from "../../api/project/index";
+// dùng update các field trong bảng project_info
 import { updateListView } from "../../api/update";
 
 const getBase64 = (file) =>
@@ -41,13 +41,13 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const Person_info = () => {
+const Project_info = () => {
   const { Option } = Select;
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
   let { id } = useParams();
   // Khai báo các kho dữ liệu
-  const [personData, setpersonData] = useState({});
+  const [projectData, setprojectData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
   const [selectListInfo, setSelectListInfo] = useState([]);
@@ -56,7 +56,7 @@ const Person_info = () => {
   const [form] = Form.useForm();
   const [infoForm] = Form.useForm();
   const [dateForm] = Form.useForm();
-  const [listselect_person_employee, setListperson_employee] = useState();
+  const [listselect_project_employee, setListproject_employee] = useState();
 
   // Tạo state để nhận dữ liệu của listview
 
@@ -83,7 +83,7 @@ const Person_info = () => {
       cancelListView();
       return;
     }
-    await updatepersonInfo(payload, info.person_id);
+    await updateprojectInfo(payload, info.project_id);
     window.location.reload();
     showSuccess("Thành công");
   };
@@ -113,7 +113,7 @@ const Person_info = () => {
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     let dateValue = {};
-    tablelist_person_Date.map((item) => {
+    tablelist_project_Date.map((item) => {
       dateValue[item.value] = dayjs(dateData[item.value]).format(
         "YYYY-MM-DD HH:mm"
       );
@@ -121,26 +121,26 @@ const Person_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
-      person_plan: values?.person_plan ? values.person_plan.join(",") : "",
-      person_block: values?.person_block ? values.person_block.join(",") : "",
-      person_error: values?.person_error ? values.person_error.join(",") : "",
-      person_processing: values?.person_processing
-        ? values.person_processing.join(",")
+      project_plan: values?.project_plan ? values.project_plan.join(",") : "",
+      project_block: values?.project_block ? values.project_block.join(",") : "",
+      project_error: values?.project_error ? values.project_error.join(",") : "",
+      project_processing: values?.project_processing
+        ? values.project_processing.join(",")
         : "",
-      person_type: values?.person_type ? values.person_type.join(",") : "",
-      person_sell_status: values?.person_sell_status
-        ? values.person_sell_status.join(",")
+      project_type: values?.project_type ? values.project_type.join(",") : "",
+      project_sell_status: values?.project_sell_status
+        ? values.project_sell_status.join(",")
         : "",
-      person_owner: values?.person_owner ? values.person_owner.join(",") : "",
-      person_employee: values?.person_employee
-        ? values.person_employee.join(",")
+      project_owner: values?.project_owner ? values.project_owner.join(",") : "",
+      project_employee: values?.project_employee
+        ? values.project_employee.join(",")
         : "",
       list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
-      person_note: noteValue,
-      person_history: info.person_history,
+      project_note: noteValue,
+      project_history: info.project_history,
     };
 
-    const response = await updatepersonInfo(newValue, id);
+    const response = await updateprojectInfo(newValue, id);
     if (response.status == 200) {
       showSuccess("Sửa thành công");
     } else {
@@ -158,23 +158,23 @@ const Person_info = () => {
   };
 
   // Hàm gọi dữ liệu về từ database
-  const getInfoperson = async () => {
-    const res = await getpersonInfo(id);
+  const getInfoproject = async () => {
+    const res = await getprojectInfo(id);
     let data = res.data;
     const newData = {
       ...data,
-      person_plan: data?.person_plan ? data.person_plan.split(",") : "",
-      person_block: data?.person_block ? data.person_block.split(",") : "",
-      person_error: data?.person_error ? data.person_error.split(",") : "",
-      person_employee: data?.person_employee ? data.person_employee.split(",") : "",
-      person_processing: data?.person_processing
-        ? data.person_processing.split(",")
+      project_plan: data?.project_plan ? data.project_plan.split(",") : "",
+      project_block: data?.project_block ? data.project_block.split(",") : "",
+      project_error: data?.project_error ? data.project_error.split(",") : "",
+      project_employee: data?.project_employee ? data.project_employee.split(",") : "",
+      project_processing: data?.project_processing
+        ? data.project_processing.split(",")
         : "",
-      person_type: data?.person_type ? data.person_type.split(",") : "",
-      person_sell_status: data?.person_sell_status
-        ? data.person_sell_status.split(",")
+      project_type: data?.project_type ? data.project_type.split(",") : "",
+      project_sell_status: data?.project_sell_status
+        ? data.project_sell_status.split(",")
         : "",
-      person_owner: data?.person_owner ? data.person_owner.split(",") : "",
+      project_owner: data?.project_owner ? data.project_owner.split(",") : "",
 
       device_id: data?.device_id ? data?.device_id?.device_id : "",
       proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
@@ -285,21 +285,21 @@ const Person_info = () => {
     form.setFieldsValue(newData);
     infoForm.setFieldsValue(newData);
     let dateValue = {};
-    tablelist_person_Date.map((item) => {
+    tablelist_project_Date.map((item) => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
     //console.log(dateValue);
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
-    setNoteValue(data.person_note);
+    setNoteValue(data.project_note);
     setInfo(newData);
     setSelectListInfo(data.list_view.split(","));
-    setListperson_employee(data.listselect_person_employee);
+    setListproject_employee(data.listselect_project_employee);
   };
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
-    getInfoperson();
+    getInfoproject();
   }, []);
   // Hàm để thay đổi dữ liệu của select list info
   const changeSelectListInfo = (values) => {
@@ -314,231 +314,231 @@ const Person_info = () => {
   // Hàm viết tự động hóa
   const onChange_Status = async (values) => {
     if (values == "Error" || values == "Restrict" || values == "Suspended") {
-      let new_person_owner = form.getFieldValue("person_owner");
-      if (new_person_owner.indexOf("Phòng phục hồi") == -1) {
-        new_person_owner.push("Phòng phục hồi");
+      let new_project_owner = form.getFieldValue("project_owner");
+      if (new_project_owner.indexOf("Phòng phục hồi") == -1) {
+        new_project_owner.push("Phòng phục hồi");
       }
-      if (new_person_owner.indexOf("Kho lưu trữ") == -1) {
-        new_person_owner.push("Kho lưu trữ");
+      if (new_project_owner.indexOf("Kho lưu trữ") == -1) {
+        new_project_owner.push("Kho lưu trữ");
       }
       // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updatepersonInfo(
+      let { data } = await updateprojectInfo(
         {
-          person_owner: new_person_owner.join(","),
+          project_owner: new_project_owner.join(","),
         },
-        info.person_id
+        info.project_id
       );
       // Tiếp tục set
-      let new_person_processing = form.getFieldValue("person_processing");
-      let old_person_processing = info.person_processing;
-      if (new_person_processing.indexOf(values) == -1) {
-        new_person_processing.push(values);
+      let new_project_processing = form.getFieldValue("project_processing");
+      let old_project_processing = info.project_processing;
+      if (new_project_processing.indexOf(values) == -1) {
+        new_project_processing.push(values);
       }
 
-      let new_person_class = form.getFieldValue("person_class");
+      let new_project_class = form.getFieldValue("project_class");
       if (values == "Error") {
-        (new_person_class = "Lớp 20"),
-          dateForm.setFieldValue("persondate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+        (new_project_class = "Lớp 20"),
+          dateForm.setFieldValue("projectdate_error", dayjs(now())); // Hiển thị ra màn hình
+        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_error: dayjs(now()),
-          persondate_nextclass: dayjs(now()),
+          projectdate_error: dayjs(now()),
+          projectdate_nextclass: dayjs(now()),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_person_class = "Lớp 23"),
-          dateForm.setFieldValue("persondate_restrict", dayjs(now()));
-        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+        (new_project_class = "Lớp 23"),
+          dateForm.setFieldValue("projectdate_restrict", dayjs(now()));
+        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_restrict: dayjs(now()),
-          persondate_nextclass: dayjs(now()),
+          projectdate_restrict: dayjs(now()),
+          projectdate_nextclass: dayjs(now()),
         });
       }
       if (values == "Suspended") {
-        (new_person_class = "Lớp 26"),
-          dateForm.setFieldValue("persondate_suspended", dayjs(now()));
-        dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+        (new_project_class = "Lớp 26"),
+          dateForm.setFieldValue("projectdate_suspended", dayjs(now()));
+        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
         setDateData({
           ...dateData,
-          persondate_suspended: dayjs(now()),
-          persondate_nextclass: dayjs(now()),
+          projectdate_suspended: dayjs(now()),
+          projectdate_nextclass: dayjs(now()),
         });
       }
 
       form.setFieldsValue({
-        person_class: new_person_class,
-        person_support: "Nguyễn Hoài",
-        person_processing: new_person_processing,
-        person_owner: new_person_owner,
+        project_class: new_project_class,
+        project_support: "Nguyễn Hoài",
+        project_processing: new_project_processing,
+        project_owner: new_project_owner,
       }); // Dùng hàm này set lại để lưu vào db
     }
   };
 
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
-      form.setFieldValue("person_class", "Lớp 4");
-      dateForm.setFieldValue("persondate_start", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      form.setFieldValue("project_class", "Lớp 4");
+      dateForm.setFieldValue("projectdate_start", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_start: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_start: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
-      form.setFieldValue("person_class", "Lớp 6");
-      dateForm.setFieldValue("persondate_verify", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      form.setFieldValue("project_class", "Lớp 6");
+      dateForm.setFieldValue("projectdate_verify", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_verify: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_verify: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Seller") {
-      form.setFieldValue("person_class", "Lớp 9");
-      dateForm.setFieldValue("persondate_seller", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      form.setFieldValue("project_class", "Lớp 9");
+      dateForm.setFieldValue("projectdate_seller", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_seller: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_seller: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "List") {
-      form.setFieldValue("person_class", "Lớp 10");
-      dateForm.setFieldValue("persondate_list1", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      form.setFieldValue("project_class", "Lớp 10");
+      dateForm.setFieldValue("projectdate_list1", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_list1: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_list1: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
     if (values[values.length - 1] == "Move room") {
-      form.setFieldValue("person_class", "Lớp 12");
-      dateForm.setFieldValue("persondate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      form.setFieldValue("project_class", "Lớp 12");
+      dateForm.setFieldValue("projectdate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_moveroom: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_moveroom: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
     setDateData({
       ...dateData,
-      persondate_nextclass: dayjs(now()),
+      projectdate_nextclass: dayjs(now()),
     });
 
     if (values == "Lớp 9") {
-      let new_person_type = form.getFieldValue("person_type");
-      if (new_person_type.indexOf("Seller") == -1) {
-        new_person_type.push("Seller");
+      let new_project_type = form.getFieldValue("project_type");
+      if (new_project_type.indexOf("Seller") == -1) {
+        new_project_type.push("Seller");
       }
 
       // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updatepersonInfo(
+      let { data } = await updateprojectInfo(
         {
-          new_person_type: new_person_type.join(","),
+          new_project_type: new_project_type.join(","),
         },
-        info.person_id
+        info.project_id
       );
 
-      let new_person_processing = form.getFieldValue("person_processing");
-      if (new_person_processing.indexOf("Seller") == -1) {
-        new_person_processing.push("Seller");
+      let new_project_processing = form.getFieldValue("project_processing");
+      if (new_project_processing.indexOf("Seller") == -1) {
+        new_project_processing.push("Seller");
       }
 
       form.setFieldsValue({
-        person_processing: new_person_processing,
-        person_type: new_person_type,
+        project_processing: new_project_processing,
+        project_type: new_project_type,
       });
 
-      dateForm.setFieldValue("persondate_seller", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("projectdate_seller", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_seller: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_seller: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
 
     if (values == "Lớp 4") {
-      let new_person_type = form.getFieldValue("person_type");
-      if (new_person_type.indexOf("Buyer") == -1) {
-        new_person_type.push("Buyer");
+      let new_project_type = form.getFieldValue("project_type");
+      if (new_project_type.indexOf("Buyer") == -1) {
+        new_project_type.push("Buyer");
       }
       // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updatepersonInfo(
+      let { data } = await updateprojectInfo(
         {
-          new_person_type: new_person_type.join(","),
+          new_project_type: new_project_type.join(","),
         },
-        info.person_id
+        info.project_id
       );
 
-      let new_person_processing = form.getFieldValue("person_processing");
-      if (new_person_processing.indexOf("Buyer") == -1) {
-        new_person_processing.push("Buyer");
+      let new_project_processing = form.getFieldValue("project_processing");
+      if (new_project_processing.indexOf("Buyer") == -1) {
+        new_project_processing.push("Buyer");
       }
-      /*  let new_person_owner = form
-        .getFieldValue("person_owner")
+      /*  let new_project_owner = form
+        .getFieldValue("project_owner")
         .filter((item) => item !== ""); */
 
       form.setFieldsValue({
-        person_processing: new_person_processing,
-        person_type: new_person_type,
+        project_processing: new_project_processing,
+        project_type: new_project_type,
       });
 
-      dateForm.setFieldValue("persondate_start", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("projectdate_start", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_start: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_start: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
 
     if (values == "Lớp 12") {
-      let new_person_type = form.getFieldValue("person_type");
-      if (new_person_type.indexOf("Bán acc") == -1) {
-        new_person_type.push("Bán acc");
+      let new_project_type = form.getFieldValue("project_type");
+      if (new_project_type.indexOf("Bán acc") == -1) {
+        new_project_type.push("Bán acc");
       }
-      let new_person_owner = form.getFieldValue("person_owner");
-      if (new_person_owner.indexOf("Phòng Kinh doanh") == -1) {
-        new_person_owner.push("Phòng Kinh doanh");
+      let new_project_owner = form.getFieldValue("project_owner");
+      if (new_project_owner.indexOf("Phòng Kinh doanh") == -1) {
+        new_project_owner.push("Phòng Kinh doanh");
       }
       // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updatepersonInfo(
+      let { data } = await updateprojectInfo(
         {
-          new_person_type: new_person_type.join(","),
-          new_person_owner: new_person_owner.join(","),
+          new_project_type: new_project_type.join(","),
+          new_project_owner: new_project_owner.join(","),
         },
-        info.person_id
+        info.project_id
       );
 
-      let new_person_processing = form.getFieldValue("person_processing");
-      if (new_person_processing.indexOf("Move room") == -1) {
-        new_person_processing.push("Move room");
+      let new_project_processing = form.getFieldValue("project_processing");
+      if (new_project_processing.indexOf("Move room") == -1) {
+        new_project_processing.push("Move room");
       }
 
       form.setFieldsValue({
-        person_processing: new_person_processing,
-        person_type: new_person_type,
-        person_owner: new_person_owner,
+        project_processing: new_project_processing,
+        project_type: new_project_type,
+        project_owner: new_project_owner,
       });
 
-      dateForm.setFieldValue("persondate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("persondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("projectdate_moveroom", dayjs(now()));
+      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
       setDateData({
         ...dateData,
-        persondate_moveroom: dayjs(now()),
-        persondate_nextclass: dayjs(now()),
+        projectdate_moveroom: dayjs(now()),
+        projectdate_nextclass: dayjs(now()),
       });
     }
   };
@@ -600,12 +600,12 @@ const Person_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12} >
-              <Card title="THÔNG TIN PERSON" >
+              <Card title="THÔNG TIN project" >
                 <Form
                   form={form}
                   name="basic"
                   onFinish={onFinish}
-                  initialValues={personData}
+                  initialValues={projectData}
                   autoComplete="off"
                   size="large"
                 >
@@ -614,12 +614,12 @@ const Person_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       <Form.Item
-                        label="person id"
-                        name="person_id"
+                        label="project id"
+                        name="project_id"
                         rules={[
                           {
                             required: true,
-                            message: "Hãy nhập person id!",
+                            message: "Hãy nhập project id!",
                           },
                         ]}
                       >
@@ -627,12 +627,12 @@ const Person_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Giới tính" name="person_sex">
+                      <Form.Item label="Giới tính" name="project_sex">
                         <Input placeholder="Nam" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Ngày sinh" name="persondate_birthday">
+                      <Form.Item label="Ngày sinh" name="projectdate_birthday">
                         <Input placeholder="27/7/2000" />
                       </Form.Item>
                     </Col>
@@ -640,17 +640,17 @@ const Person_info = () => {
 
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item label="Họ tên" name="person_fullname">
+                      <Form.Item label="Họ tên" name="project_fullname">
                         <Input placeholder="Thế Minh Hồng" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Passport" name="person_passport">
+                      <Form.Item label="Passport" name="project_passport">
                         <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="SSN" name="person_ssn">
+                      <Form.Item label="SSN" name="project_ssn">
                         <Input placeholder="028094999999" />
                       </Form.Item>
                     </Col>
@@ -658,7 +658,7 @@ const Person_info = () => {
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="Nơi thường trú" name="person_residence">
+                      <Form.Item label="Nơi thường trú" name="project_residence">
                         <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
@@ -666,12 +666,12 @@ const Person_info = () => {
 
                   <Row gutter={16}>
                     <Col span={18}>
-                      <Form.Item label="Quê quán........" name="person_origin">
+                      <Form.Item label="Quê quán........" name="project_origin">
                         <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="code" name="person_code">
+                      <Form.Item label="code" name="project_code">
                         <Input placeholder="100000" />
                       </Form.Item>
                     </Col>
@@ -681,7 +681,7 @@ const Person_info = () => {
                     <Col span={18}>
                       <Form.Item
                         label="Đặc điểm nhận dạng"
-                        name="person_identifying"
+                        name="project_identifying"
                       >
                         <Input
                         
@@ -690,7 +690,7 @@ const Person_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={6}>
-                      <Form.Item label="Password" name="person_password">
+                      <Form.Item label="Password" name="project_password">
                         <Input placeholder="012345678910" />
                       </Form.Item>
                     </Col>
@@ -699,18 +699,18 @@ const Person_info = () => {
                     <Col span={8}>
                       <Form.Item
                         label="CCCD giá trị đến"
-                        name="persondate_expiry"
+                        name="projectdate_expiry"
                       >
                         <Input placeholder="25/7/2041" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Ngày làm CCCD" name="persondate_start">
+                      <Form.Item label="Ngày làm CCCD" name="projectdate_start">
                         <Input placeholder="29/4/2021" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Ngày nhập" name="persondate_import">
+                      <Form.Item label="Ngày nhập" name="projectdate_import">
                         <Input placeholder="07/12/2022" />
                       </Form.Item>
                     </Col>
@@ -725,7 +725,7 @@ const Person_info = () => {
                   ].indexOf(users_function) == -1 ? (
                     <Form.Item
                       label="Quy trình"
-                      name="person_plan"
+                      name="project_plan"
                       disabled={true}
                     >
                       <Select
@@ -734,7 +734,7 @@ const Person_info = () => {
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_plan.map((item, index) => {
+                        {listselect_project_plan.map((item, index) => {
                           return (
                             <Option value={item} label={item} key={index}>
                               <div className="demo-option-label-item">
@@ -755,8 +755,8 @@ const Person_info = () => {
                     "Thử việc",
                   ].indexOf(users_function) == -1 ? (
                     <Form.Item
-                      label="Person block"
-                      name="person_block"
+                      label="Project block"
+                      name="project_block"
                       disabled={true}
                     >
                       <Select
@@ -765,7 +765,7 @@ const Person_info = () => {
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_block.map((item, index) => {
+                        {listselect_project_block.map((item, index) => {
                           return (
                             <Option value={item} label={item} key={index}>
                               <div className="demo-option-label-item">
@@ -778,7 +778,7 @@ const Person_info = () => {
                     </Form.Item>
                   ) : null}
 
-                  <Form.Item label="Tiến trình" name="person_processing">
+                  <Form.Item label="Tiến trình" name="project_processing">
                     <Select
                       onChange={onChange_Processing}
                       mode="multiple"
@@ -786,7 +786,7 @@ const Person_info = () => {
                       optionlabelprop="label"
                       //status="warning"
                     >
-                      {listselect_person_processing.map((item, index) => {
+                      {listselect_project_processing.map((item, index) => {
                         return (
                           <Option value={item} label={item} key={index}>
                             <div className="demo-option-label-item">{item}</div>
@@ -795,14 +795,14 @@ const Person_info = () => {
                       })}
                     </Select>
                   </Form.Item>
-                  <Form.Item label="Phát sinh" name="person_error">
+                  <Form.Item label="Phát sinh" name="project_error">
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
                       optionlabelprop="label"
                       //status="warning"
                     >
-                      {listselect_person_error.map((item, index) => {
+                      {listselect_project_error.map((item, index) => {
                         return (
                           <Option value={item} label={item} key={index}>
                             <div className="demo-option-label-item">{item}</div>
@@ -819,14 +819,14 @@ const Person_info = () => {
                     "Tập sự",
                     "Thử việc",
                   ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Loại person" name="person_type">
+                    <Form.Item label="Loại project" name="project_type">
                       <Select
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_type.map((item, index) => {
+                        {listselect_project_type.map((item, index) => {
                           return (
                             <Option value={item} label={item} key={index}>
                               <div className="demo-option-label-item">
@@ -847,7 +847,7 @@ const Person_info = () => {
                   ].indexOf(users_function) == -1 ? (
                     <Form.Item
                       label="TT Bán"
-                      name="person_sell_status"
+                      name="project_sell_status"
                       style={{
                         display:
                           [
@@ -867,7 +867,7 @@ const Person_info = () => {
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_sell_status.map((item, index) => {
+                        {listselect_project_sell_status.map((item, index) => {
                           return (
                             <Option value={item} label={item} key={index}>
                               <div className="demo-option-label-item">
@@ -887,7 +887,7 @@ const Person_info = () => {
                     "Tập sự",
                     "Thử việc",
                   ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Sở hữu" name="person_owner">
+                    <Form.Item label="Sở hữu" name="project_owner">
                       <Select
                         disabled={
                           [
@@ -902,7 +902,7 @@ const Person_info = () => {
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_owner.map((item, index) => {
+                        {listselect_project_owner.map((item, index) => {
                           return (
                             <Option value={item} label={item} key={index}>
                               <div className="demo-option-label-item">
@@ -922,14 +922,14 @@ const Person_info = () => {
                     "Tập sự",
                     "Thử việc",
                   ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Nhân viên" name="person_employee">
+                    <Form.Item label="Nhân viên" name="project_employee">
                       <Select
                         mode="multiple"
                         style={{ width: "100%" }}
                         placeholder="select one item"
                         optionlabelprop="label"
                       >
-                        {listselect_person_employee?.map((item) => {
+                        {listselect_project_employee?.map((item) => {
                           return (
                             <Option value={item} label={item}>
                               <div className="demo-option-label-item">
@@ -944,7 +944,7 @@ const Person_info = () => {
 
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item label="Trạng thái" name="person_status">
+                      <Form.Item label="Trạng thái" name="project_status">
                         <Select
                           //mode="multiple"
                           onChange={onChange_Status}
@@ -953,19 +953,19 @@ const Person_info = () => {
                             width: "100%",
                             color:
                               ["Suspended", "Error"].indexOf(
-                                form.getFieldValue("person_status")
+                                form.getFieldValue("project_status")
                               ) != -1
                                 ? "red"
                                 : "",
                             fontWeight:
                               ["Suspended", "Error"].indexOf(
-                                form.getFieldValue("person_status")
+                                form.getFieldValue("project_status")
                               ) != -1
                                 ? "bold !important"
                                 : "",
                           }}
                         >
-                          {listselect_person_status.map((item, index) => {
+                          {listselect_project_status.map((item, index) => {
                             return (
                               <Option value={item} label={item} key={index}>
                                 <div className="demo-option-label-item">
@@ -978,14 +978,14 @@ const Person_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Lớp Person" name="person_class">
+                      <Form.Item label="Lớp Project" name="project_class">
                         <Select
                           //mode="multiple"
                           style={{ width: "100%" }}
                           optionlabelprop="label"
                           onChange={onChange_Class}
                         >
-                          {listselect_person_class.map((item, index) => {
+                          {listselect_project_class.map((item, index) => {
                             return (
                               <Option
                                 value={item.value}
@@ -1002,13 +1002,13 @@ const Person_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Hỗ trợ" name="person_support">
+                      <Form.Item label="Hỗ trợ" name="project_support">
                         <Select
                           style={{ width: "100%" }}
                           placeholder="select one item"
                           optionlabelprop="label"
                         >
-                          {listselect_person_employee?.map((item) => {
+                          {listselect_project_employee?.map((item) => {
                             return (
                               <Option value={item} label={item}>
                                 <div className="demo-option-label-item">
@@ -1023,7 +1023,7 @@ const Person_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Form.Item name="person_image_url">
+                    <Form.Item name="project_image_url">
                       <Upload
                         action="http://localhost:4000/api/files"
                         listType="picture-card"
@@ -1200,7 +1200,7 @@ const Person_info = () => {
                                       )
                                     }
                                   >
-                                    {listselect_person_status.map(
+                                    {listselect_project_status.map(
                                       (item, index) => {
                                         return (
                                           <Option
@@ -1239,7 +1239,7 @@ const Person_info = () => {
                                       )
                                     }
                                   >
-                                    {listselect_person_class.map(
+                                    {listselect_project_class.map(
                                       (item, index) => {
                                         return (
                                           <Option
@@ -1282,7 +1282,7 @@ const Person_info = () => {
                   size="large"
                 >
                   <Row gutter={16}>
-                    {tablelist_person_Date.map((item, index) => {
+                    {tablelist_project_Date.map((item, index) => {
                       return (
                         <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
@@ -1313,7 +1313,7 @@ const Person_info = () => {
                 </Row>
 
                 <span>
-                  {info?.person_history?.split(",")?.map((data) => {
+                  {info?.project_history?.split(",")?.map((data) => {
                     return <div>{data}</div>;
                   })}
                 </span>
@@ -1323,7 +1323,7 @@ const Person_info = () => {
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
        
-          <HuongDanPerson_info />
+          <HuongDanProject_info />
         </Tabs.TabPane>
       </Tabs>
 
@@ -1347,4 +1347,4 @@ const Person_info = () => {
   );
 };
 
-export default Person_info;
+export default Project_info;

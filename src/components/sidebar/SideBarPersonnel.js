@@ -2,7 +2,7 @@ import React from "react";
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 
-const SideBarPersonnel = ({ color }) => {
+const SideBarpersonnel = ({ color }) => {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
 
@@ -139,4 +139,4 @@ const SideBarPersonnel = ({ color }) => {
   );
 };
 
-export default SideBarPersonnel;
+export default SideBarpersonnel;

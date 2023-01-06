@@ -1,30 +1,30 @@
 import axiosClient from "../axiosClient.js";
 
-export const postpersonInfo = (payload) => {
-  const url = `/person/create`;
+export const postprojectInfo = (payload) => {
+  const url = `/project/create`;
   return axiosClient.post(url, payload);
 };
 
-export const getpersonInfo = (id) => {
-  const url = `/person/get/${id}`;
+export const getprojectInfo = (id) => {
+  const url = `/project/get/${id}`;
   return axiosClient.get(url);
 }
 
-export const getListperson = (payload) => {
+export const getListproject = (payload) => {
   let queryString = genQueryString(payload);
-  const url = `/person/list?${queryString}`;
+  const url = `/project/list?${queryString}`;
   return axiosClient.get(url);
 }
 
 
-export const updatepersonInfo = (payload, id) => {
-  const url = `/person/update?id=${id}`;
+export const updateprojectInfo = (payload, id) => {
+  const url = `/project/update?id=${id}`;
   return axiosClient.put(url, payload);
 }
 
 
-export const getCountPerson = () => {
-  const url = `/getperson/count`;
+export const getCountProject = () => {
+  const url = `/getproject/count`;
   return axiosClient.get(url);
 }
 

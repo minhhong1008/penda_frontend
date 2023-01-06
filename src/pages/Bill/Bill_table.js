@@ -39,8 +39,8 @@ const Bill_table = () => {
   const { RangePicker } = DatePicker;
   const rangePresets = [
     {
-      label: "Tháng trước",
-      value: [dayjs().add(-7, "d"), dayjs()],
+      label: "Next 60 Days",
+      value: [dayjs(),dayjs().add(+60, "d") ],
     },
     {
       label: "Last 7 Days",
@@ -76,7 +76,7 @@ const Bill_table = () => {
     let data = res.data;
     setList_employee(data);
   };
-// Hàm gọi dữ liệu về từ database
+  // Hàm gọi dữ liệu về từ database
   const getListBillTable = async () => {
     let filter = [
       dayjs()
@@ -88,14 +88,12 @@ const Bill_table = () => {
       from: filter[0],
       to: filter[1],
     });
-    console.log(filter);
+
     let { data } = await getListBill({
       status: status,
       from: filter[0],
       to: filter[1],
     });
-    //data.bill_total = VND.format(data.bill_total)
-
     setData(data);
   };
 
@@ -132,9 +130,6 @@ const Bill_table = () => {
     {
       title: "Ngày tháng",
       dataIndex: "bill_date",
-      render: (text, record, index) => {
-        
-      }
     },
     {
       title: "Phòng ban",
@@ -155,14 +150,17 @@ const Bill_table = () => {
     {
       title: "Giá tiền",
       dataIndex: "bill_price",
+      render: (text) => VND.format(text),
     },
     {
       title: "Thành tiền",
       dataIndex: "bill_total",
+      render: (text) => VND.format(text),
     },
     {
       title: "Công nợ",
       dataIndex: "bill_debt",
+      render: (text) => VND.format(text),
     },
     {
       title: "Tính năng",
@@ -171,7 +169,6 @@ const Bill_table = () => {
         <div>
           <Button
             onClick={() => {
-              console.log(record);
               record.bill_date = dayjs(record.bill_date);
               setSelectedBill(record);
               if (record?.bill_image_url) {
@@ -232,7 +229,6 @@ const Bill_table = () => {
 
   const onRangeChange = (dates, dateStrings) => {
     if (dates) {
-      console.log(dateStrings);
       setFilterDate({
         from: dateStrings[0],
         to: dateStrings[1],

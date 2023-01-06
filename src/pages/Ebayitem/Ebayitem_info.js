@@ -143,7 +143,7 @@ const ebayitem_info = () => {
     {
       title: "INFO",
       thumbnail:
-        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-person-2646097_1280.png",
+        "https://cdn.pixabay.com/photo/2017/08/16/00/29/add-project-2646097_1280.png",
       value: "",
     },
     {

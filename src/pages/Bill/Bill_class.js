@@ -28,6 +28,7 @@ import {
   getPayAndCollect,
   updateBill,
   getListBill,
+  
   getEmployee,
 } from "../../api/bill";
 // Liên quan upload ảnh
@@ -47,14 +48,15 @@ const Bill_class = () => {
   const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
+  const [data, setData] = useState();
   const { RangePicker } = DatePicker;
   const [listselect_bill_work_new, setListBillWorkNew] = useState(
     listselect_bill_work
   );
   const rangePresets = [
     {
-      label: "Tháng trước",
-      value: [dayjs().add(-7, "d"), dayjs()],
+      label: "Next 60 Days",
+      value: [dayjs(),dayjs().add(+ 60, "d")],
     },
     {
       label: "Last 7 Days",
@@ -186,9 +188,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_suggest_pay",
-      render: (text) => (
-        VND.format(text)
-      )
+      render: (text) => VND.format(text),
     },
     {
       title: "Tỷ trọng",
@@ -220,9 +220,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_suggest_collect",
-      render: (text) => (
-        VND.format(text)
-      )
+      render: (text) => VND.format(text),
     },
     {
       title: "Tỷ trọng",
@@ -255,9 +253,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_pay",
-      render: (text) => (
-        VND.format(text)
-      )
+      render: (text) => VND.format(text),
     },
     {
       title: "Tỷ trọng",
@@ -289,9 +285,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_collect",
-      render: (text) => (
-        VND.format(text)
-      )
+      render: (text) => VND.format(text),
     },
     {
       title: "Tỷ trọng",
@@ -328,11 +322,170 @@ const Bill_class = () => {
   };
 
   const handleFilter = async () => {
-    let { data } = await getListBill({
-      status: status,
+    
+    let response = await getPayAndCollect({
       ...filterDate,
     });
-    setData(data);
+    if (response.status == 200) {
+      const { data } = response;
+      let arrKey_bill_work = [];
+      let totalMoney_pay = 0;
+      let totalMoney_collect = 0;
+      let totalMoney_suggest_pay = 0;
+      let totalMoney_suggest_collect = 0;
+
+      data?.map((item) => {
+        if (
+          !arrKey_bill_work.some((key) => {
+            return key == item.bill_work;
+          })
+        ) {
+          arrKey_bill_work.push(item.bill_work);
+        }
+      });
+
+      let listbill_collect = [
+        "Thu tiền bán hàng",
+        "Thu tiền bán tài nguyên",
+        "Thu tiền khác",
+        "Thu tiền đi vay",
+      ];
+      let arrPay = [];
+      let arrSuggestPay = [];
+      let arrCollect = [];
+      let arrSuggestCollect = [];
+      arrKey_bill_work.map((key, index) => {
+        if (listbill_collect.indexOf(key) == -1) {
+          let bill_work_pay = key;
+          let bill_total_pay = 0;
+          let bill_density_pay = "1,5%";
+
+          let bill_work_suggest_pay = key;
+          let bill_total_suggest_pay = 0;
+          let bill_density_suggest_pay = "1,5%";
+
+          data.map((item) => {
+            if (item.bill_action == "Thực hiện") {
+              if (item.bill_work == key) {
+                bill_total_pay += parseInt(item.bill_total);
+              }
+            } else {
+              if (item.bill_work == key) {
+                bill_total_suggest_pay += parseInt(item.bill_total);
+              }
+            }
+          });
+
+          arrPay.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_pay: bill_work_pay,
+            bill_total_pay: bill_total_pay,
+            bill_density_pay: bill_density_pay,
+          });
+
+          arrSuggestPay.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_suggest_pay: bill_work_suggest_pay,
+            bill_total_suggest_pay: bill_total_suggest_pay,
+            bill_density_suggest_pay: bill_density_suggest_pay,
+          });
+        } else {
+          let bill_work_collect = key;
+          let bill_total_collect = 0;
+          let bill_density_collect = "1,5%";
+
+          let bill_suggest_work_collect = key;
+          let bill_suggest_total_collect = 0;
+          let bill_suggest_density_collect = "1,5%";
+
+          data.map((item) => {
+            if (item.bill_action == "Thực hiện") {
+              if (item.bill_work == key) {
+                bill_total_collect += parseInt(item.bill_total);
+              }
+            } else {
+              if (item.bill_work == key) {
+                bill_suggest_total_collect += parseInt(item.bill_total);
+              }
+            }
+          });
+
+          arrCollect.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_collect: bill_work_collect,
+            bill_total_collect: bill_total_collect,
+            bill_density_collect: bill_density_collect,
+          });
+
+          arrSuggestCollect.push({
+            key: index + 2,
+            Stt: index + 2,
+            bill_work_suggest_collect: bill_suggest_work_collect,
+            bill_total_suggest_collect: bill_suggest_total_collect,
+            bill_density_suggest_collect: bill_suggest_density_collect,
+          });
+        }
+      });
+
+      arrPay.map((item) => {
+        totalMoney_pay += parseInt(item.bill_total_pay);
+      });
+
+      arrPay.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_pay: "Tổng tiền",
+        bill_total_pay: totalMoney_pay,
+        bill_density_pay: "100%",
+      });
+      setDataPay(arrPay);
+
+      arrSuggestPay.map((item) => {
+        totalMoney_suggest_pay += parseInt(item.bill_total_suggest_pay);
+      });
+
+      arrSuggestPay.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_suggest_pay: "Tổng tiền",
+        bill_total_suggest_pay: totalMoney_suggest_pay,
+        bill_density_suggest_pay: "100%",
+      });
+      setDataSuggestPay(arrSuggestPay);
+
+      arrCollect.map((item) => {
+        totalMoney_collect += parseInt(item.bill_total_collect);
+      });
+
+      arrCollect.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_collect: "Tổng tiền",
+        bill_total_collect: totalMoney_collect,
+        bill_density_collect: "100%",
+      });
+
+      setDataCollect(arrCollect);
+
+      arrSuggestCollect.map((item) => {
+        totalMoney_suggest_collect += parseInt(item.bill_total_suggest_collect);
+      });
+
+      arrSuggestCollect.unshift({
+        key: 1,
+        Stt: 1,
+        bill_work_suggest_collect: "Tổng tiền",
+        bill_total_suggest_collect: totalMoney_suggest_collect,
+        bill_density_suggest_collect: "100%",
+      });
+
+      setDataSuggestCollect(arrSuggestCollect);
+    } else {
+      showError("Có lỗi xảy ra");
+    }
   };
 
   // Hàm gọi dữ liệu thu chi về
@@ -352,7 +505,6 @@ const Bill_class = () => {
       from: filter[0],
       to: filter[1],
     });
-    console.log(response.status);
 
     if (response.status == 200) {
       const { data } = response;
@@ -594,6 +746,8 @@ const Bill_class = () => {
                               background: "#18a689",
                               color: "white",
                             }}
+                           
+                            onClick={() => handleFilter()}
                           >
                             Kết quả
                           </Button>
@@ -627,31 +781,7 @@ const Bill_class = () => {
                       BẢNG THU CHI
                     </strong>
                   }
-                  extra={
-                    <>
-                      <Row gutter={16}>
-                        <Col span={16}>
-                          <RangePicker
-                            size="large"
-                            presets={rangePresets}
-                            onChange={onRangeChange}
-                            defaultValue={[dayjs().add(-30, "d"), dayjs()]}
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Button
-                            style={{
-                              background: "#1890FD",
-                              color: "white",
-                            }}
-                            onClick={() => handleFilter()}
-                          >
-                            Kết quả
-                          </Button>
-                        </Col>
-                      </Row>
-                    </>
-                  }
+                 
                 >
                   <Divider>BẢNG CHI TIỀN</Divider>
                   <Table
