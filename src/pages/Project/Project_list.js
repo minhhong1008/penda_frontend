@@ -1,7 +1,4 @@
-
-export const listselect_project_error = [
-  "Gặp sự cố",
-];
+export const listselect_project_error = ["Gặp sự cố"];
 
 export const listselect_project_processing = [
   "Bắt đầu",
@@ -9,8 +6,8 @@ export const listselect_project_processing = [
   "Đã xong",
   "Kiểm tra",
   "Hoàn thành",
-  "Khó khăn",
   "Quá khó",
+  "Hơi khó",
   "Đơn giản",
   "Vướng mắc",
   "Quá hạn",
@@ -34,7 +31,6 @@ export const listselect_project_type = [
   "QT 0 CB",
   "CB 0 QT",
   "0 CB 0 QT",
-  
 ];
 
 export const listselect_project_work_item = [

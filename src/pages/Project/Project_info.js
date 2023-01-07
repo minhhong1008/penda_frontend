@@ -121,6 +121,22 @@ const Project_info = () => {
     setNoteValue(data.project_note);
     setListproject_employee(data.listselect_project_employee);
     setListproject_type(newData.project_type);
+    
+
+
+    if (data?.project_image_url) {
+      let dataImage = [];
+      let imageArr = data.project_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
     //disable input theo điều kiện
     if (
       users_function == "Giám đốc" ||
@@ -318,12 +334,17 @@ const Project_info = () => {
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={24}>
+                    <Col span={18}>
                       <Form.Item label="Nội dung" name="project_content">
                         <Input
                           placeholder="Nội dung chi tiết công việc"
                           disabled={disabled}
                         />
+                      </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                      <Form.Item label="Số lượng" name="project_number">
+                        <Input placeholder="50" />
                       </Form.Item>
                     </Col>
                   </Row>

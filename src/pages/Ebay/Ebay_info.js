@@ -43,7 +43,7 @@ import {
   updateebayInfo,
 } from "../../api/ebay/index";
 import { updateListView } from "../../api/update";
-
+//upload ảnh
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();

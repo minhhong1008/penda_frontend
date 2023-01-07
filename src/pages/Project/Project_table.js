@@ -225,6 +225,7 @@ const Project_table = () => {
       title: "NỘI DUNG",
       dataIndex: "project_content",
       key: "project_content",
+      width: 3,
       sorter: (a, b) => {
         return a.project_content?.localeCompare(b.project_content);
       },
@@ -279,6 +280,7 @@ const Project_table = () => {
       title: "TIẾN TRÌNH",
       dataIndex: "project_processing",
       key: "project_processing",
+      width: 3,
       render: (record) => {
         let list = record?.split(",");
         return (
