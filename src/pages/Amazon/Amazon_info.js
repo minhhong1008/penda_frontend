@@ -1021,7 +1021,7 @@ const Amazon_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="amazon_image_url">
                       <Upload
-                        action="http://localhost:4000/api/files"
+                        action="http://backend.penda.vn/api/files"
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}

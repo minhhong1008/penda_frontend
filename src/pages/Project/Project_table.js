@@ -32,10 +32,18 @@ const Project_table = () => {
   const history = useHistory();
   const { Option } = Select;
 
-  const [filterDate, setFilterDate] = useState();
 
+  const month = dayjs().format("MM");
+  const year = dayjs().format("YYYY");
+  const countDay = dayjs().daysInMonth();
+  const [filterDate, setFilterDate] = useState();
   const { RangePicker } = DatePicker;
+
   const rangePresets = [
+    {
+      label: "Tháng hiện tại",
+      value: [dayjs(year + "-" + month + "-" + "01"), dayjs(year + "-" + month + "-" + countDay)],
+    },
     {
       label: "Default",
       value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
@@ -59,29 +67,19 @@ const Project_table = () => {
       render: (text, record, index) => index + 1,
     },
     {
-      title: "#",
-      dataIndex: "project_id",
-      key: "project_id",
-
+      title: "HẠNG MỤC",
+      dataIndex: "project_work_item",
+      key: "project_work_item",
       width: 1,
       render: (text, record) => (
         <a
           onClick={() =>
-            history.push(`table/${encodeURIComponent(record.project_id)}`)
+            history.push(`table/${encodeURIComponent(record._id)}`)
           }
         >
           {text}
         </a>
       ),
-      sorter: (a, b) => {
-        return a.project_id?.localeCompare(b.project_id);
-      },
-    },
-    {
-      title: "HẠNG MỤC",
-      dataIndex: "project_work_item",
-      key: "project_work_item",
-      width: 1,
       sorter: (a, b) => {
         return a.project_work_item?.localeCompare(b.project_work_item);
       },
@@ -191,11 +189,11 @@ const Project_table = () => {
 
   const create = async () => {
     const response = await postprojectInfo({
+      project_id: randomStr(6),
       project_employee: project_employee,
       project_date_start: dayjs()
         .add(1, "d")
         .format("YYYY-MM-DD"),
-      project_id: randomStr(6),
       project_processing: "Bắt đầu",
       project_date_end: dayjs()
         .add(2, "d")

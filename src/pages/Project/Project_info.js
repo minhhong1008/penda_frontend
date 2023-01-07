@@ -55,7 +55,8 @@ const Project_info = () => {
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [listselect_project_employee, setListproject_employee] = useState();
-
+  const [list_project_type, setListproject_type] = useState();
+  const [disabled, setDisabled] = useState(false);
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
     let project_file = [];
@@ -85,7 +86,7 @@ const Project_info = () => {
         ? values.project_processing.join(",")
         : "",
       project_type: values?.project_type ? values.project_type.join(",") : "",
-      
+
       project_note: noteValue,
     };
 
@@ -104,7 +105,6 @@ const Project_info = () => {
     const newData = {
       ...data,
       project_error: data?.project_error ? data.project_error.split(",") : "",
-     
       project_processing: data?.project_processing
         ? data.project_processing.split(",")
         : "",
@@ -115,11 +115,24 @@ const Project_info = () => {
       project_date_end: data?.project_date_end
         ? dayjs(data.project_date_end)
         : "",
-      amazon_note: noteValue,
+      project_note: noteValue,
     };
     form.setFieldsValue(newData);
     setNoteValue(data.project_note);
     setListproject_employee(data.listselect_project_employee);
+    setListproject_type(newData.project_type);
+    //disable input theo điều kiện
+    if (
+      users_function == "Giám đốc" ||
+      users_function == "Phó giám đốc" ||
+      users_function == "Trưởng phòng"
+    ) {
+      setDisabled(false);
+    } else {
+      if (newData.project_type?.indexOf("Giao việc") !== -1) {
+        setDisabled(true);
+      }
+    }
   };
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
@@ -200,27 +213,24 @@ const Project_info = () => {
                 >
                   <Row gutter={16}>
                     <Col span={6}>
-                      <Form.Item
-                        label="Mã"
-                        name="project_id"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Hãy nhập project id!",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="I_1000" />
+                      <Form.Item label="Mã" name="project_id">
+                        <Input disabled={true} />
                       </Form.Item>
                     </Col>
                     <Col span={9}>
                       <Form.Item label="Ngày bắt đầu" name="project_date_start">
-                        <DatePicker style={{ float: "right" }} />
+                        <DatePicker
+                          style={{ float: "right" }}
+                          disabled={disabled}
+                        />
                       </Form.Item>
                     </Col>
                     <Col span={9}>
                       <Form.Item label="Ngày kết thúc" name="project_date_end">
-                        <DatePicker style={{ float: "right" }} />
+                        <DatePicker
+                          style={{ float: "right" }}
+                          disabled={disabled}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -248,7 +258,6 @@ const Project_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      {" "}
                       {/* Hạng mục */}
                       {[
                         "Tổ phó",
@@ -257,26 +266,12 @@ const Project_info = () => {
                         "Tập sự",
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
-                        <Form.Item
-                          label="Hạng mục"
-                          name="project_work_item"
-                          style={{
-                            display:
-                              [
-                                "Tổ phó",
-                                "Chuyên viên",
-                                "Nhân viên",
-                                "Tập sự",
-                                "Thử việc",
-                              ].indexOf(users_function) == -1
-                                ? ""
-                                : "none",
-                          }}
-                        >
+                        <Form.Item label="Hạng mục" name="project_work_item">
                           <Select
                             style={{ width: "100%" }}
                             placeholder="select one item"
                             optionlabelprop="label"
+                            disabled={disabled}
                           >
                             {listselect_project_work_item.map((item, index) => {
                               return (
@@ -301,14 +296,11 @@ const Project_info = () => {
                         "Tập sự",
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
-                        <Form.Item
-                          label="Công việc"
-                          name="project_work"
-                          disabled={true}
-                        >
+                        <Form.Item label="Công việc" name="project_work">
                           <Select
                             style={{ width: "100%" }}
                             optionlabelprop="label"
+                            disabled={disabled}
                           >
                             {listselect_project_work.map((item, index) => {
                               return (
@@ -328,7 +320,10 @@ const Project_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Nội dung" name="project_content">
-                        <Input placeholder="Nội dung chi tiết công việc" />
+                        <Input
+                          placeholder="Nội dung chi tiết công việc"
+                          disabled={disabled}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -380,6 +375,7 @@ const Project_info = () => {
                         style={{ width: "100%" }}
                         placeholder="select one item"
                         optionlabelprop="label"
+                        disabled={disabled}
                       >
                         {listselect_project_type.map((item, index) => {
                           return (
@@ -403,11 +399,7 @@ const Project_info = () => {
                         "Tập sự",
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
-                        <Form.Item
-                          label="Đánh giá"
-                          name="project_review"
-                          disabled={true}
-                        >
+                        <Form.Item label="Đánh giá" name="project_review">
                           <Select
                             style={{ width: "100%" }}
                             placeholder="select one item"
@@ -439,11 +431,11 @@ const Project_info = () => {
                           <Select
                             disabled={
                               [
+                                "Giám đốc",
                                 "Trưởng phòng",
                                 "Phó phòng",
                                 "Tổ trưởng",
-                                "Tổ phó",
-                              ].indexOf(users_function) !== -1
+                              ].indexOf(users_function) == -1
                             }
                             style={{ width: "100%" }}
                             placeholder="select one item"
@@ -473,10 +465,10 @@ const Project_info = () => {
                       ].indexOf(users_function) == -1 ? (
                         <Form.Item label="Nhân viên" name="project_employee">
                           <Select
-                          
                             style={{ width: "100%" }}
                             placeholder="select one item"
                             optionlabelprop="label"
+                            disabled={disabled}
                           >
                             {listselect_project_employee?.map((item) => {
                               return (
@@ -493,12 +485,11 @@ const Project_info = () => {
                     </Col>
                   </Row>
 
-                
                   {/* Upload ảnh */}
                   <Row gutter={16}>
                     <Form.Item name="project_image_url">
                       <Upload
-                        action="http://localhost:4000/api/files"
+                        action="http://backend.penda.vn/api/files"
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}

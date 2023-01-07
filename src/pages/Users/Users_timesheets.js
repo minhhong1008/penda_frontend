@@ -103,21 +103,25 @@ const Users_timesheets = () => {
     if (
       ["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) != -1
     ) {
-      let response = await createSession({
-        users_function: users_function,
-        users_name: values.working_employee,
-        working_session: values.working_session,
-        working_date: values.working_date,
-      });
-      if (response.status == "200") {
-        let { data } = response;
-        showSuccess(
-          "Đăng ký ca làm " +
-            (data.working_session == "S" ? "sáng " : "chiều ") +
-            data.working_date
-        );
-      } else {
-        showError("Đăng ký thất bại");
+      try {
+        let response = await createSession({
+          users_function: users_function,
+          users_name: values.working_employee,
+          working_session: values.working_session,
+          working_date: values.working_date,
+        });
+        if (response.status == 200) {
+          let { data } = response;
+          showSuccess(
+            "Đăng ký ca làm " +
+              (data.working_session == "S" ? "sáng " : "chiều ") +
+              data.working_date
+          );
+        } else {
+          showError("Đăng ký thất bại");
+        }
+      } catch (error) {
+        showError("Đăng ký thất bại")
       }
     }else{
       let response = await createSession({
@@ -126,7 +130,7 @@ const Users_timesheets = () => {
         working_session: values.working_session,
         working_date: values.working_date,
       });
-      if (response.status == "200") {
+      if (response.status == 200) {
         let { data } = response;
         showSuccess(
           "Đăng ký ca làm " +

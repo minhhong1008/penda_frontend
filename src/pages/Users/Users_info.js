@@ -25,14 +25,15 @@ import {
   getusersInfo,
   updateusersInfo,
 } from "../../api/users/index";
-import {
-  HuongDanUsers_info,
-} from "./Users_list";
+import { HuongDanUsers_info } from "./Users_list";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
-
 // Liên quan upload ảnh
 import { PlusOutlined } from "@ant-design/icons";
+
+// Khi
+
+
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -42,6 +43,45 @@ const getBase64 = (file) =>
   });
 
 const Users_info = () => {
+  // Khi lưu lại thì dùng JSON.stringfy(user_function) để chuyển về dạng string
+  // Khi gọi từ database về dùng JSON.parse(user_function) để truyển lại về JSON
+  const user_function = [
+    {
+      title: "Chức năng",
+      value: [
+        {
+          title: "Chức năng 1",
+          content: "Nội dung chức năng 1",
+        },
+        {
+          title: "Chức năng 2",
+          content: "Nội dung chức năng 2",
+        },
+        {
+          title: "Chức năng 3",
+          content: "Nội dung chức năng 3",
+        },
+      ],
+    },
+    {
+      title: "Nhiệm vụ",
+      value: [
+        {
+          title: "Nhiệm vụ 1",
+          content: "Nội dung chức năng 1",
+        },
+        {
+          title: "Nhiệm vụ 2",
+          content: "Nội dung chức năng 2",
+        },
+        {
+          title: "Nhiệm vụ 3",
+          content: "Nội dung chức năng 3",
+        },
+      ],
+    },
+  ];
+
   const { Option } = Select;
   const { users_function } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -327,7 +367,7 @@ const Users_info = () => {
                     </Col>
                     <Col span={6}>
                       <Form.Item label="code" name="users_code">
-                        <Input  />
+                        <Input />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -877,7 +917,7 @@ const Users_info = () => {
                     <Form.Item name="users_image_url">
                       <Upload
                         listType="picture-card"
-                        action="http://42.114.177.31:4000/api/files"
+                        action="http://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}
@@ -899,26 +939,20 @@ const Users_info = () => {
                       width: "100%",
                     }}
                   >
-                    <Alert
-                      message="Success Text"
-                      description={<><p>1. Ebay mã EB_12345</p><p>1. Ebay mã EB_12345</p></>}
-                      type="success"
-                    />
-                    <Alert
-                      message="Info Text"
-                      description="Info Description Info Description Info Description Info Description"
-                      type="info"
-                    />
-                    <Alert
-                      message="Warning Text"
-                      description="Warning Description Warning Description Warning Description Warning Description"
-                      type="warning"
-                    />
-                    <Alert
-                      message="Error Text"
-                      description="Error Description Error Description Error Description Error Description"
-                      type="error"
-                    />
+                    {user_function.map((item) => {
+                      return (
+                        <Alert
+                          message={item.title}
+                          description={item.value.map((data) => {
+                            return <div>
+                              <p>{data.title}</p>
+                              <p>{data.content}</p>
+                            </div>;
+                          })}
+                          type={item.title == "Chức năng" ? "success" : "info"}
+                        />
+                      );
+                    })}
                   </Space>
                 </Col>
                 <br></br>
@@ -975,7 +1009,7 @@ const Users_info = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-        <HuongDanUsers_info />
+          <HuongDanUsers_info />
         </Tabs.TabPane>
       </Tabs>
       <Modal

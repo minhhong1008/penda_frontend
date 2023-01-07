@@ -544,7 +544,7 @@ const Bill_table = () => {
                     <Form.Item name="bill_image_url">
                       <Upload
                         listType="picture-card"
-                        action="http://42.114.177.31:4000/api/files"
+                        action="http://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

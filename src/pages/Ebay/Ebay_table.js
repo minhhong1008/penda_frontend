@@ -18,12 +18,16 @@ import {
   Tag,
   Tooltip,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { copyToClipboard } from "../../utils";
+import Highlighter from "react-highlight-words";
+import React, { useEffect, useRef, useState } from "react";
+import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListebayActions } from "../../actions/ebayActions";
 import { HuongDanEbay_table } from "./Ebay_list";
+import { SearchOutlined } from "@ant-design/icons";
+import { updateebayInfo } from "../../api/ebay";
+
 const Ebay_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -32,6 +36,125 @@ const Ebay_table = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
+
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          {/* <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button> */}
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+
   // nut checked, sửa cả trong file ebayReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copyId = () => {
@@ -58,24 +181,10 @@ const Ebay_table = () => {
       dataIndex: "ebay_id",
       key: "ebay_id",
       width: 1,
-      render: (text, record) => (
-        <a
-          style={{
-            borderRadius: "6px",
-            padding: "4px 4px",
-            background: "#1c84c6",
-            color: "white",
-          }}
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.ebay_id)}`)
-          }
-        >
-          {text}
-        </a>
-      ),
       sorter: (a, b) => {
         return a.ebay_id?.localeCompare(b.ebay_id);
       },
+      ...getColumnSearchProps("ebay_id"),
     },
     {
       title: (
@@ -89,6 +198,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
+      ...getColumnSearchProps("ebay_user"),
     },
     {
       title: (
@@ -258,17 +368,24 @@ const Ebay_table = () => {
             <Input
               key={index}
               onPressEnter={(e) => {
-                handleChangeNote(record._id, e.target.value);
-                
+                handleChangeNote(record.ebay_id, e.target.value);
               }}
               onMouseLeave={(e) => {
-                handleChangeNote(record._id, e.target.value);
-                setSelectedNote()
+                handleChangeNote(record.ebay_id, e.target.value);
+                setSelectedNote();
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
               }}
               defaultValue={text}
             ></Input>
           ) : (
-            <div onClick={() => setSelectedNote(record._id)}>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedNote(record._id);
+              }}
+            >
               <Tooltip title={text}>
                 <div
                   style={{
@@ -291,9 +408,16 @@ const Ebay_table = () => {
     },
   ];
 
-  const handleChangeNote = (id, value) => {
-    console.log(id, value);
-    setSelectedNote()
+  const handleChangeNote = async (id, value) => {
+    const response = await updateebayInfo({
+      ebay_note: value
+    }, id);
+    if(response.status == 200){
+      showSuccess("Update thanh cong");
+    } else {
+      showError("Loi roi")
+    }
+    setSelectedNote();
   };
 
   const handleChangeFilter = (values) => {
@@ -371,6 +495,15 @@ const Ebay_table = () => {
           >
             <Card type="inner">
               <Table
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(
+                        `table/${encodeURIComponent(record.ebay_id)}`
+                      );
+                    }, // click row
+                  };
+                }}
                 columns={columns}
                 dataSource={ebays}
                 rowSelection={rowSelection}

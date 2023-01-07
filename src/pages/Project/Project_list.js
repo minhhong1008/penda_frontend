@@ -1,18 +1,3 @@
-import icondevice from "../../assets/images/iconSocial/icondevice.jpg";
-import iconproxy from "../../assets/images/iconSocial/iconproxy.jpg";
-import iconinfo from "../../assets/images/iconSocial/iconinfo.png";
-import iconmail from "../../assets/images/iconSocial/iconmail.png";
-import iconsim from "../../assets/images/iconSocial/iconsim.jpg";
-import iconbank from "../../assets/images/iconSocial/iconbank.jpg";
-import iconebay from "../../assets/images/iconSocial/iconebay.jpg";
-import iconetsy from "../../assets/images/iconSocial/iconetsy.png";
-import iconamazon from "../../assets/images/iconSocial/iconamazon.png";
-import iconshopee from "../../assets/images/iconSocial/iconshopee.png";
-import iconfacebook from "../../assets/images/iconSocial/iconfacebook.png";
-import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
-import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
-import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
-import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
 
 export const listselect_project_error = [
   "Gặp sự cố",
@@ -24,6 +9,10 @@ export const listselect_project_processing = [
   "Đã xong",
   "Kiểm tra",
   "Hoàn thành",
+  "Khó khăn",
+  "Quá khó",
+  "Đơn giản",
+  "Vướng mắc",
 ];
 
 export const listselect_project_work = [
