@@ -200,7 +200,7 @@ const Project_table = () => {
       width: 1,
       render: (text, record) => (
         <a
-         
+          
         >
           {text}
         </a>
@@ -633,11 +633,10 @@ const Project_table = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                history.push(`table/${encodeURIComponent(record.project_id)}`);
+                history.push(`table/${encodeURIComponent(record._id)}`);
               },
             };
           }}
-          
           columns={columns}
           dataSource={data}
           size="small"

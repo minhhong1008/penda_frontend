@@ -37,7 +37,11 @@ const Proxy_table = () => {
   };
   const columns = [
     {
-      title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
+      title: (
+        <Tag color="#2db7f5" onClick={copyId}>
+          Copy
+        </Tag>
+      ),
       key: "index",
       fixed: "left",
       width: 1,
@@ -48,20 +52,16 @@ const Proxy_table = () => {
       dataIndex: "proxy_id",
       key: "proxy_id",
       render: (text, record) => (
-        
-        <a 
-        style={{
-          borderRadius: "6px",
-          padding: "8px 8px",
-          background: "#1c84c6",
-          color: "white",
-        }}
-        
-          
+        <a
+          style={{
+            borderRadius: "6px",
+            padding: "8px 8px",
+            background: "#1c84c6",
+            color: "white",
+          }}
         >
           {text}
         </a>
-        
       ),
       sorter: (a, b) => {
         return a.proxy_id?.localeCompare(b.proxy_id);
@@ -152,11 +152,10 @@ const Proxy_table = () => {
       dataIndex: "proxy_error",
       key: "proxy_error",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -187,11 +186,10 @@ const Proxy_table = () => {
       dataIndex: "proxy_employee",
       key: "proxy_employee",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -247,15 +245,15 @@ const Proxy_table = () => {
   useEffect(() => {
     getListProxy();
   }, [class_name]);
-// nut checked copy cái này trong ant.design
-const onSelectChange = (newSelectedRowKeys) => {
-  setSelectedRowKeys(newSelectedRowKeys);
-};
-const rowSelection = {
-  selectedRowKeys,
-  onChange: onSelectChange,
-};
-//--------
+  // nut checked copy cái này trong ant.design
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  //--------
   return (
     <div>
       <Card>
@@ -300,18 +298,19 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
-               onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    history.push(`table/${encodeURIComponent(record.proxy_id)}`);
-                  },
-                };
-              }}
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(
+                        `table/${encodeURIComponent(record.proxy_id)}`
+                      );
+                    },
+                  };
+                }}
                 columns={columns}
                 dataSource={proxys}
                 rowSelection={rowSelection}
                 pagination={{
-                  
                   pageSizeOptions: [
                     "10",
                     "20",

@@ -96,7 +96,7 @@ const Project_class = () => {
                   onClick: (event) => {
                     history.push(
                       `project_class/table?class=${encodeURIComponent(
-                        text.class
+                        text.users_name
                       )}`
                     );
                   },
