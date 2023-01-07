@@ -15,11 +15,9 @@ import {
   List,
   Upload,
 } from "antd";
-import { getUser, randomStr } from "../../utils/index";
 import { PlusOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
-import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
 import dayjs, { now } from "dayjs";
@@ -38,11 +36,9 @@ import {
   listselect_ebay_status,
   listselect_ebay_class,
   HuongDanEbay_info,
-  ContentEbay,
 } from "./Ebay_list";
 
 import {
-  postebayInfo,
   getebayInfo,
   updateebayInfo,
 } from "../../api/ebay/index";
@@ -58,7 +54,7 @@ const getBase64 = (file) =>
 
 const Ebay_info = () => {
   const { Option } = Select;
-  const { users_function, users_name } = useSelector((state) => state.auth);
+  const { users_function } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
   let { id } = useParams();
   // Khai báo các kho dữ liệu

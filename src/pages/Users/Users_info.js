@@ -8,8 +8,6 @@ import {
   Input,
   DatePicker,
   Select,
-  Avatar,
-  List,
   Timeline,
   Alert,
   Space,
@@ -21,7 +19,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import {
-  postusersInfo,
   getusersInfo,
   updateusersInfo,
 } from "../../api/users/index";

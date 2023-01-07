@@ -4,14 +4,8 @@ import {
   Card,
   Table,
   Tabs,
-  Row,
-  Col,
   Form,
   Input,
-  DatePicker,
-  Select,
-  Collapse,
-  Popover,
   Space,
   TreeSelect,
   Checkbox,
@@ -25,8 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListebayActions } from "../../actions/ebayActions";
 import { HuongDanEbay_table } from "./Ebay_list";
-import { SearchOutlined } from "@ant-design/icons";
 import { updateebayInfo } from "../../api/ebay";
+// search trên table
+import { SearchOutlined } from "@ant-design/icons";
 
 const Ebay_table = () => {
   const queryString = window.location.search;
@@ -36,7 +31,7 @@ const Ebay_table = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
-
+// Các hàm nut search trên table
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);

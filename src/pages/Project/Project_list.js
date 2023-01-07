@@ -13,6 +13,7 @@ export const listselect_project_processing = [
   "Quá khó",
   "Đơn giản",
   "Vướng mắc",
+  "Quá hạn",
 ];
 
 export const listselect_project_work = [
@@ -42,6 +43,7 @@ export const listselect_project_work_item = [
   "Sản xuất",
   "Kế hoạch",
   "Nhân sự",
+  "Cá nhân",
 ];
 
 export const listselect_project_owner = [
@@ -50,14 +52,20 @@ export const listselect_project_owner = [
   "Phòng Kinh doanh",
   "Phòng nâng cấp",
   "Kho lưu trữ",
+  "Phòng kế toán quản trị",
+  "Phòng kế hoạch",
+  "Phòng hành chính nhân sự",
 ];
 
 export const listselect_project_status = [
   "Bắt đầu",
+  "Đang thực hiện",
   "Chưa hoàn thành",
   "Đang vướng mắc",
   "Đã hoàn thành",
   "Không cần làm",
+  "Việc cá nhân",
+  //Lưu ý có đặt điều kiện trong project.js controller nên sửa ở đây phải sửa cả controller
 ];
 
 export const HuongDanProject_info = () => {

@@ -508,7 +508,7 @@ const Project_info = () => {
                   <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
-                      rows={4}
+                      rows={10}
                       onChange={handleChangeNote}
                     />
                   </Col>
