@@ -15,24 +15,27 @@ import {
   TreeSelect,
 } from "antd";
 import React, { useEffect, useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListprojectActions } from "../../actions/projectActions";
-import { listselect_project_work_item } from "./Project_list";
-import { postprojectInfo } from "../../api/project";
+import {
+  listselect_project_status,
+  listselect_project_work_item,
+} from "./Project_list";
+import { postprojectInfo, getListproject } from "../../api/project";
 import { randomStr } from "../../utils";
 const Project_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const { projects } = useSelector((state) => state.project);
+  let { status } = useParams();
+  const [form] = Form.useForm();
+  const [data, setData] = useState();
   const project_employee = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
   const { Option } = Select;
-
-
   const month = dayjs().format("MM");
   const year = dayjs().format("YYYY");
   const countDay = dayjs().daysInMonth();
@@ -42,7 +45,10 @@ const Project_table = () => {
   const rangePresets = [
     {
       label: "Tháng hiện tại",
-      value: [dayjs(year + "-" + month + "-" + "01"), dayjs(year + "-" + month + "-" + countDay)],
+      value: [
+        dayjs(year + "-" + month + "-" + "01"),
+        dayjs(year + "-" + month + "-" + countDay),
+      ],
     },
     {
       label: "Default",
@@ -157,19 +163,29 @@ const Project_table = () => {
       dataIndex: "project_status",
       key: "project_status",
       width: 1,
+      render: (text) => {
+        return (
+          <div style={{ display: "flex", gap: "8px" }}>
+            <div
+              style={{
+                textAlign: "center",
+                borderRadius: "6px",
+                padding: "2px 2px",
+                background: "gold",
+                color: "red",
+              }}
+            >
+              {text}
+            </div>
+          </div>
+        );
+      },
       sorter: (a, b) => {
         return a.project_status?.localeCompare(b.project_status);
       },
     },
   ];
 
-  const getListProject = () => {
-    dispatch(
-      getListprojectActions({
-        project_employee: project_employee,
-      })
-    );
-  };
   const onRangeChange = (dates, dateStrings) => {
     if (dates) {
       setFilterDate({
@@ -179,12 +195,6 @@ const Project_table = () => {
     } else {
       console.log("Clear");
     }
-  };
-  const handleFilter = async () => {
-    /* let { data } = await getLisProject({
-      
-      ...filterDate,
-    }); */
   };
 
   const create = async () => {
@@ -212,8 +222,42 @@ const Project_table = () => {
     }
   };
 
+  // Hàm gọi dữ liệu về từ database
+  const getListProject_Table = async () => {
+    let filter = [
+      dayjs()
+        .add(-30, "d")
+        .format("YYYY-MM-DD"),
+      dayjs()
+        .add(15, "d")
+        .format("YYYY-MM-DD"),
+    ];
+    setFilterDate({
+      from: filter[0],
+      to: filter[1],
+    });
+
+    let { data } = await getListproject({
+      project_employee: project_employee,
+      project_status: "Bắt đầu",
+      from: filter[0],
+      to: filter[1],
+    });
+    setData(data);
+  };
+
+  const handleFilter = async () => {
+    let project_status = form.getFieldValue("project_status_search");
+    const { data } = await getListproject({
+      project_employee: project_employee,
+      project_status: project_status,
+      ...filterDate,
+    });
+    setData(data);
+  };
+
   useEffect(() => {
-    getListProject();
+    getListProject_Table();
   }, [project_employee]);
 
   return (
@@ -230,57 +274,111 @@ const Project_table = () => {
         }
         extra={
           <div>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Form.Item label="Hạng mục" name="project_work_item">
-                  <Select
+            <Form autoComplete="off" form={form}>
+              <Row
+                gutter={16}
+                style={{ flex: 1, flexDirection: "row", float: "left" }}
+              >
+                <Col
+                  span={4}
+                  style={{ width: "100%", float: "right", flex: 1 }}
+                >
+                  <Button
+                    style={{
+                      background: "#1890FD",
+                      color: "white",
+                    }}
+                    onClick={() => create()}
+                  >
+                    Tạo mới
+                  </Button>
+                </Col>
+
+                <Col span={6}>
+                  <Button
+                    icon={<SearchOutlined />}
+                    style={{
+                      background: "#1890FD",
+                      color: "white",
+                    }}
+                    onClick={() => handleFilter()}
+                  >
+                    Search
+                  </Button>
+                </Col>
+
+                <Col
+                  span={12}
+                  style={{ width: "100%", float: "right", flex: 1 }}
+                >
+                  <RangePicker
                     size="large"
                     style={{ width: "100%" }}
-                    placeholder="select one item"
-                    optionlabelprop="label"
-                  >
-                    {listselect_project_work_item.map((item, index) => {
-                      return (
-                        <Option value={item} label={item} key={index}>
-                          <div className="demo-option-label-item">{item}</div>
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <RangePicker
-                  size="large"
-                  style={{ width: "100%" }}
-                  presets={rangePresets}
-                  defaultValue={[dayjs().add(-30, "d"), dayjs().add(+30, "d")]}
-                  onChange={onRangeChange}
-                />
-              </Col>
-              <Col span={3}>
-                <Button
-                  style={{
-                    background: "#1890FD",
-                    color: "white",
-                  }}
-                  onClick={() => handleFilter()}
-                >
-                  Kết quả
-                </Button>
-              </Col>
-              <Col span={3}>
-                <Button
-                  style={{
-                    background: "#1890FD",
-                    color: "white",
-                  }}
-                  onClick={() => create()}
-                >
-                  Tạo mới
-                </Button>
-              </Col>
-            </Row>
+                    presets={rangePresets}
+                    defaultValue={[
+                      dayjs().add(-30, "d"),
+                      dayjs().add(+30, "d"),
+                    ]}
+                    onChange={onRangeChange}
+                  />
+                </Col>
+              </Row>
+              <Row
+                gutter={16}
+                style={{ flex: 1, flexDirection: "row", float: "right" }}
+              >
+                <Col span={24} style={{ flex: 1, float: "left" }}>
+                  <Form.Item label="Trạng thái" name="project_status_search">
+                    <Select
+                      size="large"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                    >
+                      {listselect_project_status.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                {/* <Col span={8}>
+                  <Form.Item label="Nhân viên" name="project_employee_search">
+                    <Select
+                      size="large"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                    >
+                      <Option>
+                        <div className="demo-option-label-item">AAA</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+                </Col> */}
+                {/* <Col span={8}>
+                  <Form.Item label="Hạng mục" name="project_work_item">
+                    <Select
+                      size="large"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                    >
+                      {listselect_project_work_item.map((item, index) => {
+                        return (
+                          <Option value={item} label={item} key={index}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col> */}
+              </Row>
+            </Form>
           </div>
         }
       >
@@ -298,7 +396,7 @@ const Project_table = () => {
             ),
             rowExpandable: (record) => record.project_id !== "Not Expandable",
           }}
-          dataSource={projects}
+          dataSource={data}
           size="small"
           bordered
           pagination={{

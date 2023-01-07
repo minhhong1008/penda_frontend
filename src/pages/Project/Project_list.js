@@ -28,6 +28,7 @@ export const listselect_project_review = [
 ];
 export const listselect_project_type = [
   "Giao việc",
+  "Chủ động",
   "QT - CB",
   "QT 0 CB",
   "CB 0 QT",
