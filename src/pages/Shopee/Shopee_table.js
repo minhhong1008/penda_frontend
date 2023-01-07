@@ -58,9 +58,7 @@ const Shopee_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.shopee_id)}`)
-          }
+         
         >
           {text}
         </a>
@@ -303,6 +301,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.shopee_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={shopees}
                 rowSelection={rowSelection}

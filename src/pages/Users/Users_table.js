@@ -25,7 +25,7 @@ const Users_table = () => {
       title: "Tên",
       dataIndex: "users_name",
       key: "users_name",
-      render: (text, record) => (
+      /* render: (text, record) => (
         <a
           onClick={() =>
             history.push(`table/${encodeURIComponent(record.users_id)}`)
@@ -33,7 +33,7 @@ const Users_table = () => {
         >
           {text}
         </a>
-      ),
+      ), */
     },
     {
       title: "Giới tính",
@@ -44,6 +44,11 @@ const Users_table = () => {
       title: "CCCD",
       dataIndex: "users_passport",
       key: "users_passport",
+    },
+    {
+      title: "Số Bank",
+      dataIndex: "users_banknumber",
+      key: "users_banknumber",
     },
     {
       title: "Ngày sinh",
@@ -125,7 +130,15 @@ const Users_table = () => {
         "Thử việc",
       ].indexOf(users_function) == -1 ? (
         <Card type="inner">
-          <Table columns={columns} dataSource={userss}></Table>
+          <Table 
+           onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                history.push(`table/${encodeURIComponent(record.users_id)}`);
+              },
+            };
+          }}
+          columns={columns} dataSource={userss}></Table>
         </Card>
       ) : null}
     </div>

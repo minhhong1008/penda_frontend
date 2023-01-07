@@ -8,12 +8,22 @@ const Users_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>TRẠNG THÁI</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            TRẠNG THÁI
+          </strong>
         </div>
       ),
       dataIndex: "class",
       key: "class",
-      render: (text) => <a onClick={() => history.push(`users_class/table?status=${encodeURIComponent(text)}`)}>{text}</a>,
+      /* render: (text) => (
+        <a
+          onClick={() =>
+            history.push(`users_class/table?status=${encodeURIComponent(text)}`)
+          }
+        >
+          {text}
+        </a>
+      ), */
     },
     {
       title: (
@@ -24,7 +34,6 @@ const Users_class = () => {
       dataIndex: "content",
       key: "content",
     },
-    
   ];
   const data = [
     {
@@ -38,30 +47,40 @@ const Users_class = () => {
       content: "Đang hoạt động",
     },
     {
-        key: "2",
-        class: "Restrict",
-        content: "Tạm dừng",
-        
-      },
-      {
-        key: "3",
-        class: "Suspened",
-        content: "Tạm đình chỉ",
-        count_account: "334",
-        users_vn: "334",
-      },
-      {
-        key: "4",
-        class: "Disable",
-        content: "Đã nghỉ việc",
-       
-      },
+      key: "2",
+      class: "Restrict",
+      content: "Tạm dừng",
+    },
+    {
+      key: "3",
+      class: "Suspened",
+      content: "Tạm đình chỉ",
+      count_account: "334",
+      users_vn: "334",
+    },
+    {
+      key: "4",
+      class: "Disable",
+      content: "Đã nghỉ việc",
+    },
   ];
   return (
     <div>
       <Card title="BẢNG TÀI KHOẢN THEO  USERS">
         <Card type="inner">
-          <Table columns={columns} dataSource={data}></Table>
+          <Table
+            onRow={(text, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  history.push(
+                    `users_class/table?status=${encodeURIComponent(text.class)}`
+                  );
+                },
+              };
+            }}
+            columns={columns}
+            dataSource={data}
+          ></Table>
         </Card>
       </Card>
     </div>

@@ -55,9 +55,7 @@ const Bank_table = () => {
             background: "#1c84c6",
             color: "white",
           }}
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.bank_id)}`)
-          }
+         
         >
           {text}
         </a>
@@ -297,6 +295,13 @@ const Bank_table = () => {
           >
             <Card type="inner">
               <Table
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.bank_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={banks}
                 rowSelection={rowSelection}

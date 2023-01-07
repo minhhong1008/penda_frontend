@@ -41,9 +41,7 @@ const Project_class = () => {
       key: "users_name",
       render: (text) => (
         <a
-          onClick={() =>
-            history.push(`project_class/table?class=${encodeURIComponent(text)}`)
-          }
+          
         >
           {text}
         </a>
@@ -93,6 +91,17 @@ const Project_class = () => {
             title="BẢNG KẾ HOẠCH"
            >
               <Table
+              onRow={(text, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(
+                      `project_class/table?class=${encodeURIComponent(
+                        text.class
+                      )}`
+                    );
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={userss}
                 pagination={{

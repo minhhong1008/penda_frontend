@@ -48,9 +48,7 @@ import {
             color: "white",
           }}
           
-            onClick={() =>
-              history.push(`table/${encodeURIComponent(record.customer_id)}`)
-            }
+           
           >
             {text}
           </a>
@@ -297,6 +295,13 @@ import {
             >
               <Card type="inner">
                 <Table
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(`table/${encodeURIComponent(record.customer_id)}`);
+                    },
+                  };
+                }}
                   columns={columns}
                   dataSource={customers}
                   pagination={{

@@ -177,6 +177,13 @@ const Salary_table = () => {
       ].indexOf(users_function) == -1 ? (
         <Card type="inner">
           <Table
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                history.push(`table/${encodeURIComponent(record.bill_id)}`);
+              },
+            };
+          }}
             columns={columns}
             dataSource={data}
             bordered

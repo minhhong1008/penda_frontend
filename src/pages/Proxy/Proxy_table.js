@@ -57,9 +57,7 @@ const Proxy_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.proxy_id)}`)
-          }
+          
         >
           {text}
         </a>
@@ -302,6 +300,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+               onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.proxy_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={proxys}
                 rowSelection={rowSelection}

@@ -57,9 +57,7 @@ const Facebook_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.facebook_id)}`)
-          }
+         
         >
           {text}
         </a>
@@ -303,6 +301,13 @@ const Facebook_table = () => {
           >
             <Card type="inner">
               <Table
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.facebook_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={facebooks}
                 rowSelection={rowSelection}

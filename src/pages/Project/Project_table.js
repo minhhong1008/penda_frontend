@@ -200,9 +200,7 @@ const Project_table = () => {
       width: 1,
       render: (text, record) => (
         <a
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record._id)}`)
-          }
+         
         >
           {text}
         </a>
@@ -228,6 +226,15 @@ const Project_table = () => {
       width: 3,
       sorter: (a, b) => {
         return a.project_content?.localeCompare(b.project_content);
+      },
+    },
+    {
+      title: "SỐ LƯỢNG",
+      dataIndex: "project_number",
+      key: "project_number",
+      width: 1,
+      sorter: (a, b) => {
+        return a.project_number?.localeCompare(b.project_number);
       },
     },
     {
@@ -273,7 +280,7 @@ const Project_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.project_status?.localeCompare(b.project_status);
+        return a.project_type?.localeCompare(b.project_type);
       },
     },
     {
@@ -417,10 +424,10 @@ const Project_table = () => {
       project_date_start: dayjs()
         .add(1, "d")
         .format("YYYY-MM-DD"),
-      project_processing: "Bắt đầu",
       project_date_end: dayjs()
         .add(2, "d")
         .format("YYYY-MM-DD"),
+      project_processing: "Bắt đầu",
       project_owner: "Phòng sản xuất",
       project_work_item: "Sản xuất",
       project_work: "Hoạt động",
@@ -439,7 +446,7 @@ const Project_table = () => {
   const getListProject_Table = async () => {
     let filter = [
       dayjs()
-        .add(-30, "d")
+        .add(-15, "d")
         .format("YYYY-MM-DD"),
       dayjs()
         .add(15, "d")
@@ -457,7 +464,7 @@ const Project_table = () => {
       to: filter[1],
     });
 
-    // Hiện những cái quá hạn mà chưa hoàn thành
+    // Hiện lên bôi đỏ những cái quá hạn mà chưa hoàn thành
     data.forEach((item) => {
       if (
         dayjs(item.project_date_end).format("YYYY-MM-DD") <
@@ -609,7 +616,7 @@ const Project_table = () => {
         }
       >
         <Table
-          columns={columns}
+          // Hiện thêm 1 dòng note khi click vào đấu + của từng dòng
           expandable={{
             expandedRowRender: (record) => (
               <p
@@ -622,6 +629,16 @@ const Project_table = () => {
             ),
             rowExpandable: (record) => record.project_id !== "Not Expandable",
           }}
+          // click row sẽ chuyển đến ebay_info
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                history.push(`table/${encodeURIComponent(record.project_id)}`);
+              },
+            };
+          }}
+          
+          columns={columns}
           dataSource={data}
           size="small"
           bordered

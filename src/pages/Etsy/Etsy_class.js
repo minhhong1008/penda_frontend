@@ -31,15 +31,7 @@ const Etsy_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-      render: (text) => (
-        <a
-          onClick={() =>
-            history.push(`etsy_class/table?class=${encodeURIComponent(text)}`)
-          }
-        >
-          {text}
-        </a>
-      ),
+     
     },
     {
       title: (
@@ -53,7 +45,9 @@ const Etsy_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>ĐÃ HOÀN THÀNH</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            ĐÃ HOÀN THÀNH
+          </strong>
         </div>
       ),
       dataIndex: "content_complete",
@@ -80,7 +74,9 @@ const Etsy_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN KIỂM TRA & XỬ LÝ</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            CẦN KIỂM TRA & XỬ LÝ
+          </strong>
         </div>
       ),
       dataIndex: "content_check",
@@ -89,7 +85,9 @@ const Etsy_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN THỰC HIỆN</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            CẦN THỰC HIỆN
+          </strong>
         </div>
       ),
       dataIndex: "content_action",
@@ -341,8 +339,8 @@ const Etsy_class = () => {
       ),
       content_action: (
         <div>
-          <strong> Verify full...</strong> <br></br> Tạo drap, tiếp tục chăm tài khoản<br></br>Chuyển Lớp
-          10
+          <strong> Verify full...</strong> <br></br> Tạo drap, tiếp tục chăm tài
+          khoản<br></br>Chuyển Lớp 10
         </div>
       ),
     },
@@ -358,15 +356,15 @@ const Etsy_class = () => {
       content_time: <div>1 ngày</div>,
       content_check: (
         <div>
-        <strong>Kiểm tra seller</strong>
+          <strong>Kiểm tra seller</strong>
 
-        <br></br>
-      </div>
+          <br></br>
+        </div>
       ),
       content_action: (
         <div>
-          <strong> List sản phẩm</strong> <br></br> Tạo drap, tiếp tục chăm tài khoản<br></br>Chuyển Lớp
-          11
+          <strong> List sản phẩm</strong> <br></br> Tạo drap, tiếp tục chăm tài
+          khoản<br></br>Chuyển Lớp 11
         </div>
       ),
     },
@@ -404,11 +402,13 @@ const Etsy_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Chuyển tài khoản về phòng kinh doanh</strong>
@@ -459,11 +459,13 @@ const Etsy_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>
@@ -486,11 +488,13 @@ const Etsy_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Bảo mật tài khoản của phòng kinh doanh</strong>
@@ -511,11 +515,13 @@ const Etsy_class = () => {
         </div>
       ),
       content_time: <div>1 - 15 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Giao bán tài khoản</strong>
@@ -536,11 +542,13 @@ const Etsy_class = () => {
         </div>
       ),
       content_time: <div>3 giờ</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Giao tài khoản cho khách hàng</strong>
@@ -563,11 +571,13 @@ const Etsy_class = () => {
           <strong> ĐÃ BÁN TÀI KHOẢN</strong>
         </div>
       ),
-      content_action: <div>
-      <strong>Chuyển tài khoản sang phòng bảo hành</strong>
-      <br></br> 
-      <br></br>
-    </div>,
+      content_action: (
+        <div>
+          <strong>Chuyển tài khoản sang phòng bảo hành</strong>
+          <br></br>
+          <br></br>
+        </div>
+      ),
     },
     {
       key: "20",
@@ -580,11 +590,13 @@ const Etsy_class = () => {
       ),
       content_time: <div>1 - 2 ngày</div>,
       content_check: "Kiểm tra lỗi",
-      content_action:<div>
-      <strong>Xử lý lỗi và chuyển tài khoản về lớp cũ</strong>
-      <br></br> 
-      <br></br>
-    </div>,
+      content_action: (
+        <div>
+          <strong>Xử lý lỗi và chuyển tài khoản về lớp cũ</strong>
+          <br></br>
+          <br></br>
+        </div>
+      ),
     },
     {
       key: "21",
@@ -674,9 +686,11 @@ const Etsy_class = () => {
       key: "30",
       class: "Lớp 30",
       etsy_count: "0",
-      content_complete: <div>
-      <strong> CHUYỂN PHÒNG</strong>
-    </div>,
+      content_complete: (
+        <div>
+          <strong> CHUYỂN PHÒNG</strong>
+        </div>
+      ),
       content_check: "",
       content_action: "",
     },
@@ -711,6 +725,17 @@ const Etsy_class = () => {
           <Tabs.TabPane tab="BẢNG TÀI KHOẢN THEO LỚP" key="1">
             <Card type="inner">
               <Table
+                onRow={(text, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(
+                        `etsy_class/table?class=${encodeURIComponent(
+                          text.class
+                        )}`
+                      );
+                    },
+                  };
+                }}
                 columns={columns}
                 dataSource={dataClass}
                 pagination={{

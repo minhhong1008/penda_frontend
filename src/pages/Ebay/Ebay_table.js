@@ -496,7 +496,7 @@ const Ebay_table = () => {
                       history.push(
                         `table/${encodeURIComponent(record.ebay_id)}`
                       );
-                    }, // click row
+                    }, // click row vào ebay_info
                   };
                 }}
                 columns={columns}

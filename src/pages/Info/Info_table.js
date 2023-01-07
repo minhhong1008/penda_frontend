@@ -57,9 +57,7 @@ const Info_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.info_id)}`)
-          }
+         
         >
           {text}
         </a>
@@ -302,6 +300,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+               onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.info_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={infos}
                 rowSelection={rowSelection}

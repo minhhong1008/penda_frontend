@@ -60,9 +60,7 @@ const Tiktok_table = () => {
             background: "#1c84c6",
             color: "white",
           }}
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.tiktok_id)}`)
-          }
+          
         >
           {text}
         </a>
@@ -302,6 +300,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.tiktok_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={tiktoks}
                 rowSelection={rowSelection}

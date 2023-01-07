@@ -33,7 +33,7 @@ import {
 } from "./Project_list";
 
 import { getprojectInfo, updateprojectInfo } from "../../api/project/index";
-// dùng update các field trong bảng project_info
+//Upload ảnh
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -59,6 +59,7 @@ const Project_info = () => {
   const [disabled, setDisabled] = useState(false);
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    //Upload ảnh
     let project_file = [];
     fileList?.map((item) => {
       let fileUrl = "";
@@ -78,6 +79,7 @@ const Project_info = () => {
     );
     const newValue = {
       ...values,
+      //Upload ảnh
       project_image_url: project_file.length > 0 ? project_file.join(",") : "",
       project_error: values?.project_error
         ? values.project_error.join(",")
@@ -121,9 +123,7 @@ const Project_info = () => {
     setNoteValue(data.project_note);
     setListproject_employee(data.listselect_project_employee);
     setListproject_type(newData.project_type);
-    
-
-
+    //Upload ảnh
     if (data?.project_image_url) {
       let dataImage = [];
       let imageArr = data.project_image_url.split(",");

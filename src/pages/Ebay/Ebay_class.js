@@ -32,7 +32,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-      render: (text) => (
+     /*  render: (text) => (
         <a
           onClick={() =>
             history.push(`ebay_class/table?class=${encodeURIComponent(text)}`)
@@ -40,7 +40,7 @@ const Ebay_class = () => {
         >
           {text}
         </a>
-      ),
+      ), */
     },
     {
       title: (
@@ -726,6 +726,14 @@ const Ebay_class = () => {
           <Tabs.TabPane tab="BẢNG TÀI KHOẢN THEO LỚP" key="1">
             <Card type="inner">
               <Table
+              onRow={(text, rowIndex) => {
+                
+                return {
+                  onClick: (event) => {
+                    history.push(`ebay_class/table?class=${encodeURIComponent(text.class)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={dataClass}
                 pagination={{

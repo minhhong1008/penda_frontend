@@ -33,9 +33,7 @@ const Paypal_class = () => {
       key: "class",
       render: (text) => (
         <a
-          onClick={() =>
-            history.push(`paypal_class/table?class=${encodeURIComponent(text)}`)
-          }
+          
         >
           {text}
         </a>
@@ -711,6 +709,17 @@ const Paypal_class = () => {
           <Tabs.TabPane tab="BẢNG TÀI KHOẢN THEO LỚP" key="1">
             <Card type="inner">
               <Table
+              onRow={(text, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(
+                      `sim_paypal/table?class=${encodeURIComponent(
+                        text.class
+                      )}`
+                    );
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={dataClass}
                 pagination={{

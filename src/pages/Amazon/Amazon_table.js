@@ -53,9 +53,7 @@ const Amazon_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.amazon_id)}`)
-          }
+          
         >
           {text}
         </a>
@@ -298,6 +296,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.amazon_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={amazons}
                 rowSelection={rowSelection}

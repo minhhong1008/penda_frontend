@@ -57,9 +57,7 @@ const Paypal_table = () => {
           color: "white",
         }}
         
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.paypal_id)}`)
-          }
+          
         >
           {text}
         </a>
@@ -302,6 +300,13 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
+               onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    history.push(`table/${encodeURIComponent(record.paypal_id)}`);
+                  },
+                };
+              }}
                 columns={columns}
                 dataSource={paypals}
                 rowSelection={rowSelection}
