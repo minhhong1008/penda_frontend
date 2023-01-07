@@ -83,6 +83,20 @@ const SideBarpersonnel = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
+          <Menu.Item key="65">
+            <NavLink to="/personnel/project_class">
+              <span
+                className="icon"
+                style={{
+                  background: page === "personnel/project_class" ? color : "",
+                }}
+              >
+                {dashboard}
+              </span>
+              <span className="label">Kế hoạch</span>
+            </NavLink>
+          </Menu.Item>
+
           <Menu.Item key="3">
             <NavLink to="/personnel/review_class">
               <span

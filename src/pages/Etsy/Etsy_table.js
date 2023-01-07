@@ -60,7 +60,7 @@ const Etsy_table = () => {
         </a>
       ),
       sorter: (a, b) => {
-        return a.etsy_id.localeCompare(b.etsy_id);
+        return a.etsy_id?.localeCompare(b.etsy_id);
       },
     },
     {
@@ -68,7 +68,7 @@ const Etsy_table = () => {
       dataIndex: "etsy_user",
       key: "etsy_user",
       sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_user);
+        return a.etsy_user?.localeCompare(b.etsy_user);
       },
     },
     {
@@ -140,7 +140,7 @@ const Etsy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_device);
+        return a.etsy_processing?.localeCompare(b.etsy_processing);
       },
     },
     {
@@ -173,7 +173,7 @@ const Etsy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_class);
+        return a.etsy_error?.localeCompare(b.etsy_error);
       },
     },
 
@@ -207,7 +207,7 @@ const Etsy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_employee);
+        return a.etsy_employee?.localeCompare(b.etsy_employee);
       },
     },
 
@@ -216,7 +216,7 @@ const Etsy_table = () => {
       dataIndex: "etsy_note",
       key: "etsy_note",
       sorter: (a, b) => {
-        return a.etsy_user.localeCompare(b.etsy_note);
+        return a.etsy_note?.localeCompare(b.etsy_note);
       },
     },
   ];

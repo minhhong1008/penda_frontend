@@ -66,7 +66,7 @@ const Facebook_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.facebook_id.localeCompare(b.facebook_id);
+        return a.facebook_id?.localeCompare(b.facebook_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Facebook_table = () => {
       dataIndex: "facebook_user",
       key: "facebook_user",
       sorter: (a, b) => {
-        return a.facebook_user.localeCompare(b.facebook_user);
+        return a.facebook_user?.localeCompare(b.facebook_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Facebook_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.facebook_user.localeCompare(b.facebook_device);
+        return a.facebook_processing?.localeCompare(b.facebook_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Facebook_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.facebook_user.localeCompare(b.facebook_class);
+        return a.facebook_error?.localeCompare(b.facebook_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Facebook_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.facebook_user.localeCompare(b.facebook_employee);
+        return a.facebook_employee?.localeCompare(b.facebook_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Facebook_table = () => {
       dataIndex: "facebook_note",
       key: "facebook_note",
       sorter: (a, b) => {
-        return a.facebook_user.localeCompare(b.facebook_note);
+        return a.facebook_note?.localeCompare(b.facebook_note);
       },
     },
   ];

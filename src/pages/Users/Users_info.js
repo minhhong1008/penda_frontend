@@ -321,13 +321,13 @@ const Users_info = () => {
 
                   <Row gutter={16}>
                     <Col span={18}>
-                      <Form.Item label="Quê quán........" name="users_origin">
-                        <Input placeholder="I_1000" />
+                      <Form.Item label="Quê quán" name="users_origin">
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="code" name="users_code">
-                        <Input placeholder="100000" />
+                        <Input  />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -923,7 +923,7 @@ const Users_info = () => {
                 </Col>
                 <br></br>
                 <br></br>
-                {renderTimeLine()}
+                {/* {renderTimeLine()} */}
               </Card>
             </Col>
           </Row>

@@ -63,7 +63,7 @@ const Bank_table = () => {
         </a>
       ),
       sorter: (a, b) => {
-        return a.bank_id.localeCompare(b.bank_id);
+        return a.bank_id?.localeCompare(b.bank_id);
       },
     },
     {
@@ -71,7 +71,7 @@ const Bank_table = () => {
       dataIndex: "bank_user",
       key: "bank_user",
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_user);
+        return a.bank_user?.localeCompare(b.bank_user);
       },
     },
     {
@@ -143,7 +143,7 @@ const Bank_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_device);
+        return a.bank_processing?.localeCompare(b.bank_processing);
       },
     },
     {
@@ -176,7 +176,7 @@ const Bank_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_class);
+        return a.bank_error?.localeCompare(b.bank_error);
       },
     },
 
@@ -210,7 +210,7 @@ const Bank_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_employee);
+        return a.bank_employee?.localeCompare(b.bank_employee);
       },
     },
 
@@ -219,7 +219,7 @@ const Bank_table = () => {
       dataIndex: "bank_note",
       key: "bank_note",
       sorter: (a, b) => {
-        return a.bank_user.localeCompare(b.bank_note);
+        return a.bank_note?.localeCompare(b.bank_note);
       },
     },
   ];

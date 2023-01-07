@@ -66,7 +66,7 @@ const Mail_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.mail_id.localeCompare(b.mail_id);
+        return a.mail_id?.localeCompare(b.mail_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Mail_table = () => {
       dataIndex: "mail_user",
       key: "mail_user",
       sorter: (a, b) => {
-        return a.mail_user.localeCompare(b.mail_user);
+        return a.mail_user?.localeCompare(b.mail_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Mail_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.mail_user.localeCompare(b.mail_device);
+        return a.mail_processing?.localeCompare(b.mail_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Mail_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.mail_user.localeCompare(b.mail_class);
+        return a.mail_error?.localeCompare(b.mail_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Mail_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.mail_user.localeCompare(b.mail_employee);
+        return a.mail_employee?.localeCompare(b.mail_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Mail_table = () => {
       dataIndex: "mail_note",
       key: "mail_note",
       sorter: (a, b) => {
-        return a.mail_user.localeCompare(b.mail_note);
+        return a.mail_note?.localeCompare(b.mail_note);
       },
     },
   ];

@@ -62,7 +62,7 @@ const Amazon_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.amazon_id.localeCompare(b.amazon_id);
+        return a.amazon_id?.localeCompare(b.amazon_id);
       },
     },
     {
@@ -70,7 +70,7 @@ const Amazon_table = () => {
       dataIndex: "amazon_user",
       key: "amazon_user",
       sorter: (a, b) => {
-        return a.amazon_user.localeCompare(b.amazon_user);
+        return a.amazon_user?.localeCompare(b.amazon_user);
       },
     },
     {
@@ -142,7 +142,7 @@ const Amazon_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.amazon_user.localeCompare(b.amazon_device);
+        return a.amazon_processing?.localeCompare(b.amazon_processing);
       },
     },
     {
@@ -176,7 +176,7 @@ const Amazon_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.amazon_user.localeCompare(b.amazon_class);
+        return a.amazon_error?.localeCompare(b.amazon_error);
       },
     },
 
@@ -211,7 +211,7 @@ const Amazon_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.amazon_user.localeCompare(b.amazon_employee);
+        return a.amazon_employee?.localeCompare(b.amazon_employee);
       },
     },
 
@@ -220,7 +220,7 @@ const Amazon_table = () => {
       dataIndex: "amazon_note",
       key: "amazon_note",
       sorter: (a, b) => {
-        return a.amazon_user.localeCompare(b.amazon_note);
+        return a.amazon_note?.localeCompare(b.amazon_note);
       },
     },
   ];

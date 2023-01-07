@@ -40,7 +40,7 @@ const Bill_table = () => {
   const rangePresets = [
     {
       label: "Default",
-      value: [dayjs().add(- 30, "d"), dayjs().add( 30, "d")],
+      value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
     },
     {
       label: "Last 30 Days",
@@ -183,7 +183,6 @@ const Bill_table = () => {
     {
       title: "Thời hạn",
       dataIndex: "bill_expiry_date",
-      
     },
     {
       title: "Tính năng",
@@ -491,7 +490,7 @@ const Bill_table = () => {
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Web" name="bill_contact_social1">
-                        <Input/>
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={8}>

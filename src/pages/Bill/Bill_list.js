@@ -19,6 +19,7 @@ export const listselect_bill_owner = [
     "Mua mail",
     "Thanh toán lương, thưởng hoa hồng",
     "Chi phí văn phòng",
+    "Chi phí dịch vụ tài chính",
     "Chi phí vận chuyển",
     "Chi phí checkout, tracking",
     "Chi phí Kicksold",

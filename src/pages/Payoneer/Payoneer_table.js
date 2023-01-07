@@ -66,7 +66,7 @@ const Payoneer_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.payoneer_id.localeCompare(b.payoneer_id);
+        return a.payoneer_id?.localeCompare(b.payoneer_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Payoneer_table = () => {
       dataIndex: "payoneer_user",
       key: "payoneer_user",
       sorter: (a, b) => {
-        return a.payoneer_user.localeCompare(b.payoneer_user);
+        return a.payoneer_user?.localeCompare(b.payoneer_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Payoneer_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.payoneer_user.localeCompare(b.payoneer_device);
+        return a.payoneer_processing?.localeCompare(b.payoneer_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Payoneer_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.payoneer_user.localeCompare(b.payoneer_class);
+        return a.payoneer_error?.localeCompare(b.payoneer_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Payoneer_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.payoneer_user.localeCompare(b.payoneer_employee);
+        return a.payoneer_employee?.localeCompare(b.payoneer_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Payoneer_table = () => {
       dataIndex: "payoneer_note",
       key: "payoneer_note",
       sorter: (a, b) => {
-        return a.payoneer_user.localeCompare(b.payoneer_note);
+        return a.payoneer_note?.localeCompare(b.payoneer_note);
       },
     },
   ];

@@ -66,7 +66,7 @@ const Device_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.device_id.localeCompare(b.device_id);
+        return a.device_id?.localeCompare(b.device_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Device_table = () => {
       dataIndex: "device_user",
       key: "device_user",
       sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_user);
+        return a.device_user?.localeCompare(b.device_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Device_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_device);
+        return a.device_processing?.localeCompare(b.device_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Device_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_class);
+        return a.device_error?.localeCompare(b.device_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Device_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_employee);
+        return a.device_employee?.localeCompare(b.device_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Device_table = () => {
       dataIndex: "device_note",
       key: "device_note",
       sorter: (a, b) => {
-        return a.device_user.localeCompare(b.device_note);
+        return a.device_note?.localeCompare(b.device_note);
       },
     },
   ];

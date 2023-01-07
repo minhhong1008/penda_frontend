@@ -57,7 +57,7 @@ import {
           
         ),
         sorter: (a, b) => {
-          return a.customer_id.localeCompare(b.customer_id);
+          return a.customer_id?.localeCompare(b.customer_id);
         },
       },
       {
@@ -65,7 +65,7 @@ import {
         dataIndex: "customer_user",
         key: "customer_user",
         sorter: (a, b) => {
-          return a.customer_user.localeCompare(b.customer_user);
+          return a.customer_user?.localeCompare(b.customer_user);
         },
       },
       {
@@ -73,7 +73,7 @@ import {
         dataIndex: "customer_phone1",
         key: "customer_phone1",
         sorter: (a, b) => {
-          return a.customer_phone1.localeCompare(b.customer_phone1);
+          return a.customer_phone1?.localeCompare(b.customer_phone1);
         },
       },
       {
@@ -149,7 +149,7 @@ import {
           );
         },
         sorter: (a, b) => {
-          return a.customer_user.localeCompare(b.customer_device);
+          return a.customer_processing?.localeCompare(b.customer_processing);
         },
       },
       {
@@ -183,7 +183,7 @@ import {
           );
         },
         sorter: (a, b) => {
-          return a.customer_user.localeCompare(b.customer_class);
+          return a.customer_error?.localeCompare(b.customer_error);
         },
       },
   
@@ -218,7 +218,7 @@ import {
           );
         },
         sorter: (a, b) => {
-          return a.customer_user.localeCompare(b.customer_employee);
+          return a.customer_employee?.localeCompare(b.customer_employee);
         },
       },
   
@@ -227,7 +227,7 @@ import {
         dataIndex: "customer_note",
         key: "customer_note",
         sorter: (a, b) => {
-          return a.customer_user.localeCompare(b.customer_note);
+          return a.customer_note?.localeCompare(b.customer_note);
         },
       },
     ];

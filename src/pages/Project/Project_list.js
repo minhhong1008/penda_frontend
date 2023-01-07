@@ -14,204 +14,44 @@ import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
 
-export const listselect_view_acc = [
-  {
-    title: "DEVICE",
-    thumbnail: icondevice,
-    value: "",
-  },
-  {
-    title: "PROXY",
-    thumbnail: iconproxy,
-    value: "",
-  },
-  {
-    title: "INFO",
-    thumbnail: iconinfo,
-    value: "",
-  },
-  {
-    title: "project",
-    thumbnail: iconinfo,
-    value: "",
-  },
-  {
-    title: "MAIL",
-    thumbnail: iconmail,
-    value: "",
-  },
-  {
-    title: "SIM",
-    thumbnail: iconsim,
-    value: "",
-  },
-  {
-    title: "BANK",
-    thumbnail: iconbank,
-    value: "",
-  },
-  {
-    title: "PAYONEER",
-    thumbnail: iconpayoneer,
-    value: "",
-  },
-  {
-    title: "PAYPAL",
-    thumbnail: iconpaypal,
-    value: "",
-  },
-  {
-    title: "PINGPONG",
-    thumbnail: iconpingpong,
-    value: "",
-  },
-  {
-    title: "EBAY",
-    thumbnail: iconebay,
-    value: "",
-  },
-  {
-    title: "ETSY",
-    thumbnail: iconetsy,
-    value: "",
-  },
-  {
-    title: "AMAZON",
-    thumbnail: iconamazon,
-    value: "",
-  },
-  {
-    title: "SHOPEE",
-    thumbnail: iconshopee,
-    value: "",
-  },
-  {
-    title: "FACEBOOK",
-    thumbnail: iconfacebook,
-    value: "",
-  },
-  {
-    title: "TIKTOK",
-    thumbnail: icontiktok,
-    value: "",
-  },
+export const listselect_project_error = [
+  "Gặp sự cố",
 ];
-
-export const listselect_project_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
 
 export const listselect_project_processing = [
-  "Login mail",
-  "Verify Mail",
-  "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify Full",
-  "Avatar",
-  "Add to cart",
-  "Seller",
-  "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
-  "Restrict",
-  "Suspended",
+  "Bắt đầu",
+  "Thực hiện",
+  "Đã xong",
+  "Kiểm tra",
+  "Hoàn thành",
 ];
 
-export const listselect_project_plan = [
-  "Phone",
-  "PC",
-  "Antidetect",
-  "Gologin",
-  "VPS",
-  "Windows 10",
-  "Windows 11",
-  "MAC",
-  "Ubuntu",
-  "Chrome",
-  "Firefox",
-  "Edge",
-  "Safari",
-  "USB 4G",
-  "Sproxy 4G",
-  "Proxy",
-  "Info real",
-  "Info gen",
-  "Sim real",
-  "Sim otp",
-  "Bank real",
-  "Bank gen",
-  "Quy trình 1",
-  "Quy trình 2",
-  "Quy trình 3",
-  "Quy trình 4",
-  "Quy trình 5",
-  "Quy trình 6",
-  "Quy trình 7",
-  "Quy trình 8",
-  "Quy trình 9",
-  "Quy trình 10",
-  "Quy trình 11",
-  "Quy trình 12",
+export const listselect_project_work = [
+  "Tài nguyên",
+  "Dữ liệu",
+  "Thiết bị",
+  "Hoạt động",
 ];
-export const listselect_project_block = [
-  "Team 1",
-  "Team 2",
-  "Team 3",
-  "Team 4",
-  "Block 1",
-  "Block 2",
-  "Block 3",
-  "Block 4",
-  "Block 5",
-  "Block 6",
-  "Block 7",
-  "Block 8",
-  "Block 9",
-  "Block 10",
-  "Block 11",
-  "Block 12",
-  "Block 13",
-  "Block 14",
-  "Block 15",
-  "Block 16",
-  "Block 17",
-  "Block 18",
-  "Block 19",
-  "Block 20",
-  "Block 21",
-  "Block 22",
-  "Block 23",
-  "Block 24",
-  "Block 25",
+export const listselect_project_review = [
+  "Không hoàn thành",
+  "Hoàn thành",
+  "Hoàn thành xuất sắc",
 ];
 export const listselect_project_type = [
-  "VN",
-  "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
-
+  "Giao việc",
+  "QT - CB",
+  "QT 0 CB",
+  "CB 0 QT",
+  "0 CB 0 QT",
+  
 ];
 
-export const listselect_project_sell_status = [
-  "Đang chuẩn bị",
-  "Đủ điều kiện bán",
-  "Bán tài khoản",
-  "Đang giao dịch",
-  "Bán thành công",
-  "Bảo hành",
-  "Hết bảo hành",
+export const listselect_project_work_item = [
+  "Tài chính",
+  "Kinh doanh",
+  "Sản xuất",
+  "Kế hoạch",
+  "Nhân sự",
 ];
 
 export const listselect_project_owner = [
@@ -223,147 +63,12 @@ export const listselect_project_owner = [
 ];
 
 export const listselect_project_status = [
-    "Null",
-  "Live",
-  "Active",
-  "Error",
-  "Restrict",
-  "Suspended",
+  "Bắt đầu",
+  "Chưa hoàn thành",
+  "Đang vướng mắc",
+  "Đã hoàn thành",
+  "Không cần làm",
 ];
-
-export const listselect_project_class = [
-  {
-    title: "Lớp 1 New",
-    value: "Lớp 1",
-  },
-  {
-    title: "Lớp 2",
-    value: "Lớp 2",
-  },
-  {
-    title: "Lớp 3",
-    value: "Lớp 3",
-  },
-  {
-    title: "Lớp 4",
-    value: "Lớp 4",
-  },
-  {
-    title: "Lớp 5",
-    value: "Lớp 5",
-  },
-  {
-    title: "Lớp 6",
-    value: "Lớp 6",
-  },
-  {
-    title: "Lớp 7",
-    value: "Lớp 7",
-  },
-  {
-    title: "Lớp 8",
-    value: "Lớp 8",
-  },
-  {
-    title: "Lớp 9 Seller",
-    value: "Lớp 9",
-  },
-  {
-    title: "Lớp 10 List",
-    value: "Lớp 10",
-  },
-  {
-    title: "Lớp 11 List",
-    value: "Lớp 11",
-  },
-  {
-    title: "Lớp 12 Chuyển",
-    value: "Lớp 12",
-  },
-  {
-    title: "Lớp 14",
-    value: "Lớp 14",
-  },
-  {
-    title: "Lớp 15",
-    value: "Lớp 15",
-  },
-  {
-    title: "Lớp 16",
-    value: "Lớp 16",
-  },
-  {
-    title: "Lớp 17",
-    value: "Lớp 17",
-  },
-  {
-    title: "Lớp 18",
-    value: "Lớp 18",
-  },
-  {
-    title: "Lớp 19",
-    value: "Lớp 19",
-  },
-  {
-    title: "Lớp 20 Error",
-    value: "Lớp 20",
-  },
-  {
-    title: "Lớp 21 Buyer Suspended",
-    value: "Lớp 21",
-  },
-  {
-    title: "Lớp 22 Buyer Suspended verify",
-    value: "Lớp 22",
-  },
-  {
-    title: "Lớp 23 Seller restrict",
-    value: "Lớp 23",
-  },
-  {
-    title: "Lớp 24 Seller restrict list",
-    value: "Lớp 24",
-  },
-  {
-    title: "Lớp 25 Seller restrict Sold",
-    value: "Lớp 25",
-  },
-  {
-    title: "Lớp 26 Seller Suspended",
-    value: "Lớp 26",
-  },
-  {
-    title: "Lớp 27 Seller Suspended list",
-    value: "Lớp 27",
-  },
-  {
-    title: "Lớp 28 Seller Suspended Sold",
-    value: "Lớp 28",
-  },
-  {
-    title: "Lớp 29",
-    value: "Lớp 29",
-  },
-  {
-    title: "Lớp 30",
-    value: "Lớp 30",
-  },
-];
-
-//  List danh sách các trường trong bảng DATE
-export const tablelist_project_Date = [
-  {
-    title: "Ngày giao",
-    value: "projectdate_delivery",
-  },
-  {
-    title: "Ngày chuyển lớp",
-    value: "projectdate_nextclass",
-  },
-];
-
-export const listselect_project_fields = [];
-
 
 export const HuongDanProject_info = () => {
   return (
@@ -371,8 +76,8 @@ export const HuongDanProject_info = () => {
       <p>1. project mã EB_12345</p>
       <p>
         1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc
+        bên tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
@@ -384,8 +89,8 @@ export const HuongDanProject_info = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
-        loại acc
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo,
+        phân loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
       <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
@@ -395,8 +100,8 @@ export const HuongDanProject_info = () => {
         loại acc
       </p>
       <p>
-        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai,
+        dùng tạo báo cáo, phân loại acc
       </p>
       <p>
         10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
@@ -425,8 +130,8 @@ export const HuongDanProject_info = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
-        or etsy...
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo
+        project or etsy...
       </p>
       <p>
         Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
@@ -448,8 +153,8 @@ export const HuongDanProject_table = () => {
       <p>1. project mã EB_12345</p>
       <p>
         1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc
+        bên tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
@@ -461,8 +166,8 @@ export const HuongDanProject_table = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
-        loại acc
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo,
+        phân loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
       <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
@@ -472,8 +177,8 @@ export const HuongDanProject_table = () => {
         loại acc
       </p>
       <p>
-        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai,
+        dùng tạo báo cáo, phân loại acc
       </p>
       <p>
         10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
@@ -502,8 +207,8 @@ export const HuongDanProject_table = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
-        or etsy...
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo
+        project or etsy...
       </p>
       <p>
         Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
@@ -525,8 +230,8 @@ export const HuongDanProject_class = () => {
       <p>1. project mã EB_12345</p>
       <p>
         1. project được tạo từ tool - nhập liệu - Chọn EBAY, bảng bên cạnh nhập
-        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc bên
-        tool nhập liệu)
+        user|pass (user: là tên shop project chuẩn bị sẵn, có hướng dẫn tạo acc
+        bên tool nhập liệu)
       </p>
       <p>
         2. Quy trình: là kế hoạch triển khai acc theo các yêu cầu định sẵn. Kế
@@ -538,8 +243,8 @@ export const HuongDanProject_class = () => {
         được suspend ở hạng mục nào, dùng để tạo báo cáo, phân loại acc
       </p>
       <p>
-        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo, phân
-        loại acc
+        4. Loại project: Là tổng quan 1 tài khoản project, dùng để tạo báo cáo,
+        phân loại acc
       </p>
       <p>5. Trạng thái bán: Dùng để phân loại tài khoản của phòng kinh doanh</p>
       <p>6. Sở hữu: Dùng để phân quyền các phòng ban theo acc</p>
@@ -549,8 +254,8 @@ export const HuongDanProject_class = () => {
         loại acc
       </p>
       <p>
-        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai, dùng
-        tạo báo cáo, phân loại acc
+        9. Lớp project: Dùng để xác định tổng quan các hạng mục đã triển khai,
+        dùng tạo báo cáo, phân loại acc
       </p>
       <p>
         10. Upload ảnh: Dùng để upload câu hỏi bảo mật, upload ảnh project
@@ -579,8 +284,8 @@ export const HuongDanProject_class = () => {
       </p>
       <p>Khi ấn lưu - tự động ghi lại lịch sử: user|lớp cũ|ngày tháng</p>
       <p>
-        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo project
-        or etsy...
+        Để tạo 1 acc project or etsy... trên 1 device thì vào device đó ấn tạo
+        project or etsy...
       </p>
       <p>
         Để thay đổi field của nhiều acc 1 lúc, hoặc xem báo cáo cơ bản thì vào
@@ -595,19 +300,3 @@ export const HuongDanProject_class = () => {
     </div>
   );
 };
-
-/*   const listTest1 = () => {
-    let listTest = [];
-    for (var i = 0; i < 10; i++) {
-      listTest.push({
-        title: "Ngày " + i,
-        value: "Số " + i
-      })
-    }
-    return listTest;
-  };
-
-  let a = listTest1();
-
-  console.log(a.map());
-  console.log('hahaha'); */

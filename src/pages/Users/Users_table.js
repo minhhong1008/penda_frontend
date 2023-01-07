@@ -8,7 +8,6 @@ import { getListusersActions } from "../../actions/usersActions";
 
 const Users_table = () => {
   const { users_function } = useSelector((state) => state.auth);
-  const { ebay_owner } = useSelector((state) => state.auth);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const { userss } = useSelector((state) => state.users);

@@ -68,7 +68,7 @@ const Tiktok_table = () => {
         </a>
       ),
       sorter: (a, b) => {
-        return a.tiktok_id.localeCompare(b.tiktok_id);
+        return a.tiktok_id?.localeCompare(b.tiktok_id);
       },
     },
     {
@@ -76,7 +76,7 @@ const Tiktok_table = () => {
       dataIndex: "tiktok_user",
       key: "tiktok_user",
       sorter: (a, b) => {
-        return a.tiktok_user.localeCompare(b.tiktok_user);
+        return a.tiktok_user?.localeCompare(b.tiktok_user);
       },
     },
     {
@@ -148,7 +148,7 @@ const Tiktok_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.tiktok_user.localeCompare(b.tiktok_device);
+        return a.tiktok_processing?.localeCompare(b.tiktok_processing);
       },
     },
     {
@@ -181,7 +181,7 @@ const Tiktok_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.tiktok_user.localeCompare(b.tiktok_class);
+        return a.tiktok_error?.localeCompare(b.tiktok_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Tiktok_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.tiktok_user.localeCompare(b.tiktok_employee);
+        return a.tiktok_employee?.localeCompare(b.tiktok_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Tiktok_table = () => {
       dataIndex: "tiktok_note",
       key: "tiktok_note",
       sorter: (a, b) => {
-        return a.tiktok_user.localeCompare(b.tiktok_note);
+        return a.tiktok_note?.localeCompare(b.tiktok_note);
       },
     },
   ];

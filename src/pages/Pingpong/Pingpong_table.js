@@ -66,7 +66,7 @@ const Pingpong_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.pingpong_id.localeCompare(b.pingpong_id);
+        return a.pingpong_id?.localeCompare(b.pingpong_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Pingpong_table = () => {
       dataIndex: "pingpong_user",
       key: "pingpong_user",
       sorter: (a, b) => {
-        return a.pingpong_user.localeCompare(b.pingpong_user);
+        return a.pingpong_user?.localeCompare(b.pingpong_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Pingpong_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.pingpong_user.localeCompare(b.pingpong_device);
+        return a.pingpong_processing?.localeCompare(b.pingpong_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Pingpong_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.pingpong_user.localeCompare(b.pingpong_class);
+        return a.pingpong_error.localeCompare(b.pingpong_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Pingpong_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.pingpong_user.localeCompare(b.pingpong_employee);
+        return a.pingpong_employee?.localeCompare(b.pingpong_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Pingpong_table = () => {
       dataIndex: "pingpong_note",
       key: "pingpong_note",
       sorter: (a, b) => {
-        return a.pingpong_user.localeCompare(b.pingpong_note);
+        return a.pingpong_note?.localeCompare(b.pingpong_note);
       },
     },
   ];

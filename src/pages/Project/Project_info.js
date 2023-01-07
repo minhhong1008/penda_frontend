@@ -1,38 +1,39 @@
-import {Button,Card,Tabs,Row,Col,Form,Input,DatePicker,Select,Modal,Avatar,List,Upload,} from "antd";
-import { getUser } from "../../utils/index";
+import {
+  Button,
+  Card,
+  Tabs,
+  Row,
+  Col,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  Modal,
+  Avatar,
+  List,
+  Upload,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
-import { uploadFile } from "../../api/upload";
 import { useParams } from "react-router-dom";
-import { copyToClipboard } from "../../utils/index";
 import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
-  tablelist_project_Date,
-  listselect_view_acc,
-  listselect_project_plan,
-  listselect_project_block,
+  listselect_project_work,
+  listselect_project_review,
   listselect_project_processing,
   listselect_project_error,
   listselect_project_type,
-  listselect_project_sell_status,
+  listselect_project_work_item,
   listselect_project_owner,
   listselect_project_status,
-  listselect_project_class,
   HuongDanProject_info,
-  ContentProject,
 } from "./Project_list";
 
-import {
-  postprojectInfo,
-  getprojectInfo,
-  updateprojectInfo,
-} from "../../api/project/index";
+import { getprojectInfo, updateprojectInfo } from "../../api/project/index";
 // dùng update các field trong bảng project_info
-import { updateListView } from "../../api/update";
-
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -48,96 +49,44 @@ const Project_info = () => {
   let { id } = useParams();
   // Khai báo các kho dữ liệu
   const [projectData, setprojectData] = useState({});
-  const [dateData, setDateData] = useState();
-  const [info, setInfo] = useState();
-  const [selectListInfo, setSelectListInfo] = useState([]);
+  const [info] = useState();
+  const [data, setData] = useState();
   const [noteValue, setNoteValue] = useState("");
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
-  const [infoForm] = Form.useForm();
-  const [dateForm] = Form.useForm();
   const [listselect_project_employee, setListproject_employee] = useState();
-
-  // Tạo state để nhận dữ liệu của listview
-
-  const [listViewData, setListViewData] = useState();
-  const [modalListView, setModalListView] = useState(false);
-  const [viewData, setViewData] = useState();
-  const [valueInput, setValueInput] = useState();
-
-  // Xử lý dữ liệu Modal List view tài khoản khác bằng id
-
-  const setValueView = (e) => {
-    setValueInput(e.target.value);
-  };
-
-  const openModalListView = (name) => {
-    setViewData(name);
-    setModalListView(true);
-  };
-
-  const submitModalListView = async () => {
-    let payload = {};
-    payload[viewData] = valueInput;
-    if (!valueInput) {
-      cancelListView();
-      return;
-    }
-    await updateprojectInfo(payload, info.project_id);
-    window.location.reload();
-    showSuccess("Thành công");
-  };
-
-  const cancelListView = () => {
-    setModalListView(false);
-    setValueInput("");
-    setViewData("");
-  };
-
-  // hàm lưu lại value của class, status trong listview theo db của từng field
-  const onChangeStatusListView = async (key, value, id) => {
-    let newData = JSON.parse(JSON.stringify(listViewData));
-    newData[key] = value;
-    setListViewData(newData);
-    await updateListView(id, key, value);
-    showSuccess("Thành công");
-  };
-  // Hàm để chuyển trang sang các tài khoản khác
-  const viewInfo = useCallback(
-    (type, id) => {
-      window.open(`http://localhost:3000/products/${type}_class/table/${id}`);
-    },
-    [info]
-  );
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
-    let dateValue = {};
-    tablelist_project_Date.map((item) => {
-      dateValue[item.value] = dayjs(dateData[item.value]).format(
-        "YYYY-MM-DD HH:mm"
-      );
+    let project_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      project_file.push(fileUrl);
     });
+
+    values.project_date_start = dayjs(values.project_date_start).format(
+      "YYYY-MM-DD"
+    );
+    values.project_date_end = dayjs(values.project_date_end).format(
+      "YYYY-MM-DD"
+    );
     const newValue = {
       ...values,
-      ...dateValue,
-      project_plan: values?.project_plan ? values.project_plan.join(",") : "",
-      project_block: values?.project_block ? values.project_block.join(",") : "",
-      project_error: values?.project_error ? values.project_error.join(",") : "",
+      project_image_url: project_file.length > 0 ? project_file.join(",") : "",
+      project_error: values?.project_error
+        ? values.project_error.join(",")
+        : "",
       project_processing: values?.project_processing
         ? values.project_processing.join(",")
         : "",
       project_type: values?.project_type ? values.project_type.join(",") : "",
-      project_sell_status: values?.project_sell_status
-        ? values.project_sell_status.join(",")
-        : "",
-      project_owner: values?.project_owner ? values.project_owner.join(",") : "",
-      project_employee: values?.project_employee
-        ? values.project_employee.join(",")
-        : "",
-      list_view: selectListInfo.length > 0 ? selectListInfo.join(",") : "",
+      
       project_note: noteValue,
-      project_history: info.project_history,
     };
 
     const response = await updateprojectInfo(newValue, id);
@@ -148,152 +97,28 @@ const Project_info = () => {
     }
   };
 
-  // Hàm gể gửi dữ liệu date
-  const onFinishDate = (values) => {
-    setDateData(values);
-  };
-  // Hàm gửi dữ liệu từ form info
-  const onFinishInfo = (values) => {
-    setInfo(values);
-  };
-
   // Hàm gọi dữ liệu về từ database
   const getInfoproject = async () => {
     const res = await getprojectInfo(id);
     let data = res.data;
     const newData = {
       ...data,
-      project_plan: data?.project_plan ? data.project_plan.split(",") : "",
-      project_block: data?.project_block ? data.project_block.split(",") : "",
       project_error: data?.project_error ? data.project_error.split(",") : "",
-      project_employee: data?.project_employee ? data.project_employee.split(",") : "",
+     
       project_processing: data?.project_processing
         ? data.project_processing.split(",")
         : "",
       project_type: data?.project_type ? data.project_type.split(",") : "",
-      project_sell_status: data?.project_sell_status
-        ? data.project_sell_status.split(",")
+      project_date_start: data?.project_date_start
+        ? dayjs(data.project_date_start)
         : "",
-      project_owner: data?.project_owner ? data.project_owner.split(",") : "",
-
-      device_id: data?.device_id ? data?.device_id?.device_id : "",
-      proxy_id: data?.proxy_id ? data?.proxy_id?.proxy_id : "",
-      info_id: data?.info_id ? data?.info_id?.info_id : "",
-      mail_id: data?.mail_id ? data?.mail_id?.mail_id : "",
-      sim_id: data?.sim_id ? data?.sim_id?.sim_id : "",
-      bank_id: data?.bank_id ? data?.bank_id?.bank_id : "",
-      payoneer_id: data?.payoneer_id ? data?.payoneer_id?.payoneer_id : "",
-      paypal_id: data?.paypal_id ? data?.paypal_id?.paypal_id : "",
-      pingpong_id: data?.pingpong_id ? data?.pingpong_id?.pingpong_id : "",
-      ebay_id: data?.ebay_id ? data?.ebay_id?.ebay_id : "",
-      etsy_id: data?.etsy_id ? data?.etsy_id?.etsy_id : "",
-      amazon_id: data?.amazon_id ? data?.amazon_id?.amazon_id : "",
-      shopee_id: data?.shopee_id ? data?.shopee_id?.shopee_id : "",
-      facebook_id: data?.facebook_id ? data?.facebook_id?.facebook_id : "",
-      tiktok_id: data?.tiktok_id ? data?.tiktok_id?.tiktok_id : "",
+      project_date_end: data?.project_date_end
+        ? dayjs(data.project_date_end)
+        : "",
+      amazon_note: noteValue,
     };
-    // hàm đổ dữ liệu về khi đã liên kết field
-    setListViewData({
-      device_class: data?.device_id ? data?.device_id?.device_class : "",
-      device_status: data?.device_id ? data?.device_id?.device_status : "",
-      device_user: data?.device_id ? data?.device_id?.device_user : "",
-      device_password: data?.device_id ? data?.device_id?.device_password : "",
-
-      proxy_class: data?.proxy_id ? data?.proxy_id?.proxy_class : "",
-      proxy_status: data?.proxy_id ? data?.proxy_id?.proxy_status : "",
-      proxy_user: data?.proxy_id ? data?.proxy_id?.proxy_user : "",
-      proxy_password: data?.proxy_id ? data?.proxy_id?.proxy_password : "",
-
-      info_class: data?.info_id ? data?.info_id?.info_class : "",
-      info_status: data?.info_id ? data?.info_id?.info_status : "",
-      info_user: data?.info_id ? data?.info_id?.info_fullname : "",
-      info_password: data?.info_id ? data?.info_id?.infodate_birthday : "",
-
-      mail_class: data?.mail_id ? data?.mail_id?.mail_class : "",
-      mail_status: data?.mail_id ? data?.mail_id?.mail_status : "",
-      mail_user: data?.mail_id ? data?.mail_id?.mail_user : "",
-      mail_password: data?.mail_id ? data?.mail_id?.mail_password : "",
-
-      sim_class: data?.sim_id ? data?.sim_id?.sim_class : "",
-      sim_status: data?.sim_id ? data?.sim_id?.sim_status : "",
-      sim_user: data?.sim_id ? data?.sim_id?.sim_user : "",
-      sim_password: data?.sim_id ? data?.sim_id?.sim_password : "",
-
-      bank_class: data?.bank_id ? data?.bank_id?.bank_class : "",
-      bank_status: data?.bank_id ? data?.bank_id?.bank_status : "",
-      bank_user: data?.bank_id ? data?.bank_id?.bank_user : "",
-      bank_password: data?.bank_id ? data?.bank_id?.bank_password : "",
-
-      payoneer_class: data?.payoneer_id
-        ? data?.payoneer_id?.payoneer_class
-        : "",
-      payoneer_status: data?.payoneer_id
-        ? data?.payoneer_id?.payoneer_status
-        : "",
-      payoneer_user: data?.payoneer_id ? data?.payoneer_id?.payoneer_user : "",
-      payoneer_password: data?.payoneer_id
-        ? data?.payoneer_id?.payoneer_password
-        : "",
-
-      paypal_class: data?.paypal_id ? data?.paypal_id?.paypal_class : "",
-      paypal_status: data?.paypal_id ? data?.paypal_id?.paypal_status : "",
-      paypal_user: data?.paypal_id ? data?.paypal_id?.paypal_user : "",
-      paypal_password: data?.paypal_id ? data?.paypal_id?.paypal_password : "",
-
-      pingpong_class: data?.pingpong_id
-        ? data?.pingpong_id?.pingpong_class
-        : "",
-      pingpong_status: data?.pingpong_id
-        ? data?.pingpong_id?.pingpong_status
-        : "",
-      pingpong_user: data?.pingpong_id ? data?.pingpong_id?.pingpong_user : "",
-      pingpong_password: data?.pingpong_id
-        ? data?.pingpong_id?.pingpong_password
-        : "",
-
-      ebay_class: data?.ebay_id ? data?.ebay_id?.ebay_class : "",
-      ebay_status: data?.ebay_id ? data?.ebay_id?.ebay_status : "",
-      ebay_user: data?.ebay_id ? data?.ebay_id?.ebay_user : "",
-      ebay_password: data?.ebay_id ? data?.ebay_id?.ebay_password : "",
-
-      amazon_class: data?.amazon_id ? data?.amazon_id?.amazon_class : "",
-      amazon_status: data?.amazon_id ? data?.amazon_id?.amazon_status : "",
-      amazon_user: data?.amazon_id ? data?.amazon_id?.amazon_user : "",
-      amazon_password: data?.amazon_id ? data?.amazon_id?.amazon_password : "",
-
-      shopee_class: data?.shopee_id ? data?.shopee_id?.shopee_class : "",
-      shopee_status: data?.shopee_id ? data?.shopee_id?.shopee_status : "",
-      shopee_user: data?.shopee_id ? data?.shopee_id?.shopee_user : "",
-      shopee_password: data?.shopee_id ? data?.shopee_id?.shopee_password : "",
-
-      facebook_class: data?.facebook_id
-        ? data?.facebook_id?.facebook_class
-        : "",
-      facebook_status: data?.facebook_id
-        ? data?.facebook_id?.facebook_status
-        : "",
-      facebook_user: data?.facebook_id ? data?.facebook_id?.facebook_user : "",
-      facebook_password: data?.facebook_id
-        ? data?.facebook_id?.facebook_password
-        : "",
-
-      tiktok_class: data?.tiktok_id ? data?.tiktok_id?.tiktok_class : "",
-      tiktok_status: data?.tiktok_id ? data?.tiktok_id?.tiktok_status : "",
-      tiktok_user: data?.tiktok_id ? data?.tiktok_id?.tiktok_user : "",
-      tiktok_password: data?.tiktok_id ? data?.tiktok_id?.tiktok_password : "",
-    });
     form.setFieldsValue(newData);
-    infoForm.setFieldsValue(newData);
-    let dateValue = {};
-    tablelist_project_Date.map((item) => {
-      dateValue[item.value] = dayjs(data[item.value]);
-    });
-    //console.log(dateValue);
-    dateForm.setFieldsValue(dateValue);
-    setDateData(data);
     setNoteValue(data.project_note);
-    setInfo(newData);
-    setSelectListInfo(data.list_view.split(","));
     setListproject_employee(data.listselect_project_employee);
   };
 
@@ -301,246 +126,10 @@ const Project_info = () => {
   useEffect(() => {
     getInfoproject();
   }, []);
-  // Hàm để thay đổi dữ liệu của select list info
-  const changeSelectListInfo = (values) => {
-    setSelectListInfo(values);
-  };
 
   // Hàm để thay đổi dữ liệu của note
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);
-  };
-
-  // Hàm viết tự động hóa
-  const onChange_Status = async (values) => {
-    if (values == "Error" || values == "Restrict" || values == "Suspended") {
-      let new_project_owner = form.getFieldValue("project_owner");
-      if (new_project_owner.indexOf("Phòng phục hồi") == -1) {
-        new_project_owner.push("Phòng phục hồi");
-      }
-      if (new_project_owner.indexOf("Kho lưu trữ") == -1) {
-        new_project_owner.push("Kho lưu trữ");
-      }
-      // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updateprojectInfo(
-        {
-          project_owner: new_project_owner.join(","),
-        },
-        info.project_id
-      );
-      // Tiếp tục set
-      let new_project_processing = form.getFieldValue("project_processing");
-      let old_project_processing = info.project_processing;
-      if (new_project_processing.indexOf(values) == -1) {
-        new_project_processing.push(values);
-      }
-
-      let new_project_class = form.getFieldValue("project_class");
-      if (values == "Error") {
-        (new_project_class = "Lớp 20"),
-          dateForm.setFieldValue("projectdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-        setDateData({
-          ...dateData,
-          projectdate_error: dayjs(now()),
-          projectdate_nextclass: dayjs(now()),
-        }); // Dùng hàm này set lại date mới lưu đc vào db
-      }
-      if (values == "Restrict") {
-        (new_project_class = "Lớp 23"),
-          dateForm.setFieldValue("projectdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-        setDateData({
-          ...dateData,
-          projectdate_restrict: dayjs(now()),
-          projectdate_nextclass: dayjs(now()),
-        });
-      }
-      if (values == "Suspended") {
-        (new_project_class = "Lớp 26"),
-          dateForm.setFieldValue("projectdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-        setDateData({
-          ...dateData,
-          projectdate_suspended: dayjs(now()),
-          projectdate_nextclass: dayjs(now()),
-        });
-      }
-
-      form.setFieldsValue({
-        project_class: new_project_class,
-        project_support: "Nguyễn Hoài",
-        project_processing: new_project_processing,
-        project_owner: new_project_owner,
-      }); // Dùng hàm này set lại để lưu vào db
-    }
-  };
-
-  const onChange_Processing = (values) => {
-    if (values[values.length - 1] == "Buyer") {
-      form.setFieldValue("project_class", "Lớp 4");
-      dateForm.setFieldValue("projectdate_start", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_start: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-    if (values[values.length - 1] == "Verify Full") {
-      form.setFieldValue("project_class", "Lớp 6");
-      dateForm.setFieldValue("projectdate_verify", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_verify: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-    if (values[values.length - 1] == "Seller") {
-      form.setFieldValue("project_class", "Lớp 9");
-      dateForm.setFieldValue("projectdate_seller", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_seller: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-    if (values[values.length - 1] == "List") {
-      form.setFieldValue("project_class", "Lớp 10");
-      dateForm.setFieldValue("projectdate_list1", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_list1: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-    if (values[values.length - 1] == "Move room") {
-      form.setFieldValue("project_class", "Lớp 12");
-      dateForm.setFieldValue("projectdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_moveroom: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-  };
-
-  const onChange_Class = async (values) => {
-    dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-    setDateData({
-      ...dateData,
-      projectdate_nextclass: dayjs(now()),
-    });
-
-    if (values == "Lớp 9") {
-      let new_project_type = form.getFieldValue("project_type");
-      if (new_project_type.indexOf("Seller") == -1) {
-        new_project_type.push("Seller");
-      }
-
-      // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updateprojectInfo(
-        {
-          new_project_type: new_project_type.join(","),
-        },
-        info.project_id
-      );
-
-      let new_project_processing = form.getFieldValue("project_processing");
-      if (new_project_processing.indexOf("Seller") == -1) {
-        new_project_processing.push("Seller");
-      }
-
-      form.setFieldsValue({
-        project_processing: new_project_processing,
-        project_type: new_project_type,
-      });
-
-      dateForm.setFieldValue("projectdate_seller", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_seller: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-
-    if (values == "Lớp 4") {
-      let new_project_type = form.getFieldValue("project_type");
-      if (new_project_type.indexOf("Buyer") == -1) {
-        new_project_type.push("Buyer");
-      }
-      // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updateprojectInfo(
-        {
-          new_project_type: new_project_type.join(","),
-        },
-        info.project_id
-      );
-
-      let new_project_processing = form.getFieldValue("project_processing");
-      if (new_project_processing.indexOf("Buyer") == -1) {
-        new_project_processing.push("Buyer");
-      }
-      /*  let new_project_owner = form
-        .getFieldValue("project_owner")
-        .filter((item) => item !== ""); */
-
-      form.setFieldsValue({
-        project_processing: new_project_processing,
-        project_type: new_project_type,
-      });
-
-      dateForm.setFieldValue("projectdate_start", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_start: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
-
-    if (values == "Lớp 12") {
-      let new_project_type = form.getFieldValue("project_type");
-      if (new_project_type.indexOf("Bán acc") == -1) {
-        new_project_type.push("Bán acc");
-      }
-      let new_project_owner = form.getFieldValue("project_owner");
-      if (new_project_owner.indexOf("Phòng Kinh doanh") == -1) {
-        new_project_owner.push("Phòng Kinh doanh");
-      }
-      // lưu vào db vì quyền nhân viên không hiển thị
-      let { data } = await updateprojectInfo(
-        {
-          new_project_type: new_project_type.join(","),
-          new_project_owner: new_project_owner.join(","),
-        },
-        info.project_id
-      );
-
-      let new_project_processing = form.getFieldValue("project_processing");
-      if (new_project_processing.indexOf("Move room") == -1) {
-        new_project_processing.push("Move room");
-      }
-
-      form.setFieldsValue({
-        project_processing: new_project_processing,
-        project_type: new_project_type,
-        project_owner: new_project_owner,
-      });
-
-      dateForm.setFieldValue("projectdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("projectdate_nextclass", dayjs(now()));
-      setDateData({
-        ...dateData,
-        projectdate_moveroom: dayjs(now()),
-        projectdate_nextclass: dayjs(now()),
-      });
-    }
   };
 
   // Upload ảnh
@@ -597,10 +186,10 @@ const Project_info = () => {
       }
     >
       <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
+        <Tabs.TabPane tab="THÔNG TIN KẾ HOẠCH" key="1">
           <Row gutter={16}>
-            <Col span={12} >
-              <Card title="THÔNG TIN project" >
+            <Col span={12}>
+              <Card title="THÔNG TIN KẾ HOẠCH">
                 <Form
                   form={form}
                   name="basic"
@@ -609,12 +198,10 @@ const Project_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-
-                  
                   <Row gutter={16}>
-                    <Col span={8}>
+                    <Col span={6}>
                       <Form.Item
-                        label="project id"
+                        label="Mã"
                         name="project_id"
                         rules={[
                           {
@@ -626,165 +213,132 @@ const Project_info = () => {
                         <Input placeholder="I_1000" />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
-                      <Form.Item label="Giới tính" name="project_sex">
-                        <Input placeholder="Nam" />
+                    <Col span={9}>
+                      <Form.Item label="Ngày bắt đầu" name="project_date_start">
+                        <DatePicker style={{ float: "right" }} />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày sinh" name="projectdate_birthday">
-                        <Input placeholder="27/7/2000" />
+                    <Col span={9}>
+                      <Form.Item label="Ngày kết thúc" name="project_date_end">
+                        <DatePicker style={{ float: "right" }} />
                       </Form.Item>
                     </Col>
                   </Row>
 
+                  {/* Trạng thái */}
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item label="Họ tên" name="project_fullname">
-                        <Input placeholder="Thế Minh Hồng" />
+                      <Form.Item label="Trạng thái" name="project_status">
+                        <Select
+                          optionlabelprop="label"
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          {listselect_project_status.map((item, index) => {
+                            return (
+                              <Option value={item} label={item} key={index}>
+                                <div className="demo-option-label-item">
+                                  {item}
+                                </div>
+                              </Option>
+                            );
+                          })}
+                        </Select>
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Passport" name="project_passport">
-                        <Input placeholder="028094999999" />
-                      </Form.Item>
+                      {" "}
+                      {/* Hạng mục */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item
+                          label="Hạng mục"
+                          name="project_work_item"
+                          style={{
+                            display:
+                              [
+                                "Tổ phó",
+                                "Chuyên viên",
+                                "Nhân viên",
+                                "Tập sự",
+                                "Thử việc",
+                              ].indexOf(users_function) == -1
+                                ? ""
+                                : "none",
+                          }}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                          >
+                            {listselect_project_work_item.map((item, index) => {
+                              return (
+                                <Option value={item} label={item} key={index}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
                     </Col>
+
                     <Col span={8}>
-                      <Form.Item label="SSN" name="project_ssn">
-                        <Input placeholder="028094999999" />
-                      </Form.Item>
+                      {/* Công việc */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item
+                          label="Công việc"
+                          name="project_work"
+                          disabled={true}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            optionlabelprop="label"
+                          >
+                            {listselect_project_work.map((item, index) => {
+                              return (
+                                <Option value={item} label={item} key={index}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
                     </Col>
                   </Row>
 
                   <Row gutter={16}>
                     <Col span={24}>
-                      <Form.Item label="Nơi thường trú" name="project_residence">
-                        <Input placeholder="I_1000" />
+                      <Form.Item label="Nội dung" name="project_content">
+                        <Input placeholder="Nội dung chi tiết công việc" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={18}>
-                      <Form.Item label="Quê quán........" name="project_origin">
-                        <Input placeholder="I_1000" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                      <Form.Item label="code" name="project_code">
-                        <Input placeholder="100000" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Row gutter={16}>
-                    <Col span={18}>
-                      <Form.Item
-                        label="Đặc điểm nhận dạng"
-                        name="project_identifying"
-                      >
-                        <Input
-                        
-                          placeholder="Nốt ruồi c: 2cm dưới mép trái"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                      <Form.Item label="Password" name="project_password">
-                        <Input placeholder="012345678910" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item
-                        label="CCCD giá trị đến"
-                        name="projectdate_expiry"
-                      >
-                        <Input placeholder="25/7/2041" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày làm CCCD" name="projectdate_start">
-                        <Input placeholder="29/4/2021" />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item label="Ngày nhập" name="projectdate_import">
-                        <Input placeholder="07/12/2022" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item
-                      label="Quy trình"
-                      name="project_plan"
-                      disabled={true}
-                    >
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                      >
-                        {listselect_project_plan.map((item, index) => {
-                          return (
-                            <Option value={item} label={item} key={index}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item
-                      label="Project block"
-                      name="project_block"
-                      disabled={true}
-                    >
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                      >
-                        {listselect_project_block.map((item, index) => {
-                          return (
-                            <Option value={item} label={item} key={index}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
+                  {/* Tiến trình */}
                   <Form.Item label="Tiến trình" name="project_processing">
                     <Select
-                      onChange={onChange_Processing}
                       mode="multiple"
                       style={{ width: "100%", color: "green" }}
                       optionlabelprop="label"
-                      //status="warning"
                     >
                       {listselect_project_processing.map((item, index) => {
                         return (
@@ -795,12 +349,13 @@ const Project_info = () => {
                       })}
                     </Select>
                   </Form.Item>
+
+                  {/* Phát sinh */}
                   <Form.Item label="Phát sinh" name="project_error">
                     <Select
                       mode="multiple"
                       style={{ width: "100%", color: "red" }}
                       optionlabelprop="label"
-                      //status="warning"
                     >
                       {listselect_project_error.map((item, index) => {
                         return (
@@ -811,7 +366,7 @@ const Project_info = () => {
                       })}
                     </Select>
                   </Form.Item>
-
+                  {/*  Loại */}
                   {[
                     "Tổ phó",
                     "Chuyên viên",
@@ -819,7 +374,7 @@ const Project_info = () => {
                     "Tập sự",
                     "Thử việc",
                   ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Loại project" name="project_type">
+                    <Form.Item label="Loại" name="project_type">
                       <Select
                         mode="multiple"
                         style={{ width: "100%" }}
@@ -838,190 +393,108 @@ const Project_info = () => {
                       </Select>
                     </Form.Item>
                   ) : null}
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item
-                      label="TT Bán"
-                      name="project_sell_status"
-                      style={{
-                        display:
-                          [
-                            "Tổ phó",
-                            "Chuyên viên",
-                            "Nhân viên",
-                            "Tập sự",
-                            "Thử việc",
-                          ].indexOf(users_function) == -1
-                            ? ""
-                            : "none",
-                      }}
-                    >
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                      >
-                        {listselect_project_sell_status.map((item, index) => {
-                          return (
-                            <Option value={item} label={item} key={index}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Sở hữu" name="project_owner">
-                      <Select
-                        disabled={
-                          [
-                            "Trưởng phòng",
-                            "Phó phòng",
-                            "Tổ trưởng",
-                            "Tổ phó",
-                          ].indexOf(users_function) !== -1
-                        }
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                      >
-                        {listselect_project_owner.map((item, index) => {
-                          return (
-                            <Option value={item} label={item} key={index}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Nhân viên" name="project_employee">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                      >
-                        {listselect_project_employee?.map((item) => {
-                          return (
-                            <Option value={item} label={item}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
                   <Row gutter={16}>
                     <Col span={8}>
-                      <Form.Item label="Trạng thái" name="project_status">
-                        <Select
-                          //mode="multiple"
-                          onChange={onChange_Status}
-                          optionlabelprop="label"
-                          style={{
-                            width: "100%",
-                            color:
-                              ["Suspended", "Error"].indexOf(
-                                form.getFieldValue("project_status")
-                              ) != -1
-                                ? "red"
-                                : "",
-                            fontWeight:
-                              ["Suspended", "Error"].indexOf(
-                                form.getFieldValue("project_status")
-                              ) != -1
-                                ? "bold !important"
-                                : "",
-                          }}
+                      {/* Đánh giá */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item
+                          label="Đánh giá"
+                          name="project_review"
+                          disabled={true}
                         >
-                          {listselect_project_status.map((item, index) => {
-                            return (
-                              <Option value={item} label={item} key={index}>
-                                <div className="demo-option-label-item">
-                                  {item}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                          >
+                            {listselect_project_review.map((item, index) => {
+                              return (
+                                <Option value={item} label={item} key={index}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Lớp Project" name="project_class">
-                        <Select
-                          //mode="multiple"
-                          style={{ width: "100%" }}
-                          optionlabelprop="label"
-                          onChange={onChange_Class}
-                        >
-                          {listselect_project_class.map((item, index) => {
-                            return (
-                              <Option
-                                value={item.value}
-                                label={item.title}
-                                key={index}
-                              >
-                                <div className="demo-option-label-item">
-                                  {item.title}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
+                      {/* Sở hữu */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item label="Sở hữu" name="project_owner">
+                          <Select
+                            disabled={
+                              [
+                                "Trưởng phòng",
+                                "Phó phòng",
+                                "Tổ trưởng",
+                                "Tổ phó",
+                              ].indexOf(users_function) !== -1
+                            }
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                          >
+                            {listselect_project_owner.map((item, index) => {
+                              return (
+                                <Option value={item} label={item} key={index}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
                     </Col>
                     <Col span={8}>
-                      <Form.Item label="Hỗ trợ" name="project_support">
-                        <Select
-                          style={{ width: "100%" }}
-                          placeholder="select one item"
-                          optionlabelprop="label"
-                        >
-                          {listselect_project_employee?.map((item) => {
-                            return (
-                              <Option value={item} label={item}>
-                                <div className="demo-option-label-item">
-                                  {item}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
+                      {/* Nhân viên */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item label="Nhân viên" name="project_employee">
+                          <Select
+                          
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                          >
+                            {listselect_project_employee?.map((item) => {
+                              return (
+                                <Option value={item} label={item}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
                     </Col>
                   </Row>
 
+                
+                  {/* Upload ảnh */}
                   <Row gutter={16}>
                     <Form.Item name="project_image_url">
                       <Upload
@@ -1038,272 +511,10 @@ const Project_info = () => {
                 </Form>
               </Card>
             </Col>
-
             <Col span={12}>
-              <Card title="THÔNG TIN TÀI NGUYÊN">
-                {[
-                  "Tổ phó",
-                  "Chuyên viên",
-                  "Nhân viên",
-                  "Tập sự",
-                  "Thử việc",
-                ].indexOf(users_function) == -1 ? (
-                  <Select
-                    mode="multiple"
-                    style={{ width: "100%" }}
-                    placeholder="select one item"
-                    optionlabelprop="label"
-                    onChange={changeSelectListInfo}
-                    value={selectListInfo}
-                    size="large"
-                  >
-                    {listselect_view_acc.map((item) => {
-                      return (
-                        <Option
-                          value={item.title.toLocaleLowerCase() + "_id"}
-                          label={item.title}
-                        >
-                          <div className="demo-option-label-item">
-                            {item.title}
-                          </div>
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                ) : null}
-                {/* form List_view */}
-                <Form
-                  onFinish={onFinishInfo}
-                  initialValues={info}
-                  form={infoForm}
-                  name="info"
-                  size="large"
-                >
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={listselect_view_acc}
-                    renderItem={(item) => (
-                      <>
-                        {selectListInfo.indexOf(
-                          item.title.toLocaleLowerCase() + "_id"
-                        ) != -1 ? (
-                          <List.Item>
-                            <div className="custom_info_item">
-                              <div className="meta_data">
-                                <Avatar
-                                  style={{ cursor: "pointer" }}
-                                  onClick={() =>
-                                    viewInfo(
-                                      item.title.toLocaleLowerCase(),
-                                      info[
-                                        item.title.toLocaleLowerCase() + "_id"
-                                      ].split("|")[0]
-                                    )
-                                  }
-                                  src={item.thumbnail}
-                                />
-                                <a
-                                  href="#"
-                                  onClick={() =>
-                                    viewInfo(
-                                      item.title.toLocaleLowerCase(),
-                                      info[
-                                        item.title.toLocaleLowerCase() + "_id"
-                                      ].split("|")[0]
-                                    )
-                                  }
-                                >
-                                  {item.title}
-                                </a>
-                              </div>
-
-                              <Row gutter={16} style={{ width: "100%" }}>
-                                <Col span={4}>
-                                  <Form.Item
-                                    onClick={() =>
-                                      openModalListView(
-                                        item.title.toLocaleLowerCase() + "_id"
-                                      )
-                                    }
-                                    name={
-                                      item.title
-                                        .toLocaleLowerCase()
-                                        .split("|")[0] + "_id"
-                                    }
-                                  >
-                                    <Input disabled />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                  <Form.Item
-                                    onClick={() =>
-                                      copyToClipboard(
-                                        listViewData[
-                                          item.title.toLocaleLowerCase() +
-                                            "_user"
-                                        ]
-                                      )
-                                    }
-                                  >
-                                    <Input
-                                      value={
-                                        listViewData[
-                                          item.title.toLocaleLowerCase() +
-                                            "_user"
-                                        ]
-                                      }
-                                      disabled
-                                    />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={6}>
-                                  <Form.Item
-                                    onClick={() =>
-                                      copyToClipboard(
-                                        listViewData[
-                                          item.title.toLocaleLowerCase() +
-                                            "_password"
-                                        ]
-                                      )
-                                    }
-                                  >
-                                    <Input
-                                      value={
-                                        listViewData[
-                                          item.title.toLocaleLowerCase() +
-                                            "_password"
-                                        ]
-                                      }
-                                      disabled
-                                    />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={4}>
-                                  <Select
-                                    //mode="multiple"
-                                    style={{ width: "100%" }}
-                                    optionlabelprop="label"
-                                    value={
-                                      listViewData[
-                                        item.title.toLocaleLowerCase() +
-                                          "_status"
-                                      ]
-                                    }
-                                    onChange={(value) =>
-                                      onChangeStatusListView(
-                                        item.title.toLocaleLowerCase() +
-                                          "_status",
-                                        value,
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ].split("|")[0]
-                                      )
-                                    }
-                                  >
-                                    {listselect_project_status.map(
-                                      (item, index) => {
-                                        return (
-                                          <Option
-                                            value={item}
-                                            label={item}
-                                            key={index}
-                                          >
-                                            <div className="demo-option-label-item">
-                                              {item}
-                                            </div>
-                                          </Option>
-                                        );
-                                      }
-                                    )}
-                                  </Select>
-                                </Col>
-                                <Col span={4}>
-                                  <Select
-                                    //mode="multiple"
-                                    style={{ width: "100%" }}
-                                    optionlabelprop="label"
-                                    value={
-                                      listViewData[
-                                        item.title.toLocaleLowerCase() +
-                                          "_class"
-                                      ]
-                                    }
-                                    onChange={(value) =>
-                                      onChangeStatusListView(
-                                        item.title.toLocaleLowerCase() +
-                                          "_class",
-                                        value,
-                                        info[
-                                          item.title.toLocaleLowerCase() + "_id"
-                                        ].split("|")[0]
-                                      )
-                                    }
-                                  >
-                                    {listselect_project_class.map(
-                                      (item, index) => {
-                                        return (
-                                          <Option
-                                            value={item.value}
-                                            label={item.title}
-                                            key={index}
-                                          >
-                                            <div className="demo-option-label-item">
-                                              {item.title}
-                                            </div>
-                                          </Option>
-                                        );
-                                      }
-                                    )}
-                                  </Select>
-                                </Col>
-                              </Row>
-                            </div>
-                          </List.Item>
-                        ) : null}
-                      </>
-                    )}
-                  />
-                </Form>
-              </Card>
-            </Col>
-          </Row>
-          <br></br>
-        </Tabs.TabPane>
-
-        <Tabs.TabPane tab="LỊCH SỬ" key="2">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Card title="THỜI GIAN: YYYY-MM-DD">
-                <Form
-                  form={dateForm}
-                  onFinish={onFinishDate}
-                  name="date"
-                  initialValues={dateData}
-                  size="large"
-                >
-                  <Row gutter={16}>
-                    {tablelist_project_Date.map((item, index) => {
-                      return (
-                        <Col key={index} span={8}>
-                          <Form.Item label={item.title} name={item.value}>
-                            <DatePicker
-                              style={{ float: "right" }}
-                              format="YYYY-MM-DD HH:mm"
-                              onChange={() => dateForm.submit()}
-                            />
-                          </Form.Item>
-                        </Col>
-                      );
-                    })}
-                  </Row>
-                </Form>
-              </Card>
-            </Col>
-
-            <Col span={12}>
-              <Card title="LỊCH SỬ">
+              <Card title="GHI CHÚ">
                 <Row>
-                  <Col span={24} >
+                  <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
@@ -1320,9 +531,9 @@ const Project_info = () => {
               </Card>
             </Col>
           </Row>
+          <br></br>
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-       
           <HuongDanProject_info />
         </Tabs.TabPane>
       </Tabs>
@@ -1334,14 +545,6 @@ const Project_info = () => {
         onCancel={handleCancel}
       >
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
-      </Modal>
-      <Modal
-        title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
-        open={modalListView}
-        onOk={() => submitModalListView()}
-        onCancel={() => cancelListView()}
-      >
-        <Input placeholder="Input _id" onChange={setValueView}></Input>
       </Modal>
     </Card>
   );

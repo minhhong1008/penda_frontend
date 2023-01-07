@@ -66,7 +66,7 @@ const Sim_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.sim_id.localeCompare(b.sim_id);
+        return a.sim_id?.localeCompare(b.sim_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Sim_table = () => {
       dataIndex: "sim_user",
       key: "sim_user",
       sorter: (a, b) => {
-        return a.sim_user.localeCompare(b.sim_user);
+        return a.sim_user?.localeCompare(b.sim_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Sim_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.sim_user.localeCompare(b.sim_device);
+        return a.sim_processing?.localeCompare(b.sim_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Sim_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.sim_user.localeCompare(b.sim_class);
+        return a.sim_error?.localeCompare(b.sim_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Sim_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.sim_user.localeCompare(b.sim_employee);
+        return a.sim_employee?.localeCompare(b.sim_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Sim_table = () => {
       dataIndex: "sim_note",
       key: "sim_note",
       sorter: (a, b) => {
-        return a.sim_user.localeCompare(b.sim_note);
+        return a.sim_note?.localeCompare(b.sim_note);
       },
     },
   ];

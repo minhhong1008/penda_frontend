@@ -306,14 +306,14 @@ const App = () => {
           />
 
           {/* project */}
-          <Route path="/products/project_class" exact component={Project_class} />
+          <Route path="/personnel/project_class" exact component={Project_class} />
           <Route
-            path="/products/project_class/table"
+            path="/personnel/project_class/table"
             exact
             component={Project_table}
           />
           <Route
-            path="/products/project_class/table/:id"
+            path="/personnel/project_class/table/:id"
             exact
             component={Project_info}
           />

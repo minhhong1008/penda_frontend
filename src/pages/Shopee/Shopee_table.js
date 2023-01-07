@@ -67,7 +67,7 @@ const Shopee_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.shopee_id.localeCompare(b.shopee_id);
+        return a.shopee_id?.localeCompare(b.shopee_id);
       },
     },
     {
@@ -75,7 +75,7 @@ const Shopee_table = () => {
       dataIndex: "shopee_user",
       key: "shopee_user",
       sorter: (a, b) => {
-        return a.shopee_user.localeCompare(b.shopee_user);
+        return a.shopee_user?.localeCompare(b.shopee_user);
       },
     },
     {
@@ -147,7 +147,7 @@ const Shopee_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.shopee_user.localeCompare(b.shopee_device);
+        return a.shopee_processing?.localeCompare(b.shopee_processing);
       },
     },
     {
@@ -181,7 +181,7 @@ const Shopee_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.shopee_user.localeCompare(b.shopee_class);
+        return a.shopee_error?.localeCompare(b.shopee_error);
       },
     },
 
@@ -216,7 +216,7 @@ const Shopee_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.shopee_user.localeCompare(b.shopee_employee);
+        return a.shopee_employee?.localeCompare(b.shopee_employee);
       },
     },
 
@@ -225,7 +225,7 @@ const Shopee_table = () => {
       dataIndex: "shopee_note",
       key: "shopee_note",
       sorter: (a, b) => {
-        return a.shopee_user.localeCompare(b.shopee_note);
+        return a.shopee_note?.localeCompare(b.shopee_note);
       },
     },
   ];

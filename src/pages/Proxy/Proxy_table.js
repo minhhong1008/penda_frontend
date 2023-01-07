@@ -66,7 +66,7 @@ const Proxy_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.proxy_id.localeCompare(b.proxy_id);
+        return a.proxy_id?.localeCompare(b.proxy_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Proxy_table = () => {
       dataIndex: "proxy_user",
       key: "proxy_user",
       sorter: (a, b) => {
-        return a.proxy_user.localeCompare(b.proxy_user);
+        return a.proxy_user?.localeCompare(b.proxy_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Proxy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.proxy_user.localeCompare(b.proxy_device);
+        return a.proxy_processing?.localeCompare(b.proxy_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Proxy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.proxy_user.localeCompare(b.proxy_class);
+        return a.proxy_error?.localeCompare(b.proxy_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Proxy_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.proxy_user.localeCompare(b.proxy_employee);
+        return a.proxy_employee?.localeCompare(b.proxy_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Proxy_table = () => {
       dataIndex: "proxy_note",
       key: "proxy_note",
       sorter: (a, b) => {
-        return a.proxy_user.localeCompare(b.proxy_note);
+        return a.proxy_note?.localeCompare(b.proxy_note);
       },
     },
   ];

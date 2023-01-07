@@ -66,7 +66,7 @@ const Info_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.info_id.localeCompare(b.info_id);
+        return a.info_id?.localeCompare(b.info_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Info_table = () => {
       dataIndex: "info_user",
       key: "info_user",
       sorter: (a, b) => {
-        return a.info_user.localeCompare(b.info_user);
+        return a.info_user?.localeCompare(b.info_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Info_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.info_user.localeCompare(b.info_device);
+        return a.info_processing?.localeCompare(b.info_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Info_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.info_user.localeCompare(b.info_class);
+        return a.info_error?.localeCompare(b.info_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Info_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.info_user.localeCompare(b.info_employee);
+        return a.info_employee?.localeCompare(b.info_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Info_table = () => {
       dataIndex: "info_note",
       key: "info_note",
       sorter: (a, b) => {
-        return a.info_user.localeCompare(b.info_note);
+        return a.info_note?.localeCompare(b.info_note);
       },
     },
   ];

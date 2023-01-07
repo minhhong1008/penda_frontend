@@ -57,11 +57,12 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_id",
       key: "ebay_id",
+      width: 1,
       render: (text, record) => (
         <a
           style={{
             borderRadius: "6px",
-            padding: "8px 8px",
+            padding: "4px 4px",
             background: "#1c84c6",
             color: "white",
           }}
@@ -73,7 +74,7 @@ const Ebay_table = () => {
         </a>
       ),
       sorter: (a, b) => {
-        return a.ebay_id.localeCompare(b.ebay_id);
+        return a.ebay_id?.localeCompare(b.ebay_id);
       },
     },
     {
@@ -84,8 +85,9 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_user",
       key: "ebay_user",
+      width: 1,
       sorter: (a, b) => {
-        return a.ebay_user.localeCompare(b.ebay_user);
+        return a.ebay_user?.localeCompare(b.ebay_user);
       },
     },
     {
@@ -163,7 +165,7 @@ const Ebay_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.ebay_user.localeCompare(b.ebay_device);
+        return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
     },
     {
@@ -200,7 +202,7 @@ const Ebay_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.ebay_user.localeCompare(b.ebay_class);
+        return a.ebay_error?.localeCompare(b.ebay_error);
       },
     },
     {
@@ -211,6 +213,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_employee",
       key: "ebay_employee",
+      width: 1,
       render: (record) => {
         if (!record) {
           return;
@@ -224,7 +227,7 @@ const Ebay_table = () => {
                 <div
                   style={{
                     borderRadius: "6px",
-                    padding: "6px 6px",
+                    padding: "2px 2px",
                     background: "#18a689",
                     color: "white",
                   }}
@@ -237,7 +240,7 @@ const Ebay_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.ebay_user.localeCompare(b.ebay_employee);
+        return a.ebay_employee?.localeCompare(b.ebay_employee);
       },
     },
     {
@@ -248,6 +251,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_note",
       key: "ebay_note",
+      width: 2,
       render: (text, record, index) => (
         <div>
           {selectedNote == record._id ? (
@@ -282,7 +286,7 @@ const Ebay_table = () => {
         </div>
       ),
       sorter: (a, b) => {
-        return a.ebay_user.localeCompare(b.ebay_note);
+        return a.ebay_note?.localeCompare(b.ebay_note);
       },
     },
   ];

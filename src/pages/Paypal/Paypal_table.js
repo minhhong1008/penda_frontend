@@ -66,7 +66,7 @@ const Paypal_table = () => {
         
       ),
       sorter: (a, b) => {
-        return a.paypal_id.localeCompare(b.paypal_id);
+        return a.paypal_id?.localeCompare(b.paypal_id);
       },
     },
     {
@@ -74,7 +74,7 @@ const Paypal_table = () => {
       dataIndex: "paypal_user",
       key: "paypal_user",
       sorter: (a, b) => {
-        return a.paypal_user.localeCompare(b.paypal_user);
+        return a.paypal_user?.localeCompare(b.paypal_user);
       },
     },
     {
@@ -146,7 +146,7 @@ const Paypal_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.paypal_user.localeCompare(b.paypal_device);
+        return a.paypal_processing?.localeCompare(b.paypal_processing);
       },
     },
     {
@@ -180,7 +180,7 @@ const Paypal_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.paypal_user.localeCompare(b.paypal_class);
+        return a.paypal_error?.localeCompare(b.paypal_error);
       },
     },
 
@@ -215,7 +215,7 @@ const Paypal_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.paypal_user.localeCompare(b.paypal_employee);
+        return a.paypal_employee?.localeCompare(b.paypal_employee);
       },
     },
 
@@ -224,7 +224,7 @@ const Paypal_table = () => {
       dataIndex: "paypal_note",
       key: "paypal_note",
       sorter: (a, b) => {
-        return a.paypal_user.localeCompare(b.paypal_note);
+        return a.paypal_note?.localeCompare(b.paypal_note);
       },
     },
   ];
