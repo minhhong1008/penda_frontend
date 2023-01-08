@@ -408,7 +408,7 @@ function Header({
               </div>
             </div>
           </Drawer>
-          <Link to="/sign-in" className="btn-sign-in">
+          <Link to="/Log-out" className="btn-sign-in">
             {profile}
             <span>{user.profile ? user.profile.users_name : ""}</span>
           </Link>
@@ -418,7 +418,10 @@ function Header({
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
-           <Spin size="large" />
+          <Link to="/HomePage">
+          <Spin size="large" />
+          </Link>
+           
         </Col>
       </Row>
     </>

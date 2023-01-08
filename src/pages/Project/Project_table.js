@@ -46,18 +46,25 @@ const Project_table = () => {
   const countDay = dayjs().daysInMonth();
   const [filterDate, setFilterDate] = useState();
   const { RangePicker } = DatePicker;
-
+  const countDay_next = dayjs(year + "-" + (parseInt(month)+1) + "-" + "01").daysInMonth();
   const rangePresets = [
     {
-      label: "Tháng hiện tại",
+      label: "Mặc định",
+      value: [dayjs().add(-15, "d"), dayjs().add(15, "d")],
+    },
+    {
+      label: "Tháng này",
       value: [
         dayjs(year + "-" + month + "-" + "01"),
         dayjs(year + "-" + month + "-" + countDay),
       ],
     },
     {
-      label: "Default",
-      value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
+      label: "Tháng sau",
+      value: [
+        dayjs(year + "-" + (parseInt(month)+1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month)+1) + "-" + countDay_next),
+      ],
     },
     {
       label: "Last 30 Days",
@@ -199,7 +206,35 @@ const Project_table = () => {
       dataIndex: "project_work_item",
       key: "project_work_item",
       width: 1,
-      render: (text, record) => <a>{text}</a>,
+      
+      render: (text) => {
+        if(text =="Kế hoạch"){
+          return (
+            <div style={{ display: "flex", gap: "8px" }}>
+              
+              <div
+                style={{
+                  textAlign: "center",
+                  borderRadius: "6px",
+                  padding: "2px 2px",
+                  background: "Magenta",
+                  color: "white",
+                }}
+              >
+                {text}
+              </div>
+            </div>
+          );
+
+        }else{
+          return (
+            <> {text}</>
+          );
+         
+        }
+        
+      },
+      
       sorter: (a, b) => {
         return a.project_work_item?.localeCompare(b.project_work_item);
       },
@@ -493,13 +528,22 @@ const Project_table = () => {
           item.project_processing = array?.join(",");
         }
       } else {
-        // Chỉ hiển thị ra 3 cái cuối cùng
+        // Chỉ hiển thị ra 3 cái cuối cùng cột processing
         let array = item.project_processing?.split(",");
         if (array?.length > 2) {
           for (let index = 0; index < array.length + 1; index++) {
             array?.shift();
           }
           item.project_processing = array?.join(",");
+        }
+        // Nếu thời hạn còn 2 ngày thì chuyển từ QT-0-CB thành QT-CB
+        let array_project_date_end = item.project_date_end.split("-")
+        if(dayjs(item.project_date_end).format("YYYY-MM-DD") <
+        dayjs().add(2,"d").format("YYYY-MM-DD")){
+          if (!item.project_type?.includes("QT - CB")) {
+            item.project_type = item.project_type + "," + "QT - CB";
+           
+          }
         }
       }
     });
@@ -537,7 +581,7 @@ const Project_table = () => {
             <Form
               autoComplete="off"
               form={form}
-              initialValues={{ project_status_search: "Thực hiện" }}
+              initialValues={{ project_status_search: "Bắt đầu" }}
             >
               <Row
                 gutter={16}
