@@ -42,7 +42,7 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 
 const Project_info = () => {
   const { Option } = Select;
@@ -386,36 +386,71 @@ const Project_info = () => {
                       })}
                     </Select>
                   </Form.Item>
-                  {/*  Loại */}
-                  {[
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Loại" name="project_type">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                        disabled={disabled}
-                      >
-                        {listselect_project_type.map((item, index) => {
-                          return (
-                            <Option value={item} label={item} key={index}>
-                              <div className="demo-option-label-item">
-                                {item}
-                              </div>
-                            </Option>
-                          );
-                        })}
-                      </Select>
-                    </Form.Item>
-                  ) : null}
+
                   <Row gutter={16}>
+                    <Col span={16}>
+                      {/*  Loại */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item label="Loại" name="project_type">
+                          <Select
+                            mode="multiple"
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                            disabled={disabled}
+                          >
+                            {listselect_project_type.map((item, index) => {
+                              return (
+                                <Option value={item} label={item} key={index}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
+                    </Col>
                     
+                    <Col span={8}>
+                      {/* Nhân viên */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item label="Nhân viên" name="project_employee">
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder="select one item"
+                            optionlabelprop="label"
+                            disabled={disabled}
+                          >
+                            {listselect_project_employee?.map((item) => {
+                              return (
+                                <Option value={item} label={item}>
+                                  <div className="demo-option-label-item">
+                                    {item}
+                                  </div>
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Form.Item>
+                      ) : null}
+                    </Col>
+                  </Row>
+
+                  <Row gutter={16}>
                     <Col span={8}>
                       {/* Sở hữu */}
                       {[
@@ -453,7 +488,7 @@ const Project_info = () => {
                       ) : null}
                     </Col>
                     <Col span={8}>
-                      {/* Nhân viên */}
+                      {/* Người giao việc */}
                       {[
                         "Tổ phó",
                         "Chuyên viên",
@@ -461,7 +496,7 @@ const Project_info = () => {
                         "Tập sự",
                         "Thử việc",
                       ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Nhân viên" name="project_employee">
+                        <Form.Item label="Người giao" name="project_employee_request">
                           <Select
                             style={{ width: "100%" }}
                             placeholder="select one item"
@@ -512,6 +547,7 @@ const Project_info = () => {
                       </Upload>
                     </Form.Item>
                   </Row>
+
                 </Form>
               </Card>
             </Col>

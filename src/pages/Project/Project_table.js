@@ -33,6 +33,7 @@ import Highlighter from "react-highlight-words";
 const Project_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  const { users_function, users_name } = useSelector((state) => state.auth);
   let { status } = useParams();
   const [form] = Form.useForm();
   const [data, setData] = useState();
@@ -236,10 +237,10 @@ const Project_table = () => {
       dataIndex: "project_type",
       key: "project_type",
       width: 1,
-      render: (record) => {
+      render: (record,text,index) => {
         let list = record?.split(",");
         return (
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div  style={{ display: "flex", gap: "8px" }}>
             {list?.map((item) => {
               if (item == "QT - CB") {
                 return (
@@ -257,6 +258,7 @@ const Project_table = () => {
               } else if (item == "Giao việc") {
                 return (
                   <div
+                 
                     style={{
                       textAlign: "center",
                       borderRadius: "6px",
@@ -265,7 +267,7 @@ const Project_table = () => {
                       color: "red",
                     }}
                   >
-                    {item}
+                    {text.project_employee_request}
                   </div>
                 );
               } else {
@@ -428,6 +430,7 @@ const Project_table = () => {
   const create = async () => {
     const response = await postprojectInfo({
       project_id: randomStr(6),
+      project_employee_request: users_name,
       project_employee: project_employee,
       project_date_start: dayjs()
         .add(1, "d")
