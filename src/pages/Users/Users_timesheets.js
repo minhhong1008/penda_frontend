@@ -10,6 +10,7 @@ import {
   Select,
   Space,
   Table,
+  Tabs,
   Tag,
   TreeSelect,
 } from "antd";
@@ -19,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getListusersActions } from "../../actions/usersActions";
 import { createSession, getSessions } from "../../api/timeSheet";
 import { showError, showSuccess } from "../../utils";
+import { HuongDanUsers_timesheets, listselect_timesheets } from "./Users_list";
 
 const Users_timesheets = () => {
   const { users_function, users_id, users_name } = useSelector(
@@ -101,7 +103,9 @@ const Users_timesheets = () => {
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
 
     if (
-      ["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) != -1
+      ["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+        -1 &&
+      ["Minh Hồng", "Nguyễn Hoài"].indexOf(users_name) !== -1
     ) {
       try {
         let response = await createSession({
@@ -117,57 +121,72 @@ const Users_timesheets = () => {
               (data.working_session == "S" ? "sáng " : "chiều ") +
               data.working_date
           );
-        } else {
-          showError("Đăng ký thất bại");
         }
       } catch (error) {
-        showError("Đăng ký thất bại")
+        showError("Đăng ký thất bại");
       }
-    }else{
-      let response = await createSession({
-        users_function: users_function,
-        users_name: users_name,
-        working_session: values.working_session,
-        working_date: values.working_date,
-      });
-      if (response.status == 200) {
-        let { data } = response;
-        showSuccess(
-          "Đăng ký ca làm " +
-            (data.working_session == "S" ? "sáng " : "chiều ") +
-            data.working_date
-        );
-      } else {
+    } else {
+      try {
+        let response = await createSession({
+          users_function: users_function,
+          users_name: users_name,
+          working_session: values.working_session,
+          working_date: values.working_date,
+        });
+        if (response.status == 200) {
+          let { data } = response;
+          showSuccess(
+            "Đăng ký ca làm " +
+              (data.working_session == "S" ? "sáng " : "chiều ") +
+              data.working_date
+          );
+        }
+      } catch (error) {
         showError("Đăng ký thất bại");
       }
     }
-    
   };
 
-  const getListSession = async (time) => {
-    let response = await getSessions(time);
+  const getListSession = async (filterDate) => {
+    let response = await getSessions(filterDate);
     if (response.status == 200) {
       let { data } = response;
       let newData = [];
-      data.map((user, index) => {
-        let item = {};
-        item["total"] = user.sessions.length;
-        item["users_name"] = userss?.filter(
-          (item) => item.users_name == user._id
+
+      data.map((item, index) => {
+        let element_obj = {};
+
+        element_obj["users_name"] = userss?.filter(
+          (element_obj) => element_obj.users_name == item._id
         )[0]?.users_name;
-        item["index"] = parseInt(
-          userss?.filter((item) => item.users_name == user._id)[0]?.users_sort
+        element_obj["index"] = parseInt(
+          userss?.filter((element_obj) => element_obj.users_name == item._id)[0]
+            ?.users_sort
         );
-        user.sessions.map((session, index) => {
-          if (item[session.day]) {
-            item[session.day] =
-              item[session.day] + "-" + session.working_session;
+
+        let total_m = 0;
+        let total_n = 0;
+        item.sessions.map((session, index) => {
+          if (["ms", "mc", "mt"].indexOf(session.working_session) !== -1) {
+            total_m++;
+          }
+          if (["ns", "nc", "nt"].indexOf(session.working_session) !== -1) {
+            total_n++;
+          }
+
+          if (element_obj[session.day]) {
+            element_obj[session.day] =
+              element_obj[session.day] + "-" + session.working_session;
           } else {
-            item[session.day] = session.working_session;
+            element_obj[session.day] = session.working_session;
           }
         });
-        newData.push(item);
+
+        element_obj["total"] =
+          item.sessions.length - 1.25 * total_m - 3 * total_n;
+        newData.push(element_obj);
       });
+
       setData(newData.sort((a, b) => a.index - b.index));
     } else {
       showError("Có lỗi xảy ra");
@@ -190,165 +209,153 @@ const Users_timesheets = () => {
   }, [userss]);
 
   return (
-    <div>
-      {[
-        "Phó phòng",
-        "Tổ trưởng",
-        "Tổ phó",
-        "Chuyên viên",
-        "Nhân viên",
-        "Tập sự",
-        "Thử việc",
-      ].indexOf(users_function) == -1 || true ? (
-        <>
-          <Card
-            type="inner"
-            title="BẢNG CHẤM CÔNG"
-            extra={
-              <div style={{ display: "flex", gap: "8px" }}>
-                <DatePicker
-                  onChange={onChangeDate}
-                  defaultValue={dayjs(
-                    filterDate?.year + "-" + filterDate?.month,
-                    "YYYY-MM"
-                  )}
-                  format={"YYYY-MM"}
-                  picker="month"
-                />
-                <Button onClick={() => showModal()}>Đăng ký ca</Button>
-              </div>
-            }
-          >
-            <Table
-              columns={columns}
-              dataSource={data}
-              bordered
-              size="small"
-              pagination={{
-                pageSizeOptions: [
-                  "10",
-                  "20",
-                  "30",
-                  "50",
-                  "100",
-                  "200",
-                  "300",
-                  "500",
-                  "1000",
-                  "2000",
-                ],
-                position: ["bottomRight", "topRight"],
-                size: "large",
-                showSizeChanger: true,
-                defaultPageSize: 100,
-              }}
+    <>
+      <Card
+        type="inner"
+        title="BẢNG CHẤM CÔNG"
+        extra={
+          <div style={{ display: "flex", gap: "8px" }}>
+            <DatePicker
+              onChange={onChangeDate}
+              defaultValue={dayjs(
+                filterDate?.year + "-" + filterDate?.month,
+                "YYYY-MM"
+              )}
+              format={"YYYY-MM"}
+              picker="month"
             />
-          </Card>
-          <Modal
-            title="Đăng ký ca làm việc"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            extra={<div style={{ display: "flex", gap: "8px" }}></div>}
-          >
-            <Card>
-              <Form
-                form={form}
-                name="basic"
-                autoComplete="off"
-                size="large"
-                onFinish={onFinish}
-                initialValues={{
-                  working_session: "S",
-                  working_date: dayjs(),
-                  working_employee: users_name,
+            <Button onClick={() => showModal()}>Đăng ký ca</Button>
+          </div>
+        }
+      >
+        <Tabs defaultActiveKey="1">
+          <Tabs.TabPane tab="BẢNG CHẤM CÔNG" key="1">
+            <Card type="inner">
+              <Table
+                columns={columns}
+                dataSource={data}
+                bordered
+                size="small"
+                pagination={{
+                  pageSizeOptions: [
+                    "10",
+                    "20",
+                    "30",
+                    "50",
+                    "100",
+                    "200",
+                    "300",
+                    "500",
+                    "1000",
+                    "2000",
+                  ],
+                  position: ["bottomRight"],
+                  size: "large",
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
                 }}
-              >
-                <Row gutter={16}>
-                  <Col span={10}>
-                    <Form.Item
-                      label="Đăng ký"
-                      name="working_session"
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      <Select optionlabelprop="label">
-                        <Option value="S" label="Ca sáng">
-                          <div className="demo-option-label-item">Ca sáng</div>
-                        </Option>
-                        <Option value="C" label="Ca chiều">
-                          <div className="demo-option-label-item">Ca chiều</div>
-                        </Option>
-                        <Option value="T" label="Ca tối">
-                          <div className="demo-option-label-item">Ca tối</div>
-                        </Option>
-                        <Option value="delete" label="Xóa ngày">
-                          <div className="demo-option-label-item">Xóa ngày</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                  <Col span={14}>
-                    <Form.Item
-                      label="Ngày tháng"
-                      name="working_date"
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      <DatePicker
-                        style={{ float: "right" }}
-                        format="YYYY-MM-DD"
-                        defaultValue={dayjs()}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-                <Row gutter={16}>
-                  {[
-                    "Phó phòng",
-                    "Tổ trưởng",
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Col span={16}>
-                      <Form.Item label="Nhân viên" name="working_employee">
-                        <Select
-                          style={{ width: "100%" }}
-                          placeholder="select one item"
-                          optionlabelprop="label"
-                          size="large"
-                        >
-                          {listselect_employee?.map((item) => {
-                            return (
-                              <Option value={item} label={item}>
-                                <div className="demo-option-label-item">
-                                  {item}
-                                </div>
-                              </Option>
-                            );
-                          })}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  ) : null}
-
-                  <Col span={2} style={{ float: "right" }}>
-                    <Tag color="#108ee9" onClick={() => Nexttime()}>
-                      Next
-                    </Tag>
-                  </Col>
-                </Row>
-              </Form>
+              />
             </Card>
-          </Modal>
-        </>
-      ) : null}
-    </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+            <HuongDanUsers_timesheets />
+          </Tabs.TabPane>
+        </Tabs>
+      </Card>
+      <Modal
+        title="Đăng ký ca làm việc"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        extra={<div style={{ display: "flex", gap: "8px" }}></div>}
+      >
+        <Card>
+          <Form
+            form={form}
+            name="basic"
+            autoComplete="off"
+            size="large"
+            onFinish={onFinish}
+            initialValues={{
+              working_session: "S",
+              working_date: dayjs(),
+              working_employee: users_name,
+            }}
+          >
+            <Row gutter={16}>
+              <Col span={10}>
+                <Form.Item
+                  label="Đăng ký"
+                  name="working_session"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <Select optionlabelprop="label">
+                    {listselect_timesheets.map((item, index) => {
+                      return (
+                        <Option
+                          value={item.value}
+                          label={item.title}
+                          key={index}
+                        >
+                          <div className="demo-option-label-item">
+                            {item.title}
+                          </div>
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={14}>
+                <Form.Item
+                  label="Ngày tháng"
+                  name="working_date"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <DatePicker
+                    style={{ float: "right" }}
+                    format="YYYY-MM-DD"
+                    defaultValue={dayjs()}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              {["Minh Hồng", "Nguyễn Hoài"].indexOf(users_name) !== -1 ? (
+                <Col span={16}>
+                  <Form.Item label="Nhân viên" name="working_employee">
+                    <Select
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                      size="large"
+                    >
+                      {listselect_employee?.map((item) => {
+                        return (
+                          <Option value={item} label={item}>
+                            <div className="demo-option-label-item">{item}</div>
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              ) : null}
+
+              <Col span={2} style={{ float: "right" }}>
+                <Tag color="#108ee9" onClick={() => Nexttime()}>
+                  Next
+                </Tag>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+      </Modal>
+    </>
   );
 };
 
