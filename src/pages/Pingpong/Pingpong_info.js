@@ -1029,7 +1029,8 @@ const Pingpong_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="pingpong_image_url">
                       <Upload
-                        listType="picture-card"
+                         multiple
+                          listType="picture-card"
                         action="http://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}

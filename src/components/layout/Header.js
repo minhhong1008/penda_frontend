@@ -15,6 +15,8 @@ import {
   Input,
   List,
   Row,
+  Space,
+  Spin,
   Switch,
   Typography,
 } from "antd";
@@ -410,11 +412,13 @@ function Header({
             {profile}
             <span>{user.profile ? user.profile.users_name : ""}</span>
           </Link>
+         
           <Input
             className="header-search"
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
+           <Spin size="large" />
         </Col>
       </Row>
     </>

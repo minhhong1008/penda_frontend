@@ -198,13 +198,7 @@ const Project_table = () => {
       dataIndex: "project_work_item",
       key: "project_work_item",
       width: 1,
-      render: (text, record) => (
-        <a
-          
-        >
-          {text}
-        </a>
-      ),
+      render: (text, record) => <a>{text}</a>,
       sorter: (a, b) => {
         return a.project_work_item?.localeCompare(b.project_work_item);
       },
@@ -255,6 +249,20 @@ const Project_table = () => {
                       padding: "2px 2px",
                       background: "Magenta",
                       color: "white",
+                    }}
+                  >
+                    {item}
+                  </div>
+                );
+              } else if (item == "Giao việc") {
+                return (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      borderRadius: "6px",
+                      padding: "2px 2px",
+                      background: "Yellow",
+                      color: "red",
                     }}
                   >
                     {item}
@@ -472,6 +480,23 @@ const Project_table = () => {
       ) {
         if (!item.project_processing.includes("Hoàn thành")) {
           item.project_processing = item.project_processing + "," + "Quá hạn";
+        }
+        // Chỉ hiển thị ra 3 cái cuối cùng
+        let array = item.project_processing?.split(",");
+        if (array?.length > 2) {
+          for (let index = 0; index < array.length + 1; index++) {
+            array.shift();
+          }
+          item.project_processing = array?.join(",");
+        }
+      } else {
+        // Chỉ hiển thị ra 3 cái cuối cùng
+        let array = item.project_processing?.split(",");
+        if (array?.length > 2) {
+          for (let index = 0; index < array.length + 1; index++) {
+            array?.shift();
+          }
+          item.project_processing = array?.join(",");
         }
       }
     });

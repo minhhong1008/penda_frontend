@@ -1004,7 +1004,8 @@ const Tiktok_info = () => {
                     <Form.Item name="tiktok_image_url">
                       <Upload
                         action="http://backend.penda.vn/api/files"
-                        listType="picture-card"
+                         multiple
+                          listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

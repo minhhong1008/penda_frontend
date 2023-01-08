@@ -31,7 +31,7 @@ const Ebay_table = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
-// Các hàm nut search trên table
+  // Các hàm nut search trên table
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -149,7 +149,7 @@ const Ebay_table = () => {
         text
       ),
   });
-
+//-------------------------------
   // nut checked, sửa cả trong file ebayReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copyId = () => {
@@ -166,6 +166,7 @@ const Ebay_table = () => {
       fixed: "left",
       width: 1,
       render: (text, record, index) => index + 1,
+      responsive: ["md"],
     },
     {
       title: (
@@ -180,6 +181,7 @@ const Ebay_table = () => {
         return a.ebay_id?.localeCompare(b.ebay_id);
       },
       ...getColumnSearchProps("ebay_id"),
+      responsive: ["md"],
     },
     {
       title: (
@@ -194,6 +196,7 @@ const Ebay_table = () => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
       ...getColumnSearchProps("ebay_user"),
+      responsive: ["md"],
     },
     {
       title: (
@@ -272,6 +275,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
+      responsive: ["md"],
     },
     {
       title: (
@@ -309,6 +313,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
+      responsive: ["md"],
     },
     {
       title: (
@@ -318,7 +323,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_employee",
       key: "ebay_employee",
-      width: 1,
+
       render: (record) => {
         if (!record) {
           return;
@@ -347,6 +352,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_employee?.localeCompare(b.ebay_employee);
       },
+      responsive: ["md"],
     },
     {
       title: (
@@ -370,7 +376,7 @@ const Ebay_table = () => {
                 setSelectedNote();
               }}
               onClick={(e) => {
-                e.stopPropagation()
+                e.stopPropagation();
               }}
               defaultValue={text}
             ></Input>
@@ -400,17 +406,21 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_note?.localeCompare(b.ebay_note);
       },
+      responsive: ["md"],
     },
   ];
 
   const handleChangeNote = async (id, value) => {
-    const response = await updateebayInfo({
-      ebay_note: value
-    }, id);
-    if(response.status == 200){
+    const response = await updateebayInfo(
+      {
+        ebay_note: value,
+      },
+      id
+    );
+    if (response.status == 200) {
       showSuccess("Update thanh cong");
     } else {
-      showError("Loi roi")
+      showError("Loi roi");
     }
     setSelectedNote();
   };

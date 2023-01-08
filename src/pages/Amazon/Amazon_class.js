@@ -716,6 +716,7 @@ const Amazon_class = () => {
               }}
                 columns={columns}
                 dataSource={dataClass}
+                scroll={{ y: 1300 }}
                 pagination={{
                   pageSizeOptions: [
                     "10",
@@ -730,6 +731,7 @@ const Amazon_class = () => {
                     "00",
                   ],
                   position: ["bottomRight", "topRight"],
+                  pageSize: 100,
                   showSizeChanger: true,
                   defaultPageSize: 19,
                 }}

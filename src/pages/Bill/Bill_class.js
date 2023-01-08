@@ -16,6 +16,7 @@ import {
   Modal,
   InputNumber,
   Upload,
+  Mentions,
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -30,6 +31,17 @@ import {
   getListBill,
   getEmployee,
 } from "../../api/bill";
+/* // Liên quan mention
+const onChange = (value) => {
+  console.log("Change:", value);
+};
+const onSelect = (option) => {
+  console.log("select", option);
+}; */
+const MOCK_DATA = {
+  "@": ["afc163", "zombiej", "yesmeck"],
+  "#": ["1.0", "2.0", "3.0"],
+};
 // Liên quan upload ảnh
 import { PlusOutlined } from "@ant-design/icons";
 const getBase64 = (file) =>
@@ -52,10 +64,16 @@ const Bill_class = () => {
   const [listselect_bill_work_new, setListBillWorkNew] = useState(
     listselect_bill_work
   );
+  // Liên kết mention
+  const [prefix, setPrefix] = useState("@");
+  const onSearch = (_, newPrefix) => {
+    setPrefix(newPrefix);
+  };
+
   const rangePresets = [
     {
       label: "Default",
-      value: [dayjs().add(- 30, "d"), dayjs().add( 30, "d")],
+      value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
     },
     {
       label: "Last 30 Days",
@@ -128,8 +146,10 @@ const Bill_class = () => {
     // Xử lý dữ liệu ngày tháng, multi select, earewa trước
     if (values.bill_date != null) {
       values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
-      values.bill_expiry_date = dayjs(values.bill_expiry_date).format("YYYY-MM-DD");
-      
+      values.bill_expiry_date = dayjs(values.bill_expiry_date).format(
+        "YYYY-MM-DD"
+      );
+
       let productValues = formProduct.getFieldsValue();
       // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
       let newData = {
@@ -926,7 +946,20 @@ const Bill_class = () => {
 
                       <Col span={8}>
                         <Form.Item label="NCC" name="bill_supplier">
-                          <Input placeholder="Antidetect" />
+                          <Mentions
+                            style={{
+                              width: "100%",
+                            }}
+                            size="large"
+                            autoSize ="true"
+                            prefix={["@", "#"]}
+                            onSearch={onSearch}
+                            options={(MOCK_DATA[prefix] || []).map((value) => ({
+                              key: value,
+                              value,
+                              label: value,
+                            }))}
+                          />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -934,17 +967,17 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item label="Điện thoại" name="bill_contact_phone">
-                          <Input  />
+                          <Input />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Web" name="bill_contact_social1">
-                          <Input  />
+                          <Input />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label="Social" name="bill_contact_social2">
-                          <Input  />
+                          <Input />
                         </Form.Item>
                       </Col>
                     </Row>
@@ -979,7 +1012,7 @@ const Bill_class = () => {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                      <Form.Item label="Thời hạn" name="bill_expiry_date">
+                        <Form.Item label="Thời hạn" name="bill_expiry_date">
                           <DatePicker
                             style={{ float: "right" }}
                             format="YYYY-MM-DD"
@@ -987,7 +1020,6 @@ const Bill_class = () => {
                           />
                         </Form.Item>
                       </Col>
-                      
                     </Row>
                     <Row gutter={16}>
                       <Col span={24}>
@@ -999,6 +1031,8 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Form.Item name="bill_image_url">
                         <Upload
+                        
+                           multiple
                           listType="picture-card"
                           action="http://backend.penda.vn/api/files"
                           fileList={fileList}

@@ -10,6 +10,7 @@ import {
   Select,
   Modal,
   Avatar,
+  Rate,
   List,
   Upload,
 } from "antd";
@@ -41,9 +42,11 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
 const Project_info = () => {
   const { Option } = Select;
+  const [value, setValue] = useState(3);
   const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
   let { id } = useParams();
@@ -337,14 +340,15 @@ const Project_info = () => {
                     <Col span={18}>
                       <Form.Item label="Nội dung" name="project_content">
                         <Input
-                          placeholder="Nội dung chi tiết công việc"
+                          placeholder="Nội dung chi tiết công việc maxLength 50"
                           disabled={disabled}
+                          maxLength={50}
                         />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Số lượng" name="project_number">
-                        <Input placeholder="50" />
+                        <Input placeholder="50" maxLength={10} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -411,34 +415,7 @@ const Project_info = () => {
                     </Form.Item>
                   ) : null}
                   <Row gutter={16}>
-                    <Col span={8}>
-                      {/* Đánh giá */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Đánh giá" name="project_review">
-                          <Select
-                            style={{ width: "100%" }}
-                            placeholder="select one item"
-                            optionlabelprop="label"
-                          >
-                            {listselect_project_review.map((item, index) => {
-                              return (
-                                <Option value={item} label={item} key={index}>
-                                  <div className="demo-option-label-item">
-                                    {item}
-                                  </div>
-                                </Option>
-                              );
-                            })}
-                          </Select>
-                        </Form.Item>
-                      ) : null}
-                    </Col>
+                    
                     <Col span={8}>
                       {/* Sở hữu */}
                       {[
@@ -504,6 +481,20 @@ const Project_info = () => {
                         </Form.Item>
                       ) : null}
                     </Col>
+                    <Col span={8}>
+                      {/* Đánh giá */}
+                      {[
+                        "Tổ phó",
+                        "Chuyên viên",
+                        "Nhân viên",
+                        "Tập sự",
+                        "Thử việc",
+                      ].indexOf(users_function) == -1 ? (
+                        <Form.Item label="Đánh giá" name="project_review">
+                          <Rate tooltips={desc} allowHalf defaultValue={1.5} />
+                        </Form.Item>
+                      ) : null}
+                    </Col>
                   </Row>
 
                   {/* Upload ảnh */}
@@ -511,6 +502,7 @@ const Project_info = () => {
                     <Form.Item name="project_image_url">
                       <Upload
                         action="http://backend.penda.vn/api/files"
+                        multiple
                         listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}

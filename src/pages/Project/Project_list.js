@@ -17,7 +17,11 @@ export const listselect_project_work = [
   "Tài nguyên",
   "Dữ liệu",
   "Thiết bị",
-  "Hoạt động",
+  "Code",
+  "Mua sắm",
+  "Giao việc",
+  "Báo cáo",
+  "Kiểm tra",
 ];
 export const listselect_project_review = [
   "Không hoàn thành",
@@ -36,6 +40,7 @@ export const listselect_project_type = [
 export const listselect_project_work_item = [
   "Tài chính",
   "Kinh doanh",
+  "Công nghệ",
   "Sản xuất",
   "Kế hoạch",
   "Nhân sự",

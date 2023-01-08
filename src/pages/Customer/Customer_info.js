@@ -25,6 +25,7 @@ import { copyToClipboard } from "../../utils/index";
 import dayjs, { now } from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
+
 import {
   listselect_customer_processing,
   listselect_customer_error,
@@ -509,7 +510,8 @@ const Customer_info = () => {
                     <Form.Item name="customer_image_url">
                       <Upload
                         action="http://backend.penda.vn/api/files"
-                        listType="picture-card"
+                         multiple
+                          listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

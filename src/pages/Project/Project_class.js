@@ -11,6 +11,7 @@ import {
   Select,
   Collapse,
   Space,
+  Spin,
   TreeSelect,
 } from "antd";
 import React, { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCountProject } from "../../api/project/index";
 import { getListusersActions } from "../../actions/usersActions";
+
 const Project_class = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -29,6 +31,7 @@ const Project_class = () => {
     {
       title: "STT",
       key: "index",
+      width: 1,
       render: (text, record, index) => index + 1,
     },
     {
@@ -39,6 +42,7 @@ const Project_class = () => {
       ),
       dataIndex: "users_name",
       key: "users_name",
+      width: 1,
       render: (text) => (
         <a
           
@@ -55,6 +59,28 @@ const Project_class = () => {
       ),
       dataIndex: "project_count",
       key: "project_count",
+      width: 1,
+    },
+    {
+      title: (
+        <div>
+          <strong>HOÀN THÀNH</strong>
+        </div>
+      ),
+      dataIndex: "project_count",
+      key: "project_count",
+      width: 1,
+    },
+    {
+      title: (
+        <div>
+          <strong>CHƯA HOÀN THÀNH</strong>
+          
+        </div>
+      ),
+      dataIndex: "project_count",
+      key: "project_count",
+      width: 1,
     },
     {
       title: (

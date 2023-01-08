@@ -1022,7 +1022,8 @@ const Amazon_info = () => {
                     <Form.Item name="amazon_image_url">
                       <Upload
                         action="http://backend.penda.vn/api/files"
-                        listType="picture-card"
+                         multiple
+                          listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}
