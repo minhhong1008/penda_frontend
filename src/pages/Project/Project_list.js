@@ -58,6 +58,7 @@ export const listselect_project_owner = [
   "Phòng Kinh doanh",
   "Phòng nâng cấp",
   "Kho lưu trữ",
+  "Phòng công nghệ",
   "Phòng kế toán quản trị",
   "Phòng kế hoạch",
   "Phòng hành chính nhân sự",
@@ -65,12 +66,12 @@ export const listselect_project_owner = [
 
 export const listselect_project_status = [
   "Bắt đầu",
-  "Đang thực hiện",
-  "Chưa hoàn thành",
-  "Đang vướng mắc",
-  "Đã hoàn thành",
+  "Thực hiện",
+  "Chưa Xong",
+  "Vướng mắc",
+  "Hoàn thành",
   "Không cần làm",
-  "Việc cá nhân",
+  "Cá nhân",
   //Lưu ý có đặt điều kiện trong project.js controller nên sửa ở đây phải sửa cả controller
 ];
 
@@ -124,6 +125,9 @@ export const HuongDanProject_info = () => {
             <p>
               Từ trưởng phòng sẽ được full quyền, nhân viên chỉ vào được bản của
               nhân viên đó.
+            </p>
+            <p>
+              Chuyển việc từ nhân viên này sang nhân viên khác khi thay đổi nhân viên.
             </p>
             <p>
               Phần mềm sẽ dùng số lượng công việc theo chỉ tiêu "Chủ động", "Đã

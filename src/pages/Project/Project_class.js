@@ -25,6 +25,7 @@ const Project_class = () => {
   const urlParams = new URLSearchParams(queryString);
   const { userss } = useSelector((state) => state.users);
   const status_name = urlParams.get("status");
+  const [newdata, setData] = useState();
   const dispatch = useDispatch();
   const history = useHistory();
   const columns = [
@@ -42,14 +43,8 @@ const Project_class = () => {
       ),
       dataIndex: "users_name",
       key: "users_name",
-      width: 1,
-      render: (text) => (
-        <a
-          
-        >
-          {text}
-        </a>
-      ),
+     
+      render: (text) => <a>{text}</a>,
     },
     {
       title: (
@@ -57,31 +52,11 @@ const Project_class = () => {
           <strong>TỔNG</strong>
         </div>
       ),
-      dataIndex: "project_count",
-      key: "project_count",
+      dataIndex: "count",
+      key: "count",
       width: 1,
     },
-    {
-      title: (
-        <div>
-          <strong>HOÀN THÀNH</strong>
-        </div>
-      ),
-      dataIndex: "project_count",
-      key: "project_count",
-      width: 1,
-    },
-    {
-      title: (
-        <div>
-          <strong>CHƯA HOÀN THÀNH</strong>
-          
-        </div>
-      ),
-      dataIndex: "project_count",
-      key: "project_count",
-      width: 1,
-    },
+    
     {
       title: (
         <div>
@@ -91,64 +66,58 @@ const Project_class = () => {
       dataIndex: "function_mission",
       key: "function_mission",
     },
-    
   ];
 
   const countProject = async () => {
     let { data } = await getCountProject();
-   
-    
+    let newdata = data.data;
+    newdata.forEach((item,index) => {
+      newdata[index].users_name = item._id.users_name;
+      console.log(newdata[index])
+    });
+
+    setData(newdata);
   };
-  const getListusers = () => {
-    dispatch(
-      getListusersActions({
-        users_status: "Active",
-      })
-    );
-  };
+
   useEffect(() => {
-    getListusers();
+    //getListusers();
     countProject();
   }, []);
 
   return (
     <div>
-       <Card type="inner"
-            title="BẢNG KẾ HOẠCH"
-           >
-              <Table
-              onRow={(text, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    history.push(
-                      `project_class/table?class=${encodeURIComponent(
-                        text.users_name
-                      )}`
-                    );
-                  },
-                };
-              }}
-                columns={columns}
-                dataSource={userss}
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "0",
-                    "300",
-                    "500",
-                    "1000",
-                    "00",
-                  ],
-                  position: ["bottomRight"],
-                  showSizeChanger: true,
-                  defaultPageSize: 19,
-                }}
-              ></Table>
-            </Card>
+      <Card type="inner" title="BẢNG KẾ HOẠCH">
+        <Table
+          onRow={(text, rowIndex) => {
+            return {
+              onClick: (event) => {
+                history.push(
+                  `project_class/table?class=${encodeURIComponent(text.users_name)}`
+                );
+              },
+            };
+          }}
+          columns={columns}
+          dataSource={newdata}
+          pagination={{
+            pageSizeOptions: [
+              "10",
+              "20",
+              "30",
+              "50",
+              "100",
+              "0",
+              "300",
+              "500",
+              "1000",
+              "00",
+            ],
+            position: ["bottomRight"],
+            showSizeChanger: true,
+            defaultPageSize: 19,
+          }}
+        ></Table>
+      </Card>
     </div>
   );
 };

@@ -46,7 +46,9 @@ const Project_table = () => {
   const countDay = dayjs().daysInMonth();
   const [filterDate, setFilterDate] = useState();
   const { RangePicker } = DatePicker;
-  const countDay_next = dayjs(year + "-" + (parseInt(month)+1) + "-" + "01").daysInMonth();
+  const countDay_next = dayjs(
+    year + "-" + (parseInt(month) + 1) + "-" + "01"
+  ).daysInMonth();
   const rangePresets = [
     {
       label: "Mặc định",
@@ -62,8 +64,8 @@ const Project_table = () => {
     {
       label: "Tháng sau",
       value: [
-        dayjs(year + "-" + (parseInt(month)+1) + "-" + "01"),
-        dayjs(year + "-" + (parseInt(month)+1) + "-" + countDay_next),
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + countDay_next),
       ],
     },
     {
@@ -206,12 +208,11 @@ const Project_table = () => {
       dataIndex: "project_work_item",
       key: "project_work_item",
       width: 1,
-      
+
       render: (text) => {
-        if(text =="Kế hoạch"){
+        if (text == "Kế hoạch") {
           return (
             <div style={{ display: "flex", gap: "8px" }}>
-              
               <div
                 style={{
                   textAlign: "center",
@@ -225,16 +226,11 @@ const Project_table = () => {
               </div>
             </div>
           );
-
-        }else{
-          return (
-            <> {text}</>
-          );
-         
+        } else {
+          return <> {text}</>;
         }
-        
       },
-      
+
       sorter: (a, b) => {
         return a.project_work_item?.localeCompare(b.project_work_item);
       },
@@ -272,10 +268,10 @@ const Project_table = () => {
       dataIndex: "project_type",
       key: "project_type",
       width: 1,
-      render: (record,text,index) => {
+      render: (record, text, index) => {
         let list = record?.split(",");
         return (
-          <div  style={{ display: "flex", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "8px" }}>
             {list?.map((item) => {
               if (item == "QT - CB") {
                 return (
@@ -293,7 +289,6 @@ const Project_table = () => {
               } else if (item == "Giao việc") {
                 return (
                   <div
-                 
                     style={{
                       textAlign: "center",
                       borderRadius: "6px",
@@ -505,12 +500,11 @@ const Project_table = () => {
 
     let { data } = await getListproject({
       project_employee: project_employee,
-      project_status: "Bắt đầu",
       from: filter[0],
       to: filter[1],
     });
 
-    // Hiện lên bôi đỏ những cái quá hạn mà chưa hoàn thành
+    // Hiện lên bôi đỏ những cái quá hạn mà chưa hoàn thành, báo việc QT-0-CB thành QT - CB
     data.forEach((item) => {
       if (
         dayjs(item.project_date_end).format("YYYY-MM-DD") <
@@ -519,7 +513,7 @@ const Project_table = () => {
         if (!item.project_processing.includes("Hoàn thành")) {
           item.project_processing = item.project_processing + "," + "Quá hạn";
         }
-        // Chỉ hiển thị ra 3 cái cuối cùng
+        // Chỉ hiển thị ra 3 cái cuối cùng cột processing
         let array = item.project_processing?.split(",");
         if (array?.length > 2) {
           for (let index = 0; index < array.length + 1; index++) {
@@ -537,12 +531,14 @@ const Project_table = () => {
           item.project_processing = array?.join(",");
         }
         // Nếu thời hạn còn 2 ngày thì chuyển từ QT-0-CB thành QT-CB
-        let array_project_date_end = item.project_date_end.split("-")
-        if(dayjs(item.project_date_end).format("YYYY-MM-DD") <
-        dayjs().add(2,"d").format("YYYY-MM-DD")){
+        if (
+          dayjs(item.project_date_end).format("YYYY-MM-DD") <
+          dayjs()
+            .add(2, "d")
+            .format("YYYY-MM-DD")
+        ) {
           if (!item.project_type?.includes("QT - CB")) {
             item.project_type = item.project_type + "," + "QT - CB";
-           
           }
         }
       }

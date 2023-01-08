@@ -204,7 +204,7 @@ const Project_info = () => {
 
   return (
     <Card
-      title={id + " | " + (info?._id ? info?._id : "")}
+      title={id + " | " + users_name}
       extra={
         <Button
           onClick={() => form.submit()}
