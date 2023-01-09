@@ -297,7 +297,7 @@ const Project_info = () => {
                     </Col>
                     <Col span={8}>
                       {/* Hạng mục */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item label="Hạng mục" name="project_work_item">
@@ -323,7 +323,7 @@ const Project_info = () => {
 
                     <Col span={8}>
                       {/* Công việc */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item label="Công việc" name="project_work">
@@ -405,7 +405,7 @@ const Project_info = () => {
                   <Row gutter={16}>
                     <Col span={16}>
                       {/*  Loại */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item label="Loại" name="project_type">
@@ -432,7 +432,7 @@ const Project_info = () => {
 
                     <Col span={8}>
                       {/* Nhân viên */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item label="Nhân viên" name="project_employee">
@@ -460,7 +460,7 @@ const Project_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       {/* Sở hữu */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item label="Sở hữu" name="project_owner">
@@ -487,7 +487,7 @@ const Project_info = () => {
                     </Col>
                     <Col span={8}>
                       {/* Người giao việc */}
-                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
                       ) !== -1 ? (
                         <Form.Item
