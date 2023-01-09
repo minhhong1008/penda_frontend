@@ -83,7 +83,7 @@ const Users_table = () => {
   return (
     <div>
       
-      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
       -1 ? (
         <Card type="inner">
           <Table
