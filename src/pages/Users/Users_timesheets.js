@@ -101,12 +101,11 @@ const Users_timesheets = () => {
 
   const onFinish = async (values) => {
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
-
-    if (
-      ["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
-        -1 &&
-      ["Minh Hồng", "Nguyễn Hoài"].indexOf(users_name) !== -1
-    ) {
+    let date_end = dayjs()
+      .add("3", "d")
+      .format("YYYY-MM-DD");
+    // Đăng ký của nhân viên
+    if (values.working_date >= date_end) {
       try {
         let response = await createSession({
           users_function: users_function,
@@ -115,34 +114,28 @@ const Users_timesheets = () => {
           working_date: values.working_date,
         });
         if (response.status == 200) {
-          let { data } = response;
-          showSuccess(
-            "Đăng ký ca làm " +
-              (data.working_session == "S" ? "sáng " : "chiều ") +
-              data.working_date
-          );
+          showSuccess("Đăng ký thành công");
         }
       } catch (error) {
-        showError("Đăng ký thất bại");
+        showError("Có Lỗi, báo cáo lại");
       }
     } else {
-      try {
-        let response = await createSession({
-          users_function: users_function,
-          users_name: users_name,
-          working_session: values.working_session,
-          working_date: values.working_date,
-        });
-        if (response.status == 200) {
-          let { data } = response;
-          showSuccess(
-            "Đăng ký ca làm " +
-              (data.working_session == "S" ? "sáng " : "chiều ") +
-              data.working_date
-          );
+      if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
+        try {
+          let response = await createSession({
+            users_function: users_function,
+            users_name: values.working_employee,
+            working_session: values.working_session,
+            working_date: values.working_date,
+          });
+          if (response.status == 200) {
+            showSuccess("Đăng ký thành công");
+          }
+        } catch (error) {
+          showError("Đăng ký rồi");
         }
-      } catch (error) {
-        showError("Đăng ký thất bại");
+      } else {
+        showError("Không có quyền");
       }
     }
   };

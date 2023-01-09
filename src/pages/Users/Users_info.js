@@ -18,10 +18,7 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import {
-  getusersInfo,
-  updateusersInfo,
-} from "../../api/users/index";
+import { getusersInfo, updateusersInfo } from "../../api/users/index";
 import { HuongDanUsers_info } from "./Users_list";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
@@ -29,7 +26,6 @@ import { useSelector } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons";
 
 // Khi
-
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -42,7 +38,7 @@ const getBase64 = (file) =>
 const Users_info = () => {
   // Khi lưu lại thì dùng JSON.stringfy(user_function) để chuyển về dạng string
   // Khi gọi từ database về dùng JSON.parse(user_function) để truyển lại về JSON
-  const user_function = [
+  const user_testfunction = [
     {
       title: "Chức năng",
       value: [
@@ -80,7 +76,7 @@ const Users_info = () => {
   ];
 
   const { Option } = Select;
-  const { users_function } = useSelector((state) => state.auth);
+  const { users_function, users_name } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
   let { id } = useParams();
   // Khai báo các kho dữ liệu
@@ -168,6 +164,7 @@ const Users_info = () => {
       });
       setFileList(dataImage);
     }
+
     form.setFieldsValue(newData);
     //infoForm.setFieldsValue(newData);
     dateForm.setFieldsValue({
@@ -176,6 +173,7 @@ const Users_info = () => {
     });
     setInfo(newData);
     setNoteValue(data.users_note);
+
     //setSelectListInfo(data.list_view.split(","));
   };
 
@@ -400,9 +398,10 @@ const Users_info = () => {
                         <Input placeholder="nguyenhoai" />
                       </Form.Item>
                     </Col>
+
                     <Col span={8}>
                       <Form.Item label="Password" name="users_passwords">
-                        <Input placeholder="Nam" />
+                        <Input />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -424,33 +423,24 @@ const Users_info = () => {
                       </Form.Item>
                     </Col>
                     <Col span={8}>
-                      {[
-                        "Tổ trưởng",
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Mail" name="users_mail">
-                          <Input placeholder="" />
-                        </Form.Item>
-                      ) : null}
+                      <Form.Item label="Mail" name="users_mail">
+                        <Input placeholder="" />
+                      </Form.Item>
                     </Col>
                   </Row>
 
                   <Row gutter={16}>
-                    <Col span={8}>
+                    <Col span={9}>
                       <Form.Item label="Ngân hàng" name="users_bank">
                         <Input placeholder="ACB" />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col span={10}>
                       <Form.Item label="Số tài khoản" name="users_banknumber">
                         <Input placeholder="76668888" />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col span={5}>
                       <Form.Item label="Sắp xếp" name="users_sort">
                         <Input placeholder="" />
                       </Form.Item>
@@ -528,393 +518,318 @@ const Users_info = () => {
                     </Col>
                   </Row>
 
-                  {[
-                    "Phó Giám đốc",
-                    "Trưởng phòng",
-                    "Phó phòng",
-                    "Tổ trưởng",
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Chức vụ" name="users_function">
-                      <Select
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                        // disabled={true}
+                  <Form.Item label="Chức vụ" name="users_function">
+                    <Select
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                      // disabled={true}
+                    >
+                      <Option value="Giám đốc" label="Giám đốc">
+                        <div className="demo-option-label-item">Giám đốc</div>
+                      </Option>
+                      <Option value="Phó Giám đốc" label="Phó Giám đốc">
+                        <div className="demo-option-label-item">
+                          Phó Giám đốc
+                        </div>
+                      </Option>
+                      <Option value="Trưởng phòng" label="Trưởng phòng">
+                        <div className="demo-option-label-item">
+                          Trưởng phòng
+                        </div>
+                      </Option>
+                      <Option value="Phó phòng" label="Phó phòng">
+                        <div className="demo-option-label-item">Phó phòng</div>
+                      </Option>
+                      <Option value="Tổ trưởng" label="Tổ trưởng">
+                        <div className="demo-option-label-item">Tổ trưởng</div>
+                      </Option>
+                      <Option value="Tổ phó" label="Tổ phó">
+                        <div className="demo-option-label-item">Tổ phó</div>
+                      </Option>
+                      <Option value="Chuyên viên" label="Chuyên viên">
+                        <div className="demo-option-label-item">
+                          Chuyên viên
+                        </div>
+                      </Option>
+                      <Option value="Nhân viên" label="Nhân viên">
+                        <div className="demo-option-label-item">Nhân viên</div>
+                      </Option>
+                      <Option value="Tập sự" label="Tập sự">
+                        <div className="demo-option-label-item">Tập sự</div>
+                      </Option>
+                      <Option value="Thử việc" label="Thử việc">
+                        <div className="demo-option-label-item">Thử việc</div>
+                      </Option>
+                      <Option value="Admin" label="Admin">
+                        <div className="demo-option-label-item">Admin</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label="Phòng ban" name="users_owner">
+                    <Select
+                      //disabled={true}
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                    >
+                      <Option value="Phòng IT" label="Phòng IT">
+                        <div className="demo-option-label-item">Phòng IT</div>
+                      </Option>
+                      <Option value="Phòng Marketting" label="Phòng Marketting">
+                        <div className="demo-option-label-item">
+                          Phòng Marketing
+                        </div>
+                      </Option>
+                      <Option
+                        value="Phòng hành chính nhân sự"
+                        label="Phòng hành chính nhân sự"
                       >
-                        <Option value="Giám đốc" label="Giám đốc">
-                          <div className="demo-option-label-item">Giám đốc</div>
-                        </Option>
-                        <Option value="Phó Giám đốc" label="Phó Giám đốc">
-                          <div className="demo-option-label-item">
-                            Phó Giám đốc
-                          </div>
-                        </Option>
-                        <Option value="Trưởng phòng" label="Trưởng phòng">
-                          <div className="demo-option-label-item">
-                            Trưởng phòng
-                          </div>
-                        </Option>
-                        <Option value="Phó phòng" label="Phó phòng">
-                          <div className="demo-option-label-item">
-                            Phó phòng
-                          </div>
-                        </Option>
-                        <Option value="Tổ trưởng" label="Tổ trưởng">
-                          <div className="demo-option-label-item">
-                            Tổ trưởng
-                          </div>
-                        </Option>
-                        <Option value="Tổ phó" label="Tổ phó">
-                          <div className="demo-option-label-item">Tổ phó</div>
-                        </Option>
-                        <Option value="Chuyên viên" label="Chuyên viên">
-                          <div className="demo-option-label-item">
-                            Chuyên viên
-                          </div>
-                        </Option>
-                        <Option value="Nhân viên" label="Nhân viên">
-                          <div className="demo-option-label-item">
-                            Nhân viên
-                          </div>
-                        </Option>
-                        <Option value="Tập sự" label="Tập sự">
-                          <div className="demo-option-label-item">Tập sự</div>
-                        </Option>
-                        <Option value="Thử việc" label="Thử việc">
-                          <div className="demo-option-label-item">Thử việc</div>
-                        </Option>
-                        <Option value="Admin" label="Admin">
-                          <div className="demo-option-label-item">Admin</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-                  ) : null}
-
-                  {[
-                    "Phó Giám đốc",
-                    "Trưởng phòng",
-                    "Phó phòng",
-                    "Tổ trưởng",
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Phòng ban" name="users_owner">
-                      <Select
-                        //disabled={true}
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
+                        <div className="demo-option-label-item">
+                          Phòng hành chính nhân sự
+                        </div>
+                      </Option>
+                      <Option
+                        value="Phòng kế toán quản trị"
+                        label="Phòng kế toán quản trị"
                       >
-                        <Option value="Phòng IT" label="Phòng IT">
-                          <div className="demo-option-label-item">Phòng IT</div>
-                        </Option>
-                        <Option
-                          value="Phòng Marketting"
-                          label="Phòng Marketting"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Marketing
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng hành chính nhân sự"
-                          label="Phòng hành chính nhân sự"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng hành chính nhân sự
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng kế toán quản trị"
-                          label="Phòng kế toán quản trị"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng kế toán quản trị
-                          </div>
-                        </Option>
-                        <Option value="Phòng kế hoạch" label="Phòng kế hoạch">
-                          <div className="demo-option-label-item">
-                            Phòng kế hoạch
-                          </div>
-                        </Option>
-                        <Option value="Ban kiểm soát" label="Ban kiểm soát">
-                          <div className="demo-option-label-item">
-                            Ban kiểm soát
-                          </div>
-                        </Option>
-                        <Option value="Phòng sản xuất" label="Phòng sản xuất">
-                          <div className="demo-option-label-item">
-                            Phòng sản xuất
-                          </div>
-                        </Option>
-                        <Option
-                          value="Phòng Kinh doanh"
-                          label="Phòng Kinh doanh"
-                        >
-                          <div className="demo-option-label-item">
-                            Phòng Kinh doanh
-                          </div>
-                        </Option>
-                        <Option value="Phòng nâng cấp" label="Phòng nâng cấp">
-                          <div className="demo-option-label-item">
-                            Phòng nâng cấp
-                          </div>
-                        </Option>
-                        <Option value="Phòng phục hồi" label="Phòng phục hồi">
-                          <div className="demo-option-label-item">
-                            Phòng phục hồi
-                          </div>
-                        </Option>
+                        <div className="demo-option-label-item">
+                          Phòng kế toán quản trị
+                        </div>
+                      </Option>
+                      <Option value="Phòng kế hoạch" label="Phòng kế hoạch">
+                        <div className="demo-option-label-item">
+                          Phòng kế hoạch
+                        </div>
+                      </Option>
+                      <Option value="Ban kiểm soát" label="Ban kiểm soát">
+                        <div className="demo-option-label-item">
+                          Ban kiểm soát
+                        </div>
+                      </Option>
+                      <Option value="Phòng sản xuất" label="Phòng sản xuất">
+                        <div className="demo-option-label-item">
+                          Phòng sản xuất
+                        </div>
+                      </Option>
+                      <Option value="Phòng Kinh doanh" label="Phòng Kinh doanh">
+                        <div className="demo-option-label-item">
+                          Phòng Kinh doanh
+                        </div>
+                      </Option>
+                      <Option value="Phòng nâng cấp" label="Phòng nâng cấp">
+                        <div className="demo-option-label-item">
+                          Phòng nâng cấp
+                        </div>
+                      </Option>
+                      <Option value="Phòng phục hồi" label="Phòng phục hồi">
+                        <div className="demo-option-label-item">
+                          Phòng phục hồi
+                        </div>
+                      </Option>
 
-                        <Option value="Kho lưu trữ" label="Kho lưu trữ">
-                          <div className="demo-option-label-item">
-                            Kho lưu trữ
-                          </div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-                  ) : null}
+                      <Option value="Kho lưu trữ" label="Kho lưu trữ">
+                        <div className="demo-option-label-item">
+                          Kho lưu trữ
+                        </div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
 
-                  {[
-                    "Phó phòng",
-                    "Tổ trưởng",
-                    "Tổ phó",
-                    "Chuyên viên",
-                    "Nhân viên",
-                    "Tập sự",
-                    "Thử việc",
-                  ].indexOf(users_function) == -1 ? (
-                    <Form.Item label="Quản lý " name="manage_view">
-                      <Select
-                        //disabled={true}
-                        mode="multiple"
-                        style={{ width: "100%" }}
-                        placeholder="select one item"
-                        optionlabelprop="label"
-                        //status="warning"
-                      >
-                        <Option value="device_id" label="device">
-                          <div className="demo-option-label-item">device</div>
-                        </Option>
-                        <Option value="proxy_id" label="proxy">
-                          <div className="demo-option-label-item">proxy</div>
-                        </Option>
-                        <Option value="info_id" label="info">
-                          <div className="demo-option-label-item">info</div>
-                        </Option>
-                        <Option value="project_id" label="project">
-                          <div className="demo-option-label-item">project</div>
-                        </Option>
-                        <Option value="mail_id" label="mail">
-                          <div className="demo-option-label-item">mail</div>
-                        </Option>
-                        <Option value="sim_id" label="sim">
-                          <div className="demo-option-label-item">sim</div>
-                        </Option>
-                        <Option value="bank_id" label="bank">
-                          <div className="demo-option-label-item">bank</div>
-                        </Option>
-                        <Option value="payoneer_id" label="payoneer">
-                          <div className="demo-option-label-item">payoneer</div>
-                        </Option>
-                        <Option value="paypal_id" label="paypal">
-                          <div className="demo-option-label-item">paypal</div>
-                        </Option>
-                        <Option value="pingpong_id" label="pingpong">
-                          <div className="demo-option-label-item">pingpong</div>
-                        </Option>
-                        <Option value="ebay_id" label="ebay">
-                          <div className="demo-option-label-item">ebay</div>
-                        </Option>
-                        <Option value="etsy_id" label="etsy">
-                          <div className="demo-option-label-item">etsy</div>
-                        </Option>
-                        <Option value="amazon_id" label="amazon">
-                          <div className="demo-option-label-item">amazon</div>
-                        </Option>
-                        <Option value="shopee_id" label="shopee">
-                          <div className="demo-option-label-item">shopee</div>
-                        </Option>
-                        <Option value="facebook_id" label="facebook">
-                          <div className="demo-option-label-item">facebook</div>
-                        </Option>
-                        <Option value="tiktok_id" label="tiktok">
-                          <div className="demo-option-label-item">tiktok</div>
-                        </Option>
-                      </Select>
-                    </Form.Item>
-                  ) : null}
+                  <Form.Item label="Quản lý " name="manage_view">
+                    <Select
+                      //disabled={true}
+                      mode="multiple"
+                      style={{ width: "100%" }}
+                      placeholder="select one item"
+                      optionlabelprop="label"
+                      //status="warning"
+                    >
+                      <Option value="device_id" label="device">
+                        <div className="demo-option-label-item">device</div>
+                      </Option>
+                      <Option value="proxy_id" label="proxy">
+                        <div className="demo-option-label-item">proxy</div>
+                      </Option>
+                      <Option value="info_id" label="info">
+                        <div className="demo-option-label-item">info</div>
+                      </Option>
+                      <Option value="project_id" label="project">
+                        <div className="demo-option-label-item">project</div>
+                      </Option>
+                      <Option value="mail_id" label="mail">
+                        <div className="demo-option-label-item">mail</div>
+                      </Option>
+                      <Option value="sim_id" label="sim">
+                        <div className="demo-option-label-item">sim</div>
+                      </Option>
+                      <Option value="bank_id" label="bank">
+                        <div className="demo-option-label-item">bank</div>
+                      </Option>
+                      <Option value="payoneer_id" label="payoneer">
+                        <div className="demo-option-label-item">payoneer</div>
+                      </Option>
+                      <Option value="paypal_id" label="paypal">
+                        <div className="demo-option-label-item">paypal</div>
+                      </Option>
+                      <Option value="pingpong_id" label="pingpong">
+                        <div className="demo-option-label-item">pingpong</div>
+                      </Option>
+                      <Option value="ebay_id" label="ebay">
+                        <div className="demo-option-label-item">ebay</div>
+                      </Option>
+                      <Option value="etsy_id" label="etsy">
+                        <div className="demo-option-label-item">etsy</div>
+                      </Option>
+                      <Option value="amazon_id" label="amazon">
+                        <div className="demo-option-label-item">amazon</div>
+                      </Option>
+                      <Option value="shopee_id" label="shopee">
+                        <div className="demo-option-label-item">shopee</div>
+                      </Option>
+                      <Option value="facebook_id" label="facebook">
+                        <div className="demo-option-label-item">facebook</div>
+                      </Option>
+                      <Option value="tiktok_id" label="tiktok">
+                        <div className="demo-option-label-item">tiktok</div>
+                      </Option>
+                    </Select>
+                  </Form.Item>
 
                   <Row gutter={16}>
                     <Col span={12}>
-                      {[
-                        "Phó Giám đốc",
-                        "Trưởng phòng",
-                        "Phó Giám đốc",
-                        "Phó phòng",
-                        "Tổ trưởng",
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Trạng thái" name="users_status">
-                          <Select
-                            //mode="multiple"
-                            //disabled={true}
-                            style={{ width: "100%" }}
-                            optionlabelprop="label"
-                          >
-                            <Option value="Active" label="Active">
-                              <div className="demo-option-label-item">
-                                Active
-                              </div>
-                            </Option>
-                            <Option value="Restrict" label="Restrict">
-                              <div className="demo-option-label-item">
-                                Restrict
-                              </div>
-                            </Option>
-                            <Option value="Suspened" label="Suspened">
-                              <div className="demo-option-label-item">
-                                Suspened
-                              </div>
-                            </Option>
-                            <Option value="Disable" label="Disable">
-                              <div className="demo-option-label-item">
-                                Disable
-                              </div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      ) : null}
+                      <Form.Item label="Trạng thái" name="users_status">
+                        <Select
+                          //mode="multiple"
+                          //disabled={true}
+                          style={{ width: "100%" }}
+                          optionlabelprop="label"
+                        >
+                          <Option value="Active" label="Active">
+                            <div className="demo-option-label-item">Active</div>
+                          </Option>
+                          <Option value="Restrict" label="Restrict">
+                            <div className="demo-option-label-item">
+                              Restrict
+                            </div>
+                          </Option>
+                          <Option value="Suspened" label="Suspened">
+                            <div className="demo-option-label-item">
+                              Suspened
+                            </div>
+                          </Option>
+                          <Option value="Disable" label="Disable">
+                            <div className="demo-option-label-item">
+                              Disable
+                            </div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
                     </Col>
                     <Col span={12}>
-                      {[
-                        "Phó Giám đốc",
-                        "Trưởng phòng",
-                        "Phó Giám đốc",
-                        "Phó phòng",
-                        "Tổ trưởng",
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Lương" name="users_salary">
-                          <Select
-                            //mode="multiple"
-                            //disabled={true}
-                            style={{ width: "100%" }}
-                            optionlabelprop="label"
-                          >
-                            <Option value="6000000" label="6.000.000">
-                              <div className="demo-option-label-item">
-                                6.000.000 đ
-                              </div>
-                            </Option>
-                            <Option value="8000000" label="8.000.000">
-                              <div className="demo-option-label-item">
-                                8.000.000 đ
-                              </div>
-                            </Option>
-                            <Option value="10000000" label="10.000.000">
-                              <div className="demo-option-label-item">
-                                10.000.000
-                              </div>
-                            </Option>
-                            <Option value="12000000" label="12.000.000">
-                              <div className="demo-option-label-item">
-                                12.000.000
-                              </div>
-                            </Option>
-                            <Option value="14000000" label="14.000.000">
-                              <div className="demo-option-label-item">
-                                14.000.000
-                              </div>
-                            </Option>
-                            <Option value="16000000" label="16.000.000">
-                              <div className="demo-option-label-item">
-                                16.000.000
-                              </div>
-                            </Option>
-                            <Option value="18000000" label="18.000.000">
-                              <div className="demo-option-label-item">
-                                18.000.000
-                              </div>
-                            </Option>
-                            <Option value="20000000" label="20.000.000">
-                              <div className="demo-option-label-item">
-                                20.000.000
-                              </div>
-                            </Option>
-                            <Option value="22000000" label="22.000.000">
-                              <div className="demo-option-label-item">
-                                22.000.000
-                              </div>
-                            </Option>
-                            <Option value="24000000" label="24000000">
-                              <div className="demo-option-label-item">
-                                24000000
-                              </div>
-                            </Option>
-                            <Option value="26000000" label="26000000">
-                              <div className="demo-option-label-item">
-                                26000000
-                              </div>
-                            </Option>
-                            <Option value="28000000" label="28000000">
-                              <div className="demo-option-label-item">
-                                28000000
-                              </div>
-                            </Option>
-                            <Option value="30000000" label="30000000">
-                              <div className="demo-option-label-item">
-                                30000000
-                              </div>
-                            </Option>
-                            <Option value="35000000" label="35.000.000">
-                              <div className="demo-option-label-item">
-                                35.000.000
-                              </div>
-                            </Option>
-                            <Option value="40000000" label="40.000.000">
-                              <div className="demo-option-label-item">
-                                40000000
-                              </div>
-                            </Option>
-                            <Option value="45000000" label="45.000.000">
-                              <div className="demo-option-label-item">
-                                45.000.000
-                              </div>
-                            </Option>
-                            <Option value="50000000" label="50.000.000">
-                              <div className="demo-option-label-item">
-                                50.000.000
-                              </div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      ) : null}
+                      <Form.Item label="Lương" name="users_salary">
+                        <Select
+                          //mode="multiple"
+                          //disabled={true}
+                          style={{ width: "100%" }}
+                          optionlabelprop="label"
+                        >
+                          <Option value="6000000" label="6.000.000">
+                            <div className="demo-option-label-item">
+                              6.000.000 đ
+                            </div>
+                          </Option>
+                          <Option value="8000000" label="8.000.000">
+                            <div className="demo-option-label-item">
+                              8.000.000 đ
+                            </div>
+                          </Option>
+                          <Option value="10000000" label="10.000.000">
+                            <div className="demo-option-label-item">
+                              10.000.000
+                            </div>
+                          </Option>
+                          <Option value="12000000" label="12.000.000">
+                            <div className="demo-option-label-item">
+                              12.000.000
+                            </div>
+                          </Option>
+                          <Option value="14000000" label="14.000.000">
+                            <div className="demo-option-label-item">
+                              14.000.000
+                            </div>
+                          </Option>
+                          <Option value="16000000" label="16.000.000">
+                            <div className="demo-option-label-item">
+                              16.000.000
+                            </div>
+                          </Option>
+                          <Option value="18000000" label="18.000.000">
+                            <div className="demo-option-label-item">
+                              18.000.000
+                            </div>
+                          </Option>
+                          <Option value="20000000" label="20.000.000">
+                            <div className="demo-option-label-item">
+                              20.000.000
+                            </div>
+                          </Option>
+                          <Option value="22000000" label="22.000.000">
+                            <div className="demo-option-label-item">
+                              22.000.000
+                            </div>
+                          </Option>
+                          <Option value="24000000" label="24000000">
+                            <div className="demo-option-label-item">
+                              24000000
+                            </div>
+                          </Option>
+                          <Option value="26000000" label="26000000">
+                            <div className="demo-option-label-item">
+                              26000000
+                            </div>
+                          </Option>
+                          <Option value="28000000" label="28000000">
+                            <div className="demo-option-label-item">
+                              28000000
+                            </div>
+                          </Option>
+                          <Option value="30000000" label="30000000">
+                            <div className="demo-option-label-item">
+                              30000000
+                            </div>
+                          </Option>
+                          <Option value="35000000" label="35.000.000">
+                            <div className="demo-option-label-item">
+                              35.000.000
+                            </div>
+                          </Option>
+                          <Option value="40000000" label="40.000.000">
+                            <div className="demo-option-label-item">
+                              40000000
+                            </div>
+                          </Option>
+                          <Option value="45000000" label="45.000.000">
+                            <div className="demo-option-label-item">
+                              45.000.000
+                            </div>
+                          </Option>
+                          <Option value="50000000" label="50.000.000">
+                            <div className="demo-option-label-item">
+                              50.000.000
+                            </div>
+                          </Option>
+                        </Select>
+                      </Form.Item>
                     </Col>
                   </Row>
                   <Row gutter={16}>
                     <Form.Item name="users_image_url">
                       <Upload
-                         multiple
-                          listType="picture-card"
+                        multiple
+                        listType="picture-card"
                         action="http://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
@@ -937,15 +852,17 @@ const Users_info = () => {
                       width: "100%",
                     }}
                   >
-                    {user_function.map((item) => {
+                    {user_testfunction.map((item) => {
                       return (
                         <Alert
                           message={item.title}
                           description={item.value.map((data) => {
-                            return <div>
-                              <p>{data.title}</p>
-                              <p>{data.content}</p>
-                            </div>;
+                            return (
+                              <div>
+                                <p>{data.title}</p>
+                                <p>{data.content}</p>
+                              </div>
+                            );
                           })}
                           type={item.title == "Chức năng" ? "success" : "info"}
                         />

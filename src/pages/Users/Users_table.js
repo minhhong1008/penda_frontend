@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getListusersActions } from "../../actions/usersActions";
-//import { useSelector } from "react-redux";
 
 const Users_table = () => {
   const { users_function } = useSelector((state) => state.auth);
@@ -20,20 +19,12 @@ const Users_table = () => {
       key: "index",
       render: (text, record, index) => index + 1,
     },
-    
+
     {
       title: "Tên",
       dataIndex: "users_name",
       key: "users_name",
-      /* render: (text, record) => (
-        <a
-          onClick={() =>
-            history.push(`table/${encodeURIComponent(record.users_id)}`)
-          }
-        >
-          {text}
-        </a>
-      ), */
+      
     },
     {
       title: "Giới tính",
@@ -75,17 +66,7 @@ const Users_table = () => {
       dataIndex: "users_function",
       key: "users_function",
     },
-    
   ];
-
-  const handleChangeFilter = (values) => {
-    let newValue = values.join(",");
-    dispatch(
-      getListusersActions({
-        users_employee: newValue,
-      })
-    );
-  };
 
   const getListusers = () => {
     dispatch(
@@ -101,44 +82,21 @@ const Users_table = () => {
 
   return (
     <div>
-      <Form.Item label="Lọc users">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionlabelprop="label"
-          treeData={[
-            {
-              title: "Trạng thái",
-              value: "users_status",
-              children: [
-                { title: "Active", value: "Active" },
-                { title: "Disable", value: "Disable" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      {[
-        "Trưởng phòng",
-        "Phó phòng",
-        "Tổ trưởng",
-        "Tổ phó",
-        "Chuyên viên",
-        "Nhân viên",
-        "Tập sự",
-        "Thử việc",
-      ].indexOf(users_function) == -1 ? (
+      
+      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      -1 ? (
         <Card type="inner">
-          <Table 
-           onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                history.push(`table/${encodeURIComponent(record.users_id)}`);
-              },
-            };
-          }}
-          columns={columns} dataSource={userss}></Table>
+          <Table
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  history.push(`table/${encodeURIComponent(record.users_id)}`);
+                },
+              };
+            }}
+            columns={columns}
+            dataSource={userss}
+          ></Table>
         </Card>
       ) : null}
     </div>

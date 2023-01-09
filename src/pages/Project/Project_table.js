@@ -515,7 +515,7 @@ const Project_table = () => {
         }
         // Chỉ hiển thị ra 3 cái cuối cùng cột processing
         let array = item.project_processing?.split(",");
-        if (array?.length > 2) {
+        if (array?.length > 3) {
           for (let index = 0; index < array.length + 1; index++) {
             array.shift();
           }
@@ -524,7 +524,7 @@ const Project_table = () => {
       } else {
         // Chỉ hiển thị ra 3 cái cuối cùng cột processing
         let array = item.project_processing?.split(",");
-        if (array?.length > 2) {
+        if (array?.length > 3) {
           for (let index = 0; index < array.length + 1; index++) {
             array?.shift();
           }

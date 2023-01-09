@@ -54,7 +54,8 @@ const Project_info = () => {
   const [projectData, setprojectData] = useState({});
   const [info] = useState();
   const [data, setData] = useState();
-  const [noteValue, setNoteValue] = useState("");
+  const [noteValue_request, setNoteValueRequest] = useState("");
+  const [noteValue_active, setNoteValueActive] = useState("");
   // Khai báo kho dữ liệu của các form
   const [form] = Form.useForm();
   const [listselect_project_employee, setListproject_employee] = useState();
@@ -92,7 +93,8 @@ const Project_info = () => {
         : "",
       project_type: values?.project_type ? values.project_type.join(",") : "",
 
-      project_note: noteValue,
+      project_note: noteValue_request,
+      project_note_active: noteValue_active,
     };
 
     const response = await updateprojectInfo(newValue, id);
@@ -120,10 +122,20 @@ const Project_info = () => {
       project_date_end: data?.project_date_end
         ? dayjs(data.project_date_end)
         : "",
-      project_note: noteValue,
+      project_note: noteValue_request,
+      project_note_active: noteValue_active,
     };
+    //disable input theo điều kiện
+    if (users_function == "Giám đốc") {
+      setDisabled(false);
+    } else {
+      if (newData.project_type?.indexOf("Giao việc") !== -1) {
+        setDisabled(true);
+      }
+    }
     form.setFieldsValue(newData);
-    setNoteValue(data.project_note);
+    setNoteValueActive(data.project_note_active);
+    setNoteValueRequest(data.project_note);
     setListproject_employee(data.listselect_project_employee);
     setListproject_type(newData.project_type);
     //Upload ảnh
@@ -140,18 +152,6 @@ const Project_info = () => {
       });
       setFileList(dataImage);
     }
-    //disable input theo điều kiện
-    if (
-      users_function == "Giám đốc" ||
-      users_function == "Phó giám đốc" ||
-      users_function == "Trưởng phòng"
-    ) {
-      setDisabled(false);
-    } else {
-      if (newData.project_type?.indexOf("Giao việc") !== -1) {
-        setDisabled(true);
-      }
-    }
   };
 
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
@@ -160,8 +160,12 @@ const Project_info = () => {
   }, []);
 
   // Hàm để thay đổi dữ liệu của note
-  const handleChangeNote = (e) => {
-    setNoteValue(e.target.value);
+  const handleChangeNoteRequest = (e) => {
+    setNoteValueRequest(e.target.value);
+  };
+
+  const handleChangeNoteActive = (e) => {
+    setNoteValueActive(e.target.value);
   };
 
   // Upload ảnh
@@ -221,7 +225,21 @@ const Project_info = () => {
         <Tabs.TabPane tab="THÔNG TIN KẾ HOẠCH" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN KẾ HOẠCH">
+              <Card
+                title="THÔNG TIN KẾ HOẠCH"
+                style={{ width: "100%", color: "blue" }}
+                extra={
+                  <Button
+                    onClick={() => form.submit()}
+                    style={{
+                      background: "#18a689",
+                      color: "white",
+                    }}
+                  >
+                    Lưu thông tin
+                  </Button>
+                }
+              >
                 <Form
                   form={form}
                   name="basic"
@@ -259,6 +277,7 @@ const Project_info = () => {
                     <Col span={8}>
                       <Form.Item label="Trạng thái" name="project_status">
                         <Select
+                          disabled={disabled}
                           optionlabelprop="label"
                           style={{
                             width: "100%",
@@ -278,13 +297,9 @@ const Project_info = () => {
                     </Col>
                     <Col span={8}>
                       {/* Hạng mục */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
                         <Form.Item label="Hạng mục" name="project_work_item">
                           <Select
                             style={{ width: "100%" }}
@@ -308,13 +323,9 @@ const Project_info = () => {
 
                     <Col span={8}>
                       {/* Công việc */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
                         <Form.Item label="Công việc" name="project_work">
                           <Select
                             style={{ width: "100%" }}
@@ -348,7 +359,11 @@ const Project_info = () => {
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Số lượng" name="project_number">
-                        <Input placeholder="50" maxLength={10} />
+                        <Input
+                          placeholder="50"
+                          maxLength={10}
+                          disabled={disabled}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -390,13 +405,9 @@ const Project_info = () => {
                   <Row gutter={16}>
                     <Col span={16}>
                       {/*  Loại */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
                         <Form.Item label="Loại" name="project_type">
                           <Select
                             mode="multiple"
@@ -418,16 +429,12 @@ const Project_info = () => {
                         </Form.Item>
                       ) : null}
                     </Col>
-                    
+
                     <Col span={8}>
                       {/* Nhân viên */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
                         <Form.Item label="Nhân viên" name="project_employee">
                           <Select
                             style={{ width: "100%" }}
@@ -453,22 +460,13 @@ const Project_info = () => {
                   <Row gutter={16}>
                     <Col span={8}>
                       {/* Sở hữu */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
                         <Form.Item label="Sở hữu" name="project_owner">
                           <Select
                             disabled={
-                              [
-                                "Giám đốc",
-                                "Trưởng phòng",
-                                "Phó phòng",
-                                "Tổ trưởng",
-                              ].indexOf(users_function) == -1
+                              ["Giám đốc"].indexOf(users_function) == -1
                             }
                             style={{ width: "100%" }}
                             placeholder="select one item"
@@ -489,14 +487,13 @@ const Project_info = () => {
                     </Col>
                     <Col span={8}>
                       {/* Người giao việc */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Người giao" name="project_employee_request">
+                      {["Giám đốc", "Phó giám đốc", "Trưởng phòng"].indexOf(
+                        users_function
+                      ) !== -1 ? (
+                        <Form.Item
+                          label="Người giao"
+                          name="project_employee_request"
+                        >
                           <Select
                             style={{ width: "100%" }}
                             placeholder="select one item"
@@ -518,17 +515,14 @@ const Project_info = () => {
                     </Col>
                     <Col span={8}>
                       {/* Đánh giá */}
-                      {[
-                        "Tổ phó",
-                        "Chuyên viên",
-                        "Nhân viên",
-                        "Tập sự",
-                        "Thử việc",
-                      ].indexOf(users_function) == -1 ? (
-                        <Form.Item label="Đánh giá" name="project_review">
-                          <Rate tooltips={desc} allowHalf defaultValue={1.5} />
-                        </Form.Item>
-                      ) : null}
+                      <Form.Item label="Đánh giá" name="project_review">
+                        <Rate
+                          tooltips={desc}
+                          allowHalf
+                          defaultValue={1.5}
+                          disabled={disabled}
+                        />
+                      </Form.Item>
                     </Col>
                   </Row>
 
@@ -547,19 +541,33 @@ const Project_info = () => {
                       </Upload>
                     </Form.Item>
                   </Row>
-
                 </Form>
               </Card>
             </Col>
             <Col span={12}>
               <Card title="GHI CHÚ">
-                <Row>
+                <Row gutter={16}>
                   <Col span={24}>
-                    <Input.TextArea
-                      value={noteValue}
-                      rows={10}
-                      onChange={handleChangeNote}
-                    />
+                    <Form.Item label="Yêu cầu">
+                      <Input.TextArea
+                        disabled={disabled}
+                        value={noteValue_request}
+                        rows={11}
+                        onChange={handleChangeNoteRequest}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Form.Item label="Thực hiện">
+                      <Input.TextArea
+                        value={noteValue_active}
+                        rows={12}
+                        onChange={handleChangeNoteActive}
+                      />
+                    </Form.Item>
                   </Col>
                 </Row>
 

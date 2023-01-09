@@ -15,15 +15,7 @@ const Users_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-      /* render: (text) => (
-        <a
-          onClick={() =>
-            history.push(`users_class/table?status=${encodeURIComponent(text)}`)
-          }
-        >
-          {text}
-        </a>
-      ), */
+     
     },
     {
       title: (

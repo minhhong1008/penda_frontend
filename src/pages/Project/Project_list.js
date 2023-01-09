@@ -46,10 +46,12 @@ export const listselect_project_work_item = [
   "Sản xuất",
   "Nhân sự",
   "Tài chính",
-  "Kế hoạch",
   "Kinh doanh",
   "Công nghệ",
+  "Kế hoạch",
+  "Mục tiêu",
   "Cá nhân",
+ 
 ];
 
 export const listselect_project_owner = [

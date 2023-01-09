@@ -66,7 +66,8 @@ export const HuongDanUsers_info = () => {
               2. Tài khoản trưởng phòng trở lên hỗ trợ được các tài khoản khác
               chấm công
             </p>
-            <p>2. Phải chấm công, chỉnh sửa trước 2 ngày trở lên</p>
+            <p>3. Phải chấm công, chỉnh sửa trước 2 ngày trở lên</p>
+            <p>4. 8h15 hoặc 14h15 nhân viên phải đăng nhập vào phần mềm không phần mềm sẽ tự động chấm công nhân viên đó đi muộn</p>
           </>
         }
         type="success"

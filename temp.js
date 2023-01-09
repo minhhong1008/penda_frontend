@@ -14,3 +14,15 @@ function(err,allNews){
   socket.emit('news-load', allNews); // Do something with the array of 10 objects
 })
 
+
+{[
+  "Phó phòng",
+  "Tổ trưởng",
+  "Tổ phó",
+  "Chuyên viên",
+  "Nhân viên",
+  "Tập sự",
+  "Thử việc",
+].indexOf(users_function) == -1 ? (
+  
+) : null}
