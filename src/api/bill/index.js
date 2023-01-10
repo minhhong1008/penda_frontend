@@ -11,12 +11,12 @@ export const getPayAndCollect = (payload) => {
   return axiosClient.get(url);
 };
 
-export const postBillUpdate = (newData) => {
+export const post_Bill_update = (newData) => {
   const url = `/bill_table/update`;
   return axiosClient.post(url, newData);
 };
 
-export const getListBill = (payload) => {
+export const get_Bill_table = (payload) => {
   const url = `/bill_table/list_table?${genQueryString(payload)}`;
   return axiosClient.get(url);
 };
@@ -26,7 +26,7 @@ export const updateBill = (bill) => {
   return axiosClient.post(url, bill);
 };
 
-export const getEmployee = () => {
+export const get_Bill_employee = () => {
   const url = `/bill/getemployee`;
   return axiosClient.get(url);
 };

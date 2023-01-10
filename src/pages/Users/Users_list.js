@@ -1,8 +1,7 @@
 import React from "react";
 import { Alert, Divider, Space } from "antd";
 
-
-export const listselect_timesheets = [
+export const listselect_working_session = [
   {
     title: "Ca sáng",
     value: "S",
@@ -67,7 +66,10 @@ export const HuongDanUsers_info = () => {
               chấm công
             </p>
             <p>3. Phải chấm công, chỉnh sửa trước 2 ngày trở lên</p>
-            <p>4. 8h15 hoặc 14h15 nhân viên phải đăng nhập vào phần mềm không phần mềm sẽ tự động chấm công nhân viên đó đi muộn</p>
+            <p>
+              4. 8h15 hoặc 14h15 nhân viên phải đăng nhập vào phần mềm không
+              phần mềm sẽ tự động chấm công nhân viên đó đi muộn
+            </p>
           </>
         }
         type="success"
@@ -110,32 +112,77 @@ export const HuongDanUsers_timesheets = () => {
       }}
     >
       <Alert
-        message="Tổng quan"
+        message={
+          <>
+            <strong>1. Đăng ký lịch làm việc:</strong>
+          </>
+        }
         description={
           <>
             <p>
-              1. Nhân viên đăng ký lịch làm việc từ ngày mùng 1 đến ngày mùng 3
-              hàng tháng.
+              - Nhân viên đăng ký lịch làm việc từ ngày mùng 1 đến ngày mùng 3
+              hàng tháng. Nhân viên đi làm ca không đăng ký sẽ không chấm công được.
             </p>
             <p>
-              2. Nhân viên chỉ sửa được lịch đăng ký sau 3 ngày tính từ ngày sửa.
+              - Nhân viên chỉ sửa được lịch đăng ký sau 3 ngày tính từ ngày sửa
+              ( ngày hiện tại).
+            </p>
+            <p>- Ký hiệu: S ca sáng, C ca chiều, T ca tối.</p>
+            <p>- Ký hiệu: ms muộn sáng, mc muộn chiều, mt muộn tối.</p>
+            <p>
+              - Ký hiệu: vs về trước sáng, vc về trước chiều, vt về trước tối.
             </p>
             <p>
-              3. Đi muộn sau 8h15 sẽ bị trừ 1/4 ca, nghỉ không phép bị trừ 2 ca,
-              xin nghỉ trong thời gian nhỏ hơn 2 ngày bị trừ 1/4 ca.
+              - Ký hiệu: ns nghỉ không phép sáng, nc nghỉ không phép chiều, nt
+              nghỉ không phép tối.
+            </p>
+            <p>- Công ty không có ca khác giờ quy định.</p>
+            <p>
+              - Nhân viên chấm công trên matbiec.penda.vn. Và thường xuyên theo dõi chấm công của mọi người.
             </p>
             <p>
-              4. Ký hiệu: mc muộn sáng, mc muộn chiều, mt muộn tối, ns nghỉ không
-              phép sáng, nc nghỉ không phép chiều, nt nghỉ không phép tối.
-            </p>
-            <p>
-              5. Nếu người quản lý phát hiện chấm công không đúng với thực tế thì người chấm công và người quản lý chấm công đều bị trừ 10 ca.
+              - Phần mềm sẽ tự động chấm công và tính toán. Hoài chỉ giải quyết việc nhân viên xin nghỉ đột xuất trong thời gian 3 ngày đăng ký cố định.
             </p>
           </>
         }
         type="success"
       />
-      <Alert message="Hướng dẫn các trường" description={<></>} type="info" />
+      <Alert
+        message={
+          <>
+            {" "}
+            <strong>2. Quy chế:</strong>
+          </>
+        }
+        description={
+          <>
+            <p>
+              - Ca sáng : 8h -12h, thời gian chấm công từ 8h00-8h15, Thời gian
+              chấm kết thúc ca : 12h00 - 12h15.
+            </p>
+            <p>
+              - Ca chiều : 14h -18h, thời gian chấm công từ 14h00-14h15, Thời
+              gian chấm kết thúc ca : 18h00 - 18h15.
+            </p>
+            <p>
+              - Ca tối : 18h30 -22h30, thời gian chấm công từ 18h00-18hh45. Thời
+              gian chấm kết thúc ca : 22h30 - 22h45.
+            </p>
+            <p>- Đi muộn sẽ bị trừ 1/4 ca, về sớm bị trừ 1/4 ca.</p>
+            <p>
+              - Xin nghỉ trong thời gian nhỏ hơn 3 ngày cố định (ngày cố định là
+              ngày nhân viên không sửa được trong bảng đăng ký) bị trừ 1/4 ca.
+            </p>
+            <p>- Nghỉ không phép bị trừ 2 ca.</p>
+
+            <p>
+              - Nếu người quản lý phát hiện chấm công không đúng với thực tế thì
+              người chấm công và người quản lý chấm công đều bị trừ 10 ca.
+            </p>
+          </>
+        }
+        type="info"
+      />
       <Alert message="Yêu cầu " description={<></>} type="warning" />
       <Alert
         message="Kiểm tra & xử lý số liệu"

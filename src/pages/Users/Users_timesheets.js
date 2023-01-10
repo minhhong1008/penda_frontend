@@ -14,94 +14,91 @@ import {
   Tag,
   TreeSelect,
 } from "antd";
+//import từ ant.desgin và React
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+//import từ api
 import { getListusersActions } from "../../actions/usersActions";
-import { createSession, getSessions } from "../../api/timeSheet";
+import { createSession, get_Timesheets_table } from "../../api/timeSheet";
+//import từ file dùng chung
 import { showError, showSuccess } from "../../utils";
-import { HuongDanUsers_timesheets, listselect_timesheets } from "./Users_list";
+// import từ listselect
+import {
+  HuongDanUsers_timesheets,
+  listselect_working_session,
+} from "./Users_list";
 
+// HÀM CHÍNH TRONG TRANG
 const Users_timesheets = () => {
-  const { users_function, users_id, users_name } = useSelector(
-    (state) => state.auth
-  );
+  // Khai báo các kho dữ liệu của andt.desin đầu tiên
+  const { Option } = Select;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { users_function, users_name } = useSelector((state) => state.auth);
   const { userss } = useSelector((state) => state.users);
-  let listselect_employee = [];
-  userss.map((user, index) => {
-    listselect_employee.push(user.users_name);
-  });
-  const [data, setData] = useState();
+  const [data_table_timesheets, setData_Timesheets_table] = useState();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { Option } = Select;
+  const [list_working_session, setList_working_session] = useState(
+    listselect_working_session
+  );
 
-  const [filterDate, setFilterDate] = useState({
+  // Các hàm liên quan đến thao tác với giao diện
+  // Các hàm liên quan đến ngày tháng
+  const [filter_date_start, setFilter_date_start] = useState({
     month: dayjs().format("MM"),
     year: dayjs().format("YYYY"),
   });
-  const showModal = () => {
+
+  // Các hàm liên quan đến render
+
+  let list_employee = [];
+  userss.map((user, index) => {
+    list_employee.push(user.users_name);
+  });
+
+  const render_working_session = (values) => {
+    if (["Minh Hồng", "Nguyễn Hoài"].indexOf(values) == -1) {
+      setList_working_session([
+        {
+          title: "Ca sáng",
+          value: "S",
+        },
+        {
+          title: "Ca chiều",
+          value: "C",
+        },
+        {
+          title: "Ca tối",
+          value: "T",
+        },
+      ]);
+    }
+  };
+
+  // các hàm liên quan đếm sự kiện trên giao diện
+  const onClick_showModal = () => {
+    let values = users_name;
+    render_working_session(values);
     setIsModalOpen(true);
   };
-  const handleOk = () => {
+  const onOk_postOk = () => {
     form.submit();
-    // setIsModalOpen(false);
   };
-  const handleCancel = () => {
+  const onCancel_closeModal = () => {
     setIsModalOpen(false);
   };
-  const columns = [
-    {
-      title: "STT",
-      key: "index",
-      fixed: "left",
-      width: 5,
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: "Họ tên",
-      dataIndex: "users_name",
-      key: "users_name",
-      fixed: "left",
-      width: "100%",
-      sorter: (a, b) => a.age - b.age,
-    },
-    {
-      title: "NGÀY TRONG THÁNG" + "-" + filterDate?.month,
-      children: handleDateTime(
-        dayjs(
-          filterDate?.year + "-" + filterDate?.month,
-          "YYYY-MM"
-        ).daysInMonth(),
-        filterDate?.year,
-        filterDate?.month
-      ),
-      width: "100%",
-      sorter: (a, b) => a.age - b.age,
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-      width: "100%",
-      fixed: "right",
-    },
-  ];
-
-  const onChangeDate = (date, dateString) => {
-    setFilterDate({
-      year: dateString.split("-")[0],
-      month: dateString.split("-")[1],
-    });
-    getListSession({
-      year: dateString.split("-")[0],
-      month: dateString.split("-")[1],
-    });
+  const nextDay = () => {
+    let working_date_next = form.getFieldValue("working_date");
+    form.setFieldValue(
+      "working_date",
+      dayjs(working_date_next.add("1", "day"))
+    );
   };
 
+  // Các hàm liên quan đến gọi dữ liệu từ giao diện và gửi dữ liệu lên server
   const onFinish = async (values) => {
-    if (values.working_date == null || values.working_employee == "" ||users_name == "" ) {
+    if (values.working_date == null || users_name == "undefined") {
       return showError("Có Lỗi, date");
     }
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
@@ -109,12 +106,12 @@ const Users_timesheets = () => {
       .add("3", "d")
       .format("YYYY-MM-DD");
     // Đăng ký của nhân viên
-    if (values.working_date >= date_end) {
+    if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
       try {
         let response = await createSession({
           users_function: users_function,
-          users_name: users_name,
-          working_session:  values.working_session,
+          users_name: values.working_employee,
+          working_session: values.working_session,
           working_verify: "unverify",
           working_date: values.working_date,
         });
@@ -122,14 +119,14 @@ const Users_timesheets = () => {
           showSuccess("Đăng ký thành công");
         }
       } catch (error) {
-        showError("Có Lỗi, báo cáo lại");
+        showError("Đăng ký rồi");
       }
     } else {
-      if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
+      if (values.working_date >= date_end) {
         try {
           let response = await createSession({
             users_function: users_function,
-            users_name: values.working_employee,
+            users_name: users_name,
             working_session: values.working_session,
             working_verify: "unverify",
             working_date: values.working_date,
@@ -138,7 +135,7 @@ const Users_timesheets = () => {
             showSuccess("Đăng ký thành công");
           }
         } catch (error) {
-          showError("Đăng ký rồi");
+          showError("Có Lỗi, Kiểm tra");
         }
       } else {
         showError("Bạn không có quyền");
@@ -146,8 +143,21 @@ const Users_timesheets = () => {
     }
   };
 
-  const getListSession = async (filterDate) => {
-    let response = await getSessions(filterDate);
+  // Các hàm liên quan đến xử lý dữ liệu từ database về
+
+  const onChange_Filter_date = (date, dateString) => {
+    setFilter_date_start({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
+    });
+    getData_Timesheets_table({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
+    });
+  };
+
+  const getData_Timesheets_table = async (filter_date_start) => {
+    let response = await get_Timesheets_table(filter_date_start);
     if (response.status == 200) {
       let { data } = response;
       let newData = [];
@@ -158,6 +168,7 @@ const Users_timesheets = () => {
         element_obj["users_name"] = userss?.filter(
           (element_obj) => element_obj.users_name == item._id
         )[0]?.users_name;
+
         element_obj["index"] = parseInt(
           userss?.filter((element_obj) => element_obj.users_name == item._id)[0]
             ?.users_sort
@@ -166,7 +177,11 @@ const Users_timesheets = () => {
         let total_m = 0;
         let total_n = 0;
         item.sessions.map((session, index) => {
-          if (["ms", "mc", "mt"].indexOf(session.working_session) !== -1) {
+          if (
+            ["ms", "mc", "mt", "vs", "vc", "vt"].indexOf(
+              session.working_session
+            ) !== -1
+          ) {
             total_m++;
           }
           if (["ns", "nc", "nt"].indexOf(session.working_session) !== -1) {
@@ -186,15 +201,13 @@ const Users_timesheets = () => {
         newData.push(element_obj);
       });
 
-      setData(newData.sort((a, b) => a.index - b.index));
+      setData_Timesheets_table(newData.sort((a, b) => a.index - b.index));
     } else {
       showError("Có lỗi xảy ra");
     }
   };
-  const Nexttime = () => {
-    let working_date_new = form.getFieldValue("working_date");
-    form.setFieldValue("working_date", dayjs(working_date_new.add("1", "day")));
-  };
+
+  // Hiển thị giao diện lần đầu khi vào trang
   useEffect(() => {
     dispatch(
       getListusersActions({
@@ -204,9 +217,47 @@ const Users_timesheets = () => {
   }, []);
 
   useEffect(() => {
-    getListSession(filterDate);
+    getData_Timesheets_table(filter_date_start);
   }, [userss]);
 
+  // Các hàm xử lý giao diện từ ant.desgin bao gồm columns
+  const columns = [
+    {
+      title: "STT",
+      key: "index",
+      fixed: "left",
+      width: 5,
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Họ tên",
+      dataIndex: "users_name",
+      key: "users_name",
+      fixed: "left",
+      width: "100%",
+      sorter: (a, b) => a.age - b.age,
+    },
+    {
+      title: "NGÀY TRONG THÁNG" + "-" + filter_date_start?.month,
+      children: handleDateTime(
+        dayjs(
+          filter_date_start?.year + "-" + filter_date_start?.month,
+          "YYYY-MM"
+        ).daysInMonth(),
+        filter_date_start?.year,
+        filter_date_start?.month
+      ),
+      width: "100%",
+      sorter: (a, b) => a.age - b.age,
+    },
+    {
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
+      width: "100%",
+      fixed: "right",
+    },
+  ];
   return (
     <>
       <Card
@@ -217,15 +268,15 @@ const Users_timesheets = () => {
         extra={
           <div style={{ display: "flex", gap: "8px" }}>
             <DatePicker
-              onChange={onChangeDate}
+              onChange={onChange_Filter_date}
               defaultValue={dayjs(
-                filterDate?.year + "-" + filterDate?.month,
+                filter_date_start?.year + "-" + filter_date_start?.month,
                 "YYYY-MM"
               )}
               format={"YYYY-MM"}
               picker="month"
             />
-            <Button onClick={() => showModal()}>Đăng ký ca</Button>
+            <Button onClick={() => onClick_showModal()}>Đăng ký ca</Button>
           </div>
         }
       >
@@ -255,7 +306,7 @@ const Users_timesheets = () => {
                 maxTagCount="responsive"
                 width="100%"
                 columns={columns}
-                dataSource={data}
+                dataSource={data_table_timesheets}
                 bordered
                 size="small"
                 pagination={{
@@ -287,8 +338,8 @@ const Users_timesheets = () => {
       <Modal
         title="Đăng ký ca làm việc"
         open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onOk={onOk_postOk}
+        onCancel={onCancel_closeModal}
         extra={<div style={{ display: "flex", gap: "8px" }}></div>}
       >
         <Card>
@@ -314,7 +365,7 @@ const Users_timesheets = () => {
                   }}
                 >
                   <Select optionlabelprop="label">
-                    {listselect_timesheets.map((item, index) => {
+                    {list_working_session.map((item, index) => {
                       return (
                         <Option
                           value={item.value}
@@ -356,7 +407,7 @@ const Users_timesheets = () => {
                       optionlabelprop="label"
                       size="large"
                     >
-                      {listselect_employee?.map((item) => {
+                      {list_employee?.map((item) => {
                         return (
                           <Option value={item} label={item}>
                             <div className="demo-option-label-item">{item}</div>
@@ -369,7 +420,7 @@ const Users_timesheets = () => {
               ) : null}
 
               <Col span={2} style={{ float: "right" }}>
-                <Tag color="#108ee9" onClick={() => Nexttime()}>
+                <Tag color="#108ee9" onClick={() => nextDay()}>
                   Next
                 </Tag>
               </Col>
@@ -410,13 +461,13 @@ const handleDateTime = (countDays, year, month) => {
             );
           },
         },
-        
       ],
     });
-    
-
   }
   return arrDate;
 };
 
 export default Users_timesheets;
+
+// Chú thích code về tính năng các kiểu
+/* hehe */

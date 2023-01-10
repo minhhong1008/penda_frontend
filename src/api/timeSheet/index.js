@@ -11,7 +11,7 @@ export const createVerifySession = (payload) => {
   return axiosClient.post(url, payload);
 };
 
-export const getSessions = (payload) => {
+export const get_Timesheets_table = (payload) => {
   const url = `/timeSheet/list?${genQueryString(payload)}`
   return axiosClient.get(url);
 }

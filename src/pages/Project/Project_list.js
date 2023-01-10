@@ -16,23 +16,19 @@ export const listselect_project_processing = [
 ];
 
 export const listselect_project_work = [
+  "Giao việc",
   "Tài nguyên",
   "Dữ liệu",
   "Thiết bị",
   "Code",
-  "Tạo mục tiêu",
-  "Lên kế hoạch",
-  "Nghiên cứu",
   "Tester",
   "Mua sắm",
-  "Giao việc",
+  "Nghiên cứu",
+  "Tạo mục tiêu",
+  "Lên kế hoạch",
   "Báo cáo",
   "Kiểm tra",
-];
-export const listselect_project_review = [
-  "Không hoàn thành",
-  "Hoàn thành",
-  "Hoàn thành xuất sắc",
+  "Nhắc nhở",
 ];
 export const listselect_project_type = [
   "Giao việc",
@@ -68,11 +64,8 @@ export const listselect_project_owner = [
 
 export const listselect_project_status = [
   "Bắt đầu",
-  "Thực hiện",
-  "Chưa Xong",
-  "Vướng mắc",
   "Hoàn thành",
-  "Không cần làm",
+  "Không xong",
   "Cá nhân",
   //Lưu ý có đặt điều kiện trong project.js controller nên sửa ở đây phải sửa cả controller
 ];

@@ -30,7 +30,7 @@ import {
   getPayAndCollect,
   updateBill,
   getListBill,
-  getEmployee,
+  get_Bill_employee,
 } from "../../api/bill";
 /* // Liên quan mention
 const onChange = (value) => {
@@ -60,6 +60,7 @@ const Bill_class = () => {
   const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
+  const { users_function, users_name } = useSelector((state) => state.auth);
   const [data, setData] = useState();
   const { RangePicker } = DatePicker;
   const [listselect_bill_work_new, setListBillWorkNew] = useState(
@@ -179,7 +180,7 @@ const Bill_class = () => {
 
   // Hàm gọi dữ liệu về từ database
   const gettooldata = async () => {
-    const res = await getEmployee();
+    const res = await get_Bill_employee();
     let data = res.data;
     setlistselect_employee(data);
   };
@@ -534,7 +535,7 @@ const Bill_class = () => {
       let totalMoney_collect = 0;
       let totalMoney_suggest_pay = 0;
       let totalMoney_suggest_collect = 0;
-
+     
       data?.map((item) => {
         if (
           !arrKey_bill_work.some((key) => {
@@ -642,6 +643,7 @@ const Bill_class = () => {
         bill_total_pay: totalMoney_pay,
         bill_density_pay: "100%",
       });
+     
       setDataPay(arrPay);
 
       arrSuggestPay.map((item) => {
@@ -655,6 +657,8 @@ const Bill_class = () => {
         bill_total_suggest_pay: totalMoney_suggest_pay,
         bill_density_suggest_pay: "100%",
       });
+      
+     
       setDataSuggestPay(arrSuggestPay);
 
       arrCollect.map((item) => {
@@ -668,7 +672,7 @@ const Bill_class = () => {
         bill_total_collect: totalMoney_collect,
         bill_density_collect: "100%",
       });
-
+      arrCollect.result_pay = parseInt(totalMoney_pay)  - parseInt(totalMoney_collect);
       setDataCollect(arrCollect);
 
       arrSuggestCollect.map((item) => {
@@ -682,7 +686,7 @@ const Bill_class = () => {
         bill_total_suggest_collect: totalMoney_suggest_collect,
         bill_density_suggest_collect: "100%",
       });
-
+      arrSuggestCollect.result_suggest_pay = parseInt(totalMoney_suggest_pay)  - parseInt(totalMoney_suggest_collect);
       setDataSuggestCollect(arrSuggestCollect);
     } else {
       showError("Có lỗi xảy ra");
@@ -735,9 +739,13 @@ const Bill_class = () => {
 
   return (
     <div>
-      <Card>
+      {["Giám đốc","Phó Giám đốc","Trưởng phòng"].indexOf(
+        users_function
+      ) !== -1 ? (
+
+<Card>
         <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
+          <Tabs.TabPane tab="BÁO CÁO THU CHI"  key="1">
             <Row gutter={16}>
               <Col span={12}>
                 <Card
@@ -779,7 +787,7 @@ const Bill_class = () => {
                     </>
                   }
                 >
-                  <Divider>BẢNG ĐỀ XUẤT CHI </Divider>
+                  <Divider >{"BẢNG ĐỀ XUẤT CHI: " + VND.format( data_suggest_collect?.result_suggest_pay) } </Divider>
                   <Table
                     columns={columns_suggest_pay}
                     dataSource={data_suggest_pay}
@@ -805,7 +813,7 @@ const Bill_class = () => {
                     </strong>
                   }
                 >
-                  <Divider>BẢNG CHI TIỀN</Divider>
+                  <Divider> {"BẢNG CHI TIỀN: " +  VND.format(data_collect?.result_pay)  }</Divider>
                   <Table
                     columns={columns_pay}
                     dataSource={data_pay}
@@ -1162,6 +1170,10 @@ const Bill_class = () => {
           <img alt="example" style={{ width: "100%" }} src={previewImage} />
         </Modal>
       </Card>
+
+
+      ): null}
+      
     </div>
   );
 };
