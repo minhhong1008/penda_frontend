@@ -56,7 +56,7 @@ const Users_timesheets = () => {
       title: "STT",
       key: "index",
       fixed: "left",
-      width: 7,
+      width: 5,
       render: (text, record, index) => index + 1,
     },
     {
@@ -64,7 +64,7 @@ const Users_timesheets = () => {
       dataIndex: "users_name",
       key: "users_name",
       fixed: "left",
-      width: 25,
+      width: "100%",
       sorter: (a, b) => a.age - b.age,
     },
     {
@@ -77,13 +77,14 @@ const Users_timesheets = () => {
         filterDate?.year,
         filterDate?.month
       ),
+      width: "100%",
       sorter: (a, b) => a.age - b.age,
     },
     {
       title: "Total",
       dataIndex: "total",
       key: "total",
-      width: 20,
+      width: "100%",
       fixed: "right",
     },
   ];
@@ -100,6 +101,9 @@ const Users_timesheets = () => {
   };
 
   const onFinish = async (values) => {
+    if (values.working_date == null || values.working_employee == "") {
+      return showError("Có Lỗi, date");
+    }
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
     let date_end = dayjs()
       .add("3", "d")
@@ -111,6 +115,7 @@ const Users_timesheets = () => {
           users_function: users_function,
           users_name: values.working_employee,
           working_session: values.working_session,
+          working_verify: "unverify",
           working_date: values.working_date,
         });
         if (response.status == 200) {
@@ -126,6 +131,7 @@ const Users_timesheets = () => {
             users_function: users_function,
             users_name: values.working_employee,
             working_session: values.working_session,
+            working_verify: "unverify",
             working_date: values.working_date,
           });
           if (response.status == 200) {
@@ -206,6 +212,8 @@ const Users_timesheets = () => {
       <Card
         type="inner"
         title="BẢNG CHẤM CÔNG"
+        width="100%"
+        maxTagCount="responsive"
         extra={
           <div style={{ display: "flex", gap: "8px" }}>
             <DatePicker
@@ -221,10 +229,31 @@ const Users_timesheets = () => {
           </div>
         }
       >
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="BẢNG CHẤM CÔNG" key="1">
-            <Card type="inner">
+        <Tabs
+          defaultActiveKey="1"
+          style={{
+            width: "100%",
+          }}
+          maxTagCount="responsive"
+        >
+          <Tabs.TabPane
+            tab="BẢNG CHẤM CÔNG"
+            key="1"
+            style={{
+              width: "100%",
+            }}
+            maxTagCount="responsive"
+          >
+            <Card
+              type="inner"
+              style={{
+                width: "100%",
+              }}
+              maxTagCount="responsive"
+            >
               <Table
+                maxTagCount="responsive"
+                width="100%"
                 columns={columns}
                 dataSource={data}
                 bordered
@@ -366,13 +395,14 @@ const handleDateTime = (countDays, year, month) => {
           ).format("dd"),
           dataIndex: i,
           key: i,
-          width: 10,
+          width: "100%",
           render: (text) => {
             return (
               <div
                 style={{
                   color: dayjs().format("D") == dataIndex ? "blue" : "",
                   fontWeight: dayjs().format("D") == dataIndex ? "bold" : "",
+                  width: "100%",
                 }}
               >
                 {text}
@@ -380,8 +410,11 @@ const handleDateTime = (countDays, year, month) => {
             );
           },
         },
+        
       ],
     });
+    
+
   }
   return arrDate;
 };

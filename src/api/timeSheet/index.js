@@ -5,8 +5,19 @@ export const createSession = (payload) => {
   return axiosClient.post(url, payload);
 };
 
+export const createVerifySession = (payload) => {
+  console.log(payload)
+  const url = `/timeSheet/createverify`;
+  return axiosClient.post(url, payload);
+};
+
 export const getSessions = (payload) => {
   const url = `/timeSheet/list?${genQueryString(payload)}`
+  return axiosClient.get(url);
+}
+
+export const getcheckSessions = (payload) => {
+  const url = `/timeSheet/getcheck?${genQueryString(payload)}`
   return axiosClient.get(url);
 }
 

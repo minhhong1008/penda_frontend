@@ -16,15 +16,22 @@ import {
   List,
   Row,
   Space,
+  Rate,
   Spin,
   Switch,
   Typography,
+  message,
 } from "antd";
 import React, { useEffect, useState } from "react";
+
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
+import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import dayjs, { now } from "dayjs";
+import { createVerifySession } from "../../api/timeSheet";
+import { showError, showSuccess } from "../../utils";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -250,8 +257,9 @@ function Header({
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
   const user = useSelector((state) => state.auth);
-
   useEffect(() => window.scrollTo(0, 0));
+
+  const { users_function, users_name } = useSelector((state) => state.auth);
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
@@ -264,21 +272,153 @@ function Header({
       brecrum = brecrum + "/" + item;
       brc.push(
         <Breadcrumb.Item key={index}>
-          <NavLink to={item == 'table' ? brecrum + "?class=" + encodeURIComponent(param) : brecrum}>{decodeURIComponent(item)}</NavLink>
+          <NavLink
+            to={
+              item == "table"
+                ? brecrum + "?class=" + encodeURIComponent(param)
+                : brecrum
+            }
+          >
+            {decodeURIComponent(item)}
+          </NavLink>
         </Breadcrumb.Item>
       );
     });
     return brc;
   };
+  const [messageApi, contextHolder] = message.useMessage();
+  const [filterDate, setFilterDate] = useState({
+    month: dayjs().format("MM"),
+    year: dayjs().format("YYYY"),
+  });
+
+  // Tính năng chấm công tự động
+  const Timesheets = () => {
+    let values = [
+      {
+        working_check: "",
+        working_session: "",
+      },
+    ];
+    // Chấm công ca sáng, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
+    if (dayjs().hour() >= 7 && dayjs().hour() <= 12) {
+      values[0].working_check = "S";
+      if (dayjs().hour() == 8 && dayjs().minute() < 15) {
+        values[0].working_session = "S";
+        createVerify(values);
+        success();
+      } else {
+        values[0].working_session = "ms";
+        createVerify(values);
+        error();
+      }
+      return;
+    }
+
+    // Chấm công ca chiều, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
+    if (dayjs().hour() >= 14 && dayjs().hour() <= 18) {
+      values[0].working_check = "C";
+      if (dayjs().hour() == 14 && dayjs().minute() < 15) {
+        values[0].working_session = "C";
+        createVerify(values);
+        success();
+      } else {
+        values[0].working_session = "mc";
+        createVerify(values);
+        error();
+      }
+      return;
+    }
+
+    // Chấm công ca tối, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
+    if (dayjs().hour() >= 18 && dayjs().hour() <= 23) {
+      values[0].working_check = "T";
+      if (dayjs().hour() == 18 && dayjs().minute() < 30) {
+        values[0].working_session = "T";
+        createVerify(values);
+        success();
+        
+      } else {
+        values[0].working_session = "mt";
+        createVerify(values);
+        error();
+       
+      }
+      return;
+    }
+    warning();
+
+  };
+
+  const createVerify = async (values) => {
+    try {
+      let response = await createVerifySession({
+        users_name: users_name,
+        working_verify: "verify",
+        working_date: dayjs().format("YYYY-MM-DD"),
+        working_session: values[0].working_session,
+        working_check: values[0].working_check,
+      });
+      if (response.status == 200) {
+        showSuccess("Đăng ký thành công");
+        
+      }
+    } catch (error) {
+      showError("Kiểm tra");
+      
+    }
+  };
+
+  // Function thông báo lấy từ ant.desgin
+  const customIcons = {
+    1: <FrownOutlined />,
+    2: <FrownOutlined />,
+    3: <MehOutlined />,
+    4: <SmileOutlined />,
+    5: <SmileOutlined />,
+  };
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: users_name + ":" + " Bạn đã chấm công đúng giờ . Đừng ấn nữa nhé!",
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: "error",
+      content: users_name + ":" + " Đã muộn giờ!",
+    });
+  };
+
+  const warning = () => {
+    messageApi.open({
+      type: "warning",
+      content: users_name + ":" +  " Chưa đến giờ chấm công",
+    });
+  };
+
   return (
     <>
+      {contextHolder}
+      {/*  Cái này chính là nut setting Configurator */}
       <div className="setting-drwer" onClick={showDrawer}>
         {setting}
       </div>
       <Row gutter={[24, 0]}>
-        <Col span={24} md={6}>
+        {/*  Hiển thị link */}
+        {/* <Col span={24} md={6}>
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
+        </Col> */}
+        <Col span={24} md={6}>
+          <Link to="/HomePage">
+            <Rate
+              defaultValue={3}
+              character={({ index }) => customIcons[index + 1]}
+            />
+          </Link>
         </Col>
+
         <Col span={24} md={18} className="header-control">
           {/* <Badge size="small" count={4}>
             {<Dropdown overlay={menu} trigger={["click"]}>
@@ -408,20 +548,23 @@ function Header({
               </div>
             </div>
           </Drawer>
-          <Link to="/Log-out" className="btn-sign-in">
+          <Link
+            to="/Log-out"
+            className="btn-sign-in"
+            style={{ float: "right" }}
+          >
             {profile}
             <span>{user.profile ? user.profile.users_name : ""}</span>
           </Link>
-         
+
           <Input
             className="header-search"
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
-          <Link to="/HomePage">
-          <Spin size="large" />
+          <Link to="/personnel/users_timesheets">
+            <Spin size="large" onClick={Timesheets} />
           </Link>
-           
         </Col>
       </Row>
     </>

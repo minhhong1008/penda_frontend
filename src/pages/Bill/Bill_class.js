@@ -9,6 +9,7 @@ import {
   Input,
   DatePicker,
   Select,
+  message,
   Collapse,
   Space,
   TreeSelect,
@@ -132,6 +133,11 @@ const Bill_class = () => {
 
   // Bước 1: onFinish Lấy dữ liệu (values) từ FORM, sau đó xử lý và gửi dữ liêu lên server bằng phương thức post. dùng hàm postData_sever
   const onFinish = (values) => {
+    // check dữ liểu chưa chuẩn thì báo lỗi
+    if (values.bill_date == null || values.bill_expiry_date == null) {
+      return showError("Lỗi date");
+    }
+
     let bill_file = [];
     fileList?.map((item) => {
       let fileUrl = "";
@@ -144,23 +150,20 @@ const Bill_class = () => {
     });
 
     // Xử lý dữ liệu ngày tháng, multi select, earewa trước
-    if (values.bill_date != null) {
-      values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
-      values.bill_expiry_date = dayjs(values.bill_expiry_date).format(
-        "YYYY-MM-DD"
-      );
 
-      let productValues = formProduct.getFieldsValue();
-      // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
-      let newData = {
-        ...values,
-        ...productValues,
-        bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
-      };
-      postData_Create(newData);
-    } else {
-      alert("chọn ngày tháng");
-    }
+    values.bill_date = dayjs(values.bill_date).format("YYYY-MM-DD");
+    values.bill_expiry_date = dayjs(values.bill_expiry_date).format(
+      "YYYY-MM-DD"
+    );
+
+    let productValues = formProduct.getFieldsValue();
+    // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
+    let newData = {
+      ...values,
+      ...productValues,
+      bill_image_url: bill_file.length > 0 ? bill_file.join(",") : "",
+    };
+    postData_Create(newData);
   };
 
   // Bước 2: Gửi dữ liệu lên server Xử lý bất đồng bộ: dùng async await
@@ -951,7 +954,7 @@ const Bill_class = () => {
                               width: "100%",
                             }}
                             size="large"
-                            autoSize ="true"
+                            autoSize="true"
                             prefix={["@", "#"]}
                             onSearch={onSearch}
                             options={(MOCK_DATA[prefix] || []).map((value) => ({
@@ -1031,8 +1034,7 @@ const Bill_class = () => {
                     <Row gutter={16}>
                       <Form.Item name="bill_image_url">
                         <Upload
-                        
-                           multiple
+                          multiple
                           listType="picture-card"
                           action="http://backend.penda.vn/api/files"
                           fileList={fileList}

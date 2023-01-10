@@ -63,6 +63,7 @@ const Project_info = () => {
   const [disabled, setDisabled] = useState(false);
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    if(values.project_date_start == null || values.project_date_end == null ){return showError("Có Lỗi, date");}
     //Upload ảnh
     let project_file = [];
     fileList?.map((item) => {

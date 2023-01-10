@@ -96,6 +96,23 @@ const Users_table = () => {
             }}
             columns={columns}
             dataSource={userss}
+            pagination={{
+              pageSizeOptions: [
+                "10",
+                "20",
+                "30",
+                "50",
+                "100",
+                "200",
+                "300",
+                "500",
+                "1000",
+                "2000",
+              ],
+              position: ["bottomRight", "topRight"],
+              showSizeChanger: true,
+              defaultPageSize: 100,
+            }}
           ></Table>
         </Card>
       ) : null}
