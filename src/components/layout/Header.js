@@ -301,9 +301,9 @@ function Header({
       },
     ];
     // Chấm công ca sáng, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
-    if (dayjs().hour() >= 7 && dayjs().hour() <= 12) {
+    if (dayjs().hour() >= 8 && dayjs().hour() <= 12) {
       values[0].working_check = "S";
-      if (dayjs().hour() == 8 && dayjs().minute() < 15) {
+      if (dayjs().hour() == 8 && dayjs().minute() <= 15) {
         values[0].working_session = "S";
         createVerify(values);
         success();
@@ -314,11 +314,20 @@ function Header({
       }
       return;
     }
+    if (dayjs().hour() == 12 && dayjs().minute() <= 15) {
+      values[0].working_session = "S";
+      createVerify(values);
+      success();
+    } else {
+      values[0].working_session = "vs";
+      createVerify(values);
+      error();
+    }
 
     // Chấm công ca chiều, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
     if (dayjs().hour() >= 14 && dayjs().hour() <= 18) {
       values[0].working_check = "C";
-      if (dayjs().hour() == 14 && dayjs().minute() < 15) {
+      if (dayjs().hour() == 14 && dayjs().minute() <= 15) {
         values[0].working_session = "C";
         createVerify(values);
         success();
@@ -333,7 +342,7 @@ function Header({
     // Chấm công ca tối, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
     if (dayjs().hour() >= 18 && dayjs().hour() <= 23) {
       values[0].working_check = "T";
-      if (dayjs().hour() == 18 && dayjs().minute() < 30) {
+      if (dayjs().hour() == 18 && dayjs().minute() <= 30) {
         values[0].working_session = "T";
         createVerify(values);
         success();

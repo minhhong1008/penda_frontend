@@ -101,7 +101,7 @@ const Users_timesheets = () => {
   };
 
   const onFinish = async (values) => {
-    if (values.working_date == null || values.working_employee == "") {
+    if (values.working_date == null || values.working_employee == "" ||users_name == "" ) {
       return showError("Có Lỗi, date");
     }
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
@@ -141,7 +141,20 @@ const Users_timesheets = () => {
           showError("Đăng ký rồi");
         }
       } else {
-        showError("Không có quyền");
+        try {
+          let response = await createSession({
+            users_function: users_function,
+            users_name: users_name,
+            working_session: values.working_session,
+            working_verify: "unverify",
+            working_date: values.working_date,
+          });
+          if (response.status == 200) {
+            showSuccess("Đăng ký thành công");
+          }
+        } catch (error) {
+          showError("Đăng ký rồi");
+        }
       }
     }
   };
