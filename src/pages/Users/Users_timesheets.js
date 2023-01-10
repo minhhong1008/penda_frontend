@@ -114,7 +114,7 @@ const Users_timesheets = () => {
         let response = await createSession({
           users_function: users_function,
           users_name: values.working_employee,
-          working_session: values.working_session,
+          working_session: users_name,
           working_verify: "unverify",
           working_date: values.working_date,
         });
@@ -141,20 +141,7 @@ const Users_timesheets = () => {
           showError("Đăng ký rồi");
         }
       } else {
-        try {
-          let response = await createSession({
-            users_function: users_function,
-            users_name: users_name,
-            working_session: values.working_session,
-            working_verify: "unverify",
-            working_date: values.working_date,
-          });
-          if (response.status == 200) {
-            showSuccess("Đăng ký thành công");
-          }
-        } catch (error) {
-          showError("Đăng ký rồi");
-        }
+        showError("Bạn không có quyền");
       }
     }
   };
