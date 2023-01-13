@@ -674,7 +674,7 @@ export const HuongDanEbay_table = () => {
               khoản của nhận viên
             </p>
             <p>2. Nhân viên chỉ xem được những tài khoản do mình quản lý</p>
-            <p>3. Lọc sẽ lọc theo Block và nhân viên ( đang phát triển)</p>
+            <p>3. Lọc sẽ lọc theo: ebay_id, eBay User, Quy trình,eBay block,Tiến trình,Phát sinh, Block và nhân viên ( đang phát triển)</p>
           </>
         }
         type="warning"

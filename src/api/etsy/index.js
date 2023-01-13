@@ -28,6 +28,12 @@ export const getCountEtsy = () => {
   return axiosClient.get(url);
 }
 
+
+export const searchEtsyInfo = (text) => {
+  const url = `/etsy/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

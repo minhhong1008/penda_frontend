@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import Icon, { HomeOutlined } from "@ant-design/icons";
@@ -10,6 +10,9 @@ const SideBarProducts = ({ color }) => {
   // dùng cái này để hiển hị ra màn hình { JSON.stringify(ebays) }
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
+  const [show_taikhoan, setshow_taikhoan] = useState(false);
+  const [show_method_pay, setshow_method_pay] = useState(false);
+  const [show_tainguyen, setshow_tainguyen] = useState(false);
 
   const dashboard = [
     <svg
@@ -202,12 +205,200 @@ const SideBarProducts = ({ color }) => {
     </svg>
   );
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
+
+  //Hiện nút chấm công tự động theo thời gian */
+  const showSidebar_taikhoan = () => {
+    return (
+      <>
+        <Menu.Item key="4">
+          <NavLink to="/products/shopee_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/shopee_class" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Shopee</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <NavLink to="/products/amazon_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/amazon_class" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Amazon</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="5">
+          <NavLink to="/products/facebook_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/facebook_class" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Facebook</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="6">
+          <NavLink to="/products/tiktok_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/tiktok_class" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Tiktok</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="7">
+          <NavLink to="/products/other_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/other_class" ? color : "",
+              }}
+            >
+              {rtl}
+            </span>
+            <span className="label">Other</span>
+          </NavLink>
+        </Menu.Item>
+      </>
+    );
+  };
+
+  const showSidebar_method_pay = () => {
+    return (
+      <>
+        <Menu.Item key="32">
+          <NavLink to="/products/paypal_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/paypal_class" ? color : "",
+              }}
+            >
+              {billing}
+            </span>
+            <span className="label">Paypal</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="33">
+          <NavLink to="/products/pingpong_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/pingpong_class" ? color : "",
+              }}
+            >
+              {billing}
+            </span>
+            <span className="label">Pingpong</span>
+          </NavLink>
+        </Menu.Item>
+      </>
+    );
+  };
+  const showSidebar_tainguyen = () => {
+    return (
+      <>
+        <Menu.Item key="62">
+          <NavLink to="/products/mail_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/mail_class" ? color : "",
+              }}
+            >
+              {profile}
+            </span>
+            <span className="label">Mail</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="63">
+          <NavLink to="/products/sim_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/sim_class" ? color : "",
+              }}
+            >
+              {profile}
+            </span>
+            <span className="label">Sim</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="65">
+          <NavLink to="/products/proxy_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "products/proxy_class" ? color : "",
+              }}
+            >
+              {profile}
+            </span>
+            <span className="label">Proxy</span>
+          </NavLink>
+        </Menu.Item>
+      </>
+    );
+  };
+  // Sự kiện onClick show giao diện
+  let a = 0;
+  const shows_taikhoan = () => {
+    a++;
+    if (a % 2 == 0) {
+      setshow_taikhoan(showSidebar_taikhoan);
+    }else{
+      setshow_taikhoan(false);
+    }
+    
+  };
+
+  const shows_monthod_pay = () => {
+    a++;
+    if (a % 2 == 0) {
+      setshow_method_pay(showSidebar_method_pay);
+    }else{
+      setshow_method_pay(false);
+    }
+    
+  };
+  
+  const shows_tainguyen = () => {
+    a++;
+    if (a % 2 == 0) {
+      setshow_tainguyen(showSidebar_tainguyen);
+    } else {
+      setshow_tainguyen(false);
+    }
+  };
+
   return (
     <>
       {page == "HomePage" ? null : (
         <Menu theme="light" mode="inline">
-          <Menu.Item className="menu-item-header" key="100">
-            Tài Khoản 
+          <Menu.Item
+            className="menu-item-header"
+            key="100"
+            onClick={shows_taikhoan}
+          >
+            Tài Khoản
           </Menu.Item>
 
           <Menu.Item key="1">
@@ -237,78 +428,13 @@ const SideBarProducts = ({ color }) => {
               <span className="label">Etsy</span>
             </NavLink>
           </Menu.Item>
+          {show_taikhoan}
 
-          <Menu.Item key="3">
-            <NavLink to="/products/amazon_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/amazon_class" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">Amazon</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="4">
-            <NavLink to="/products/shopee_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/shopee_class" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">Shopee</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="5">
-            <NavLink to="/products/facebook_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/facebook_class" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">Facebook</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="6">
-            <NavLink to="/products/tiktok_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/tiktok_class" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">Tiktok</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="7">
-            <NavLink to="/products/other_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/other_class" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">Other</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item className="menu-item-header" key="30">
+          <Menu.Item
+            className="menu-item-header"
+            key="30"
+            onClick={shows_monthod_pay}
+          >
             Phương thức thanh toán
           </Menu.Item>
 
@@ -326,34 +452,6 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="32">
-            <NavLink to="/products/paypal_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/paypal_class" ? color : "",
-                }}
-              >
-                {billing}
-              </span>
-              <span className="label">Paypal</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="33">
-            <NavLink to="/products/pingpong_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/pingpong_class" ? color : "",
-                }}
-              >
-                {billing}
-              </span>
-              <span className="label">Pingpong</span>
-            </NavLink>
-          </Menu.Item>
-
           <Menu.Item key="34">
             <NavLink to="/products/bank_class">
               <span
@@ -367,8 +465,12 @@ const SideBarProducts = ({ color }) => {
               <span className="label">Bank</span>
             </NavLink>
           </Menu.Item>
-
-          <Menu.Item className="menu-item-header" key="60">
+          {show_method_pay}
+          <Menu.Item
+            className="menu-item-header"
+            key="60"
+            onClick={shows_tainguyen}
+          >
             Tài nguyên
           </Menu.Item>
 
@@ -386,34 +488,6 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="62">
-            <NavLink to="/products/mail_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/mail_class" ? color : "",
-                }}
-              >
-                {profile}
-              </span>
-              <span className="label">Mail</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="63">
-            <NavLink to="/products/sim_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/sim_class" ? color : "",
-                }}
-              >
-                {profile}
-              </span>
-              <span className="label">Sim</span>
-            </NavLink>
-          </Menu.Item>
-
           <Menu.Item key="64">
             <NavLink to="/products/device_class">
               <span
@@ -427,23 +501,7 @@ const SideBarProducts = ({ color }) => {
               <span className="label">Device</span>
             </NavLink>
           </Menu.Item>
-
-          <Menu.Item key="65">
-            <NavLink to="/products/proxy_class">
-              <span
-                className="icon"
-                style={{
-                  background: page === "products/proxy_class" ? color : "",
-                }}
-              >
-                {profile}
-              </span>
-              <span className="label">Proxy</span>
-            </NavLink>
-          </Menu.Item>
-
-          
-
+          {show_tainguyen}
           <Menu.Item className="menu-item-header" key="90">
             Công cụ
           </Menu.Item>

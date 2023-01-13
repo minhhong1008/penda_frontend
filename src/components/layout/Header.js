@@ -325,11 +325,11 @@ function Header({
       values[0].working_session = "S";
       if (dayjs().hour() == 8) {
         if (dayjs().minute() <= 15) {
-          values[0].working_verify = "B";
+          values[0].working_verify = "Bs";
           post_working_session(values);
           success(users_name + ": Bạn đi làm đúng giờ 8h-8h15. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
         } else {
-          values[0].working_verify = "B";
+          values[0].working_verify = "Bs";
           values[0].working_check_late = "m";
           post_working_session(values);
           error(users_name + ": Bạn đã đi muộn ca sáng. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
@@ -354,11 +354,11 @@ function Header({
       values[0].working_session = "C";
       if (dayjs().hour() == 14) {
         if (dayjs().minute() <= 15) {
-          values[0].working_verify = "B";
+          values[0].working_verify = "Bc";
           post_working_session(values);
           success(users_name + ": Bạn đi làm đúng giờ 14h-14h15. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
         } else {
-          values[0].working_verify = "B";
+          values[0].working_verify = "Bc";
           values[0].working_check_late = "m";
           post_working_session(values);
           error(users_name + ": Bạn đã đi muộn ca chiều. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
@@ -379,14 +379,14 @@ function Header({
         dayjs().minute() <= 30
       ) {
         values[0].working_session = "T";
-        values[0].working_verify = "B";
+        values[0].working_verify = "Bt";
         post_working_session(values);
         return success(users_name + ": Bạn đã chấm công");
       }
 
       if (dayjs().hour() == 18 && dayjs().minute() > 30) {
         values[0].working_session = "T";
-        values[0].working_verify = "B";
+        values[0].working_verify = "Bt";
         values[0].working_check_late = "m";
         post_working_session(values);
         return error(users_name + ": Bạn đã đi muộn");
@@ -634,3 +634,6 @@ function Header({
 }
 
 export default Header;
+
+//db.getCollection('timesheets').find({working_date:"2023-01-13"})
+//"working_check_late" : "m",

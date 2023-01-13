@@ -230,8 +230,12 @@ const Users_timesheets = () => {
 
           if (
             session?.working_check_late == "m" ||
-            session?.working_verify == "B" ||
-            session?.working_verify == "p"
+            session?.working_verify == "Bs" ||
+            session?.working_verify == "Bc" ||
+            session?.working_verify == "Bt" ||
+            session?.working_verify == "ps"||
+            session?.working_verify == "pc" ||
+            session?.working_verify == "pt"
           ) {
             total_check++;
           }

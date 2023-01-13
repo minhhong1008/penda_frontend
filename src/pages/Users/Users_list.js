@@ -93,28 +93,36 @@ export const HuongDanUsers_timesheets = () => {
           <>
             <p>
               - Nhân viên đăng ký lịch làm việc từ ngày mùng 1 đến ngày mùng 3
-              hàng tháng. Nhân viên đi làm ca không đăng ký sẽ không chấm công được.
+              hàng tháng. Nhân viên đi làm ca không đăng ký sẽ không chấm công
+              được.
             </p>
             <p>
               - Nhân viên chỉ sửa được lịch đăng ký sau 3 ngày tính từ ngày sửa
               ( ngày hiện tại).
             </p>
-            <p>- Ký hiệu: S ca sáng, C ca chiều, T ca tối.</p>
-            <p>- Ký hiệu: ms muộn sáng, mc muộn chiều, mt muộn tối.</p>
             <p>
-              - Ký hiệu: vs về trước sáng, vc về trước chiều, vt về trước tối.
+              - Ký hiệu: S hoàn thành ca sáng, C hoàn thành ca chiều, T hoàn
+              thành ca tối.
             </p>
             <p>
-              - Ký hiệu: ns nghỉ không phép sáng, nc nghỉ không phép chiều, nt
+              - Ký hiệu: Bs bắt đầu ca sáng, Bc bắt đầu ca chiều, Bt bắt đầu ca
+              tối.
+            </p>
+            <p>
+              - Ký hiệu: ps xin nghỉ có phép ca sáng, pc xin nghỉ có phép ca
+              chiều, pt xin nghỉ có phép ca tối.
+            </p>
+            <p>- Ký hiệu: m đi muộn.</p>
+            <p>
+              - Ký hiệu: Ns nghỉ không phép sáng, Nc nghỉ không phép chiều, Nt
               nghỉ không phép tối.
             </p>
             <p>- Công ty không có ca khác giờ quy định.</p>
             <p>
-              - Nhân viên chấm công trên matbiec.penda.vn. Và thường xuyên theo dõi chấm công của mọi người.
+              - Nhân viên chấm công trên matbiec.penda.vn. Và thường xuyên theo
+              dõi chấm công của mọi người.
             </p>
-            <p>
-              - Phần mềm sẽ tự động chấm công và tính toán. Hoài chỉ giải quyết việc nhân viên xin nghỉ đột xuất trong thời gian 3 ngày đăng ký cố định.
-            </p>
+            <p>- Phần mềm sẽ tự động chấm công và tính toán.</p>
           </>
         }
         type="success"
@@ -148,8 +156,9 @@ export const HuongDanUsers_timesheets = () => {
             <p>- Nghỉ không phép bị trừ 2 ca.</p>
 
             <p>
-              - Nếu người quản lý phát hiện chấm công không đúng với thực tế thì
-              người chấm công và người quản lý chấm công đều bị trừ 10 ca.
+              - Nếu người quản lý phát hiện gian lận trong chấm công.(VD: Chấm
+              công khi không có mặt ở công ty, nhờ người khác chấm công hộ) Thì
+              người chấm công bị trừ 10 ca.
             </p>
           </>
         }

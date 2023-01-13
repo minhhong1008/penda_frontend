@@ -15,12 +15,17 @@ import {
   TreeSelect,
   Tag,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { copyToClipboard } from "../../utils";
+import React, { useEffect, useRef, useState } from "react";
+import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListetsyActions } from "../../actions/etsyActions";
 import { HuongDanEtsy_table } from "./Etsy_list";
+import { searchEtsyInfo } from "../../api/etsy";
+import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
+
+
 const Etsy_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -28,6 +33,107 @@ const Etsy_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
+
+    // Các hàm nut search trên table của ant.desgn
+    const [searchText, setSearchText] = useState("");
+    const [searchedColumn, setSearchedColumn] = useState("");
+    const searchInput = useRef(null);
+    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+      confirm();
+      setSearchText(selectedKeys[0]);
+      setSearchedColumn(dataIndex);
+    };
+    const handleReset = (clearFilters) => {
+      clearFilters();
+      setSearchText("");
+    };
+    const getColumnSearchProps = (dataIndex) => ({
+      filterDropdown: ({
+        setSelectedKeys,
+        selectedKeys,
+        confirm,
+        clearFilters,
+        close,
+      }) => (
+        <div
+          style={{
+            padding: 8,
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <Input
+            ref={searchInput}
+            placeholder={`Search ${dataIndex}`}
+            value={selectedKeys[0]}
+            onChange={(e) =>
+              setSelectedKeys(e.target.value ? [e.target.value] : [])
+            }
+            onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            style={{
+              marginBottom: 8,
+              display: "block",
+            }}
+          />
+          <Space>
+            
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                confirm({
+                  closeDropdown: false,
+                });
+                setSearchText(selectedKeys[0]);
+                setSearchedColumn(dataIndex);
+              }}
+            >
+              Filter
+            </Button>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                close();
+              }}
+            >
+              close
+            </Button>
+          </Space>
+        </div>
+      ),
+      filterIcon: (filtered) => (
+        <SearchOutlined
+          style={{
+            color: filtered ? "#1890ff" : undefined,
+          }}
+        />
+      ),
+      onFilter: (value, record) =>
+        record[dataIndex]
+          .toString()
+          .toLowerCase()
+          .includes(value.toLowerCase()),
+      onFilterDropdownOpenChange: (visible) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+      render: (text) =>
+        searchedColumn === dataIndex ? (
+          <Highlighter
+            highlightStyle={{
+              backgroundColor: "#ffc069",
+              padding: 0,
+            }}
+            searchWords={[searchText]}
+            autoEscape
+            textToHighlight={text ? text.toString() : ""}
+          />
+        ) : (
+          text
+        ),
+    });
+    //-------------------------------
   // nut checked
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copy_Id = () => {
@@ -60,6 +166,7 @@ const Etsy_table = () => {
       sorter: (a, b) => {
         return a.etsy_id?.localeCompare(b.etsy_id);
       },
+      ...getColumnSearchProps("etsy_id"),
     },
     {
       title: "TÀI KHOẢN",
@@ -68,6 +175,7 @@ const Etsy_table = () => {
       sorter: (a, b) => {
         return a.etsy_user?.localeCompare(b.etsy_user);
       },
+      ...getColumnSearchProps("etsy_user"),
     },
     {
       title: "TIẾN TRÌNH",
@@ -248,44 +356,40 @@ const rowSelection = {
   selectedRowKeys,
   onChange: onSelectChange,
 };
+// Hàm search
+
+const searchEtsy = async (value) => {
+  const response = await searchEtsyInfo({
+    query: value,
+  });
+  if (response.status == 200) {
+    let { data } = response;
+
+    dispatch({
+      type: GET_LIST_ETSY_SUCCESS,
+      payload: data,
+    });
+  } else {
+    showError("Có lỗi Search")
+  }
+};
 //--------
   return (
     <div>
       <Card>
-        <Form.Item label="Lọc eBay">
-          <TreeSelect
-            mode="multiple"
-            onChange={handleChangeFilter}
-            multiple
-            optionlabelprop="label"
-            treeData={[
-              {
-                title: "Lớp",
-                value: "etsy_class",
-                children: [
-                  { title: "Lớp 1", value: "Lớp 1" },
-                  { title: "Lớp 2", value: "Lớp 2" },
-                ],
-              },
-              {
-                title: "Thiết bị",
-                value: "etsy_device",
-                children: [
-                  { title: "PC06", value: "PC06" },
-                  { title: "PC07", value: "PC07" },
-                ],
-              },
-              {
-                title: "Nhân viên",
-                value: "etsy_employee",
-                children: [
-                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                  { title: "Khắc Liêm", value: "Khắc Liêm" },
-                ],
-              },
-            ]}
-          />
-        </Form.Item>
+      <row gutter={16}>
+          <Col span={18}>
+            <Input
+              placeholder="Search"
+              onPressEnter={(e) => {
+                searchEtsy(e.target.value);
+              }}
+            />
+          </Col>
+          <Col span={4}>
+           {etsys.length}
+          </Col>
+        </row>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG LỚP ETSY : " + class_name.toUpperCase()}

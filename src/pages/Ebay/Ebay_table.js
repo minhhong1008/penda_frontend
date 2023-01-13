@@ -11,13 +11,17 @@ import {
   Checkbox,
   Tag,
   Tooltip,
+  Col,
 } from "antd";
 import Highlighter from "react-highlight-words";
 import React, { useEffect, useRef, useState } from "react";
 import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListebayActions, GET_LIST_EBAY_SUCCESS } from "../../actions/ebayActions";
+import {
+  getListebayActions,
+  GET_LIST_EBAY_SUCCESS,
+} from "../../actions/ebayActions";
 import { HuongDanEbay_table } from "./Ebay_list";
 import { searchEbayInfo, updateebayInfo } from "../../api/ebay";
 // search trên table
@@ -32,7 +36,7 @@ const Ebay_table = () => {
   const dispatch = useDispatch();
   const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
-  // Các hàm nut search trên table
+  // Các hàm nut search trên table của ant.desgn
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -150,12 +154,14 @@ const Ebay_table = () => {
         text
       ),
   });
-//-------------------------------
+  //-------------------------------
   // nut checked, sửa cả trong file ebayReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copyId = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
   };
+
+
   const columns = [
     {
       title: (
@@ -461,25 +467,37 @@ const Ebay_table = () => {
 
   const searchEbay = async (value) => {
     const response = await searchEbayInfo({
-      query: value
+      query: value,
     });
-    if(response.status == 200){
+    if (response.status == 200) {
       let { data } = response;
+
       dispatch({
         type: GET_LIST_EBAY_SUCCESS,
-        payload: data
-      })
+        payload: data,
+      });
     } else {
-      
     }
-    
-  }
+  };
 
   return (
     <div>
       <Card>
-        <Input placeholder="Search" onPressEnter={(e) => {searchEbay(e.target.value)}} />
-        <Form.Item label="Lọc eBay">
+        <row gutter={16}>
+          <Col span={18}>
+            <Input
+              placeholder="Search"
+              onPressEnter={(e) => {
+                searchEbay(e.target.value);
+              }}
+            />
+          </Col>
+          <Col span={4}>
+           {ebays.length}
+          </Col>
+        </row>
+
+        {/* <Form.Item label="Lọc eBay">
           <TreeSelect
             mode="multiple"
             onChange={handleChangeFilter}
@@ -512,7 +530,7 @@ const Ebay_table = () => {
               },
             ]}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase()}

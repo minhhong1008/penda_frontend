@@ -28,6 +28,11 @@ export const getCountSim = () => {
   return axiosClient.get(url);
 }
 
+export const searchSimInfo = (text) => {
+  const url = `/sim/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)
