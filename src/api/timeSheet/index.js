@@ -26,6 +26,11 @@ export const postcheckSessions = (payload) => {
   return axiosClient.post(url,payload);
 }
 
+export const postcheckSessions_xl = (payload) => {
+  const url = `/timeSheet/postcheck_xl`
+  return axiosClient.post(url,payload);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

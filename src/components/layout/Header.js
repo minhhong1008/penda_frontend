@@ -30,7 +30,7 @@ import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import dayjs, { now } from "dayjs";
-import { postcheckSessions } from "../../api/timeSheet";
+import { postcheckSessions,postcheckSessions_xl } from "../../api/timeSheet";
 import { showError, showSuccess } from "../../utils";
 
 const ButtonContainer = styled.div`
@@ -284,6 +284,29 @@ function Header({
     }
   };
 
+  const renderhide_xyly = () => {
+    if (users_name =="Minh Hồng" ) {
+      return (
+        <div>
+          <Link >
+            <Spin size="large" onClick={post_working_session_XL()} />
+          </Link>
+        </div>
+      );
+    }
+  };
+
+  const post_working_session_XL = async (values) => {
+    try {
+      let response = await postcheckSessions_xl(values);
+      if (response.status == 200) {
+        success("Thành công");
+      }
+    } catch (error) {
+      error("Đã lỗi");
+    }
+  };
+
   const Timesheets = () => {
     let values = [
       {
@@ -343,7 +366,7 @@ function Header({
         return;
       }
 
-      if (dayjs().hour() == 18 && dayjs().minute() <= 15) {
+      if (dayjs().hour() == 17 && dayjs().minute() <= 55) {
         values[0].working_verify = "C";
         post_working_session(values);
         success(users_name + ": Bạn đã hoàn thành ca");
@@ -600,7 +623,11 @@ function Header({
             prefix={<SearchOutlined />}
           />
           {renderhide_Timesheets()}
+
+
         </Col>
+        {renderhide_xyly()}
+        
       </Row>
     </>
   );
