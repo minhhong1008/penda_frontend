@@ -19,6 +19,8 @@ import {
   Upload,
   Mentions,
 } from "antd";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,6 +59,7 @@ const getBase64 = (file) =>
 // useState để tạo kho dữ liệu trong nội bộ components !== biến thường là khi dữ liệu được cập nhật thì UI thay đổi theo
 
 const Bill_class = () => {
+  const [content, setContent] = useState("abc");
   const { Option } = Select;
   const dispatch = useDispatch();
   const history = useHistory();
@@ -535,7 +538,7 @@ const Bill_class = () => {
       let totalMoney_collect = 0;
       let totalMoney_suggest_pay = 0;
       let totalMoney_suggest_collect = 0;
-     
+
       data?.map((item) => {
         if (
           !arrKey_bill_work.some((key) => {
@@ -643,7 +646,7 @@ const Bill_class = () => {
         bill_total_pay: totalMoney_pay,
         bill_density_pay: "100%",
       });
-     
+
       setDataPay(arrPay);
 
       arrSuggestPay.map((item) => {
@@ -657,8 +660,7 @@ const Bill_class = () => {
         bill_total_suggest_pay: totalMoney_suggest_pay,
         bill_density_suggest_pay: "100%",
       });
-      
-     
+
       setDataSuggestPay(arrSuggestPay);
 
       arrCollect.map((item) => {
@@ -672,7 +674,8 @@ const Bill_class = () => {
         bill_total_collect: totalMoney_collect,
         bill_density_collect: "100%",
       });
-      arrCollect.result_pay = parseInt(totalMoney_pay)  - parseInt(totalMoney_collect);
+      arrCollect.result_pay =
+        parseInt(totalMoney_pay) - parseInt(totalMoney_collect);
       setDataCollect(arrCollect);
 
       arrSuggestCollect.map((item) => {
@@ -686,7 +689,8 @@ const Bill_class = () => {
         bill_total_suggest_collect: totalMoney_suggest_collect,
         bill_density_suggest_collect: "100%",
       });
-      arrSuggestCollect.result_suggest_pay = parseInt(totalMoney_suggest_pay)  - parseInt(totalMoney_suggest_collect);
+      arrSuggestCollect.result_suggest_pay =
+        parseInt(totalMoney_suggest_pay) - parseInt(totalMoney_suggest_collect);
       setDataSuggestCollect(arrSuggestCollect);
     } else {
       showError("Có lỗi xảy ra");
@@ -739,441 +743,492 @@ const Bill_class = () => {
 
   return (
     <div>
-      {["Giám đốc","Phó Giám đốc","Trưởng phòng"].indexOf(
-        users_function
-      ) !== -1 ? (
-
-<Card>
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane tab="BÁO CÁO THU CHI"  key="1">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#18a689",
-                      }}
-                    >
-                      BẢNG ĐỀ XUẤT
-                    </strong>
-                  }
-                  extra={
-                    <>
-                      <Row gutter={16}>
-                        <Col span={16}>
-                          <RangePicker
-                            size="large"
-                            presets={rangePresets}
-                            onChange={onRangeChange}
-                            defaultValue={[
-                              dayjs().add(-30, "d"),
-                              dayjs().add(30, "d"),
-                            ]}
-                          />
-                        </Col>
-                        <Col span={8}>
-                          <Button
-                            style={{
-                              background: "#18a689",
-                              color: "white",
-                            }}
-                            onClick={() => handleFilter()}
-                          >
-                            Kết quả
-                          </Button>
-                        </Col>
-                      </Row>
-                    </>
-                  }
-                >
-                  <Divider >{"BẢNG ĐỀ XUẤT CHI: " + VND.format( data_suggest_collect?.result_suggest_pay) } </Divider>
-                  <Table
-                    columns={columns_suggest_pay}
-                    dataSource={data_suggest_pay}
-                    size="middle"
-                  />
-                  <Divider>BẢNG ĐỀ XUẤT THU </Divider>
-                  <Table
-                    columns={columns_suggest_collect}
-                    dataSource={data_suggest_collect}
-                    size="middle"
-                  />
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#1890FD",
-                      }}
-                    >
-                      BẢNG THU CHI
-                    </strong>
-                  }
-                >
-                  <Divider> {"BẢNG CHI TIỀN: " +  VND.format(data_collect?.result_pay)  }</Divider>
-                  <Table
-                    columns={columns_pay}
-                    dataSource={data_pay}
-                    size="middle"
-                  />
-                  <Divider>BẢNG THU TIỀN</Divider>
-                  <Table
-                    columns={columns_collect}
-                    dataSource={data_collect}
-                    size="middle"
-                  />
-                </Card>
-              </Col>
-            </Row>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="2">
-            <Row gutter={16}>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#1890FD",
-                      }}
-                    >
-                      TẠO HÓA ĐƠN THU CHI
-                    </strong>
-                  }
-                  extra={
-                    <>
-                      <Button
-                        onClick={() => {
-                          form.submit();
-                        }}
+      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      -1 ? (
+        <Card>
+          <Tabs defaultActiveKey="1">
+            <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Card
+                    title={
+                      <strong
                         style={{
-                          background: "#1890FD",
-                          color: "white",
+                          color: "#18a689",
                         }}
                       >
-                        Tạo hóa đơn
-                      </Button>
-                      {/* <Button onClick={() => test()}>Test</Button> */}
-                    </>
-                  }
-                >
-                  <Form
-                    form={form}
-                    name="basic"
-                    autoComplete="off"
-                    size="large"
-                    onFinish={onFinish}
-                    initialValues={{
-                      bill_date: dayjs(),
-                      bill_type: "Phiếu chi",
-                      bill_action: "Đề xuất",
-                      bill_owner: "Phòng sản xuất",
-                      bill_employee: "Khắc Liêm",
-                      bill_payment: "0",
-                      bill_debt: "0",
-                    }}
+                        BẢNG ĐỀ XUẤT
+                      </strong>
+                    }
+                    extra={
+                      <>
+                        <Row gutter={16}>
+                          <Col span={16}>
+                            <RangePicker
+                              size="large"
+                              presets={rangePresets}
+                              onChange={onRangeChange}
+                              defaultValue={[
+                                dayjs().add(-30, "d"),
+                                dayjs().add(30, "d"),
+                              ]}
+                            />
+                          </Col>
+                          <Col span={8}>
+                            <Button
+                              style={{
+                                background: "#18a689",
+                                color: "white",
+                              }}
+                              onClick={() => handleFilter()}
+                            >
+                              Kết quả
+                            </Button>
+                          </Col>
+                        </Row>
+                      </>
+                    }
                   >
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Ngày tháng" name="bill_date">
-                          <DatePicker
-                            style={{ float: "right" }}
-                            format="YYYY-MM-DD"
-                            defaultValue={dayjs()}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Hạng mục" name="bill_type">
-                          <Select optionlabelprop="label" onChange={rendertype}>
-                            <Option value="Phiếu chi" label="Phiếu chi">
-                              <div className="demo-option-label-item">
-                                Phiếu chi
-                              </div>
-                            </Option>
-                            <Option value="Phiếu thu" label="Phiếu thu">
-                              <div className="demo-option-label-item">
-                                Phiếu thu
-                              </div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Hành động" name="bill_action">
-                          <Select optionlabelprop="label">
-                            <Option value="Đề xuất" label="Đề xuất">
-                              <div className="demo-option-label-item">
-                                Đề xuất
-                              </div>
-                            </Option>
-                            <Option value="Thực hiện" label="Thực hiện">
-                              <div className="demo-option-label-item">
-                                Thực hiện
-                              </div>
-                            </Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Phòng ban" name="bill_owner">
-                          <Select optionlabelprop="label">
-                            {listselect_bill_owner.map((item, index) => {
-                              return (
-                                <Option value={item} label={item} key={index}>
-                                  <div className="demo-option-label-item">
-                                    {item}
-                                  </div>
-                                </Option>
-                              );
-                            })}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Nhân viên" name="bill_employee">
-                          <Select
-                            style={{ width: "100%" }}
-                            placeholder="select one item"
-                            optionlabelprop="label"
-                            size="large"
-                          >
-                            {listselect_employee?.map((item) => {
-                              return (
-                                <Option value={item} label={item}>
-                                  <div className="demo-option-label-item">
-                                    {item}
-                                  </div>
-                                </Option>
-                              );
-                            })}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-
-                      <Col span={8}>
-                        <Form.Item label="NCC" name="bill_supplier">
-                          <Mentions
-                            style={{
-                              width: "100%",
-                            }}
-                            size="large"
-                            autoSize="true"
-                            prefix={["@", "#"]}
-                            onSearch={onSearch}
-                            options={(MOCK_DATA[prefix] || []).map((value) => ({
-                              key: value,
-                              value,
-                              label: value,
-                            }))}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Điện thoại" name="bill_contact_phone">
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Web" name="bill_contact_social1">
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Social" name="bill_contact_social2">
-                          <Input />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={8}>
-                        <Form.Item label="Thanh toán" name="bill_payment">
-                          <InputNumber
-                            style={{
-                              width: "100%",
-                            }}
-                            step="10000"
-                            formatter={(value) =>
-                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            onChange={renderpayment}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Công nợ" name="bill_debt">
-                          <InputNumber
-                            style={{
-                              width: "100%",
-                            }}
-                            formatter={(value) =>
-                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            disabled
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label="Thời hạn" name="bill_expiry_date">
-                          <DatePicker
-                            style={{ float: "right" }}
-                            format="YYYY-MM-DD"
-                            defaultValue={dayjs()}
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Col span={24}>
-                        <Form.Item label="Ghi chú" name="bill_note">
-                          <Input placeholder="input here" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                    <Row gutter={16}>
-                      <Form.Item name="bill_image_url">
-                        <Upload
-                          multiple
-                          listType="picture-card"
-                          action="http://backend.penda.vn/api/files"
-                          fileList={fileList}
-                          onPreview={handlePreview}
-                          onChange={handleChange}
+                    <Divider>
+                      {"BẢNG ĐỀ XUẤT CHI: " +
+                        VND.format(
+                          data_suggest_collect?.result_suggest_pay
+                        )}{" "}
+                    </Divider>
+                    <Table
+                      columns={columns_suggest_pay}
+                      dataSource={data_suggest_pay}
+                      size="middle"
+                    />
+                    <Divider>BẢNG ĐỀ XUẤT THU </Divider>
+                    <Table
+                      columns={columns_suggest_collect}
+                      dataSource={data_suggest_collect}
+                      size="middle"
+                    />
+                  </Card>
+                </Col>
+                <Col span={12}>
+                  <Card
+                    title={
+                      <strong
+                        style={{
+                          color: "#1890FD",
+                        }}
+                      >
+                        BẢNG THU CHI
+                      </strong>
+                    }
+                  >
+                    <Divider>
+                      {" "}
+                      {"BẢNG CHI TIỀN: " + VND.format(data_collect?.result_pay)}
+                    </Divider>
+                    <Table
+                      columns={columns_pay}
+                      dataSource={data_pay}
+                      size="middle"
+                    />
+                    <Divider>BẢNG THU TIỀN</Divider>
+                    <Table
+                      columns={columns_collect}
+                      dataSource={data_collect}
+                      size="middle"
+                    />
+                  </Card>
+                </Col>
+              </Row>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="2">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Card
+                    title={
+                      <strong
+                        style={{
+                          color: "#1890FD",
+                        }}
+                      >
+                        TẠO HÓA ĐƠN THU CHI
+                      </strong>
+                    }
+                    extra={
+                      <>
+                        <Button
+                          onClick={() => {
+                            form.submit();
+                          }}
+                          style={{
+                            background: "#1890FD",
+                            color: "white",
+                          }}
                         >
-                          {uploadButton}
-                        </Upload>
-                      </Form.Item>
-                    </Row>
-                  </Form>
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card
-                  title={
-                    <strong
-                      style={{
-                        color: "#1890FD",
+                          Tạo hóa đơn
+                        </Button>
+                        {/* <Button onClick={() => test()}>Test</Button> */}
+                      </>
+                    }
+                  >
+                    <Form
+                      form={form}
+                      name="basic"
+                      autoComplete="off"
+                      size="large"
+                      onFinish={onFinish}
+                      initialValues={{
+                        bill_date: dayjs(),
+                        bill_type: "Phiếu chi",
+                        bill_action: "Đề xuất",
+                        bill_owner: "Phòng sản xuất",
+                        bill_employee: "Khắc Liêm",
+                        bill_payment: "0",
+                        bill_debt: "0",
                       }}
                     >
-                      CHI TIẾT HÀNG HÓA
-                    </strong>
-                  }
-                >
-                  <Form
-                    form={formProduct}
-                    name="basic"
-                    autoComplete="off"
-                    size="large"
-                    initialValues={{
-                      bill_work: "Mua device, proxy & gia hạn",
-                      bill_number: "0",
-                      bill_price: "0",
-                      bill_total: "0",
-                    }}
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item label="Ngày tháng" name="bill_date">
+                            <DatePicker
+                              style={{ float: "right" }}
+                              format="YYYY-MM-DD"
+                              defaultValue={dayjs()}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Hạng mục" name="bill_type">
+                            <Select
+                              optionlabelprop="label"
+                              onChange={rendertype}
+                            >
+                              <Option value="Phiếu chi" label="Phiếu chi">
+                                <div className="demo-option-label-item">
+                                  Phiếu chi
+                                </div>
+                              </Option>
+                              <Option value="Phiếu thu" label="Phiếu thu">
+                                <div className="demo-option-label-item">
+                                  Phiếu thu
+                                </div>
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Hành động" name="bill_action">
+                            <Select optionlabelprop="label">
+                              <Option value="Đề xuất" label="Đề xuất">
+                                <div className="demo-option-label-item">
+                                  Đề xuất
+                                </div>
+                              </Option>
+                              <Option value="Thực hiện" label="Thực hiện">
+                                <div className="demo-option-label-item">
+                                  Thực hiện
+                                </div>
+                              </Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item label="Phòng ban" name="bill_owner">
+                            <Select optionlabelprop="label">
+                              {listselect_bill_owner.map((item, index) => {
+                                return (
+                                  <Option value={item} label={item} key={index}>
+                                    <div className="demo-option-label-item">
+                                      {item}
+                                    </div>
+                                  </Option>
+                                );
+                              })}
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Nhân viên" name="bill_employee">
+                            <Select
+                              style={{ width: "100%" }}
+                              placeholder="select one item"
+                              optionlabelprop="label"
+                              size="large"
+                            >
+                              {listselect_employee?.map((item) => {
+                                return (
+                                  <Option value={item} label={item}>
+                                    <div className="demo-option-label-item">
+                                      {item}
+                                    </div>
+                                  </Option>
+                                );
+                              })}
+                            </Select>
+                          </Form.Item>
+                        </Col>
+
+                        <Col span={8}>
+                          <Form.Item label="NCC" name="bill_supplier">
+                            <Mentions
+                              style={{
+                                width: "100%",
+                              }}
+                              size="large"
+                              autoSize="true"
+                              prefix={["@", "#"]}
+                              onSearch={onSearch}
+                              options={(MOCK_DATA[prefix] || []).map(
+                                (value) => ({
+                                  key: value,
+                                  value,
+                                  label: value,
+                                })
+                              )}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item
+                            label="Điện thoại"
+                            name="bill_contact_phone"
+                          >
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Web" name="bill_contact_social1">
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Social" name="bill_contact_social2">
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Col span={8}>
+                          <Form.Item label="Thanh toán" name="bill_payment">
+                            <InputNumber
+                              style={{
+                                width: "100%",
+                              }}
+                              step="10000"
+                              formatter={(value) =>
+                                ` ${value}`.replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                              onChange={renderpayment}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Công nợ" name="bill_debt">
+                            <InputNumber
+                              style={{
+                                width: "100%",
+                              }}
+                              formatter={(value) =>
+                                ` ${value}`.replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                              disabled
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label="Thời hạn" name="bill_expiry_date">
+                            <DatePicker
+                              style={{ float: "right" }}
+                              format="YYYY-MM-DD"
+                              defaultValue={dayjs()}
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Col span={24}>
+                          <Form.Item label="Ghi chú" name="bill_note">
+                            <Input placeholder="input here" />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row gutter={16}>
+                        <Form.Item name="bill_image_url">
+                          <Upload
+                            multiple
+                            listType="picture-card"
+                            action="http://backend.penda.vn/api/files"
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                          >
+                            {uploadButton}
+                          </Upload>
+                        </Form.Item>
+                      </Row>
+                    </Form>
+                  </Card>
+                </Col>
+                <Col span={12}>
+                  <Card
+                    title={
+                      <strong
+                        style={{
+                          color: "#1890FD",
+                        }}
+                      >
+                        CHI TIẾT HÀNG HÓA
+                      </strong>
+                    }
                   >
-                    <Row gutter={16}>
-                      <Col span={12}>
-                        <Form.Item label="Công việc" name="bill_work">
-                          <Select optionlabelprop="label">
-                            {listselect_bill_work_new.map((item, index) => {
-                              return (
-                                <Option value={item} label={item} key={index}>
-                                  <div className="demo-option-label-item">
-                                    {item}
-                                  </div>
-                                </Option>
-                              );
-                            })}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item label="Nội dung" name="bill_content">
-                          <Input placeholder="Mua key tháng 12" />
-                        </Form.Item>
-                      </Col>
-                    </Row>
+                    <Form
+                      form={formProduct}
+                      name="basic"
+                      autoComplete="off"
+                      size="large"
+                      initialValues={{
+                        bill_work: "Mua device, proxy & gia hạn",
+                        bill_number: "0",
+                        bill_price: "0",
+                        bill_total: "0",
+                      }}
+                    >
+                      <Row gutter={16}>
+                        <Col span={12}>
+                          <Form.Item label="Công việc" name="bill_work">
+                            <Select optionlabelprop="label">
+                              {listselect_bill_work_new.map((item, index) => {
+                                return (
+                                  <Option value={item} label={item} key={index}>
+                                    <div className="demo-option-label-item">
+                                      {item}
+                                    </div>
+                                  </Option>
+                                );
+                              })}
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                          <Form.Item label="Nội dung" name="bill_content">
+                            <Input placeholder="Mua key tháng 12" />
+                          </Form.Item>
+                        </Col>
+                      </Row>
 
-                    <Row gutter={16}>
-                      <Col span={6}>
-                        <Form.Item label="Số lượng" name="bill_number">
-                          <InputNumber
-                            style={{
-                              width: "100%",
-                            }}
-                            size="large"
-                            placeholder="1000"
-                            onChange={renderTotalMoney}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={9}>
-                        <Form.Item label="Giá tiền" name="bill_price">
-                          <InputNumber
-                            style={{
-                              width: "100%",
-                            }}
-                            step="10000"
-                            size="large"
-                            formatter={(value) =>
-                              ` ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            onChange={renderTotalMoney}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={9}>
-                        <Form.Item label="Thành tiền" name="bill_total">
-                          <InputNumber
-                            style={{
-                              width: "100%",
-                            }}
-                            size="large"
-                            formatter={(value) =>
-                              ` ${value} đ`.replace(
-                                /\B(?=(\d{3})+(?!\d))/g,
-                                ","
-                              )
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            disabled
-                          />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card>
-              </Col>
-            </Row>
-          </Tabs.TabPane>
+                      <Row gutter={16}>
+                        <Col span={6}>
+                          <Form.Item label="Số lượng" name="bill_number">
+                            <InputNumber
+                              style={{
+                                width: "100%",
+                              }}
+                              size="large"
+                              placeholder="1000"
+                              onChange={renderTotalMoney}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={9}>
+                          <Form.Item label="Giá tiền" name="bill_price">
+                            <InputNumber
+                              style={{
+                                width: "100%",
+                              }}
+                              step="10000"
+                              size="large"
+                              formatter={(value) =>
+                                ` ${value}`.replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                              onChange={renderTotalMoney}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={9}>
+                          <Form.Item label="Thành tiền" name="bill_total">
+                            <InputNumber
+                              style={{
+                                width: "100%",
+                              }}
+                              size="large"
+                              formatter={(value) =>
+                                ` ${value} đ`.replace(
+                                  /\B(?=(\d{3})+(?!\d))/g,
+                                  ","
+                                )
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                              disabled
+                            />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Card>
+                </Col>
+              </Row>
+            </Tabs.TabPane>
 
-          <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
-            <p>Mỗi nhà cung cấp phải tạo 1 phiếu khác nhau</p>
-          </Tabs.TabPane>
-        </Tabs>
-        <Modal
-          open={previewOpen}
-          title={previewTitle}
-          footer={null}
-          onCancel={handleCancel}
-        >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
-        </Modal>
-      </Card>
+            <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+              <CKEditor
+                editor={ClassicEditor}
+                data="<p>Hello from CKEditor 5!</p>"
+                config={{ckfinder: {
+                  uploadUrl: 'http://backend.penda.vn/api/files'
+                }}}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log("Editor is ready to use!", editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setContent(data);
+                  console.log({ event, editor, data });
+                }}
+                onBlur={(event, editor) => {
+                  console.log("Blur.", editor);
+                }}
+                onFocus={(event, editor) => {
+                  console.log("Focus.", editor);
+                }}
+              />
+            <div dangerouslySetInnerHTML={{__html: content}}></div>
 
-
-      ): null}
-      
+            </Tabs.TabPane>
+          </Tabs>
+          <Modal
+            open={previewOpen}
+            title={previewTitle}
+            footer={null}
+            onCancel={handleCancel}
+          >
+            <img alt="example" style={{ width: "100%" }} src={previewImage} />
+          </Modal>
+        </Card>
+      ) : null}
     </div>
   );
 };

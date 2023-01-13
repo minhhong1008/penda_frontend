@@ -17,10 +17,14 @@ export const get_Timesheets_table = (payload) => {
 }
 
 export const getcheckSessions = (payload) => {
-  const url = `/timeSheet/getcheck?${genQueryString(payload)}`
-  return axiosClient.get(url);
+  const url = `/timeSheet/getcheck`
+  return axiosClient.getcheck(url,payload);
 }
 
+export const postcheckSessions = (payload) => {
+  const url = `/timeSheet/postcheck`
+  return axiosClient.post(url,payload);
+}
 
 const genQueryString = function(obj) {
   var str = [];

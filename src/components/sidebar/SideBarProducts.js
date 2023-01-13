@@ -3,8 +3,11 @@ import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import Icon, { HomeOutlined } from "@ant-design/icons";
 import { Space } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
 const SideBarProducts = ({ color }) => {
+  const { ebays } = useSelector((state) => state.ebay);
+  // dùng cái này để hiển hị ra màn hình { JSON.stringify(ebays) }
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
 
@@ -204,7 +207,7 @@ const SideBarProducts = ({ color }) => {
       {page == "HomePage" ? null : (
         <Menu theme="light" mode="inline">
           <Menu.Item className="menu-item-header" key="100">
-            Tài Khoản
+            Tài Khoản 
           </Menu.Item>
 
           <Menu.Item key="1">

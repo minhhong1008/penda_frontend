@@ -14,34 +14,6 @@ export const listselect_working_session = [
     title: "Ca tối",
     value: "T",
   },
-  {
-    title: "Muộn sáng",
-    value: "ms",
-  },
-  {
-    title: "Muộn chiều",
-    value: "mc",
-  },
-  {
-    title: "Muộn tối",
-    value: "mt",
-  },
-  {
-    title: "Nghỉ sáng",
-    value: "nt",
-  },
-  {
-    title: "Nghỉ chiều",
-    value: "nc",
-  },
-  {
-    title: "Nghỉ tối",
-    value: "nt",
-  },
-  {
-    title: "Xóa ngày",
-    value: "delete",
-  },
 ];
 
 export const HuongDanUsers_info = () => {

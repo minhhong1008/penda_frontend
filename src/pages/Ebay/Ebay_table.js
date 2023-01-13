@@ -17,15 +17,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListebayActions } from "../../actions/ebayActions";
+import { getListebayActions, GET_LIST_EBAY_SUCCESS } from "../../actions/ebayActions";
 import { HuongDanEbay_table } from "./Ebay_list";
-import { updateebayInfo } from "../../api/ebay";
+import { searchEbayInfo, updateebayInfo } from "../../api/ebay";
 // search trên table
 import { SearchOutlined } from "@ant-design/icons";
 
 const Ebay_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  // Gọi dữ liệu trong state ở reducer ( trong file ebayReducer )
   const { ebays } = useSelector((state) => state.ebay);
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
@@ -456,9 +457,28 @@ const Ebay_table = () => {
   };
   //--------
 
+  // Hàm search
+
+  const searchEbay = async (value) => {
+    const response = await searchEbayInfo({
+      query: value
+    });
+    if(response.status == 200){
+      let { data } = response;
+      dispatch({
+        type: GET_LIST_EBAY_SUCCESS,
+        payload: data
+      })
+    } else {
+      
+    }
+    
+  }
+
   return (
     <div>
       <Card>
+        <Input placeholder="Search" onPressEnter={(e) => {searchEbay(e.target.value)}} />
         <Form.Item label="Lọc eBay">
           <TreeSelect
             mode="multiple"

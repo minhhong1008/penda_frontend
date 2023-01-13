@@ -9,7 +9,7 @@ import { showError } from "../utils/index";
 
 function* getListebaySaga({ payload }) {
   try {
-    const response = yield call(getListebay, payload);4
+    const response = yield call(getListebay, payload);
     const { data } = response;
     yield put({ type: GET_LIST_EBAY_SUCCESS, payload: data });
   } catch (err) {

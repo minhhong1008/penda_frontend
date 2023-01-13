@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
     <div>
       <Row gutter={4}>
-        <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" lg={12} xl={6}>
           <div>
             <Card
               onClick={() => handleClick("/company")}
@@ -38,7 +38,7 @@ const HomePage = () => {
         </Col>
 
         {new_users_owner?.indexOf("Phòng sản xuất") !== -1 ? (
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" lg={12} xl={6}>
             <div>
               <Card
                 onClick={() => handleClick("/products")}
@@ -61,7 +61,7 @@ const HomePage = () => {
         ) : null}
 
         {new_users_owner?.indexOf("Phòng Kinh doanh") !== -1 ? (
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" lg={12} xl={6}>
             <div>
               <Card
                 onClick={() => handleClick("/business")}
@@ -83,7 +83,7 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Phòng hành chính nhân sự") !== -1 ? (
-          <Col className="gutter-row" span={6}>
+          <Col className="gutter-row" lg={12} xl={6}>
             <div>
               <Card
               

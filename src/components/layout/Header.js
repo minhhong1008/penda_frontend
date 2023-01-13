@@ -30,7 +30,7 @@ import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
 import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
 import dayjs, { now } from "dayjs";
-import { createVerifySession } from "../../api/timeSheet";
+import { postcheckSessions } from "../../api/timeSheet";
 import { showError, showSuccess } from "../../utils";
 
 const ButtonContainer = styled.div`
@@ -263,118 +263,138 @@ function Header({
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
-  const renderBrecrums = () => {
-    let brc = [];
-    let data_name = name.split("/");
-    let brecrum = "";
-    let param = new URL(window.location.href).searchParams.get("class");
-    data_name.map((item, index) => {
-      brecrum = brecrum + "/" + item;
-      brc.push(
-        <Breadcrumb.Item key={index}>
-          <NavLink
-            to={
-              item == "table"
-                ? brecrum + "?class=" + encodeURIComponent(param)
-                : brecrum
-            }
-          >
-            {decodeURIComponent(item)}
-          </NavLink>
-        </Breadcrumb.Item>
-      );
-    });
-    return brc;
-  };
+
   const [messageApi, contextHolder] = message.useMessage();
   const [filterDate, setFilterDate] = useState({
     month: dayjs().format("MM"),
     year: dayjs().format("YYYY"),
   });
 
-  // Tính năng chấm công tự động
+  /* Tính năng chấm công tự động
+  Hiện nút chấm công tự động theo thời gian */
+  const renderhide_Timesheets = () => {
+    if (dayjs().hour() > 3 ) {
+      return (
+        <div>
+          <Link to="/personnel/users_timesheets">
+            <Spin size="large" onClick={Timesheets} />
+          </Link>
+        </div>
+      );
+    }
+  };
+
   const Timesheets = () => {
     let values = [
       {
-        working_check: "",
+        users_name: users_name,
+        working_date: dayjs().format("YYYY-MM-DD"),
+
         working_session: "",
+        working_check_late: "",
+        working_check_soon: "",
+        working_verify: "",
       },
     ];
+
     // Chấm công ca sáng, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
     if (dayjs().hour() >= 8 && dayjs().hour() <= 12) {
-      values[0].working_check = "S";
-      if (dayjs().hour() == 8 && dayjs().minute() <= 15) {
-        values[0].working_session = "S";
-        createVerify(values);
-        success();
-      } else {
-        values[0].working_session = "ms";
-        createVerify(values);
-        error();
-      }
-      return;
-    }
-    if (dayjs().hour() == 12 && dayjs().minute() <= 15) {
       values[0].working_session = "S";
-      createVerify(values);
-      success();
-    } else {
-      values[0].working_session = "vs";
-      createVerify(values);
-      error();
+      if (dayjs().hour() == 8) {
+        if (dayjs().minute() <= 15) {
+          values[0].working_verify = "B";
+          post_working_session(values);
+          success(users_name + ": Bạn đi làm đúng giờ 8h-8h15. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
+        } else {
+          values[0].working_verify = "B";
+          values[0].working_check_late = "m";
+          post_working_session(values);
+          error(users_name + ": Bạn đã đi muộn ca sáng. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
+        }
+        return;
+      }
+
+      if (dayjs().hour() == 12) {
+        if (dayjs().minute() <= 15) {
+          values[0].working_verify = "S";
+          post_working_session(values);
+          success(users_name + ": Bạn đã hoàn thành ca sáng");
+        }
+        return;
+      }
+      // Thông báo đã hết giờ chấm công
+      return warning("Đã hết giờ chấm công!Thời gian chấm công ca sáng: 8h-9h");
     }
 
     // Chấm công ca chiều, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
     if (dayjs().hour() >= 14 && dayjs().hour() <= 18) {
-      values[0].working_check = "C";
-      if (dayjs().hour() == 14 && dayjs().minute() <= 15) {
-        values[0].working_session = "C";
-        createVerify(values);
-        success();
-      } else {
-        values[0].working_session = "mc";
-        createVerify(values);
-        error();
+      values[0].working_session = "C";
+      if (dayjs().hour() == 14) {
+        if (dayjs().minute() <= 15) {
+          values[0].working_verify = "B";
+          post_working_session(values);
+          success(users_name + ": Bạn đi làm đúng giờ 14h-14h15. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
+        } else {
+          values[0].working_verify = "B";
+          values[0].working_check_late = "m";
+          post_working_session(values);
+          error(users_name + ": Bạn đã đi muộn ca chiều. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
+        }
+        return;
       }
-      return;
+
+      if (dayjs().hour() == 18 && dayjs().minute() <= 15) {
+        values[0].working_verify = "C";
+        post_working_session(values);
+        success(users_name + ": Bạn đã hoàn thành ca");
+        return;
+      }
+
+      if (
+        dayjs().hour() == 19 &&
+        dayjs().minute() > 15 &&
+        dayjs().minute() <= 30
+      ) {
+        values[0].working_session = "T";
+        values[0].working_verify = "B";
+        post_working_session(values);
+        return success(users_name + ": Bạn đã chấm công");
+      }
+
+      if (dayjs().hour() == 18 && dayjs().minute() > 30) {
+        values[0].working_session = "T";
+        values[0].working_verify = "B";
+        values[0].working_check_late = "m";
+        post_working_session(values);
+        return error(users_name + ": Bạn đã đi muộn");
+      }
+
+      // Thông báo đã hết giờ chấm công
+      return warning("Đã hết giờ chấm công!");
     }
 
     // Chấm công ca tối, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
-    if (dayjs().hour() >= 18 && dayjs().hour() <= 23) {
-      values[0].working_check = "T";
-      if (dayjs().hour() == 18 && dayjs().minute() <= 30) {
-        values[0].working_session = "T";
-        createVerify(values);
-        success();
-        
-      } else {
-        values[0].working_session = "mt";
-        createVerify(values);
-        error();
-       
-      }
+    
+    if (dayjs().hour() == 22 && dayjs().minute() >= 30) {
+      values[0].working_session = "T";
+      values[0].working_verify = "T";
+      post_working_session(values);
+      success(users_name + ": Bạn đã hoàn thành ca");
       return;
     }
-    warning();
 
+    // ngoài giờ ca làm việc
+    warning("Đang ngoài giờ làm việc");
   };
 
-  const createVerify = async (values) => {
+  const post_working_session = async (values) => {
     try {
-      let response = await createVerifySession({
-        users_name: users_name,
-        working_verify: "verify",
-        working_date: dayjs().format("YYYY-MM-DD"),
-        working_session: values[0].working_session,
-        working_check: values[0].working_check,
-      });
+      let response = await postcheckSessions(values);
       if (response.status == 200) {
-        showSuccess("Đăng ký thành công");
-        
+        success("Thành công");
       }
     } catch (error) {
-      showError("Kiểm tra");
-      
+      error("Đã lỗi");
     }
   };
 
@@ -386,24 +406,24 @@ function Header({
     4: <SmileOutlined />,
     5: <SmileOutlined />,
   };
-  const success = () => {
+  const success = (message) => {
     messageApi.open({
       type: "success",
-      content: users_name + ":" + " Bạn đã chấm công đúng giờ . Đừng ấn nữa nhé!",
+      content: message,
     });
   };
 
-  const error = () => {
+  const error = (message) => {
     messageApi.open({
       type: "error",
-      content: users_name + ":" + " Đã muộn giờ!",
+      content: message,
     });
   };
 
-  const warning = () => {
+  const warning = (message) => {
     messageApi.open({
       type: "warning",
-      content: users_name + ":" +  " Chưa đến giờ chấm công",
+      content: message,
     });
   };
 
@@ -553,6 +573,14 @@ function Header({
                     <Button type="black">{<TwitterOutlined />}TWEET</Button>
                     <Button type="black">{<FacebookFilled />}SHARE</Button>
                   </ButtonContainer>
+                  {/* {users_name == "Minh Hồng" ? (
+                    <>
+                      
+                    </>
+                  ) : null}
+                  {
+                    renderLoading("Minh Hồng")
+                  } */}
                 </div>
               </div>
             </div>
@@ -571,9 +599,7 @@ function Header({
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
-          <Link to="/personnel/users_timesheets">
-            <Spin size="large" onClick={Timesheets} />
-          </Link>
+          {renderhide_Timesheets()}
         </Col>
       </Row>
     </>

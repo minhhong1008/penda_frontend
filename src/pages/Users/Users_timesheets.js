@@ -98,44 +98,72 @@ const Users_timesheets = () => {
 
   // Các hàm liên quan đến gọi dữ liệu từ giao diện và gửi dữ liệu lên server
   const onFinish = async (values) => {
-    if (values.working_date == null || users_name == "undefined") {
-      return showError("Có Lỗi, date");
+    if (
+      values.working_date == null ||
+      users_name == "undefined" ||
+      users_name == ""
+    ) {
+      return showError("Kiểm tra nhập liệu");
     }
     values.working_date = dayjs(values.working_date).format("YYYY-MM-DD");
     let date_end = dayjs()
       .add("3", "d")
       .format("YYYY-MM-DD");
     // Đăng ký của nhân viên
-    if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
-      try {
-        let response = await createSession({
-          users_function: users_function,
-          users_name: values.working_employee,
-          working_session: values.working_session,
-          working_verify: "unverify",
-          working_date: values.working_date,
-        });
-        if (response.status == 200) {
-          showSuccess("Đăng ký thành công");
-        }
-      } catch (error) {
-        showError("Đăng ký rồi");
-      }
-    } else {
-      if (values.working_date >= date_end) {
+    if (values.working_date >= date_end) {
+      if (
+        values.working_edit == "Tạo ca" ||
+        values.working_edit == "Xóa ca"
+      ) {
         try {
+          let working_employee = "";
+          if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
+            working_employee = values.working_employee;
+          } else {
+            working_employee = users_name;
+          }
           let response = await createSession({
             users_function: users_function,
-            users_name: users_name,
+            users_name: working_employee,
             working_session: values.working_session,
-            working_verify: "unverify",
             working_date: values.working_date,
+            working_edit: values.working_edit,
           });
           if (response.status == 200) {
-            showSuccess("Đăng ký thành công");
+            showSuccess(values.working_edit + ": Thành công");
           }
         } catch (error) {
-          showError("Có Lỗi, Kiểm tra");
+          showError("Kiểm tra bạn đã đăng ký chưa");
+        }
+      } else {
+        showError("Chưa làm");
+      }
+    } else {
+      if (values.working_edit == "Xin nghỉ") {
+        if (values.working_date > dayjs().format("YYYY-MM-DD")) {
+          let working_employee = "";
+          if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
+            working_employee = values.working_employee;
+          } else {
+            working_employee = users_name;
+          }
+
+          try {
+            let response = await createSession({
+              users_function: users_function,
+              users_name: working_employee,
+              working_session: values.working_session,
+              working_date: values.working_date,
+              working_edit: values.working_edit,
+            });
+            if (response.status == 200) {
+              showSuccess("Đăng ký thành công");
+            }
+          } catch (error) {
+            showError("Có Lỗi, Kiểm tra");
+          }
+        } else {
+          showError("Vô lý quá");
         }
       } else {
         showError("Bạn không có quyền");
@@ -163,42 +191,58 @@ const Users_timesheets = () => {
       let newData = [];
 
       data.map((item, index) => {
-        let element_obj = {};
-
-        element_obj["users_name"] = userss?.filter(
-          (element_obj) => element_obj.users_name == item._id
-        )[0]?.users_name;
-
-        element_obj["index"] = parseInt(
-          userss?.filter((element_obj) => element_obj.users_name == item._id)[0]
-            ?.users_sort
+        let session_obj = {};
+        let verify_obj = {};
+        let total_check = 0;
+        let total_n = 0;
+        session_obj["index"] = parseInt(
+          userss?.filter(
+            (session_obj) => session_obj?.users_name == item._id
+          )[0]?.users_sort
         );
 
-        let total_m = 0;
-        let total_n = 0;
-        item.sessions.map((session, index) => {
-          if (
-            ["ms", "mc", "mt", "vs", "vc", "vt"].indexOf(
-              session.working_session
-            ) !== -1
-          ) {
-            total_m++;
-          }
-          if (["ns", "nc", "nt"].indexOf(session.working_session) !== -1) {
-            total_n++;
+        session_obj["users_name"] = userss?.filter(
+          (session_obj) => session_obj.users_name == item._id
+        )[0]?.users_name;
+
+        verify_obj["users_name"] = "Chấm công";
+        item?.sessions.map((session, index) => {
+          if (session_obj[session?.day]) {
+            session_obj[session?.day] =
+              session_obj[session?.day] + "-" + session?.working_session;
+          } else {
+            session_obj[session?.day] = session?.working_session;
           }
 
-          if (element_obj[session.day]) {
-            element_obj[session.day] =
-              element_obj[session.day] + "-" + session.working_session;
+          if (verify_obj[session?.day]) {
+            verify_obj[session?.day] =
+              verify_obj[session?.day] +
+              "-" +
+              (session?.working_verify ? session?.working_verify : "") +
+              (session?.working_check_late ? session?.working_check_late : "") +
+              (session?.working_check_soon ? session?.working_check_soon : "");
           } else {
-            element_obj[session.day] = session.working_session;
+            verify_obj[session?.day] =
+              (session?.working_verify ? session?.working_verify : "") +
+              (session?.working_check_late ? session?.working_check_late : "") +
+              (session?.working_check_soon ? session?.working_check_soon : "");
+          }
+
+          if (
+            session?.working_check_late == "m" ||
+            session?.working_verify == "B" ||
+            session?.working_verify == "p"
+          ) {
+            total_check++;
           }
         });
 
-        element_obj["total"] =
-          item.sessions.length - 1.25 * total_m - 3 * total_n;
-        newData.push(element_obj);
+        session_obj["total"] = item.sessions?.length;
+        verify_obj["total"] =
+          item.sessions?.length - 0.25 * total_check - 2 * total_n;
+
+        newData.push(session_obj);
+        newData.push(verify_obj);
       });
 
       setData_Timesheets_table(newData.sort((a, b) => a.index - b.index));
@@ -227,7 +271,16 @@ const Users_timesheets = () => {
       key: "index",
       fixed: "left",
       width: 5,
-      render: (text, record, index) => index + 1,
+      render: (text, record, index) => {
+        if (index % 2 == 0) {
+          let text = index + 1;
+          if (text % 2 !== 0) {
+            return text;
+          } else {
+            return text - 1;
+          }
+        }
+      },
     },
     {
       title: "Họ tên",
@@ -352,11 +405,12 @@ const Users_timesheets = () => {
             initialValues={{
               working_session: "S",
               working_date: dayjs(),
+              working_edit: "Tạo ca",
               working_employee: users_name,
             }}
           >
             <Row gutter={16}>
-              <Col span={10}>
+              <Col span={24}>
                 <Form.Item
                   label="Đăng ký"
                   name="working_session"
@@ -381,7 +435,34 @@ const Users_timesheets = () => {
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={14}>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="Sửa đăng ký"
+                  name="working_edit"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <Select
+                    //mode="multiple"
+                    style={{ width: "100%" }}
+                    optionlabelprop="label"
+                  >
+                    <Option value="Tạo ca" label="Tạo ca">
+                      <div className="demo-option-label-item">Tạo ca</div>
+                    </Option>
+                    <Option value="Xóa ca" label="Xóa ca">
+                      <div className="demo-option-label-item">Xóa ca</div>
+                    </Option>
+                    <Option value="Xin nghỉ" label="Xin nghỉ">
+                      <div className="demo-option-label-item">Xin nghỉ</div>
+                    </Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
                 <Form.Item
                   label="Ngày tháng"
                   name="working_date"

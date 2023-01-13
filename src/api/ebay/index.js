@@ -28,6 +28,11 @@ export const getCountEbay = () => {
   return axiosClient.get(url);
 }
 
+export const searchEbayInfo = (text) => {
+  const url = `/ebay/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

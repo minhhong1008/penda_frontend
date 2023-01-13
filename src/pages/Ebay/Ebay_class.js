@@ -32,7 +32,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-     /*  render: (text) => (
+      /*  render: (text) => (
         <a
           onClick={() =>
             history.push(`ebay_class/table?class=${encodeURIComponent(text)}`)
@@ -54,7 +54,9 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>ĐÃ HOÀN THÀNH</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            ĐÃ HOÀN THÀNH
+          </strong>
         </div>
       ),
       dataIndex: "content_complete",
@@ -81,7 +83,9 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN KIỂM TRA & XỬ LÝ</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            CẦN KIỂM TRA & XỬ LÝ
+          </strong>
         </div>
       ),
       dataIndex: "content_check",
@@ -90,7 +94,9 @@ const Ebay_class = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>CẦN THỰC HIỆN</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>
+            CẦN THỰC HIỆN
+          </strong>
         </div>
       ),
       dataIndex: "content_action",
@@ -104,16 +110,8 @@ const Ebay_class = () => {
       ebay_count: "0",
       content_complete: "",
       content_time: <div></div>,
-      content_check: (
-        <div>
-          
-        </div>
-      ),
-      content_action: (
-        <div>
-         
-        </div>
-      ),
+      content_check: <div></div>,
+      content_action: <div></div>,
     },
     {
       key: "0",
@@ -121,7 +119,7 @@ const Ebay_class = () => {
       ebay_count: "0",
       content_complete: (
         <div>
-          <strong >TÀI NGUYÊN MỚI</strong>
+          <strong>TÀI NGUYÊN MỚI</strong>
           <br></br> Device, brower, info, mail, sim, bank..
         </div>
       ),
@@ -359,8 +357,8 @@ const Ebay_class = () => {
       ),
       content_action: (
         <div>
-          <strong> Verify full...</strong> <br></br> Tạo drap, tiếp tục chăm tài khoản<br></br>Chuyển Lớp
-          10
+          <strong> Verify full...</strong> <br></br> Tạo drap, tiếp tục chăm tài
+          khoản<br></br>Chuyển Lớp 10
         </div>
       ),
     },
@@ -376,15 +374,15 @@ const Ebay_class = () => {
       content_time: <div>1 ngày</div>,
       content_check: (
         <div>
-        <strong>Kiểm tra seller</strong>
+          <strong>Kiểm tra seller</strong>
 
-        <br></br>
-      </div>
+          <br></br>
+        </div>
       ),
       content_action: (
         <div>
-          <strong> List sản phẩm</strong> <br></br> Tạo drap, tiếp tục chăm tài khoản<br></br>Chuyển Lớp
-          11
+          <strong> List sản phẩm</strong> <br></br> Tạo drap, tiếp tục chăm tài
+          khoản<br></br>Chuyển Lớp 11
         </div>
       ),
     },
@@ -422,11 +420,13 @@ const Ebay_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Chuyển tài khoản về phòng kinh doanh</strong>
@@ -455,13 +455,14 @@ const Ebay_class = () => {
         </div>
       ),
       content_action: (
-        <div>
-          <strong>
+        <div style={{ width: "300px" }}>
+          <strong style={{  whiteSpace: "pre-wrap" }}>
             Giao nhận tài khoản giữu phòng sản xuất và phòng kinh doanh
           </strong>
-          <br></br> Giao nhân viên phòng kinh doanh, nhân viên KD kiểm tra tài
-          khoản
+          <br></br><p style={{  whiteSpace: "pre-wrap" }}>Giao nhân viên phòng kinh doanh, nhân viên KD kiểm tra tài
+          khoản</p> 
           <br></br>Chuyển Lớp 15 hoặc 16
+          
         </div>
       ),
     },
@@ -477,11 +478,13 @@ const Ebay_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>
@@ -504,11 +507,13 @@ const Ebay_class = () => {
         </div>
       ),
       content_time: <div>1 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Bảo mật tài khoản của phòng kinh doanh</strong>
@@ -529,11 +534,13 @@ const Ebay_class = () => {
         </div>
       ),
       content_time: <div>1 - 15 ngày</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Giao bán tài khoản</strong>
@@ -554,11 +561,13 @@ const Ebay_class = () => {
         </div>
       ),
       content_time: <div>3 giờ</div>,
-      content_check: <div>
-      <strong>Kiểm tra seller</strong>
+      content_check: (
+        <div>
+          <strong>Kiểm tra seller</strong>
 
-      <br></br>
-    </div>,
+          <br></br>
+        </div>
+      ),
       content_action: (
         <div>
           <strong>Giao tài khoản cho khách hàng</strong>
@@ -581,11 +590,13 @@ const Ebay_class = () => {
           <strong> ĐÃ BÁN TÀI KHOẢN</strong>
         </div>
       ),
-      content_action: <div>
-      <strong>Chuyển tài khoản sang phòng bảo hành</strong>
-      <br></br> 
-      <br></br>
-    </div>,
+      content_action: (
+        <div>
+          <strong>Chuyển tài khoản sang phòng bảo hành</strong>
+          <br></br>
+          <br></br>
+        </div>
+      ),
     },
     {
       key: "20",
@@ -598,11 +609,13 @@ const Ebay_class = () => {
       ),
       content_time: <div>1 - 2 ngày</div>,
       content_check: "Kiểm tra lỗi",
-      content_action:<div>
-      <strong>Xử lý lỗi và chuyển tài khoản về lớp cũ</strong>
-      <br></br> 
-      <br></br>
-    </div>,
+      content_action: (
+        <div>
+          <strong>Xử lý lỗi và chuyển tài khoản về lớp cũ</strong>
+          <br></br>
+          <br></br>
+        </div>
+      ),
     },
     {
       key: "21",
@@ -692,9 +705,11 @@ const Ebay_class = () => {
       key: "30",
       class: "Lớp 30",
       ebay_count: "0",
-      content_complete: <div>
-      <strong> CHUYỂN PHÒNG</strong>
-    </div>,
+      content_complete: (
+        <div>
+          <strong> CHUYỂN PHÒNG</strong>
+        </div>
+      ),
       content_check: "",
       content_action: "",
     },
@@ -714,7 +729,6 @@ const Ebay_class = () => {
     setDataClass(baseData);
   };
 
-
   useEffect(() => {
     countEbay();
   }, []);
@@ -726,14 +740,17 @@ const Ebay_class = () => {
           <Tabs.TabPane tab="BẢNG TÀI KHOẢN THEO LỚP" key="1">
             <Card type="inner">
               <Table
-              onRow={(text, rowIndex) => {
-                
-                return {
-                  onClick: (event) => {
-                    history.push(`ebay_class/table?class=${encodeURIComponent(text.class)}`);
-                  },
-                };
-              }}
+                onRow={(text, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(
+                        `ebay_class/table?class=${encodeURIComponent(
+                          text.class
+                        )}`
+                      );
+                    },
+                  };
+                }}
                 columns={columns}
                 dataSource={dataClass}
                 pagination={{
