@@ -484,7 +484,6 @@ const Ebay_table = () => {
     
     const response = await searchEbayInfo({
       query: value,
-      type: ",",
     });
     if (response.status == 200) {
       let { data } = response;
