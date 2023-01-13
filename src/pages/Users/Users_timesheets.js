@@ -194,6 +194,7 @@ const Users_timesheets = () => {
         let session_obj = {};
         let verify_obj = {};
         let total_check = 0;
+        let total_verrify = 0;
         let total_n = 0;
         session_obj["index"] = parseInt(
           userss?.filter(
@@ -239,11 +240,23 @@ const Users_timesheets = () => {
           ) {
             total_check++;
           }
+
+          if (
+            session?.working_verify == "Bs" ||
+            session?.working_verify == "Bc" ||
+            session?.working_verify == "Bt" ||
+            session?.working_verify == "S"||
+            session?.working_verify == "C" ||
+            session?.working_verify == "T"
+          ) {
+            total_verrify++;
+          }
+
         });
 
         session_obj["total"] = item.sessions?.length;
         verify_obj["total"] =
-          item.sessions?.length - 0.25 * total_check - 2 * total_n;
+        total_verrify - 0.25 * total_check - 2 * total_n;
 
         newData.push(session_obj);
         newData.push(verify_obj);
