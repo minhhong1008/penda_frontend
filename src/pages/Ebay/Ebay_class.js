@@ -719,12 +719,24 @@ const Ebay_class = () => {
 
   const countEbay = async () => {
     let { data } = await getCountEbay();
+    let total = 0;
+    data?.data?.forEach((data) => {
+      total = parseInt(total) + parseInt(data?.count);
+      
+    });
+    
     baseData.forEach((item) => {
+     
+     if(item.class == "Tổng"){item.ebay_count = total.toString()}
+
+
       data?.data?.forEach((data) => {
+        
         if (data._id == item.class) {
           item.ebay_count = data.count.toString();
         }
       });
+     
     });
     setDataClass(baseData);
   };
@@ -768,7 +780,7 @@ const Ebay_class = () => {
                   ],
                   position: ["bottomRight", "topRight"],
                   showSizeChanger: true,
-                  defaultPageSize: 19,
+                  defaultPageSize: 12,
                 }}
               ></Table>
             </Card>

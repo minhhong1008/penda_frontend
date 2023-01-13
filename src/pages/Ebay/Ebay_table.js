@@ -208,6 +208,21 @@ const Ebay_table = () => {
     {
       title: (
         <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>LỚP</strong>
+        </div>
+      ),
+      dataIndex: "ebay_class",
+      key: "ebay_class",
+      width: 1,
+      sorter: (a, b) => {
+        return a.ebay_class?.localeCompare(b.ebay_class);
+      },
+      ...getColumnSearchProps("ebay_class"),
+      responsive: ["md"],
+    },
+    {
+      title: (
+        <div>
           <strong style={{ width: "100%", color: "#1677ff" }}>
             TIẾN TRÌNH
           </strong>
@@ -466,8 +481,10 @@ const Ebay_table = () => {
   // Hàm search
 
   const searchEbay = async (value) => {
+    
     const response = await searchEbayInfo({
       query: value,
+      type: ",",
     });
     if (response.status == 200) {
       let { data } = response;
@@ -492,8 +509,8 @@ const Ebay_table = () => {
               }}
             />
           </Col>
-          <Col span={4}>
-           {ebays.length}
+          <Col span={4} name ="DKM">
+           
           </Col>
         </row>
 
@@ -533,7 +550,7 @@ const Ebay_table = () => {
         </Form.Item> */}
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
-            tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase()}
+            tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase() }
             key="1"
           >
             <Card type="inner">
@@ -570,7 +587,7 @@ const Ebay_table = () => {
               ></Table>
             </Card>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+          <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + ebays.length} key="2">
             <HuongDanEbay_table />
           </Tabs.TabPane>
         </Tabs>

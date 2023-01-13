@@ -169,6 +169,12 @@ const Tooldata_info = () => {
                       onFinish={onFinish}
                       autoComplete="off"
                       size="large"
+                      initialValues={{
+                        //bill_date: dayjs(),
+                        create_collection: ["UPDATE","EBAY"],
+                        
+                      }}
+
                     >
                       <Form.Item
                         label="Tạo collection"
