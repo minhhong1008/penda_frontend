@@ -284,7 +284,7 @@ function Header({
     }
   };
 
-  const renderhide_xyly = () => {
+  /* const renderhide_xyly = () => {
     if (users_name =="Minh Hồng" ) {
       return (
         <div>
@@ -294,9 +294,9 @@ function Header({
         </div>
       );
     }
-  };
+  }; */
 
-  const post_working_session_XL = async (values) => {
+  /* const post_working_session_XL = async (values) => {
     try {
       let response = await postcheckSessions_xl(values);
       if (response.status == 200) {
@@ -305,7 +305,7 @@ function Header({
     } catch (error) {
       error("Đã lỗi");
     }
-  };
+  }; */
 
   const Timesheets = () => {
     let values = [
@@ -366,7 +366,7 @@ function Header({
         return;
       }
 
-      if (dayjs().hour() == 17 && dayjs().minute() <= 55) {
+      if (dayjs().hour() == 18 && dayjs().minute() <= 15) {
         values[0].working_verify = "C";
         post_working_session(values);
         success(users_name + ": Bạn đã hoàn thành ca");
@@ -626,7 +626,7 @@ function Header({
 
 
         </Col>
-        {renderhide_xyly()}
+       {/*  {renderhide_xyly()} */}
         
       </Row>
     </>
