@@ -274,10 +274,15 @@ const Project_info = () => {
 
                   {/* Trạng thái */}
                   <Row gutter={16}>
+
                     <Col span={8}>
                       <Form.Item label="Trạng thái" name="project_status">
                         <Select
-                          disabled={disabled}
+                          disabled = {
+                            users_name == form.getFieldValue("project_employee_request") ? (
+                              false
+                            ) : true
+                        }
                           optionlabelprop="label"
                           style={{
                             width: "100%",
@@ -295,6 +300,7 @@ const Project_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
+
                     <Col span={8}>
                       {/* Hạng mục */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
@@ -517,10 +523,15 @@ const Project_info = () => {
                       {/* Đánh giá */}
                       <Form.Item label="Đánh giá" name="project_review">
                         <Rate
+                        disabled = {
+                          users_name == form.getFieldValue("project_employee_request") ? (
+                            false
+                          ) : true
+                      }
                           tooltips={desc}
                           allowHalf
                           defaultValue={1.5}
-                          disabled={disabled}
+                          
                         />
                       </Form.Item>
                     </Col>

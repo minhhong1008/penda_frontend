@@ -422,13 +422,19 @@ function Header({
   };
 
   // Function thông báo lấy từ ant.desgin
-  const customIcons = {
+  const customIcons1 = {
     1: <FrownOutlined />,
     2: <FrownOutlined />,
+  };
+  const customIcons2 = {
     3: <MehOutlined />,
     4: <SmileOutlined />,
-    5: <SmileOutlined />,
   };
+  const customIcons3 = {
+    4: <SmileOutlined />,
+    5: <SmileOutlined/>
+  };
+   // Function thông báo lấy từ ant.desgin
   const success = (message) => {
     messageApi.open({
       type: "success",
@@ -465,8 +471,21 @@ function Header({
         <Col span={24} md={6}>
           <Link to="/HomePage">
             <Rate
-              defaultValue={3}
-              character={({ index }) => customIcons[index + 1]}
+              defaultValue={2}
+              character={({ index }) => customIcons1[index + 1]}
+            />
+          </Link>
+
+          <Link to="/products">
+            <Rate
+              defaultValue={2}
+              character={({ index }) => customIcons2[index + 1]}
+            />
+          </Link>
+          <Link to="/personnel/project_class">
+            <Rate
+              defaultValue={2}
+              character={({ index }) => customIcons3[index + 1]}
             />
           </Link>
         </Col>

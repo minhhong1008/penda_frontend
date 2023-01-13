@@ -13,8 +13,8 @@ import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
 import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
-import React from 'react';
-import { Divider } from 'antd';
+import React from "react";
+import { Divider } from "antd";
 
 export const listselect_view_acc = [
   {
@@ -94,27 +94,23 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_sim_error = ["Không gửi code", "Không nhận code","Không có sóng","Yêu cầu verify","khóa 1 chiều","khóa 2 chiều"];
+export const listselect_sim_error = [
+  "Không gửi code",
+  "Không nhận code",
+  "Không có sóng",
+  "Yêu cầu verify",
+  "khóa 1 chiều",
+  "khóa 2 chiều",
+];
 
 export const listselect_sim_processing = [
-  "Check",
-  "Verify Mail",
-  "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify Full",
-  "Avatar",
-  "Add to cart",
-  "Seller",
-  "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
+  "use mail",
+  "use ebay",
+  "use etsy",
+  "use amazon",
+  "use facebook",
+  "use payoneer",
+  "use paypal",
   "Restrict",
   "Suspended",
 ];
@@ -197,7 +193,6 @@ export const listselect_sim_type = [
   "Khác",
   "Mua dịch vụ",
   "Tự đăng ký",
-
 ];
 
 export const listselect_sim_sell_status = [
@@ -219,7 +214,7 @@ export const listselect_sim_owner = [
 ];
 
 export const listselect_sim_status = [
-    "Null",
+  "Null",
   "Live",
   "Active",
   "Error",
@@ -473,7 +468,6 @@ export const tablelist_sim_Date = [
 
 export const listselect_sim_fields = [];
 
-
 export const HuongDanSim_info = () => {
   return (
     <div>
@@ -705,42 +699,46 @@ export const HuongDanSim_class = () => {
   );
 };
 
-
-
 const ContentSim = () => (
   <>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider>Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left">Left Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right">Right Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left" orientationMargin="0">
       Left Text with 0 orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right" orientationMargin={50}>
       Right Text with 50px orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
   </>
 );

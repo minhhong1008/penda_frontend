@@ -78,31 +78,19 @@ export const listselect_view_acc = [
 ];
 
 export const listselect_info_error = [
-  "Không login",
-  "Sai pass",
-  "Không về code",
-  "Không thấy sim",
+  "Ảnh không rõ",
+  "Thiếu ảnh",
+  "Sai thông tin",
+  "Thiếu thông tin",
 ];
 
 export const listselect_info_processing = [
-  "Login mail",
-  "Verify Mail",
-  "Buyer",
-  "View",
-  "Like",
-  "Policies",
-  "Verify Full",
-  "Avatar",
-  "Add to cart",
-  "Seller",
-  "Verify Bank",
-  "Draft",
-  "List",
-  "Sold",
-  "Move room",
-  "Quảng cáo",
-  "Above Standard",
-  "Top Rate",
+  "Nhập thông tin",
+  "Tải ảnh",
+  "Kiểm tra",
+  "Info chuẩn",
+  "Có Doc",
+  "Đang sử dụng",
   "Restrict",
   "Suspended",
 ];
@@ -177,15 +165,10 @@ export const listselect_info_block = [
 export const listselect_info_type = [
   "VN",
   "US",
-  "Buyer",
-  "Kick Sold",
-  "Seller",
-  "Non Suspended",
-  "Gỡ Suspended",
-  "Above Standard",
-  "Top Rate",
-  "Bán acc",
-  "Bán hàng",
+  "CCCD",
+  "Passport",
+  "CMT",
+  "Chỉ có info",
 ];
 
 export const listselect_info_sell_status = [
@@ -207,7 +190,7 @@ export const listselect_info_owner = [
 ];
 
 export const listselect_info_status = [
-    "Null",
+  "Null",
   "Live",
   "Active",
   "Error",
@@ -344,7 +327,6 @@ export const tablelist_info_Date = [
     title: "Ngày chuyển lớp",
     value: "infodate_nextclass",
   },
- 
 ];
 
 export const listselect_info_fields = [];
@@ -579,7 +561,6 @@ export const HuongDanInfo_class = () => {
     </div>
   );
 };
-
 
 export const listinput_info_identifying = [
   "Nốt ruồi cách 2cm",
