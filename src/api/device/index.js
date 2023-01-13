@@ -28,6 +28,11 @@ export const getCountDevice = () => {
   return axiosClient.get(url);
 }
 
+export const searchDeviceInfo = (text) => {
+  const url = `/device/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

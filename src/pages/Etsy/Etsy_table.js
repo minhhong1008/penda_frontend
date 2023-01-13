@@ -19,7 +19,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListetsyActions } from "../../actions/etsyActions";
+import { getListetsyActions,GET_LIST_ETSY_SUCCESS } from "../../actions/etsyActions";
 import { HuongDanEtsy_table } from "./Etsy_list";
 import { searchEtsyInfo } from "../../api/etsy";
 import { SearchOutlined } from "@ant-design/icons";
@@ -176,6 +176,21 @@ const Etsy_table = () => {
         return a.etsy_user?.localeCompare(b.etsy_user);
       },
       ...getColumnSearchProps("etsy_user"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>LỚP</strong>
+        </div>
+      ),
+      dataIndex: "etsy_class",
+      key: "etsy_class",
+      width: 1,
+      sorter: (a, b) => {
+        return a.etsy_class?.localeCompare(b.etsy_class);
+      },
+      ...getColumnSearchProps("etsy_class"),
+      responsive: ["md"],
     },
     {
       title: "TIẾN TRÌNH",

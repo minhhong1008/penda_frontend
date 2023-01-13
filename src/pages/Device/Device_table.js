@@ -4,25 +4,27 @@ import {
   Card,
   Table,
   Tabs,
-  Row,
-  Col,
   Form,
   Input,
-  DatePicker,
-  Select,
-  Collapse,
-  Popover,
   Space,
   TreeSelect,
   Checkbox,
   Tag,
+  Tooltip,
+  Col,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { copyToClipboard } from "../../utils";
+import Highlighter from "react-highlight-words";
+import React, { useEffect, useRef, useState } from "react";
+import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListdeviceActions } from "../../actions/deviceActions";
+
+import { getListdeviceActions,GET_LIST_DEVICE_SUCCESS } from "../../actions/deviceActions";
 import { HuongDanDevice_table } from "./Device_list";
+import { searchDeviceInfo, updatedeviceInfo } from "../../api/device";
+// search trên table
+import { SearchOutlined } from "@ant-design/icons";
+
 const Device_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -30,7 +32,128 @@ const Device_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-  // nut checked, sửa cả trong file ebayReducer
+  const [selectedNote, setSelectedNote] = useState();
+  // Các hàm nut search trên table của ant.desgn
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          {/* <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button> */}
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+  //-------------------------------
+
+  // nut checked, sửa cả trong file deviceReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copyId = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
@@ -66,6 +189,7 @@ const Device_table = () => {
       sorter: (a, b) => {
         return a.device_id?.localeCompare(b.device_id);
       },
+      ...getColumnSearchProps("device_id"),
     },
     {
       title: "TÀI KHOẢN",
@@ -74,6 +198,22 @@ const Device_table = () => {
       sorter: (a, b) => {
         return a.device_user?.localeCompare(b.device_user);
       },
+      ...getColumnSearchProps("device_user"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>PC</strong>
+        </div>
+      ),
+      dataIndex: "device_class",
+      key: "device_class",
+      width: 1,
+      sorter: (a, b) => {
+        return a.device_class?.localeCompare(b.device_class);
+      },
+      ...getColumnSearchProps("device_class"),
+      responsive: ["md"],
     },
     {
       title: "TIẾN TRÌNH",
@@ -221,11 +361,66 @@ const Device_table = () => {
       title: "GHI CHÚ",
       dataIndex: "device_note",
       key: "device_note",
+      render: (text, record, index) => (
+        <div>
+          {selectedNote == record._id ? (
+            <Input
+              key={index}
+              onPressEnter={(e) => {
+                handleChangeNote(record.device_id, e.target.value);
+              }}
+              onMouseLeave={(e) => {
+                handleChangeNote(record.device_id, e.target.value);
+                setSelectedNote();
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              defaultValue={text}
+            ></Input>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedNote(record._id);
+              }}
+            >
+              <Tooltip title={text}>
+                <div
+                  style={{
+                    whiteSpace: "nowrap",
+                    width: "50px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {text}
+                </div>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      ),
       sorter: (a, b) => {
         return a.device_note?.localeCompare(b.device_note);
       },
     },
   ];
+
+  const handleChangeNote = async (id, value) => {
+    const response = await updatedeviceInfo(
+      {
+        device_note: value,
+      },
+      id
+    );
+    if (response.status == 200) {
+      showSuccess("Update thanh cong");
+    } else {
+      showError("Loi roi");
+    }
+    setSelectedNote();
+  };
 
   const handleChangeFilter = (values) => {
     let newValue = values.join(",");
@@ -255,44 +450,42 @@ const rowSelection = {
   selectedRowKeys,
   onChange: onSelectChange,
 };
+
+  // Hàm search
+
+  const searchDevice = async (value) => {
+    
+    const response = await searchDeviceInfo({
+      query: value,
+    });
+    if (response.status == 200) {
+      let { data } = response;
+
+      dispatch({
+        type: GET_LIST_DEVICE_SUCCESS,
+        payload: data,
+      });
+    } else {
+    }
+  };
+
 //--------
   return (
     <div>
       <Card>
-        <Form.Item label="Lọc eBay">
-          <TreeSelect
-            mode="multiple"
-            onChange={handleChangeFilter}
-            multiple
-            optionlabelprop="label"
-            treeData={[
-              {
-                title: "Lớp",
-                value: "device_class",
-                item: [
-                  { title: "Lớp 1", value: "Lớp 1" },
-                  { title: "Lớp 2", value: "Lớp 2" },
-                ],
-              },
-              {
-                title: "Thiết bị",
-                value: "device_device",
-                item: [
-                  { title: "PC06", value: "PC06" },
-                  { title: "PC07", value: "PC07" },
-                ],
-              },
-              {
-                title: "Nhân viên",
-                value: "device_employee",
-                item: [
-                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                  { title: "Khắc Liêm", value: "Khắc Liêm" },
-                ],
-              },
-            ]}
-          />
-        </Form.Item>
+        <row gutter={16}>
+          <Col span={18}>
+            <Input
+              placeholder="Search"
+              onPressEnter={(e) => {
+                searchDevice(e.target.value);
+              }}
+            />
+          </Col>
+          <Col span={4}>
+           
+          </Col>
+        </row>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG THIẾT BỊ : " + class_name.toUpperCase()}
@@ -330,7 +523,7 @@ const rowSelection = {
               ></Table>
             </Card>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+          <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + devices.length} key="2">
             <HuongDanDevice_table />
           </Tabs.TabPane>
         </Tabs>

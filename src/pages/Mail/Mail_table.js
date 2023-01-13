@@ -4,25 +4,27 @@ import {
   Card,
   Table,
   Tabs,
-  Row,
-  Col,
   Form,
   Input,
-  DatePicker,
-  Select,
-  Collapse,
-  Popover,
   Space,
   TreeSelect,
   Checkbox,
   Tag,
+  Tooltip,
+  Col,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { copyToClipboard } from "../../utils";
+import Highlighter from "react-highlight-words";
+import React, { useEffect, useRef, useState } from "react";
+import { copyToClipboard, showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListmailActions } from "../../actions/mailActions";
+
+import { getListmailActions,GET_LIST_MAIL_SUCCESS } from "../../actions/mailActions";
 import { HuongDanMail_table } from "./Mail_list";
+import { searchMailInfo, updatemailInfo } from "../../api/mail";
+// search trên table
+import { SearchOutlined } from "@ant-design/icons";
+
 const Mail_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -30,11 +32,135 @@ const Mail_table = () => {
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
   const history = useHistory();
-  // nut checked, sửa cả trong file ebayReducer
+  const [selectedNote, setSelectedNote] = useState();
+  // Các hàm nut search trên table của ant.desgn
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          {/* <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button> */}
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1890ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
+  //-------------------------------
+
+
+  // nut checked, sửa cả trong file mailReducer
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const copyId = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
   };
+
+
   const columns = [
     {
       title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
@@ -66,6 +192,7 @@ const Mail_table = () => {
       sorter: (a, b) => {
         return a.mail_id?.localeCompare(b.mail_id);
       },
+      ...getColumnSearchProps("mail_class"),
     },
     {
       title: "TÀI KHOẢN",
@@ -74,6 +201,22 @@ const Mail_table = () => {
       sorter: (a, b) => {
         return a.mail_user?.localeCompare(b.mail_user);
       },
+      ...getColumnSearchProps("mail_user"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>LỚP</strong>
+        </div>
+      ),
+      dataIndex: "mail_class",
+      key: "mail_class",
+      width: 1,
+      sorter: (a, b) => {
+        return a.mail_class?.localeCompare(b.mail_class);
+      },
+      ...getColumnSearchProps("mail_class"),
+      responsive: ["md"],
     },
     {
       title: "TIẾN TRÌNH",
@@ -221,11 +364,66 @@ const Mail_table = () => {
       title: "GHI CHÚ",
       dataIndex: "mail_note",
       key: "mail_note",
+      render: (text, record, index) => (
+        <div>
+          {selectedNote == record._id ? (
+            <Input
+              key={index}
+              onPressEnter={(e) => {
+                handleChangeNote(record.mail_id, e.target.value);
+              }}
+              onMouseLeave={(e) => {
+                handleChangeNote(record.mail_id, e.target.value);
+                setSelectedNote();
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              defaultValue={text}
+            ></Input>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedNote(record._id);
+              }}
+            >
+              <Tooltip title={text}>
+                <div
+                  style={{
+                    whiteSpace: "nowrap",
+                    width: "50px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {text}
+                </div>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      ),
       sorter: (a, b) => {
         return a.mail_note?.localeCompare(b.mail_note);
       },
     },
   ];
+
+  const handleChangeNote = async (id, value) => {
+    const response = await updatemailInfo(
+      {
+        mail_note: value,
+      },
+      id
+    );
+    if (response.status == 200) {
+      showSuccess("Update thanh cong");
+    } else {
+      showError("Loi roi");
+    }
+    setSelectedNote();
+  };
 
   const handleChangeFilter = (values) => {
     let newValue = values.join(",");
@@ -255,44 +453,42 @@ const rowSelection = {
   selectedRowKeys,
   onChange: onSelectChange,
 };
+
+  // Hàm search
+
+  const searchMail = async (value) => {
+    
+    const response = await searchMailInfo({
+      query: value,
+    });
+    if (response.status == 200) {
+      let { data } = response;
+
+      dispatch({
+        type: GET_LIST_MAIL_SUCCESS,
+        payload: data,
+      });
+    } else {
+    }
+  };
+
 //--------
   return (
     <div>
       <Card>
-        <Form.Item label="Lọc eBay">
-          <TreeSelect
-            mode="multiple"
-            onChange={handleChangeFilter}
-            multiple
-            optionlabelprop="label"
-            treeData={[
-              {
-                title: "Lớp",
-                value: "mail_class",
-                children: [
-                  { title: "Lớp 1", value: "Lớp 1" },
-                  { title: "Lớp 2", value: "Lớp 2" },
-                ],
-              },
-              {
-                title: "Thiết bị",
-                value: "mail_device",
-                children: [
-                  { title: "PC06", value: "PC06" },
-                  { title: "PC07", value: "PC07" },
-                ],
-              },
-              {
-                title: "Nhân viên",
-                value: "mail_employee",
-                children: [
-                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                  { title: "Khắc Liêm", value: "Khắc Liêm" },
-                ],
-              },
-            ]}
-          />
-        </Form.Item>
+        <row gutter={16}>
+          <Col span={18}>
+            <Input
+              placeholder="Search"
+              onPressEnter={(e) => {
+                searchMail(e.target.value);
+              }}
+            />
+          </Col>
+          <Col span={4} name ="DKM">
+           
+          </Col>
+        </row>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG LỚP MAIL : " + class_name.toUpperCase()}
@@ -330,7 +526,7 @@ const rowSelection = {
               ></Table>
             </Card>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
+          <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + mails.length} key="2">
             <HuongDanMail_table />
           </Tabs.TabPane>
         </Tabs>

@@ -28,6 +28,11 @@ export const getCountMail = () => {
   return axiosClient.get(url);
 }
 
+export const searchMailInfo = (text) => {
+  const url = `/mail/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

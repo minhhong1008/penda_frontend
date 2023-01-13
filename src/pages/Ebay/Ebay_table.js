@@ -34,8 +34,8 @@ const Ebay_table = () => {
   const { ebays } = useSelector((state) => state.ebay);
   const class_name = urlParams.get("class");
   const dispatch = useDispatch();
-  const [selectedNote, setSelectedNote] = useState();
   const history = useHistory();
+  const [selectedNote, setSelectedNote] = useState();
   // Các hàm nut search trên table của ant.desgn
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");

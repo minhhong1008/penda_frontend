@@ -28,6 +28,11 @@ export const getCountInfo = () => {
   return axiosClient.get(url);
 }
 
+export const searchInfoInfo = (text) => {
+  const url = `/info/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)
