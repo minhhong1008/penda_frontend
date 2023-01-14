@@ -364,22 +364,20 @@ const SideBarProducts = ({ color }) => {
     a++;
     if (a % 2 == 0) {
       setshow_taikhoan(showSidebar_taikhoan);
-    }else{
+    } else {
       setshow_taikhoan(false);
     }
-    
   };
 
   const shows_monthod_pay = () => {
     a++;
     if (a % 2 == 0) {
       setshow_method_pay(showSidebar_method_pay);
-    }else{
+    } else {
       setshow_method_pay(false);
     }
-    
   };
-  
+
   const shows_tainguyen = () => {
     a++;
     if (a % 2 == 0) {

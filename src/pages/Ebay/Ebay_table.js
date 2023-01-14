@@ -12,6 +12,7 @@ import {
   Tag,
   Tooltip,
   Col,
+  Row,
 } from "antd";
 import Highlighter from "react-highlight-words";
 import React, { useEffect, useRef, useState } from "react";
@@ -499,19 +500,18 @@ const Ebay_table = () => {
   return (
     <div>
       <Card>
-        <row gutter={16}>
-          <Col span={18}>
+        <Row gutter={16}>
+          <Col span={16}>
             <Input
-              placeholder="Search"
+              placeholder="Search theo điều kiện hoặc"
               onPressEnter={(e) => {
                 searchEbay(e.target.value);
               }}
             />
           </Col>
-          <Col span={4} name ="DKM">
-           
-          </Col>
-        </row>
+          
+          
+        </Row>
 
         {/* <Form.Item label="Lọc eBay">
           <TreeSelect

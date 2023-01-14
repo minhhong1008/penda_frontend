@@ -108,10 +108,10 @@ const Ebay_class = () => {
       key: "0",
       class: "Tổng",
       ebay_count: "0",
-      content_complete: "",
-      content_time: <div></div>,
-      content_check: <div></div>,
-      content_action: <div></div>,
+      content_complete: "Tổng Buyer:",
+      content_time: <div>Tổng Seller: </div>,
+      content_check: <div>Tổng Buyer Sus: </div>,
+      content_action: <div>Tổng Seller Sus: </div>,
     },
     {
       key: "0",
@@ -720,6 +720,8 @@ const Ebay_class = () => {
   const countEbay = async () => {
     let { data } = await getCountEbay();
     let total = 0;
+    let total_buyer = 0;
+    let total_seller = 0;
     data?.data?.forEach((data) => {
       total = parseInt(total) + parseInt(data?.count);
       

@@ -332,7 +332,7 @@ function Header({
           values[0].working_verify = "Bs";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error(users_name + ": Bạn đã đi muộn ca sáng. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
+          error("Muộn giờ làm rồi. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
         }
         return;
       }
@@ -341,7 +341,7 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "S";
           post_working_session(values);
-          success(users_name + ": Bạn đã hoàn thành ca sáng");
+          success("Chấm công hoàn thành ca sáng");
         }
         return;
       }
@@ -361,7 +361,7 @@ function Header({
           values[0].working_verify = "Bc";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error(users_name + ": Bạn đã đi muộn ca chiều. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
+          error(" Muộn giờ làm rồi. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
         }
         return;
       }
@@ -369,29 +369,28 @@ function Header({
       if (dayjs().hour() == 18 && dayjs().minute() <= 15) {
         values[0].working_verify = "C";
         post_working_session(values);
-        success(users_name + ": Bạn đã hoàn thành ca");
+        success("Chấm công hoàn thành ca");
         return;
       }
 
       if (
-        dayjs().hour() == 19 &&
+        dayjs().hour() == 18 &&
         dayjs().minute() > 15 &&
-        dayjs().minute() <= 30
+        dayjs().minute() <= 45
       ) {
         values[0].working_session = "T";
         values[0].working_verify = "Bt";
         post_working_session(values);
-        return success(users_name + ": Bạn đã chấm công");
+        success(users_name + ": Bạn đi làm đúng giờ 18h30-18h45. Bạn nhớ chấm công ra ca tối 22h30 - 22h45");
       }
 
-      if (dayjs().hour() == 18 && dayjs().minute() > 30) {
+      if (dayjs().hour() == 18 && dayjs().minute() > 45) {
         values[0].working_session = "T";
         values[0].working_verify = "Bt";
         values[0].working_check_late = "m";
         post_working_session(values);
-        return error(users_name + ": Bạn đã đi muộn");
+        error(" Muộn giờ làm rồi. Bạn nhớ chấm công ra ca tối 22h30 - 22h45");
       }
-
       // Thông báo đã hết giờ chấm công
       return warning("Đã hết giờ chấm công!");
     }
@@ -402,7 +401,7 @@ function Header({
       values[0].working_session = "T";
       values[0].working_verify = "T";
       post_working_session(values);
-      success(users_name + ": Bạn đã hoàn thành ca");
+      success("Chấm công hoàn thành ca");
       return;
     }
 
@@ -413,8 +412,9 @@ function Header({
   const post_working_session = async (values) => {
     try {
       let response = await postcheckSessions(values);
+      let { data } = response;
       if (response.status == 200) {
-        success("Thành công");
+        success(users_name + " : " + data.report);
       }
     } catch (error) {
       error("Đã lỗi");
