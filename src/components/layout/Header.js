@@ -327,12 +327,12 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bs";
           post_working_session(values);
-          success(users_name + ": Bạn đi làm đúng giờ 8h-8h15. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
+          success(users_name + ": Bạn đi làm đúng giờ 8h-8h15.Nếu bạn đã chấm công bắt đầu ca bạn nhớ chấm công ra ca sáng 12h - 12h15");
         } else {
           values[0].working_verify = "Bs";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error("Muộn giờ làm rồi. Bạn nhớ chấm công ra ca sáng 12h - 12h.15");
+          error("Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca sáng 12h - 12h15");
         }
         return;
       }
@@ -356,12 +356,12 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bc";
           post_working_session(values);
-          success(users_name + ": Bạn đi làm đúng giờ 14h-14h15. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
+          success(users_name + ": Bạn đi làm đúng giờ 14h-14h15. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15");
         } else {
           values[0].working_verify = "Bc";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error(" Muộn giờ làm rồi. Bạn nhớ chấm công ra ca chiều 18h - 18h.15");
+          error(" Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15");
         }
         return;
       }
