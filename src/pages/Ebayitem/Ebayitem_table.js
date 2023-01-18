@@ -81,7 +81,6 @@ const Ebayitem_table = () => {
       sorter: (a, b) => {
         return a.ebayitem_user.localeCompare(b.ebayitem_limit);
       },
-      
     },
     {
       title: "active",
@@ -131,7 +130,7 @@ const Ebayitem_table = () => {
         return a.ebayitem_user.localeCompare(b.ebayitemdate_class);
       },
     },
-    
+
     {
       title: "Ghi chú",
       dataIndex: "ebayitem_note",
@@ -165,46 +164,24 @@ const Ebayitem_table = () => {
 
   return (
     <div>
-      <Form.Item label="Lọc eBay">
-        <TreeSelect
-          mode="multiple"
-          onChange={handleChangeFilter}
-          multiple
-          optionlabelprop="label"
-          treeData={[
-            {
-              title: "Lớp",
-              value: "ebayitem_class",
-              children: [
-                { title: "Lớp 1", value: "Lớp 1" },
-                { title: "Lớp 2", value: "Lớp 2" },
-              ],
-            },
-            {
-              title: "Thiết bị",
-              value: "ebayitem_device",
-              children: [
-                { title: "PC06", value: "PC06" },
-                { title: "PC07", value: "PC07" },
-              ],
-            },
-            {
-              title: "Nhân viên",
-              value: "ebayitem_employee",
-              children: [
-                { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                { title: "Khắc Liêm", value: "Khắc Liêm" },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
+     
       <Card type="inner">
         <Table
           columns={columns}
           dataSource={ebayitems}
           pagination={{
-            pageSizeOptions: ["10","20","30","50","100", "200", "300", "500","1000","2000"],
+            pageSizeOptions: [
+              "10",
+              "20",
+              "30",
+              "50",
+              "100",
+              "200",
+              "300",
+              "500",
+              "1000",
+              "2000",
+            ],
             position: ["bottomRight", "topRight"],
             showSizeChanger: true,
             defaultPageSize: 100,

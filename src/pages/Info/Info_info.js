@@ -47,6 +47,7 @@ import {
   updateinfoInfo,
 } from "../../api/info/index";
 import { updateListView } from "../../api/update";
+import CCCD from "../Tools/cccd/cccd";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -1377,6 +1378,12 @@ const Info_info = () => {
           </Row>
         </Tabs.TabPane>
         <Tabs.TabPane tab="HƯỚNG DẪN" key="3">
+          <HuongDanInfo_info />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="CCCD" key="4">
+          <CCCD info={info}/>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab="Doc Bank" key="5">
           <HuongDanInfo_info />
         </Tabs.TabPane>
       </Tabs>

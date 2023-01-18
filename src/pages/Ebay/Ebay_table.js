@@ -162,7 +162,6 @@ const Ebay_table = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
   };
 
-
   const columns = [
     {
       title: (
@@ -173,7 +172,27 @@ const Ebay_table = () => {
       key: "index",
       fixed: "left",
       width: 1,
-      render: (text, record, index) => index + 1,
+      render: (text, record, index) => (
+        <div
+          style={{
+            textAlign: "center",
+            border: "1px solid white",
+            borderRadius: "8px",
+            background: "rgb(35, 198, 200)",
+            fontWeight: "bold",
+            color: "white"
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(
+              `table/${encodeURIComponent(record.ebay_id)}`,
+              "_blank"
+            );
+          }}
+        >
+          <div>{index + 1}</div>
+        </div>
+      ),
       responsive: ["md"],
     },
     {
@@ -482,7 +501,6 @@ const Ebay_table = () => {
   // Hàm search
 
   const searchEbay = async (value) => {
-    
     const response = await searchEbayInfo({
       query: value,
     });
@@ -509,8 +527,6 @@ const Ebay_table = () => {
               }}
             />
           </Col>
-          
-          
         </Row>
 
         {/* <Form.Item label="Lọc eBay">
@@ -549,7 +565,7 @@ const Ebay_table = () => {
         </Form.Item> */}
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
-            tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase() }
+            tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase()}
             key="1"
           >
             <Card type="inner">

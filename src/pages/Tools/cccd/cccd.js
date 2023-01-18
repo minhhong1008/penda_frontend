@@ -1,6 +1,6 @@
 import "./cccd.css";
 import { Button, Col, Form, Input, Row, Select } from "antd";
-import 'antd/dist/reset.css';
+import "antd/dist/reset.css";
 import img1 from "./assets/mat_truoc.jpg";
 import img2 from "./assets/mat_sau.jpg";
 import img3 from "./assets/finger/van-tay-1.png";
@@ -14,7 +14,8 @@ import QRCode from "react-qr-code";
 import { useScreenshot, createFileName } from "use-react-screenshot";
 import dayjs from "dayjs";
 
-function CCCD() {
+function CCCD({ info }) {
+  const [form] = Form.useForm();
   const inRef = createRef(null);
   const outRef = createRef(null);
   const [background, setBackground] = useState();
@@ -38,12 +39,6 @@ function CCCD() {
     var rand = arr[Math.floor(Math.random() * arr.length)];
     setFinger2(rand);
   };
-
-  useEffect(() => {
-    renderBackground();
-    renderFinger1();
-    renderFinger2();
-  }, []);
 
   const [card, setCard] = useState({
     card_id: "004183886158",
@@ -110,12 +105,16 @@ function CCCD() {
       strSpace += "<";
     }
     let birth_date_array = card.birth_date.split("/");
-    let str_birth_date = birth_date_array[2].slice(2, 4) + birth_date_array[1] + birth_date_array[0];
+    let str_birth_date =
+      birth_date_array[2]?.slice(2, 4) +
+      birth_date_array[1] +
+      birth_date_array[0];
     let expiry_array = card.expiry.split("/");
-    let str_expiry = expiry_array[2].slice(2, 4) + expiry_array[1] + expiry_array[0];
+    let str_expiry =
+      expiry_array[2]?.slice(2, 4) + expiry_array[1] + expiry_array[0];
     let str =
       "IDVNM" +
-      card.card_id.slice(3) +
+      card.card_id?.slice(3) +
       Math.floor(Math.random() * 10) +
       card.card_id +
       "<<" +
@@ -218,18 +217,40 @@ function CCCD() {
     );
     return str;
   }
+  useEffect(() => {
+    let newValue = {
+      card_id: info?.info_passport ? info.info_passport : "004183886158",
+      name: info?.info_fullname ? info.info_fullname.toUpperCase() : "PHUNG VAN MINH",
+      birth_date: info?.infodate_birthday ? info.infodate_birthday : "10/05/2000",
+      date: info?.infodate_start ? info.infodate_start : "27/04/2021",
+      expiry: info?.infodate_expiry ? info.infodate_expiry :  "10/05/2025",
+      id:
+        "IDVNM0810028357026081042835<<98105026M4105028VNM<<<<<<<<<<<6CU<<TUAN<<ANH<<<<<<<<<<<<<<<<<",
+      identification: info?.info_identifying ? info.info_identifying : "Sẹo chấm cánh mũi trái",
+      nationality: "Việt Nam",
+      origin: info?.info_origin ? info.info_origin : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
+      residence: info?.info_residence ? info.info_residence : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
+      gender: info?.info_sex ? info.info_sex : "Nam",
+      img: "",
+    };
+    form.setFieldsValue(newValue);
+    setCard(newValue);
+  }, []);
+
+  // info_identifying
+  useEffect(() => {
+    renderBackground();
+    renderFinger1();
+    renderFinger2();
+  }, []);
 
   return (
     <div className="CCCD">
       <Row gutter={[24, 24]}>
-        <Col span={12}>
-          <div>Thông tin</div>
-        </Col>
-      </Row>
-      <Row gutter={[24, 24]}>
-        <Col span={12}>
+        <Col span={8}>
           <Form
             name="basic"
+            form={form}
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             initialValues={{ remember: true }}
@@ -323,7 +344,7 @@ function CCCD() {
             </Form.Item>
           </Form>
         </Col>
-        <Col span={12}>
+        <Col span={16}>
           <br></br>
           <br></br>
           <div

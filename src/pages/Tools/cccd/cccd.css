@@ -92,100 +92,100 @@
   
   .card_id {
     position: absolute;
-    top: 270px;
+    top: 260px;
     left: 275px;
-    font-weight: bold;
-    font-size: 24px;
+    font-weight: 600;
+    font-size: 32px;
   }
   
   .name {
     position: absolute;
-    top: 325px;
+    top: 320px;
     left: 200px;
-    font-size: 22px;
-    font-weight: 500;
+    font-size: 24px;
+    font-weight: 400;
   }
   
   .birth_date {
     position: absolute;
-    top: 350px;
+    top: 354px;
     left: 390px;
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 400;
+    font-size: 18px;
   }
   
   .gender {
     position: absolute;
-    top: 380px;
+    top: 374px;
     left: 320px;
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 20px;
   }
   
   .nationality {
     position: absolute;
-    top: 380px;
+    top: 376px;
     left: 555px;
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 20px;
   }
   
   .origin {
     position: absolute;
-    top: 427px;
+    top: 422px;
     left: 200px;
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 20px;
   }
   
   .residence {
     position: absolute;
-    top: 470px;
+    top: 466px;
     left: 200px;
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 20px;
   }
   
   .expiry {
     position: absolute;
-    top: 470px;
+    top: 464px;
     left: 110px;
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: 400;
+    font-size: 16px;
   }
   
   .qr_code {
-    width: 80px;
-    height: 80px;
-    top: 140px;
+    width: 85px;
+    height: 85px;
+    top: 131px;
     position: absolute;
-    left: 570px;
+    left: 563px;
   }
   
   .identification {
     position: absolute;
-    top: 132px;
+    top: 128px;
     left: 20px;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
   }
   
   .date {
     position: absolute;
-    top: 160px;
+    top: 157px;
     left: 285px;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
   }
   
   .id {
     position: absolute;
     width: 640px;
-    top: 390px;
+    top: 381px;
     left: 42px;
     word-break: break-all;
     font-size: 26px;
-    font-weight: 500;
+    font-weight: 400;
     font-family: idFont !important;
   }
   

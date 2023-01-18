@@ -251,6 +251,13 @@ const Users_timesheets = () => {
           ) {
             total_verrify++;
           }
+          // Tính ngày nghỉ không xin phép
+          if (dayjs(session?.working_date).format("YYYY-MM-DD") < dayjs().format("YYYY-MM-DD") &&
+            session?.working_session != "" &&
+            session?.working_verify == ""
+          ) {
+            total_n++;
+          }
 
         });
 
