@@ -141,12 +141,7 @@ const SideBarpersonnel = ({ color }) => {
 
           
 
-          <Menu.Item key="100">
-            <NavLink to="/log-out">
-              <span className="icon">{signup}</span>
-              <span className="label">Đăng Xuất</span>
-            </NavLink>
-          </Menu.Item>
+          
         </Menu>
       )}
     </>

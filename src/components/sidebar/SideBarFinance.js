@@ -86,12 +86,7 @@ const SideBarFinance = ({ color }) => {
 
           
 
-          <Menu.Item key="20">
-            <NavLink to="/log-out">
-              <span className="icon">{signup}</span>
-              <span className="label">Đăng Xuất</span>
-            </NavLink>
-          </Menu.Item>
+          
         </Menu>
       )}
     </>

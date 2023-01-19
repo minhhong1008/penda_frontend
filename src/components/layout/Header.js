@@ -35,6 +35,7 @@ import {
   AmazonOutlined,
   AppleOutlined,
   ProjectTwoTone,
+  DollarTwoTone,
   FrownOutlined,
   MehOutlined,
   SmileOutlined,
@@ -288,7 +289,7 @@ function Header({
         <div>
           <Tooltip title="TimeSheets" color="gold" key="gold">
           <Link to="/personnel/users_timesheets">
-            <Spin size="large" onClick={Timesheets} />
+            <Spin size="large" onClick={Timesheets} style={{ fontSize: "30px", paddingRight:"20px" }} />
           </Link>
           </Tooltip>
 
@@ -495,28 +496,31 @@ function Header({
         {/* <Col span={24} md={6}>
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col> */}
-        <Col span={24} md={1}>
+        <Col span={24} md={4}>
           <Tooltip title="HomePage" color="pink" key="pink">
             <Link to="/HomePage">
               <HomeTwoTone style={{ fontSize: "30px"}} twoToneColor="#eb2f96" />
             </Link>
           </Tooltip>
-        </Col>
-        <Col span={24} md={1}>
-          <Tooltip title="products" color="green" key="green">
-            <Link to="/products">
-              <AppleOutlined style={{ fontSize: "30px", color: "#08c" }} />
+          <Tooltip title="Products" color="green" key="green">
+            <Link to="/products/ebay_class">
+              <AppleOutlined style={{ fontSize: "30px", paddingLeft:"20px" , color: "#08c" }} />
             </Link>
           </Tooltip>
-        </Col>
-        <Col span={24} md={1}>
-          <Tooltip title="project" color="blue" key="blue">
+          <Tooltip title="Project" color="blue" key="blue">
             <Link to="/personnel/project_class">
-              <ProjectTwoTone style={{ fontSize: "30px"}} twoToneColor="blue" />
+              <ProjectTwoTone style={{ fontSize: "30px", paddingLeft:"20px" }} twoToneColor="blue" />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Finance" color="orange" key="orange">
+            <Link to="/finance/bill_class">
+           
+              <DollarTwoTone style={{ fontSize: "30px", paddingLeft:"20px" }} twoToneColor="orange" />
             </Link>
           </Tooltip>
         </Col>
-        <Col span={24} md={21} className="header-control">
+       
+        <Col span={24} md={20} className="header-control">
           {/* <Badge size="small" count={4}>
             {<Dropdown overlay={menu} trigger={["click"]}>
               <a
