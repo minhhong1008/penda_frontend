@@ -21,6 +21,7 @@ import {
   Switch,
   Typography,
   message,
+  Tooltip,
 } from "antd";
 import React, { useEffect, useState } from "react";
 
@@ -28,9 +29,18 @@ import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
-import { FrownOutlined, MehOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  HomeTwoTone,
+  AmazonOutlined,
+  AppleOutlined,
+  ProjectTwoTone,
+  FrownOutlined,
+  MehOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
 import dayjs, { now } from "dayjs";
-import { postcheckSessions,postcheckSessions_xl } from "../../api/timeSheet";
+import { postcheckSessions, postcheckSessions_xl } from "../../api/timeSheet";
 import { showError, showSuccess } from "../../utils";
 
 const ButtonContainer = styled.div`
@@ -273,12 +283,16 @@ function Header({
   /* Tính năng chấm công tự động
   Hiện nút chấm công tự động theo thời gian */
   const renderhide_Timesheets = () => {
-    if (dayjs().hour() > 3 ) {
+    if (dayjs().hour() > 3) {
       return (
         <div>
+          <Tooltip title="TimeSheets" color="gold" key="gold">
           <Link to="/personnel/users_timesheets">
             <Spin size="large" onClick={Timesheets} />
           </Link>
+          </Tooltip>
+
+          
         </div>
       );
     }
@@ -327,12 +341,17 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bs";
           post_working_session(values);
-          success(users_name + ": Bạn đi làm đúng giờ 8h-8h15.Nếu bạn đã chấm công bắt đầu ca bạn nhớ chấm công ra ca sáng 12h - 12h15");
+          success(
+            users_name +
+              ": Bạn đi làm đúng giờ 8h-8h15.Nếu bạn đã chấm công bắt đầu ca bạn nhớ chấm công ra ca sáng 12h - 12h15"
+          );
         } else {
           values[0].working_verify = "Bs";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error("Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca sáng 12h - 12h15");
+          error(
+            "Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca sáng 12h - 12h15"
+          );
         }
         return;
       }
@@ -356,12 +375,17 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bc";
           post_working_session(values);
-          success(users_name + ": Bạn đi làm đúng giờ 14h-14h15. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15");
+          success(
+            users_name +
+              ": Bạn đi làm đúng giờ 14h-14h15. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15"
+          );
         } else {
           values[0].working_verify = "Bc";
           values[0].working_check_late = "m";
           post_working_session(values);
-          error(" Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15");
+          error(
+            " Muộn giờ làm rồi. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15"
+          );
         }
         return;
       }
@@ -381,7 +405,10 @@ function Header({
         values[0].working_session = "T";
         values[0].working_verify = "Bt";
         post_working_session(values);
-        success(users_name + ": Bạn đi làm đúng giờ 18h30-18h45. Bạn nhớ chấm công ra ca tối 22h30 - 22h45");
+        success(
+          users_name +
+            ": Bạn đi làm đúng giờ 18h30-18h45. Bạn nhớ chấm công ra ca tối 22h30 - 22h45"
+        );
       }
 
       if (dayjs().hour() == 18 && dayjs().minute() > 45) {
@@ -396,7 +423,7 @@ function Header({
     }
 
     // Chấm công ca tối, Kiểm tra xem đã chấm chưa, nếu chấm rồi thông báo đã chấm công
-    
+
     if (dayjs().hour() == 22 && dayjs().minute() >= 30) {
       values[0].working_session = "T";
       values[0].working_verify = "T";
@@ -432,9 +459,9 @@ function Header({
   };
   const customIcons3 = {
     4: <SmileOutlined />,
-    5: <SmileOutlined/>
+    5: <SmileOutlined />,
   };
-   // Function thông báo lấy từ ant.desgin
+  // Function thông báo lấy từ ant.desgin
   const success = (message) => {
     messageApi.open({
       type: "success",
@@ -468,29 +495,28 @@ function Header({
         {/* <Col span={24} md={6}>
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col> */}
-        <Col span={24} md={6}>
-          <Link to="/HomePage">
-            <Rate
-              defaultValue={2}
-              character={({ index }) => customIcons1[index + 1]}
-            />
-          </Link>
-
-          <Link to="/products">
-            <Rate
-              defaultValue={2}
-              character={({ index }) => customIcons2[index + 1]}
-            />
-          </Link>
-          <Link to="/personnel/project_class">
-            <Rate
-              defaultValue={2}
-              character={({ index }) => customIcons3[index + 1]}
-            />
-          </Link>
+        <Col span={24} md={1}>
+          <Tooltip title="HomePage" color="pink" key="pink">
+            <Link to="/HomePage">
+              <HomeTwoTone style={{ fontSize: "30px"}} twoToneColor="#eb2f96" />
+            </Link>
+          </Tooltip>
         </Col>
-
-        <Col span={24} md={18} className="header-control">
+        <Col span={24} md={1}>
+          <Tooltip title="products" color="green" key="green">
+            <Link to="/products">
+              <AppleOutlined style={{ fontSize: "30px", color: "#08c" }} />
+            </Link>
+          </Tooltip>
+        </Col>
+        <Col span={24} md={1}>
+          <Tooltip title="project" color="blue" key="blue">
+            <Link to="/personnel/project_class">
+              <ProjectTwoTone style={{ fontSize: "30px"}} twoToneColor="blue" />
+            </Link>
+          </Tooltip>
+        </Col>
+        <Col span={24} md={21} className="header-control">
           {/* <Badge size="small" count={4}>
             {<Dropdown overlay={menu} trigger={["click"]}>
               <a
@@ -642,11 +668,9 @@ function Header({
             prefix={<SearchOutlined />}
           />
           {renderhide_Timesheets()}
-
-
         </Col>
-       {/*  {renderhide_xyly()} */}
         
+        {/*  {renderhide_xyly()} */}
       </Row>
     </>
   );
