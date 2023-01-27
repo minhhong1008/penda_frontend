@@ -65,6 +65,7 @@ const Project_class = () => {
       ),
       dataIndex: "function_mission",
       key: "function_mission",
+      responsive: ["md"],
     },
   ];
 

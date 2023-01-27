@@ -208,7 +208,7 @@ const Ebay_table = () => {
         return a.ebay_id?.localeCompare(b.ebay_id);
       },
       ...getColumnSearchProps("ebay_id"),
-      responsive: ["md"],
+     
     },
     {
       title: (
@@ -238,7 +238,7 @@ const Ebay_table = () => {
         return a.ebay_class?.localeCompare(b.ebay_class);
       },
       ...getColumnSearchProps("ebay_class"),
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -355,7 +355,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
-      responsive: ["md"],
+    
     },
     {
       title: (

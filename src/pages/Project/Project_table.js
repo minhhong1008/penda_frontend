@@ -244,7 +244,9 @@ const Project_table = () => {
         return a.project_work?.localeCompare(b.project_work);
       },
       ...getColumnSearchProps("project_work"),
+      responsive: ["md"],
     },
+
     {
       title: "NỘI DUNG",
       dataIndex: "project_content",
@@ -262,6 +264,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_number?.localeCompare(b.project_number);
       },
+      responsive: ["md"],
     },
     {
       title: "PHÂN LOẠI",
@@ -322,6 +325,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_type?.localeCompare(b.project_type);
       },
+      responsive: ["md"],
     },
     {
       title: "TIẾN TRÌNH",
@@ -396,6 +400,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_processing?.localeCompare(b.project_processing);
       },
+      responsive: ["md"],
     },
 
     {
@@ -416,6 +421,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_date_end?.localeCompare(b.project_date_end);
       },
+      responsive: ["md"],
     },
 
     {
@@ -443,6 +449,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_status?.localeCompare(b.project_status);
       },
+      responsive: ["md"],
     },
   ];
 
@@ -578,107 +585,46 @@ const Project_table = () => {
               autoComplete="off"
               form={form}
               initialValues={{ project_status_search: "Bắt đầu" }}
+              responsive={["md"]}
             >
-              <Row
-                gutter={16}
-                style={{ flex: 1, flexDirection: "row", float: "left" }}
-              >
-                <Col
-                  span={4}
-                  style={{ width: "100%", float: "right", flex: 1 }}
+              <Space wrap>
+                <Button type="primary" onClick={() => create()}>
+                  Tạo mới
+                </Button>
+                <Button
+                  icon={<SearchOutlined />}
+                  onClick={() => handleFilter()}
                 >
-                  <Button
-                    style={{
-                      background: "#1890FD",
-                      color: "white",
-                    }}
-                    onClick={() => create()}
-                  >
-                    Tạo mới
-                  </Button>
-                </Col>
+                  Search
+                </Button>
 
-                <Col span={6}>
-                  <Button
-                    icon={<SearchOutlined />}
-                    style={{
-                      background: "#1890FD",
-                      color: "white",
-                    }}
-                    onClick={() => handleFilter()}
-                  >
-                    Search
-                  </Button>
-                </Col>
+                <RangePicker
+                  size="large"
+                  style={{ width: "100%" }}
+                  presets={rangePresets}
+                  defaultValue={[dayjs().add(-30, "d"), dayjs().add(30, "d")]}
+                  onChange={onRangeChange}
+                />
 
-                <Col
-                  span={12}
-                  style={{ width: "100%", float: "right", flex: 1 }}
-                >
-                  <RangePicker
+                <Form.Item label="Trạng thái" name="project_status_search">
+                  <Select
                     size="large"
                     style={{ width: "100%" }}
-                    presets={rangePresets}
-                    defaultValue={[dayjs().add(-15, "d"), dayjs().add(15, "d")]}
-                    onChange={onRangeChange}
-                  />
-                </Col>
-              </Row>
-              <Row
-                gutter={16}
-                style={{ flex: 1, flexDirection: "row", float: "right" }}
-              >
-                <Col span={24} style={{ flex: 1, float: "left" }}>
-                  <Form.Item label="Trạng thái" name="project_status_search">
-                    <Select
-                      size="large"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionlabelprop="label"
-                    >
-                      {listselect_project_status.map((item, index) => {
-                        return (
-                          <Option value={item} label={item} key={index}>
-                            <div className="demo-option-label-item">{item}</div>
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                {/* <Col span={8}>
-                  <Form.Item label="Nhân viên" name="project_employee_search">
-                    <Select
-                      size="large"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionlabelprop="label"
-                    >
-                      <Option>
-                        <div className="demo-option-label-item">AAA</div>
-                      </Option>
-                    </Select>
-                  </Form.Item>
-                </Col> */}
-                {/* <Col span={8}>
-                  <Form.Item label="Hạng mục" name="project_work_item">
-                    <Select
-                      size="large"
-                      style={{ width: "100%" }}
-                      placeholder="select one item"
-                      optionlabelprop="label"
-                    >
-                      {listselect_project_work_item.map((item, index) => {
-                        return (
-                          <Option value={item} label={item} key={index}>
-                            <div className="demo-option-label-item">{item}</div>
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
-                </Col> */}
-              </Row>
+                    placeholder="select one item"
+                    optionlabelprop="label"
+                  >
+                    {listselect_project_status.map((item, index) => {
+                      return (
+                        <Option value={item} label={item} key={index}>
+                          <div className="demo-option-label-item">{item}</div>
+                        </Option>
+                      );
+                    })}
+                  </Select>
+                </Form.Item>
+
+                
+              </Space>
             </Form>
           </div>
         }

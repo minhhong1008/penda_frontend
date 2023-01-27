@@ -236,45 +236,55 @@ const Bill_table = () => {
       render: (text, record, index) => {
         return index + 1;
       },
+      responsive: ["md"],
     },
     {
       title: "Ngày tháng",
       dataIndex: "bill_date",
+      responsive: ["md"],
     },
     {
       title: "Phòng ban",
       dataIndex: "bill_owner",
+      responsive: ["md"],
     },
     {
       title: "Công việc",
       dataIndex: "bill_work",
+      
     },
     {
       title: "Nội dung",
       dataIndex: "bill_content",
+      responsive: ["md"],
     },
     {
       title: "Số lượng",
       dataIndex: "bill_number",
+      responsive: ["md"],
     },
     {
       title: "Giá tiền",
       dataIndex: "bill_price",
       render: (text) => VND.format(text),
+      responsive: ["md"],
     },
     {
       title: "Thành tiền",
       dataIndex: "bill_total",
       render: (text) => VND.format(text),
+      
     },
     {
       title: "Công nợ",
       dataIndex: "bill_debt",
       render: (text) => VND.format(text),
+      responsive: ["md"],
     },
     {
       title: "Thời hạn",
       dataIndex: "bill_expiry_date",
+      responsive: ["md"],
     },
     {
       title: "Tính năng",
@@ -306,6 +316,7 @@ const Bill_table = () => {
           </Button>
         </div>
       ),
+      responsive: ["md"],
     },
   ];
   // Upload ảnh là mục khó nhớ nên để vào 1 chỗ: để upload ảnh cần copy 4 chỗ

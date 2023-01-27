@@ -171,7 +171,7 @@ const Tooldata_info = () => {
                       size="large"
                       initialValues={{
                         //bill_date: dayjs(),
-                        create_collection: ["UPDATE","EBAY"],
+                        //create_collection: ["UPDATE","EBAY"],
                         
                       }}
 

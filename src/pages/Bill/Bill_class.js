@@ -749,7 +749,7 @@ const Bill_class = () => {
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
               <Row gutter={16}>
-                <Col span={12}>
+                <Col className="gutter-row" lg={12} xl={12}>
                   <Card
                     title={
                       <strong
@@ -808,7 +808,7 @@ const Bill_class = () => {
                     />
                   </Card>
                 </Col>
-                <Col span={12}>
+                <Col className="gutter-row" lg={12} xl={12}>
                   <Card
                     title={
                       <strong
@@ -841,7 +841,7 @@ const Bill_class = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="2">
               <Row gutter={16}>
-                <Col span={12}>
+                <Col className="gutter-row" lg={12} xl={12}>
                   <Card
                     title={
                       <strong
@@ -1084,7 +1084,7 @@ const Bill_class = () => {
                     </Form>
                   </Card>
                 </Col>
-                <Col span={12}>
+                <Col className="gutter-row" lg={12} xl={12}>
                   <Card
                     title={
                       <strong

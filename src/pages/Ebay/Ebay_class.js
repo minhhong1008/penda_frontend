@@ -61,6 +61,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "content_complete",
       key: "content_complete",
+      responsive: ["md"],
     },
     {
       title: (
@@ -70,6 +71,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "content_time",
       key: "content_time",
+      responsive: ["md"],
     },
     {
       title: (
@@ -79,6 +81,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "content_kpi",
       key: "content_kpi",
+      responsive: ["md"],
     },
     {
       title: (
@@ -90,6 +93,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "content_check",
       key: "content_check",
+      responsive: ["md"],
     },
     {
       title: (
@@ -101,6 +105,7 @@ const Ebay_class = () => {
       ),
       dataIndex: "content_action",
       key: "content_action",
+      responsive: ["md"],
     },
   ];
   const baseData = [

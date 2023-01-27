@@ -341,7 +341,7 @@ const Users_timesheets = () => {
         type="inner"
         title="BẢNG CHẤM CÔNG"
         width="100%"
-        maxTagCount="responsive"
+        //maxTagCount="responsive"
         extra={
           <div style={{ display: "flex", gap: "8px" }}>
             <DatePicker
@@ -362,7 +362,7 @@ const Users_timesheets = () => {
           style={{
             width: "100%",
           }}
-          maxTagCount="responsive"
+          //maxTagCount="responsive"
         >
           <Tabs.TabPane
             tab="BẢNG CHẤM CÔNG"
@@ -370,17 +370,17 @@ const Users_timesheets = () => {
             style={{
               width: "100%",
             }}
-            maxTagCount="responsive"
+           // maxTagCount="responsive"
           >
             <Card
               type="inner"
               style={{
                 width: "100%",
               }}
-              maxTagCount="responsive"
+             // maxTagCount="responsive"
             >
               <Table
-                maxTagCount="responsive"
+               // maxTagCount="responsive"
                 width="100%"
                 columns={columns}
                 dataSource={data_table_timesheets}
@@ -543,6 +543,7 @@ const handleDateTime = (countDays, year, month) => {
     let dataIndex = i;
     arrDate.push({
       title: i,
+      //responsive: ['md'],
       children: [
         {
           title: dayjs(
@@ -552,6 +553,7 @@ const handleDateTime = (countDays, year, month) => {
           dataIndex: i,
           key: i,
           width: "100%",
+          //responsive: ['md'],
           render: (text) => {
             return (
               <div
@@ -567,6 +569,7 @@ const handleDateTime = (countDays, year, month) => {
           },
         },
       ],
+      
     });
   }
   return arrDate;
