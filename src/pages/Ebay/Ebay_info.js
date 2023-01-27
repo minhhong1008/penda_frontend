@@ -12,10 +12,11 @@ import {
   Select,
   Modal,
   Avatar,
+  Tooltip,
   List,
   Upload,
 } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CopyOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -38,10 +39,7 @@ import {
   HuongDanEbay_info,
 } from "./Ebay_list";
 
-import {
-  getebayInfo,
-  updateebayInfo,
-} from "../../api/ebay/index";
+import { getebayInfo, updateebayInfo } from "../../api/ebay/index";
 import { updateListView } from "../../api/update";
 //upload ảnh
 const getBase64 = (file) =>
@@ -1047,8 +1045,8 @@ const Ebay_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="ebay_image_url">
                       <Upload
-                         multiple
-                          listType="picture-card"
+                        multiple
+                        listType="picture-card"
                         action="http://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}

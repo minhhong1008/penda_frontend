@@ -60,9 +60,86 @@ const Project_info = () => {
   const [listselect_project_employee, setListproject_employee] = useState();
   const [list_project_type, setListproject_type] = useState();
   const [disabled, setDisabled] = useState(false);
+  const [list_project_work, setList_project_work] = useState(
+    listselect_project_work
+  );
+  /* Các hàm liên quan đến thao tác với giao diện
+      Các hàm liên quan đến ngày tháng
+      Các hàm liên quan đến render
+      Các hàm liên quan đếm sự kiện trên giao diện */
+
+  const onChange_project_work_item = (values) => {
+    if (values == "Sản xuất") {
+      form.setFieldValue("project_work", "Tạo tài khoản");
+      setList_project_work([
+        "Xử lý dữ liệu",
+        "Mua tài nguyên",
+        "Tạo tài khoản",
+        "Chăm tài khoản",
+        "Lên seller",
+      ]);
+    }
+    if (values == "Nhân sự") {
+      form.setFieldValue("project_work", "Chức năng & Nhiệm vụ");
+      setList_project_work([
+        "Chức năng & Nhiệm vụ",
+      ]);
+    }
+
+    if (values == "Tài chính") {
+      form.setFieldValue("project_work", "Thanh toán");
+      setList_project_work([
+        "Mua sắm",
+        "Thanh toán",
+      ]);
+    }
+    if (values == "Kinh doanh") {
+      setList_project_work([
+        "Giao việc",
+        "Tài nguyên",
+        "Dữ liệu",
+        "Thiết bị",
+        "Code",
+      ]);
+    }
+    if (values == "Công nghệ") {
+      form.setFieldValue("project_work", "Code");
+      setList_project_work([
+        "Code",
+        "Nghiên cứu",
+      ]);
+    }
+    
+    if (values == "Mục tiêu") {
+      form.setFieldValue("project_work", "Mục tiêu sản xuất");
+      setList_project_work([
+        "Mục tiêu sản xuất",
+        "Mục tiêu tài chính",
+        "Mục tiêu kinh doanh",
+        "Mục tiêu công nghệ",
+        "Mục tiêu nhân sự",
+        "Mục tiêu kế hoạch",
+      ]);
+    }
+
+    if (values == "Kế hoạch") {
+      form.setFieldValue("project_work", "Kế hoạch sản xuất");
+      setList_project_work([
+        "Kế hoạch sản xuất",
+        "Kế hoạch tài chính",
+        "Kế hoạch kinh doanh",
+        "Kế hoạch công nghệ",
+        "Kế hoạch nhân sự",
+      ]);
+    }
+  };
+
+  // Các hàm liên quan đến gọi dữ liệu từ giao diện và gửi dữ liệu lên server
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
-    if(values.project_date_start == null || values.project_date_end == null ){return showError("Có Lỗi, date");}
+    if (values.project_date_start == null || values.project_date_end == null) {
+      return showError("Có Lỗi, date");
+    }
     //Upload ảnh
     let project_file = [];
     fileList?.map((item) => {
@@ -104,7 +181,7 @@ const Project_info = () => {
       showError("Sửa không thành công");
     }
   };
-
+  // Các hàm liên quan đến xử lý dữ liệu từ database về
   // Hàm gọi dữ liệu về từ database
   const getInfoproject = async () => {
     const res = await getprojectInfo(id);
@@ -205,6 +282,7 @@ const Project_info = () => {
       </div>
     </div>
   );
+  // Các hàm xử lý giao diện từ ant.desgin bao gồm columns
 
   return (
     <Card
@@ -274,15 +352,15 @@ const Project_info = () => {
 
                   {/* Trạng thái */}
                   <Row gutter={16}>
-
                     <Col span={8}>
                       <Form.Item label="Trạng thái" name="project_status">
                         <Select
-                          disabled = {
-                            users_name == form.getFieldValue("project_employee_request") ? (
-                              false
-                            ) : true
-                        }
+                          disabled={
+                            users_name ==
+                            form.getFieldValue("project_employee_request")
+                              ? false
+                              : true
+                          }
                           optionlabelprop="label"
                           style={{
                             width: "100%",
@@ -308,6 +386,7 @@ const Project_info = () => {
                       ) !== -1 ? (
                         <Form.Item label="Hạng mục" name="project_work_item">
                           <Select
+                            onChange={onChange_project_work_item}
                             style={{ width: "100%" }}
                             placeholder="select one item"
                             optionlabelprop="label"
@@ -338,7 +417,7 @@ const Project_info = () => {
                             optionlabelprop="label"
                             disabled={disabled}
                           >
-                            {listselect_project_work.map((item, index) => {
+                            {list_project_work.map((item, index) => {
                               return (
                                 <Option value={item} label={item} key={index}>
                                   <div className="demo-option-label-item">
@@ -523,15 +602,15 @@ const Project_info = () => {
                       {/* Đánh giá */}
                       <Form.Item label="Đánh giá" name="project_review">
                         <Rate
-                        disabled = {
-                          users_name == form.getFieldValue("project_employee_request") ? (
-                            false
-                          ) : true
-                      }
+                          disabled={
+                            users_name ==
+                            form.getFieldValue("project_employee_request")
+                              ? false
+                              : true
+                          }
                           tooltips={desc}
                           allowHalf
                           defaultValue={1.5}
-                          
                         />
                       </Form.Item>
                     </Col>
