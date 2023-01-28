@@ -675,7 +675,7 @@ const Ebay_info = () => {
                   size="large"
                 >
                   <Row gutter={[24, 0]}>
-                    <Col xs={6} xl={6} className="mb-24">
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item
                         label="eBay id"
                         name="ebay_id"
@@ -693,12 +693,12 @@ const Ebay_info = () => {
                         <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={10}>
+                    <Col xs={12} xl={10} className="mb-24">
                       <Form.Item label="eBay User" name="ebay_user">
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col xs={8} xl={8} className="mb-24">
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="eBay Pass" name="ebay_password">
                         <Input placeholder="input here" />
                       </Form.Item>
@@ -714,22 +714,22 @@ const Ebay_info = () => {
                   </Row>
 
                   <Row gutter={[24, 0]}>
-                    <Col xs={6} xl={6} className="mb-24">
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="eBay limit" name="ebay_limit">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={6} xl={6} className="mb-24">
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="eBay items" name="ebay_item">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={6} xl={6} className="mb-24">
+                    <Col xs={0} xl={6} className="mb-24">
                       <Form.Item label="eBay Sold" name="ebay_sold">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={6} xl={6} className="mb-24">
+                    <Col xs={0} xl={6} className="mb-24">
                       <Form.Item label="eBay Fb" name="ebay_feedback">
                         <Input placeholder="0" />
                       </Form.Item>
@@ -963,7 +963,7 @@ const Ebay_info = () => {
                   ) : null}
 
                   <Row gutter={[24, 0]}>
-                    <Col xs={8} xl={8} className="mb-24">
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Trạng thái" name="ebay_status">
                         <Select
                           //mode="multiple"
@@ -997,7 +997,7 @@ const Ebay_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={8} xl={8} className="mb-24">
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Lớp eBay" name="ebay_class">
                         <Select
                           //mode="multiple"
@@ -1021,7 +1021,7 @@ const Ebay_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={8} xl={8} className="mb-24">
+                    <Col xs={0} xl={8} className="mb-24">
                       <Form.Item label="Hỗ trợ" name="ebay_support">
                         <Select
                           style={{ width: "100%" }}
