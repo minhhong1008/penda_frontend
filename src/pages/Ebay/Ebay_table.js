@@ -170,8 +170,9 @@ const Ebay_table = () => {
         </Tag>
       ),
       key: "index",
-      fixed: "left",
+      fixed: 'left',
       width: 1,
+      
       render: (text, record, index) => (
         <div
           style={{
@@ -180,7 +181,7 @@ const Ebay_table = () => {
             borderRadius: "8px",
             background: "rgb(35, 198, 200)",
             fontWeight: "bold",
-            color: "white"
+            color: "white",
           }}
           onClick={(e) => {
             e.stopPropagation();
@@ -208,7 +209,6 @@ const Ebay_table = () => {
         return a.ebay_id?.localeCompare(b.ebay_id);
       },
       ...getColumnSearchProps("ebay_id"),
-     
     },
     {
       title: (
@@ -219,6 +219,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_user",
       key: "ebay_user",
       width: 1,
+      
       sorter: (a, b) => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
@@ -234,11 +235,11 @@ const Ebay_table = () => {
       dataIndex: "ebay_class",
       key: "ebay_class",
       width: 1,
+      
       sorter: (a, b) => {
         return a.ebay_class?.localeCompare(b.ebay_class);
       },
       ...getColumnSearchProps("ebay_class"),
-      
     },
     {
       title: (
@@ -250,6 +251,8 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_processing",
       key: "ebay_processing",
+     
+
       render: (record) => {
         let list = record?.split(",");
         return (
@@ -317,7 +320,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
-      responsive: ["md"],
+      responsive: ['md'],
     },
     {
       title: (
@@ -355,7 +358,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
-    
+      responsive: ['md'],
     },
     {
       title: (
@@ -405,6 +408,8 @@ const Ebay_table = () => {
       dataIndex: "ebay_note",
       key: "ebay_note",
       width: 2,
+      fixed: 'right',
+      
       render: (text, record, index) => (
         <div>
           {selectedNote == record._id ? (
@@ -582,6 +587,7 @@ const Ebay_table = () => {
                 columns={columns}
                 dataSource={ebays}
                 rowSelection={rowSelection}
+                
                 pagination={{
                   pageSizeOptions: [
                     "10",

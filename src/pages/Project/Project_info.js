@@ -63,6 +63,7 @@ const Project_info = () => {
   const [list_project_work, setList_project_work] = useState(
     listselect_project_work
   );
+  
   /* Các hàm liên quan đến thao tác với giao diện
       Các hàm liên quan đến ngày tháng
       Các hàm liên quan đến render
@@ -205,11 +206,14 @@ const Project_info = () => {
     //disable input theo điều kiện
     if (users_function == "Giám đốc") {
       setDisabled(false);
+     
     } else {
       if (newData.project_type?.indexOf("Giao việc") !== -1) {
         setDisabled(true);
+       
       }
     }
+    
     form.setFieldsValue(newData);
     setNoteValueActive(data.project_note_active);
     setNoteValueRequest(data.project_note);
@@ -231,6 +235,7 @@ const Project_info = () => {
     }
   };
 
+  
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
     getInfoproject();
@@ -301,8 +306,8 @@ const Project_info = () => {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN KẾ HOẠCH" key="1">
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card
                 title="THÔNG TIN KẾ HOẠCH"
                 style={{ width: "100%", color: "blue" }}
@@ -326,13 +331,13 @@ const Project_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-                  <Row gutter={16}>
-                    <Col span={6}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={0} xl={6} className="mb-24">
                       <Form.Item label="Mã" name="project_id">
                         <Input disabled={true} />
                       </Form.Item>
                     </Col>
-                    <Col span={9}>
+                    <Col xs={12} xl={9} className="mb-24">
                       <Form.Item label="Ngày bắt đầu" name="project_date_start">
                         <DatePicker
                           style={{ float: "right" }}
@@ -340,7 +345,7 @@ const Project_info = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={9}>
+                    <Col xs={12} xl={9} className="mb-24">
                       <Form.Item label="Ngày kết thúc" name="project_date_end">
                         <DatePicker
                           style={{ float: "right" }}
@@ -351,8 +356,8 @@ const Project_info = () => {
                   </Row>
 
                   {/* Trạng thái */}
-                  <Row gutter={16}>
-                    <Col span={8}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={0} xl={8} className="mb-24">
                       <Form.Item label="Trạng thái" name="project_status">
                         <Select
                           disabled={
@@ -379,7 +384,7 @@ const Project_info = () => {
                       </Form.Item>
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       {/* Hạng mục */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -406,7 +411,7 @@ const Project_info = () => {
                       ) : null}
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       {/* Công việc */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -432,8 +437,8 @@ const Project_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={18}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={24} xl={18} className="mb-24">
                       <Form.Item label="Nội dung" name="project_content">
                         <Input
                           placeholder="Nội dung chi tiết công việc maxLength 50"
@@ -442,7 +447,7 @@ const Project_info = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={0} xl={6} className="mb-24">
                       <Form.Item label="Số lượng" name="project_number">
                         <Input
                           placeholder="50"
@@ -487,8 +492,8 @@ const Project_info = () => {
                     </Select>
                   </Form.Item>
 
-                  <Row gutter={16}>
-                    <Col span={16}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={16} xl={16} className="mb-24">
                       {/*  Loại */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -515,7 +520,7 @@ const Project_info = () => {
                       ) : null}
                     </Col>
 
-                    <Col span={8}>
+                    <Col xs={8} xl={8} className="mb-24">
                       {/* Nhân viên */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -542,8 +547,8 @@ const Project_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={8}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={0} xl={8} className="mb-24">
                       {/* Sở hữu */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -570,7 +575,7 @@ const Project_info = () => {
                         </Form.Item>
                       ) : null}
                     </Col>
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       {/* Người giao việc */}
                       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(
                         users_function
@@ -598,7 +603,7 @@ const Project_info = () => {
                         </Form.Item>
                       ) : null}
                     </Col>
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       {/* Đánh giá */}
                       <Form.Item label="Đánh giá" name="project_review">
                         <Rate
@@ -617,7 +622,7 @@ const Project_info = () => {
                   </Row>
 
                   {/* Upload ảnh */}
-                  <Row gutter={16}>
+                  <Row gutter={[24, 0]}>
                     <Form.Item name="project_image_url">
                       <Upload
                         action="http://backend.penda.vn/api/files"
@@ -634,10 +639,10 @@ const Project_info = () => {
                 </Form>
               </Card>
             </Col>
-            <Col span={12}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title="GHI CHÚ">
-                <Row gutter={16}>
-                  <Col span={24}>
+                <Row gutter={[24, 0]}>
+                  <Col xs={24} xl={24} className="mb-24">
                     <Form.Item label="Yêu cầu">
                       <Input.TextArea
                         disabled={disabled}
@@ -649,8 +654,8 @@ const Project_info = () => {
                   </Col>
                 </Row>
 
-                <Row gutter={16}>
-                  <Col span={24}>
+                <Row gutter={[24, 0]}>
+                  <Col xs={24} xl={24} className="mb-24">
                     <Form.Item label="Thực hiện">
                       <Input.TextArea
                         value={noteValue_active}

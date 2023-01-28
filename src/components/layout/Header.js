@@ -39,6 +39,7 @@ import {
   FrownOutlined,
   MehOutlined,
   SmileOutlined,
+  HeartTwoTone,
 } from "@ant-design/icons";
 import dayjs, { now } from "dayjs";
 import { postcheckSessions, postcheckSessions_xl } from "../../api/timeSheet";
@@ -288,12 +289,14 @@ function Header({
       return (
         <div>
           <Tooltip title="TimeSheets" color="gold" key="gold">
-          <Link to="/personnel/users_timesheets">
-            <Spin size="large" onClick={Timesheets} style={{ fontSize: "30px", paddingRight:"20px" }} />
-          </Link>
+            <Link to="/personnel/users_timesheets">
+              <Spin
+                size="large"
+                onClick={Timesheets}
+                style={{ fontSize: "30px", paddingRight: "20px" }}
+              />
+            </Link>
           </Tooltip>
-
-          
         </div>
       );
     }
@@ -496,31 +499,65 @@ function Header({
         {/* <Col span={24} md={6}>
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col> */}
-        <Col span={24} md={4}>
+        <Col xs={24} xl={24} className="mb-24">
           <Tooltip title="HomePage" color="pink" key="pink">
             <Link to="/HomePage">
-              <HomeTwoTone style={{ fontSize: "30px"}} twoToneColor="#eb2f96" />
+              <HomeTwoTone
+                style={{ fontSize: "30px" }}
+                twoToneColor="#eb2f96"
+              />
             </Link>
           </Tooltip>
           <Tooltip title="Products" color="green" key="green">
             <Link to="/products/ebay_class">
-              <AppleOutlined style={{ fontSize: "30px", paddingLeft:"20px" , color: "#08c" }} />
+              <AppleOutlined
+                style={{ fontSize: "30px", paddingLeft: "20px", color: "#08c" }}
+              />
             </Link>
           </Tooltip>
           <Tooltip title="Project" color="blue" key="blue">
             <Link to="/personnel/project_class">
-              <ProjectTwoTone style={{ fontSize: "30px", paddingLeft:"20px" }} twoToneColor="blue" />
+              <ProjectTwoTone
+                style={{ fontSize: "30px", paddingLeft: "20px" }}
+                twoToneColor="blue"
+              />
             </Link>
           </Tooltip>
           <Tooltip title="Finance" color="orange" key="orange">
             <Link to="/finance/bill_class">
-           
-              <DollarTwoTone style={{ fontSize: "30px", paddingLeft:"20px" }} twoToneColor="orange" />
+              <DollarTwoTone
+                style={{ fontSize: "30px", paddingLeft: "20px" }}
+                twoToneColor="orange"
+              />
+            </Link>
+          </Tooltip>
+
+          <Tooltip title="Log-out" color="gold" key="gold">
+            <Link
+              to="/Log-out"
+              className="btn-sign-in"
+              style={{ float: "right" }}
+            >
+              <HeartTwoTone
+                style={{ fontSize: "30px", paddingLeft: "80px" }}
+                twoToneColor="orange"
+              />
+              {user.profile ? user.profile.users_name : ""}
+            </Link>
+          </Tooltip>
+
+          <Tooltip title="TimeSheets" color="gold" key="gold">
+            <Link to="/personnel/users_timesheets" style={{ float: "right" }}>
+              <Spin
+                size="large"
+                onClick={Timesheets}
+                style={{ fontSize: "30px", paddingLeft: "20px" }}
+              />
             </Link>
           </Tooltip>
         </Col>
-       
-        <Col span={24} md={20} className="header-control">
+
+        <Col xs={24} xl={16} className="header-control">
           {/* <Badge size="small" count={4}>
             {<Dropdown overlay={menu} trigger={["click"]}>
               <a
@@ -532,7 +569,7 @@ function Header({
               </a>
             </Dropdown>}
           </Badge> */}
-          <Button type="link" onClick={showDrawer}>
+          {/*  <Button type="link" onClick={showDrawer}>
             {logsetting}
           </Button>
           <Button
@@ -652,7 +689,7 @@ function Header({
                   ) : null}
                   {
                     renderLoading("Minh Hồng")
-                  } */}
+                  } 
                 </div>
               </div>
             </div>
@@ -671,10 +708,8 @@ function Header({
             placeholder="Type here..."
             prefix={<SearchOutlined />}
           />
-          {renderhide_Timesheets()}
+          {renderhide_xyly()} */}
         </Col>
-        
-        {/*  {renderhide_xyly()} */}
       </Row>
     </>
   );

@@ -653,8 +653,8 @@ const Ebay_info = () => {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card
                 title={
                   <strong
@@ -674,8 +674,8 @@ const Ebay_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-                  <Row gutter={16}>
-                    <Col span={6}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={6} xl={6} className="mb-24">
                       <Form.Item
                         label="eBay id"
                         name="ebay_id"
@@ -698,38 +698,38 @@ const Ebay_info = () => {
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={8} xl={8} className="mb-24">
                       <Form.Item label="eBay Pass" name="ebay_password">
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={24}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={24} xl={24} className="mb-24">
                       <Form.Item label="eBay chi tiết" name="ebay_detail">
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={6}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={6} xl={6} className="mb-24">
                       <Form.Item label="eBay limit" name="ebay_limit">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={6} xl={6} className="mb-24">
                       <Form.Item label="eBay items" name="ebay_item">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={6} xl={6} className="mb-24">
                       <Form.Item label="eBay Sold" name="ebay_sold">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={6} xl={6} className="mb-24">
                       <Form.Item label="eBay Fb" name="ebay_feedback">
                         <Input placeholder="0" />
                       </Form.Item>
@@ -962,8 +962,8 @@ const Ebay_info = () => {
                     </Form.Item>
                   ) : null}
 
-                  <Row gutter={16}>
-                    <Col span={8}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={8} xl={8} className="mb-24">
                       <Form.Item label="Trạng thái" name="ebay_status">
                         <Select
                           //mode="multiple"
@@ -997,7 +997,7 @@ const Ebay_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={8} xl={8} className="mb-24">
                       <Form.Item label="Lớp eBay" name="ebay_class">
                         <Select
                           //mode="multiple"
@@ -1021,7 +1021,7 @@ const Ebay_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={8} xl={8} className="mb-24">
                       <Form.Item label="Hỗ trợ" name="ebay_support">
                         <Select
                           style={{ width: "100%" }}
@@ -1042,7 +1042,7 @@ const Ebay_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
+                  <Row gutter={[24, 0]}>
                     <Form.Item name="ebay_image_url">
                       <Upload
                         multiple
@@ -1060,7 +1060,7 @@ const Ebay_info = () => {
               </Card>
             </Col>
 
-            <Col span={12}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card
                 title={
                   <strong
@@ -1148,8 +1148,8 @@ const Ebay_info = () => {
                                 </a>
                               </div>
 
-                              <Row gutter={16} style={{ width: "100%" }}>
-                                <Col span={4}>
+                              <Row gutter={[24, 0]} style={{ width: "100%" }}>
+                                <Col xs={12} xl={4} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       openModalListView(
@@ -1165,7 +1165,7 @@ const Ebay_info = () => {
                                     <Input disabled />
                                   </Form.Item>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={12} xl={6} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1187,7 +1187,7 @@ const Ebay_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={0} xl={6} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1209,7 +1209,7 @@ const Ebay_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col span={4}>
+                                <Col xs={0} xl={4} className="mb-24">
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1248,7 +1248,7 @@ const Ebay_info = () => {
                                     )}
                                   </Select>
                                 </Col>
-                                <Col span={4}>
+                                <Col xs={0} xl={4} className="mb-24">
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1302,8 +1302,8 @@ const Ebay_info = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
@@ -1312,10 +1312,10 @@ const Ebay_info = () => {
                   initialValues={dateData}
                   size="large"
                 >
-                  <Row gutter={16}>
+                  <Row gutter={[24, 0]}>
                     {tablelist_ebay_Date.map((item, index) => {
                       return (
-                        <Col key={index} span={8}>
+                        <Col key={index} xs={8} xl={8} className="mb-24">
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
@@ -1331,10 +1331,10 @@ const Ebay_info = () => {
               </Card>
             </Col>
 
-            <Col span={12}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col xs={24} xl={24} className="mb-24">
                     <Input.TextArea
                       value={noteValue}
                       rows={4}

@@ -111,10 +111,7 @@ const Users_timesheets = () => {
       .format("YYYY-MM-DD");
     // Đăng ký của nhân viên
     if (values.working_date >= date_end) {
-      if (
-        values.working_edit == "Tạo ca" ||
-        values.working_edit == "Xóa ca"
-      ) {
+      if (values.working_edit == "Tạo ca" || values.working_edit == "Xóa ca") {
         try {
           let working_employee = "";
           if (["Giám đốc", "Trưởng phòng"].indexOf(users_function) !== -1) {
@@ -234,7 +231,7 @@ const Users_timesheets = () => {
             session?.working_verify == "Bs" ||
             session?.working_verify == "Bc" ||
             session?.working_verify == "Bt" ||
-            session?.working_verify == "ps"||
+            session?.working_verify == "ps" ||
             session?.working_verify == "pc" ||
             session?.working_verify == "pt"
           ) {
@@ -245,25 +242,25 @@ const Users_timesheets = () => {
             session?.working_verify == "Bs" ||
             session?.working_verify == "Bc" ||
             session?.working_verify == "Bt" ||
-            session?.working_verify == "S"||
+            session?.working_verify == "S" ||
             session?.working_verify == "C" ||
             session?.working_verify == "T"
           ) {
             total_verrify++;
           }
           // Tính ngày nghỉ không xin phép
-          if (dayjs(session?.working_date).format("YYYY-MM-DD") < dayjs().format("YYYY-MM-DD") &&
+          if (
+            dayjs(session?.working_date).format("YYYY-MM-DD") <
+              dayjs().format("YYYY-MM-DD") &&
             session?.working_session != "" &&
             session?.working_verify == ""
           ) {
             total_n++;
           }
-
         });
 
         session_obj["total"] = item.sessions?.length;
-        verify_obj["total"] =
-        total_verrify - 0.25 * total_check - 2 * total_n;
+        verify_obj["total"] = total_verrify - 0.25 * total_check - 2 * total_n;
 
         newData.push(session_obj);
         newData.push(verify_obj);
@@ -362,6 +359,7 @@ const Users_timesheets = () => {
           style={{
             width: "100%",
           }}
+
           //maxTagCount="responsive"
         >
           <Tabs.TabPane
@@ -370,41 +368,41 @@ const Users_timesheets = () => {
             style={{
               width: "100%",
             }}
-           // maxTagCount="responsive"
+            // maxTagCount="responsive"
           >
             <Card
               type="inner"
               style={{
                 width: "100%",
               }}
-             // maxTagCount="responsive"
+             
+              // 
             >
-              <Table
-               // maxTagCount="responsive"
-                width="100%"
-                columns={columns}
-                dataSource={data_table_timesheets}
-                bordered
-                size="small"
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "200",
-                    "300",
-                    "500",
-                    "1000",
-                    "2000",
-                  ],
-                  position: ["bottomRight"],
-                  size: "large",
-                  showSizeChanger: true,
-                  defaultPageSize: 100,
-                }}
-              />
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={24} className="mb-24">
+                  <Table
+                    width="100%"
+                    columns={columns}
+                    dataSource={data_table_timesheets}
+                    bordered
+                    size="small"
+                    pagination={{
+                      pageSizeOptions: [
+                        "100",
+                        "200",
+                        "300",
+                        "500",
+                        "1000",
+                        "2000",
+                      ],
+                      position: ["bottomRight"],
+                      size: "small",
+                      showSizeChanger: true,
+                      defaultPageSize: 100,
+                    }}
+                  />
+                </Col>
+              </Row>
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="HƯỚNG DẪN" key="2">
@@ -412,6 +410,7 @@ const Users_timesheets = () => {
           </Tabs.TabPane>
         </Tabs>
       </Card>
+
       <Modal
         title="Đăng ký ca làm việc"
         open={isModalOpen}
@@ -569,7 +568,6 @@ const handleDateTime = (countDays, year, month) => {
           },
         },
       ],
-      
     });
   }
   return arrDate;

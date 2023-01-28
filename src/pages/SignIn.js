@@ -145,7 +145,7 @@ const SignIn = () => {
             </Col>
           </Row>
         </Content>
-        <Footer>
+        {/* <Footer>
           <Menu mode="horizontal">
             <Menu.Item>Company</Menu.Item>
             <Menu.Item>About Us</Menu.Item>
@@ -180,7 +180,7 @@ const SignIn = () => {
               <Link to="#">{<GithubOutlined />}</Link>
             </Menu.Item>
           </Menu>
-        </Footer>
+        </Footer> */}
       </Layout>
     </Spin>
   );

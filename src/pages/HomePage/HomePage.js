@@ -14,13 +14,13 @@ const HomePage = () => {
   };
   return (
     <div>
-      <Row gutter={4}>
-        <Col className="gutter-row" lg={12} xl={6}>
+      <Row gutter={[24, 0]} >
+        <Col xs={12} xl={6} className="mb-24">
           <div>
             <Card
               onClick={() => handleClick("/company")}
               hoverable
-              style={{ width: 240 }}
+              style={{ width: 200 }}
               cover={
                 <img
                   alt="example"
@@ -37,12 +37,12 @@ const HomePage = () => {
         </Col>
 
         {new_users_owner?.indexOf("Phòng sản xuất") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
                 onClick={() => handleClick("/products")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -60,12 +60,12 @@ const HomePage = () => {
         ) : null}
 
         {new_users_owner?.indexOf("Phòng Kinh doanh") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24" >
             <div>
               <Card
                 onClick={() => handleClick("/business")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -82,13 +82,13 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Phòng hành chính nhân sự") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24" >
             <div>
               <Card
               
                 onClick={() =>  handleClick("/personnel")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -108,14 +108,14 @@ const HomePage = () => {
 
       <br></br>
       <br></br>
-      <Row gutter={4}>
+      <Row gutter={[24, 0]}>
         {new_users_owner?.indexOf("Phòng kế toán quản trị") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
                onClick={() =>  handleClick("/finance")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -132,12 +132,12 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Ban kiểm soát") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
               onClick={() =>  handleClick("/control")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -154,12 +154,12 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Phòng kế hoạch") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
               onClick={() =>  handleClick("/plan")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"
@@ -176,12 +176,12 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Phòng phục hồi") !== -1 ? (
-          <Col className="gutter-row" lg={12} xl={6}>
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
               onClick={() =>  handleClick("/repair")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 200 }}
                 cover={
                   <img
                     alt="example"

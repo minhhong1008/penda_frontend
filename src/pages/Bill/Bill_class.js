@@ -217,6 +217,7 @@ const Bill_class = () => {
     {
       title: "Tỷ trọng",
       dataIndex: "bill_density_suggest_pay",
+      responsive: ["md"],
     },
   ];
   const [data_suggest_pay, setDataSuggestPay] = useState();
@@ -249,6 +250,7 @@ const Bill_class = () => {
     {
       title: "Tỷ trọng",
       dataIndex: "bill_density_suggest_collect",
+      responsive: ["md"],
     },
   ];
   const [data_suggest_collect, setDataSuggestCollect] = useState();
@@ -282,6 +284,7 @@ const Bill_class = () => {
     {
       title: "Tỷ trọng",
       dataIndex: "bill_density_pay",
+      responsive: ["md"],
     },
   ];
   const [data_pay, setDataPay] = useState();
@@ -314,6 +317,7 @@ const Bill_class = () => {
     {
       title: "Tỷ trọng",
       dataIndex: "bill_density_collect",
+      responsive: ["md"],
     },
   ];
   const [data_collect, setDataCollect] = useState();
@@ -748,8 +752,9 @@ const Bill_class = () => {
         <Card>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
-              <Row gutter={16}>
-                <Col className="gutter-row" lg={12} xl={12}>
+
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card
                     title={
                       <strong
@@ -762,8 +767,8 @@ const Bill_class = () => {
                     }
                     extra={
                       <>
-                        <Row gutter={16}>
-                          <Col span={16}>
+                        <Row gutter={[24, 0]}>
+                          <Col xs={16} xl={16} className="mb-24">
                             <RangePicker
                               size="large"
                               presets={rangePresets}
@@ -774,7 +779,7 @@ const Bill_class = () => {
                               ]}
                             />
                           </Col>
-                          <Col span={8}>
+                          <Col xs={8} xl={8} className="mb-24">
                             <Button
                               style={{
                                 background: "#18a689",
@@ -808,7 +813,7 @@ const Bill_class = () => {
                     />
                   </Card>
                 </Col>
-                <Col className="gutter-row" lg={12} xl={12}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card
                     title={
                       <strong
@@ -840,8 +845,8 @@ const Bill_class = () => {
               </Row>
             </Tabs.TabPane>
             <Tabs.TabPane tab="TẠO HÓA ĐƠN" key="2">
-              <Row gutter={16}>
-                <Col className="gutter-row" lg={12} xl={12}>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card
                     title={
                       <strong
@@ -885,8 +890,8 @@ const Bill_class = () => {
                         bill_debt: "0",
                       }}
                     >
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col  xs={8} xl={8} className="mb-24">
                           <Form.Item label="Ngày tháng" name="bill_date">
                             <DatePicker
                               style={{ float: "right" }}
@@ -895,7 +900,7 @@ const Bill_class = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Hạng mục" name="bill_type">
                             <Select
                               optionlabelprop="label"
@@ -914,7 +919,7 @@ const Bill_class = () => {
                             </Select>
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Hành động" name="bill_action">
                             <Select optionlabelprop="label">
                               <Option value="Đề xuất" label="Đề xuất">
@@ -931,8 +936,8 @@ const Bill_class = () => {
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Phòng ban" name="bill_owner">
                             <Select optionlabelprop="label">
                               {listselect_bill_owner.map((item, index) => {
@@ -947,7 +952,7 @@ const Bill_class = () => {
                             </Select>
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Nhân viên" name="bill_employee">
                             <Select
                               style={{ width: "100%" }}
@@ -968,7 +973,7 @@ const Bill_class = () => {
                           </Form.Item>
                         </Col>
 
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="NCC" name="bill_supplier">
                             <Mentions
                               style={{
@@ -990,8 +995,8 @@ const Bill_class = () => {
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item
                             label="Điện thoại"
                             name="bill_contact_phone"
@@ -999,19 +1004,19 @@ const Bill_class = () => {
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Web" name="bill_contact_social1">
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Social" name="bill_contact_social2">
                             <Input />
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Thanh toán" name="bill_payment">
                             <InputNumber
                               style={{
@@ -1031,7 +1036,7 @@ const Bill_class = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Công nợ" name="bill_debt">
                             <InputNumber
                               style={{
@@ -1050,7 +1055,7 @@ const Bill_class = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={8} xl={8} className="mb-24">
                           <Form.Item label="Thời hạn" name="bill_expiry_date">
                             <DatePicker
                               style={{ float: "right" }}
@@ -1060,14 +1065,14 @@ const Bill_class = () => {
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         <Col span={24}>
                           <Form.Item label="Ghi chú" name="bill_note">
                             <Input placeholder="input here" />
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         <Form.Item name="bill_image_url">
                           <Upload
                             multiple
@@ -1084,7 +1089,7 @@ const Bill_class = () => {
                     </Form>
                   </Card>
                 </Col>
-                <Col className="gutter-row" lg={12} xl={12}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card
                     title={
                       <strong
@@ -1108,7 +1113,7 @@ const Bill_class = () => {
                         bill_total: "0",
                       }}
                     >
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         <Col span={12}>
                           <Form.Item label="Công việc" name="bill_work">
                             <Select optionlabelprop="label">
@@ -1131,7 +1136,7 @@ const Bill_class = () => {
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         <Col span={6}>
                           <Form.Item label="Số lượng" name="bill_number">
                             <InputNumber
@@ -1224,6 +1229,7 @@ const Bill_class = () => {
             title={previewTitle}
             footer={null}
             onCancel={handleCancel}
+           
           >
             <img alt="example" style={{ width: "100%" }} src={previewImage} />
           </Modal>

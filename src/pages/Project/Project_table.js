@@ -202,13 +202,14 @@ const Project_table = () => {
       key: "index",
       width: 1,
       render: (text, record, index) => index + 1,
+      responsive: ["md"],
     },
     {
       title: "HẠNG MỤC",
       dataIndex: "project_work_item",
       key: "project_work_item",
       width: 1,
-
+      responsive: ["md"],
       render: (text) => {
         if (text == "Kế hoạch") {
           return (
@@ -588,42 +589,53 @@ const Project_table = () => {
               responsive={["md"]}
             >
               <Space wrap>
-                <Button type="primary" onClick={() => create()}>
-                  Tạo mới
-                </Button>
-                <Button
-                  icon={<SearchOutlined />}
-                  onClick={() => handleFilter()}
-                >
-                  Search
-                </Button>
-
-                <RangePicker
-                  size="large"
-                  style={{ width: "100%" }}
-                  presets={rangePresets}
-                  defaultValue={[dayjs().add(-30, "d"), dayjs().add(30, "d")]}
-                  onChange={onRangeChange}
-                />
-
-                <Form.Item label="Trạng thái" name="project_status_search">
-                  <Select
-                    size="large"
-                    style={{ width: "100%" }}
-                    placeholder="select one item"
-                    optionlabelprop="label"
-                  >
-                    {listselect_project_status.map((item, index) => {
-                      return (
-                        <Option value={item} label={item} key={index}>
-                          <div className="demo-option-label-item">{item}</div>
-                        </Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-
-                
+                <Row gutter={[24, 0]}>
+                  <Col xs={6} xl={4} className="mb-24">
+                    <Button type="primary" onClick={() => create()}>
+                      Tạo mới
+                    </Button>
+                  </Col>
+                  <Col xs={6} xl={4} className="mb-24">
+                    <Button
+                      icon={<SearchOutlined />}
+                      onClick={() => handleFilter()}
+                    >
+                      Search
+                    </Button>
+                  </Col>
+                  <Col xs={12} xl={10} className="mb-24">
+                    <RangePicker
+                      size="large"
+                      style={{ width: "100%" }}
+                      presets={rangePresets}
+                      defaultValue={[
+                        dayjs().add(-30, "d"),
+                        dayjs().add(30, "d"),
+                      ]}
+                      onChange={onRangeChange}
+                    />
+                  </Col>
+                  <Col xs={0} xl={6} className="mb-24">
+                    <Form.Item label="Trạng thái" name="project_status_search">
+                      <Select
+                        size="large"
+                        style={{ width: "100%" }}
+                        placeholder="select one item"
+                        optionlabelprop="label"
+                      >
+                        {listselect_project_status.map((item, index) => {
+                          return (
+                            <Option value={item} label={item} key={index}>
+                              <div className="demo-option-label-item">
+                                {item}
+                              </div>
+                            </Option>
+                          );
+                        })}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
               </Space>
             </Form>
           </div>
