@@ -170,9 +170,9 @@ const Ebay_table = () => {
         </Tag>
       ),
       key: "index",
-      fixed: 'left',
+      fixed: "left",
       width: 1,
-      
+
       render: (text, record, index) => (
         <div
           style={{
@@ -219,7 +219,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_user",
       key: "ebay_user",
       width: 1,
-      
+
       sorter: (a, b) => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
@@ -235,7 +235,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_class",
       key: "ebay_class",
       width: 1,
-      
+
       sorter: (a, b) => {
         return a.ebay_class?.localeCompare(b.ebay_class);
       },
@@ -251,12 +251,17 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_processing",
       key: "ebay_processing",
-     
 
       render: (record) => {
         let list = record?.split(",");
         return (
-          <div style={{ display: "flex", gap: "8px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              
+            }}
+          >
             {list?.map((item) => {
               if (item == "Buyer" || item == "Seller") {
                 return (
@@ -320,7 +325,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: (
@@ -358,7 +363,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
-      responsive: ['md'],
+      responsive: ["md"],
     },
     {
       title: (
@@ -408,8 +413,8 @@ const Ebay_table = () => {
       dataIndex: "ebay_note",
       key: "ebay_note",
       width: 2,
-      fixed: 'right',
-      
+      fixed: "right",
+
       render: (text, record, index) => (
         <div>
           {selectedNote == record._id ? (
@@ -587,7 +592,6 @@ const Ebay_table = () => {
                 columns={columns}
                 dataSource={ebays}
                 rowSelection={rowSelection}
-                
                 pagination={{
                   pageSizeOptions: [
                     "10",

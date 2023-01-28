@@ -61,6 +61,16 @@ const getBase64 = (file) =>
 const Bill_class = () => {
   const [content, setContent] = useState("abc");
   const { Option } = Select;
+  const month = dayjs().format("MM");
+  const year = dayjs().format("YYYY");
+  const countDay_last = dayjs(
+    year + "-" + (parseInt(month) -1) + "-" + "01"
+  ).daysInMonth();
+  const countDay = dayjs().daysInMonth();
+  const countDay_next = dayjs(
+    year + "-" + (parseInt(month) + 1) + "-" + "01"
+  ).daysInMonth();
+
   const dispatch = useDispatch();
   const history = useHistory();
   const { users_function, users_name } = useSelector((state) => state.auth);
@@ -79,6 +89,27 @@ const Bill_class = () => {
     {
       label: "Default",
       value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
+    },
+    {
+      label: "Tháng trước",
+      value: [
+        dayjs(year + "-" + (parseInt(month) - 1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month) - 1) + "-" + countDay_last),
+      ],
+    },
+    {
+      label: "Tháng này",
+      value: [
+        dayjs(year + "-" + month + "-" + "01"),
+        dayjs(year + "-" + month + "-" + countDay),
+      ],
+    },
+    {
+      label: "Tháng sau",
+      value: [
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + countDay_next),
+      ],
     },
     {
       label: "Last 30 Days",
@@ -193,10 +224,12 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
+     width: 30,
     },
     {
       title: "Công việc",
       dataIndex: "bill_work_suggest_pay",
+      ellipsis: true,
       render: (text) => (
         <a
           onClick={() =>
@@ -226,10 +259,12 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
+      width: 30,
     },
     {
       title: "Công việc",
       dataIndex: "bill_work_suggest_collect",
+      ellipsis: true,
       render: (text) => (
         <a
           onClick={() =>
@@ -260,10 +295,12 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
+     width: 30,
     },
     {
       title: "Công việc",
       dataIndex: "bill_work_pay",
+      ellipsis: true,
       render: (text) => (
         <a
           onClick={() =>
@@ -279,6 +316,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_pay",
+      ellipsis: true,
       render: (text) => VND.format(text),
     },
     {
@@ -293,10 +331,12 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
+     width: 30,
     },
     {
       title: "Công việc",
       dataIndex: "bill_work_collect",
+      ellipsis: true,
       render: (text) => (
         <a
           onClick={() =>
@@ -312,6 +352,7 @@ const Bill_class = () => {
     {
       title: "Số tiền",
       dataIndex: "bill_total_collect",
+      ellipsis: true,
       render: (text) => VND.format(text),
     },
     {

@@ -20,7 +20,7 @@ const HomePage = () => {
             <Card
               onClick={() => handleClick("/company")}
               hoverable
-              style={{ width: 200 }}
+              style={{  width: "100%" }}
               cover={
                 <img
                   alt="example"
@@ -42,7 +42,7 @@ const HomePage = () => {
               <Card
                 onClick={() => handleClick("/products")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -65,7 +65,7 @@ const HomePage = () => {
               <Card
                 onClick={() => handleClick("/business")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -88,7 +88,7 @@ const HomePage = () => {
               
                 onClick={() =>  handleClick("/personnel")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -115,7 +115,7 @@ const HomePage = () => {
               <Card
                onClick={() =>  handleClick("/finance")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -137,7 +137,7 @@ const HomePage = () => {
               <Card
               onClick={() =>  handleClick("/control")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -159,7 +159,7 @@ const HomePage = () => {
               <Card
               onClick={() =>  handleClick("/plan")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -181,7 +181,7 @@ const HomePage = () => {
               <Card
               onClick={() =>  handleClick("/repair")}
                 hoverable
-                style={{ width: 200 }}
+                style={{  width: "100%" }}
                 cover={
                   <img
                     alt="example"

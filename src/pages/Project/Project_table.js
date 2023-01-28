@@ -118,26 +118,7 @@ const Project_table = () => {
           }}
         />
         <Space>
-          {/* <Button
-          type="primary"
-          onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          icon={<SearchOutlined />}
-          size="small"
-          style={{
-            width: 90,
-          }}
-        >
-          Search
-        </Button>
-        <Button
-          onClick={() => clearFilters && handleReset(clearFilters)}
-          size="small"
-          style={{
-            width: 90,
-          }}
-        >
-          Reset
-        </Button> */}
+          
           <Button
             type="link"
             size="small"
@@ -231,7 +212,6 @@ const Project_table = () => {
           return <> {text}</>;
         }
       },
-
       sorter: (a, b) => {
         return a.project_work_item?.localeCompare(b.project_work_item);
       },
@@ -253,6 +233,7 @@ const Project_table = () => {
       dataIndex: "project_content",
       key: "project_content",
       width: 3,
+      
       sorter: (a, b) => {
         return a.project_content?.localeCompare(b.project_content);
       },

@@ -499,8 +499,8 @@ function Header({
         {/* <Col span={24} md={6}>
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col> */}
-        <Col xs={24} xl={24} className="mb-24">
-          <Tooltip title="HomePage" color="pink" key="pink">
+        <Col xs={14} xl={14} className="mb-24">
+        <Tooltip title="HomePage" color="pink" key="pink">
             <Link to="/HomePage">
               <HomeTwoTone
                 style={{ fontSize: "30px" }}
@@ -531,30 +531,35 @@ function Header({
               />
             </Link>
           </Tooltip>
+        </Col>
+        <Col xs={10} xl={10} className="mb-24">
+        
+          <Tooltip title="TimeSheets" color="gold" key="gold">
+            <Link to="/personnel/users_timesheets">
+              <Spin
+                size="large"
+                onClick={Timesheets}
+                style={{ fontSize: "30px"}}
+              />
+             
+            </Link>
+          </Tooltip>
 
           <Tooltip title="Log-out" color="gold" key="gold">
             <Link
               to="/Log-out"
               className="btn-sign-in"
               style={{ float: "right" }}
-            >
+            >{user.profile ? user.profile.users_name : ""}
               <HeartTwoTone
-                style={{ fontSize: "30px", paddingLeft: "80px" }}
+                style={{ fontSize: "30px",  }}
                 twoToneColor="orange"
               />
-              {user.profile ? user.profile.users_name : ""}
+               
             </Link>
           </Tooltip>
 
-          <Tooltip title="TimeSheets" color="gold" key="gold">
-            <Link to="/personnel/users_timesheets" style={{ float: "right" }}>
-              <Spin
-                size="large"
-                onClick={Timesheets}
-                style={{ fontSize: "30px", paddingLeft: "20px" }}
-              />
-            </Link>
-          </Tooltip>
+          
         </Col>
 
         <Col xs={24} xl={16} className="header-control">

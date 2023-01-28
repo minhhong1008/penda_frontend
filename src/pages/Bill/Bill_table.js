@@ -55,7 +55,18 @@ import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
 const Bill_table = () => {
   // Khai báo kho dữ liệu của andt.desin đầu tiên
   const { Option } = Select;
+  
   const { RangePicker } = DatePicker;
+  const month = dayjs().format("MM");
+  const year = dayjs().format("YYYY");
+  const countDay_last = dayjs(
+    year + "-" + (parseInt(month) -1) + "-" + "01"
+  ).daysInMonth();
+  const countDay = dayjs().daysInMonth();
+  const countDay_next = dayjs(
+    year + "-" + (parseInt(month) + 1) + "-" + "01"
+  ).daysInMonth();
+  
   let { status } = useParams();
   // Khai báo kho dữ liệu lấy từ file dùng chung
   const dispatch = useDispatch();
@@ -77,6 +88,27 @@ const Bill_table = () => {
     {
       label: "Default",
       value: [dayjs().add(-30, "d"), dayjs().add(30, "d")],
+    },
+    {
+      label: "Tháng trước",
+      value: [
+        dayjs(year + "-" + (parseInt(month) - 1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month) - 1) + "-" + countDay_last),
+      ],
+    },
+    {
+      label: "Tháng này",
+      value: [
+        dayjs(year + "-" + month + "-" + "01"),
+        dayjs(year + "-" + month + "-" + countDay),
+      ],
+    },
+    {
+      label: "Tháng sau",
+      value: [
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + "01"),
+        dayjs(year + "-" + (parseInt(month) + 1) + "-" + countDay_next),
+      ],
     },
     {
       label: "Last 30 Days",
@@ -233,6 +265,7 @@ const Bill_table = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
+      width: 50,
       render: (text, record, index) => {
         return index + 1;
       },
@@ -251,12 +284,13 @@ const Bill_table = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work",
-      
+      ellipsis: true,
     },
     {
       title: "Nội dung",
       dataIndex: "bill_content",
       responsive: ["md"],
+      ellipsis: true,
     },
     {
       title: "Số lượng",
@@ -273,7 +307,7 @@ const Bill_table = () => {
       title: "Thành tiền",
       dataIndex: "bill_total",
       render: (text) => VND.format(text),
-      
+      ellipsis: true,
     },
     {
       title: "Công nợ",
@@ -316,7 +350,7 @@ const Bill_table = () => {
           </Button>
         </div>
       ),
-      responsive: ["md"],
+      ellipsis: true,
     },
   ];
   // Upload ảnh là mục khó nhớ nên để vào 1 chỗ: để upload ảnh cần copy 4 chỗ
@@ -360,8 +394,8 @@ const Bill_table = () => {
         <Card>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="BÁO CÁO CHI TIẾT" key="1">
-              <Row gutter={16}>
-                <Col span={24}>
+              <Row  gutter={[24, 0]}>
+                <Col xs={24} xl={24} className="mb-24">
                   <Card
                     title={
                       <strong
@@ -376,8 +410,8 @@ const Bill_table = () => {
                     }
                     extra={
                       <>
-                        <Row gutter={16}>
-                          <Col span={16}>
+                        <Row  gutter={[24, 0]}>
+                          <Col xs={16} xl={16} className="mb-24">
                             <RangePicker
                               size="large"
                               presets={rangePresets_date_start}
@@ -388,7 +422,7 @@ const Bill_table = () => {
                               onChange={onChange_date_start}
                             />
                           </Col>
-                          <Col span={8}>
+                          <Col xs={12} xl={8} className="mb-24">
                             <Button
                               style={{
                                 background: "#1890FD",
@@ -424,8 +458,8 @@ const Bill_table = () => {
             onCancel={onClose}
             onOk={() => form.submit()}
           >
-            <Row gutter={16}>
-              <Col span={12}>
+            <Row  gutter={[24, 0]} >
+              <Col xs={24} xl={12} className="mb-24">
                 <Card
                   title={
                     <strong
@@ -445,13 +479,13 @@ const Bill_table = () => {
                     onFinish={onFinish}
                     initialValues={data_Bill_info}
                   >
-                    <Row gutter={16}>
-                      <Col span={8}>
+                    <Row  gutter={[24, 0]}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Ngày tháng" name="bill_date">
                           <DatePicker style={{ float: "right" }} />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Hạng mục" name="bill_type">
                           <Select
                             optionlabelprop="label"
@@ -470,7 +504,7 @@ const Bill_table = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Hành động" name="bill_action">
                           <Select optionlabelprop="label">
                             <Option value="Đề xuất" label="Đề xuất">
@@ -487,8 +521,8 @@ const Bill_table = () => {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={16}>
-                      <Col span={8}>
+                    <Row  gutter={[24, 0]}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Phòng ban" name="bill_owner">
                           <Select optionlabelprop="label">
                             {listselect_bill_owner.map((item, index) => {
@@ -503,7 +537,7 @@ const Bill_table = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Nhân viên" name="bill_employee">
                           <Select
                             style={{ width: "100%" }}
@@ -523,30 +557,30 @@ const Bill_table = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="NCC" name="bill_supplier">
                           <Input placeholder="Antidetect" />
                         </Form.Item>
                       </Col>
                     </Row>
 
-                    <Row gutter={16}>
-                      <Col span={8}>
+                    <Row  gutter={[24, 0]}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Điện thoại" name="bill_contact_phone">
                           <Input placeholder="antidetect.online" />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Web" name="bill_contact_social1">
                           <Input />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Social" name="bill_contact_social2">
                           <Input />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Thanh toán" name="bill_payment">
                           <InputNumber
                             style={{
@@ -561,7 +595,7 @@ const Bill_table = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Công nợ" name="bill_debt">
                           <InputNumber
                             style={{
@@ -574,20 +608,20 @@ const Bill_table = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={8}>
+                      <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Thời hạn" name="bill_expiry_date">
                           <DatePicker style={{ float: "right" }} />
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={16}>
+                    <Row  gutter={[24, 0]}>
                       <Col span={24}>
                         <Form.Item label="Ghi chú" name="bill_note">
                           <Input placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row gutter={16}>
+                    <Row  gutter={[24, 0]}>
                       <Form.Item name="bill_image_url">
                         <Upload
                           multiple
@@ -604,7 +638,7 @@ const Bill_table = () => {
                   </Form>
                 </Card>
               </Col>
-              <Col span={12}>
+              <Col xs={24} xl={12} className="mb-24">
                 <Card
                   title={
                     <strong
@@ -623,8 +657,8 @@ const Bill_table = () => {
                     autoComplete="off"
                     size="large"
                   >
-                    <Row gutter={16}>
-                      <Col span={12}>
+                    <Row  gutter={[24, 0]}>
+                      <Col xs={24} xl={12} className="mb-24">
                         <Form.Item label="Công việc" name="bill_work">
                           <Select optionlabelprop="label">
                             {lists_bill_work.map((item, index) => {
@@ -639,15 +673,15 @@ const Bill_table = () => {
                           </Select>
                         </Form.Item>
                       </Col>
-                      <Col span={12}>
+                      <Col xs={24} xl={12} className="mb-24">
                         <Form.Item label="Nội dung" name="bill_content">
                           <Input placeholder="Mua key tháng 12" />
                         </Form.Item>
                       </Col>
                     </Row>
 
-                    <Row gutter={16}>
-                      <Col span={6}>
+                    <Row  gutter={[24, 0]}>
+                      <Col xs={12} xl={6} className="mb-24">
                         <Form.Item label="Số lượng" name="bill_number">
                           <InputNumber
                             size="large"
@@ -656,7 +690,7 @@ const Bill_table = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={9}>
+                      <Col xs={12} xl={9} className="mb-24">
                         <Form.Item label="Giá tiền" name="bill_price">
                           <InputNumber
                             style={{
@@ -672,7 +706,7 @@ const Bill_table = () => {
                           />
                         </Form.Item>
                       </Col>
-                      <Col span={9}>
+                      <Col xs={12} xl={9} className="mb-24">
                         <Form.Item label="Thành tiền" name="bill_total">
                           <InputNumber
                             style={{
