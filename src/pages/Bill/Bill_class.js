@@ -1137,7 +1137,7 @@ const Bill_class = () => {
                       </Row>
 
                       <Row gutter={[24, 0]}>
-                        <Col  xs={4} xl={8} className="mb-24">
+                        <Col  xs={12} xl={8} className="mb-24">
                           <Form.Item label="Số lượng" name="bill_number">
                             <InputNumber
                               style={{
@@ -1149,7 +1149,7 @@ const Bill_class = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col xs={10} xl={8} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Giá tiền" name="bill_price">
                             <InputNumber
                               style={{
@@ -1170,7 +1170,7 @@ const Bill_class = () => {
                             />
                           </Form.Item>
                         </Col>
-                        <Col xs={10} xl={8} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Thành tiền" name="bill_total">
                             <InputNumber
                               style={{
