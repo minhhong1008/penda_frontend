@@ -94,7 +94,7 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_payoneer_error = ["error login", "Sai pass","error code","Không thấy sim","error verify"];
+export const listselect_payoneer_error = ["error login", "Sai pass","error code","code 1h","Request selfie","Request Address","Không thấy sim","error verify"];
 
 export const listselect_payoneer_processing = [
   "Login mail",

@@ -275,7 +275,7 @@ const Ebay_class = () => {
           <br></br>Etsy, ebay, shopee, amazone, payoneer, paypal
         </div>
       ),
-      content_time: <div>1 ngày</div>,
+      content_time: <div>1-10 ngày</div>,
       content_check: (
         <div>
           <strong> Kiểm tra mail die, buyer die, payoneer, paypal</strong>

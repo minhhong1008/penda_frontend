@@ -100,6 +100,7 @@ export const listselect_mail_error = [
   "error code",
   "Không thấy sim",
   "error verify",
+  "mail 7 days",
 ];
 
 export const listselect_mail_processing = [
@@ -113,9 +114,9 @@ export const listselect_mail_processing = [
   "2 FA",
   "Buyer",
   "Verify Full",
-  "Seller",
-  "Restrict",
-  "Suspended",
+  "disable",
+  "Send support",
+  "die",
 ];
 
 export const listselect_mail_plan = [
