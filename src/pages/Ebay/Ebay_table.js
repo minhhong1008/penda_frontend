@@ -276,7 +276,7 @@ const Ebay_table = () => {
                     {item}
                   </div>
                 );
-              } else if (item == "Verify Full" || item == "Verify Bank") {
+              } else if (item == "Verify Full" || item == "Verify Bank" || item == "Verify phone" || item == "Verify mail"|| item == "Verify address") {
                 return (
                   <div
                     style={{

@@ -108,12 +108,15 @@ export const listselect_ebay_error = [
 ];
 
 export const listselect_ebay_processing = [
-  "Login mail",
-  "Verify Mail",
+  "Login Gmail",
+  "Verify Gmail",
   "Buyer",
   "View",
   "Like",
   "Policies",
+  "Verify address",
+  "Verify phone",
+  "Verify mail",
   "Verify Full",
   "Avatar",
   "Add to cart",
