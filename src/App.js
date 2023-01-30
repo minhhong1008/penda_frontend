@@ -1,7 +1,7 @@
 // Test deploy
 import React, { useEffect } from "react";
-import 'antd/dist/reset.css';
-import './index.css';
+import "antd/dist/reset.css";
+import "./index.css";
 import "./App.css";
 import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { compose } from "recompose";
@@ -100,7 +100,6 @@ import Tools_list from "./pages/Tools/tools_list";
 import CCCD from "./pages/Tools/cccd/cccd";
 import DOCKBANK from "./pages/Tools/docbank/docbank";
 
-
 // User
 import Users_class from "./pages/Users/Users_class";
 import Users_table from "./pages/Users/Users_table";
@@ -139,11 +138,11 @@ import Bill_class from "./pages/Bill/Bill_class";
 import Bill_table from "./pages/Bill/Bill_table";
 import Salary_table from "./pages/Bill/Salary_table";
 
-
 // Customer
 import Customer_class from "./pages/Customer/Customer_class";
 import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
+import Company from "./pages/Company/Company";
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -306,7 +305,11 @@ const App = () => {
           />
 
           {/* project */}
-          <Route path="/personnel/project_class" exact component={Project_class} />
+          <Route
+            path="/personnel/project_class"
+            exact
+            component={Project_class}
+          />
           <Route
             path="/personnel/project_class/table"
             exact
@@ -416,7 +419,6 @@ const App = () => {
 
           <Route path="/products/docbank" exact component={DOCKBANK} />
 
-
           <Route
             path="/products/report_overview"
             exact
@@ -426,7 +428,11 @@ const App = () => {
           {/*Bill */}
           <Route path="/finance/bill_class" exact component={Bill_class} />
 
-          <Route path="/finance/bill_table/:status" exact component={Bill_table} />
+          <Route
+            path="/finance/bill_table/:status"
+            exact
+            component={Bill_table}
+          />
           <Route path="/finance/salary_table" exact component={Salary_table} />
 
           {/*---------------------------------quản trị nhân sự-------------------------------- */}
@@ -532,6 +538,8 @@ const App = () => {
             exact
             component={Customer_info}
           />
+
+          <Route path="/company" exact component={Company} />
 
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />

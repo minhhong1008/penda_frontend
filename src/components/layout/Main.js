@@ -34,6 +34,8 @@ function Main({ children }) {
     }
   }, [pathname]);
 
+  console.log(pathname);
+
   return (
     <Layout
       className={`layout-dashboard ${
@@ -70,34 +72,42 @@ function Main({ children }) {
           </Sider>
         </Layout>
       </Drawer>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
-        }}
-        trigger={null}
-        width={250}
-        theme="light"
-        className={`sider-primary ant-layout-sider-primary ${
-          sidenavType === "#fff" ? "active-route" : ""
-        }`}
-        style={{ background: sidenavType }}
+      {pathname == "HomePage" || pathname == "company" ? null : (
+        <Sider
+          breakpoint="lg"
+          collapsedWidth="0"
+          onCollapse={(collapsed, type) => {
+            console.log(collapsed, type);
+          }}
+          trigger={null}
+          width={250}
+          theme="light"
+          className={`sider-primary ant-layout-sider-primary ${
+            sidenavType === "#fff" ? "active-route" : ""
+          }`}
+          style={{ background: sidenavType }}
+        >
+          {pathname.split("/")[0] == "products" ? (
+            <SideBarProduct color={sidenavColor}></SideBarProduct>
+          ) : null}
+          {pathname.split("/")[0] == "business" ? (
+            <SideBarBussiness color={sidenavColor}></SideBarBussiness>
+          ) : null}
+          {pathname.split("/")[0] == "personnel" ? (
+            <SideBarPersonnel color={sidenavColor}></SideBarPersonnel>
+          ) : null}
+          {pathname.split("/")[0] == "finance" ? (
+            <SideBarFinance color={sidenavColor}></SideBarFinance>
+          ) : null}
+        </Sider>
+      )}
+      <Layout
+        style={
+          pathname == "HomePage" || pathname == "company"
+            ? { marginLeft: 0 }
+            : {}
+        }
       >
-        {pathname.split("/")[0] == "products" ? (
-          <SideBarProduct color={sidenavColor}></SideBarProduct>
-        ) : null}
-        {pathname.split("/")[0] == "business" ? (
-          <SideBarBussiness color={sidenavColor}></SideBarBussiness>
-        ) : null}
-        {pathname.split("/")[0] == "personnel" ? (
-          <SideBarPersonnel color={sidenavColor}></SideBarPersonnel>
-        ) : null}
-        {pathname.split("/")[0] == "finance" ? (
-          <SideBarFinance color={sidenavColor}></SideBarFinance>
-        ) : null}
-      </Sider>
-      <Layout>
         {fixed ? (
           <Affix>
             <AntHeader className={`${fixed ? "ant-header-fixed" : ""}`}>

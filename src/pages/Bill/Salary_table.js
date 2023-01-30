@@ -1,17 +1,24 @@
 //import React from 'react'
-import { Card, Form, Space, Table, Tag, TreeSelect } from "antd";
-import React, { useEffect } from "react";
+import { Card, DatePicker, Form, Space, Table, Tag, TreeSelect } from "antd";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getListusers_timesheetsActions } from "../../actions/usersActions";
+import { getSalary } from "../../api/salary";
+import { get_Timesheets_table } from "../../api/timeSheet";
 
 const Salary_table = () => {
   const { users_function } = useSelector((state) => state.auth);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const status_name = urlParams.get("timesheets");
+  const [data, setData] = useState();
   const { userss } = useSelector((state) => state.users);
-
+  const [filter_date_start, setFilter_date_start] = useState({
+    month: dayjs().format("MM"),
+    year: dayjs().format("YYYY"),
+  });
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -30,7 +37,6 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
-      
     },
     {
       title: "Chức vụ",
@@ -58,6 +64,7 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
     {
@@ -67,6 +74,7 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
     {
@@ -76,7 +84,8 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
-    },
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+      },
 
     {
       title: "Công hiện tại",
@@ -94,6 +103,7 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
     {
@@ -102,6 +112,7 @@ const Salary_table = () => {
       key: "users_advance",
       fixed: "left",
       width: 25,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
       sorter: (a, b) => a.age - b.age,
     },
     {
@@ -111,6 +122,7 @@ const Salary_table = () => {
       fixed: "left",
       width: 25,
       sorter: (a, b) => a.age - b.age,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
     {
@@ -127,28 +139,62 @@ const Salary_table = () => {
       dataIndex: "users_expected_salary",
       key: "users_expected_salary",
       width: 20,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
       fixed: "right",
     },
   ];
 
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      users_name: "John Brown",
-      users_function:"Giám đốc",
-      users_salary:"100.000.000",
-      users_bonus:"20.000.000",
-      users_allowance:"50.000.000",
-      users_days:"60",
-      users_now_salary:"80.000.000",
-      users_advance:"50.000.000",
-      users_true_salary:"10.000.000",
-      users_expected_days: "80",
-      users_expected_salary:"2.000.000",
-     
+  const renderData = (timeSheet) => {
+    let newData = [];
+    let data_index = 0;
+    timeSheet.forEach((user_time, index) => {
+      if (index % 2 == 0) {
+        newData.push({
+          user_index: user_time?.index,
+          users_name: user_time?.users_name,
+          users_expected_days: user_time?.total,
+        });
+      } else {
+        newData[data_index] = {
+          ...newData[data_index],
+          users_days: user_time?.total,
+        };
+        data_index = data_index + 1;
+      }
     });
-  }
+    const final_data = [];
+    userss.forEach((user, index) => {
+      newData.forEach((data) => {
+        if (user.users_name == data.users_name) {
+          let users_now_salary = Math.round(
+            Math.round(parseInt(user?.users_salary) / 60) *
+              parseFloat(data.users_days) +
+              parseInt(user?.users_comission) +
+              parseInt(user?.users_subsidize)
+          );
+          let users_expected_salary = Math.round(
+            Math.round(parseInt(user?.users_salary) / 60) *
+              parseFloat(data.users_expected_days)
+          );
+          let users_true_salary = Math.round(
+            users_now_salary - parseInt(user?.users_salary_advance)
+          );
+          final_data.push({
+            ...data,
+            users_function: user?.users_function,
+            users_salary: user?.users_salary,
+            users_bonus: user?.users_comission,
+            users_allowance: user?.users_subsidize,
+            users_now_salary: users_now_salary,
+            users_expected_salary: users_expected_salary,
+            users_advance: user?.users_salary_advance,
+            users_true_salary: users_true_salary,
+          });
+        }
+      });
+    });
+    setData(final_data);
+  };
 
   const getListusers = () => {
     dispatch(
@@ -158,10 +204,101 @@ const Salary_table = () => {
     );
   };
 
+  const getData_Timesheets_table = async (filter_date_start) => {
+    let response = await get_Timesheets_table(filter_date_start);
+    if (response.status == 200) {
+      let { data } = response;
+      let newData = [];
+
+      data.map((item, index) => {
+        let session_obj = {};
+        let verify_obj = {};
+        let total_check = 0;
+        let total_verrify = 0;
+        let total_n = 0;
+        session_obj["index"] = parseInt(
+          userss?.filter(
+            (session_obj) => session_obj?.users_name == item._id
+          )[0]?.users_sort
+        );
+
+        session_obj["users_name"] = userss?.filter(
+          (session_obj) => session_obj.users_name == item._id
+        )[0]?.users_name;
+
+        verify_obj["users_name"] = "Chấm công";
+        item?.sessions.map((session, index) => {
+          if (
+            session?.working_check_late == "m" ||
+            session?.working_verify == "Bs" ||
+            session?.working_verify == "Bc" ||
+            session?.working_verify == "Bt" ||
+            session?.working_verify == "ps" ||
+            session?.working_verify == "pc" ||
+            session?.working_verify == "pt"
+          ) {
+            total_check++;
+          }
+
+          if (
+            session?.working_verify == "Bs" ||
+            session?.working_verify == "Bc" ||
+            session?.working_verify == "Bt" ||
+            session?.working_verify == "S" ||
+            session?.working_verify == "C" ||
+            session?.working_verify == "T"
+          ) {
+            total_verrify++;
+          }
+          // Tính ngày nghỉ không xin phép
+          if (
+            dayjs(session?.working_date).format("YYYY-MM-DD") <
+              dayjs().format("YYYY-MM-DD") &&
+            session?.working_session != "" &&
+            session?.working_verify == ""
+          ) {
+            total_n++;
+          }
+        });
+
+        session_obj["total"] = item.sessions?.length;
+        verify_obj["total"] = total_verrify - 0.25 * total_check - 2 * total_n;
+
+        newData.push(session_obj);
+        newData.push(verify_obj);
+      });
+
+      renderData(newData);
+    } else {
+      showError("Có lỗi xảy ra");
+    }
+  };
+
+  const onChange_Filter_date = async (date, dateString) => {
+    setFilter_date_start({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
+    });
+    const response = await getSalary({
+      year: dateString.split("-")[0],
+      month: dateString.split("-")[1],
+    });
+    const { data } = response;
+    if(data.length > 0){
+      console.log(JSON.parse(data[0].value))
+      setData(JSON.parse(data[0].value))
+    } else {
+      setData([])
+    }
+  };
+
   useEffect(() => {
     getListusers();
-   
   }, [status_name]);
+
+  useEffect(() => {
+    getData_Timesheets_table(filter_date_start);
+  }, [userss]);
 
   return (
     <div>
@@ -175,15 +312,21 @@ const Salary_table = () => {
         "Tập sự",
         "Thử việc",
       ].indexOf(users_function) == -1 ? (
-        <Card type="inner">
+        <Card
+          type="inner"
+          extra={
+            <DatePicker
+              onChange={onChange_Filter_date}
+              defaultValue={dayjs(
+                filter_date_start?.year + "-" + filter_date_start?.month,
+                "YYYY-MM"
+              )}
+              format={"YYYY-MM"}
+              picker="month"
+            />
+          }
+        >
           <Table
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                history.push(`table/${encodeURIComponent(record.bill_id)}`);
-              },
-            };
-          }}
             columns={columns}
             dataSource={data}
             bordered

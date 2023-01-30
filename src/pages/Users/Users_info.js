@@ -874,6 +874,27 @@ const Users_info = () => {
                           </Form.Item>
                         </Col>
                       </Row>
+                      <Row>
+                      <Col span={12}>
+                          <Form.Item label="Trợ cấp" name="users_subsidize">
+                             <Input />
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                          <Form.Item label="Hoa hồng" name="users_comission">
+                            <Input />
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                      <Col span={12}>
+                          <Form.Item label="Ứng lương" name="users_salary_advance">
+                             <Input />
+                          </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                        </Col>
+                      </Row>
                       <Row gutter={16}>
                         <Form.Item name="users_image_url">
                           <Upload

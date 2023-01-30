@@ -147,7 +147,6 @@ function Sidenav({ color }) {
       />
     </svg>,
   ];
-
   return (
     <>
       {page == "HomePage" ? null : (
