@@ -31,6 +31,7 @@ const Etsy_class = () => {
       ),
       dataIndex: "class",
       key: "class",
+      fixed: "left",
     },
     {
       title: (

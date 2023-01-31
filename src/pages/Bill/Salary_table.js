@@ -36,7 +36,6 @@ const Salary_table = () => {
     {
       title: "STT",
       key: "index",
-      fixed: "left",
       width: 7,
       render: (text, record, index) => index + 1,
       responsive: ["md"],

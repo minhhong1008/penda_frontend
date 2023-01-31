@@ -31,6 +31,7 @@ const Payoneer_class = () => {
       ),
       dataIndex: "class",
       key: "class",
+      fixed: "left",
       render: (text) => (
         <a
           

@@ -150,6 +150,7 @@ const Etsy_table = () => {
       title: "#",
       dataIndex: "etsy_id",
       key: "etsy_id",
+      fixed: "left",
       render: (text, record) => (
         <a
           style={{

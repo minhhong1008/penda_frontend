@@ -414,7 +414,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_note",
       key: "ebay_note",
       width: 2,
-      fixed: "right",
+     
 
       render: (text, record, index) => (
         <div>

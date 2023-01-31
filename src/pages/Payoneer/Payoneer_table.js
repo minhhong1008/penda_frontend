@@ -43,7 +43,7 @@ const Payoneer_table = () => {
         </Tag>
       ),
       key: "index",
-      fixed: "left",
+      
       width: 1,
       render: (text, record, index) => index + 1,
     },
@@ -51,6 +51,7 @@ const Payoneer_table = () => {
       title: "#",
       dataIndex: "payoneer_id",
       key: "payoneer_id",
+      fixed: "left",
       render: (text, record) => (
         <a
           style={{

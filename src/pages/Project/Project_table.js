@@ -399,7 +399,7 @@ const Project_table = () => {
       title: "KẾT THÚC",
       dataIndex: "project_date_end",
       key: "project_date_end",
-      fixed: "right",
+      //fixed: "right",
       width: 1,
       sorter: (a, b) => {
         return a.project_date_end?.localeCompare(b.project_date_end);
