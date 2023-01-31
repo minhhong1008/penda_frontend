@@ -35,7 +35,11 @@ const Amazon_table = () => {
   };
   const columns = [
     {
-      title:<Tag color="#2db7f5" onClick={copy_Id}>Copy</Tag>,
+      title: (
+        <Tag color="#2db7f5" onClick={copy_Id}>
+          Copy
+        </Tag>
+      ),
       key: "index",
       render: (text, record, index) => index + 1,
     },
@@ -44,20 +48,16 @@ const Amazon_table = () => {
       dataIndex: "amazon_id",
       key: "amazon_id",
       render: (text, record) => (
-        
-        <a 
-        style={{
-          borderRadius: "6px",
-          padding: "8px 8px",
-          background: "#1c84c6",
-          color: "white",
-        }}
-        
-          
+        <a
+          style={{
+            borderRadius: "6px",
+            padding: "8px 8px",
+            background: "#1c84c6",
+            color: "white",
+          }}
         >
           {text}
         </a>
-        
       ),
       sorter: (a, b) => {
         return a.amazon_id?.localeCompare(b.amazon_id);
@@ -148,11 +148,10 @@ const Amazon_table = () => {
       dataIndex: "amazon_error",
       key: "amazon_error",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -183,11 +182,10 @@ const Amazon_table = () => {
       dataIndex: "amazon_employee",
       key: "amazon_employee",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -243,15 +241,15 @@ const Amazon_table = () => {
   useEffect(() => {
     getListAmazon();
   }, [class_name]);
-// nut checked copy cái này trong ant.design
-const onSelectChange = (newSelectedRowKeys) => {
-  setSelectedRowKeys(newSelectedRowKeys);
-};
-const rowSelection = {
-  selectedRowKeys,
-  onChange: onSelectChange,
-};
-//--------
+  // nut checked copy cái này trong ant.design
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  //--------
   return (
     <div>
       <Card>
@@ -296,13 +294,15 @@ const rowSelection = {
           >
             <Card type="inner">
               <Table
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    history.push(`table/${encodeURIComponent(record.amazon_id)}`);
-                  },
-                };
-              }}
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(
+                        `table/${encodeURIComponent(record.amazon_id)}`
+                      );
+                    },
+                  };
+                }}
                 columns={columns}
                 dataSource={amazons}
                 rowSelection={rowSelection}

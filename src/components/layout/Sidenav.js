@@ -152,19 +152,73 @@ function Sidenav({ color }) {
       {page == "HomePage" ? null : (
         <Menu theme="light" mode="inline">
           <Menu.Item key="1">
-            <NavLink to="/dashboard">
+            <NavLink to="/HomePage">
               <span
                 className="icon"
                 style={{
-                  background: page === "dashboard" ? color : "",
+                  background: page === "department-management" ? color : "",
                 }}
               >
-                {dashboard}
+                {tables}
               </span>
-              <span className="label">Trang Chủ</span>
+              <span className="label">HomePage</span>
             </NavLink>
           </Menu.Item>
           <Menu.Item key="2">
+            <NavLink to="/products/etsy_class">
+              <span
+                className="icon"
+                style={{
+                  background: page === "department-management" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Etsy</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <NavLink to="/products/payoneer_class">
+              <span
+                className="icon"
+                style={{
+                  background: page === "department-management" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Payoneer</span>
+            </NavLink>
+          </Menu.Item>
+          
+          <Menu.Item key="4">
+            <NavLink to="/personnel/users_class/table?status=Active">
+              <span
+                className="icon"
+                style={{
+                  background: page === "rtl" ? color : "",
+                }}
+              >
+                {rtl}
+              </span>
+              <span className="label">Nhân viên</span>
+            </NavLink>
+          </Menu.Item>
+          
+          <Menu.Item key="5">
+            <NavLink to="/finance/salary_table">
+              <span
+                className="icon"
+                style={{
+                  background: page === "profile" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Bảng lương</span>
+            </NavLink>
+          </Menu.Item>
+          <Menu.Item key="6">
             <NavLink to="/tables">
               <span
                 className="icon"
@@ -177,33 +231,7 @@ function Sidenav({ color }) {
               <span className="label">Tables</span>
             </NavLink>
           </Menu.Item>
-          <Menu.Item key="10">
-            <NavLink to="/personnel-management">
-              <span
-                className="icon"
-                style={{
-                  background: page === "personnel-management" ? color : "",
-                }}
-              >
-                {tables}
-              </span>
-              <span className="label">Quản Lý Nhân Sự</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="11">
-            <NavLink to="/department-management">
-              <span
-                className="icon"
-                style={{
-                  background: page === "department-management" ? color : "",
-                }}
-              >
-                {tables}
-              </span>
-              <span className="label">Quản Lý Phòng Ban</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="232">
+          <Menu.Item key="7">
             <NavLink to="/account-management">
               <span
                 className="icon"
@@ -217,23 +245,7 @@ function Sidenav({ color }) {
               <span className="label">Quản Lý Account</span>
             </NavLink>
           </Menu.Item>
-
-          <Menu.Item key="233">
-            <NavLink to="/accounts/account">
-              <span
-                className="icon"
-                style={{
-                  background: page === "accounts/account" ? color : "",
-                }}
-              >
-                {tables}
-              </span>
-
-              <span className="label">Account</span>
-            </NavLink>
-          </Menu.Item>
-
-          <Menu.Item key="3">
+          <Menu.Item key="8">
             <NavLink to="/billing">
               <span
                 className="icon"
@@ -244,41 +256,6 @@ function Sidenav({ color }) {
                 {billing}
               </span>
               <span className="label">Billing</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <NavLink to="/rtl">
-              <span
-                className="icon"
-                style={{
-                  background: page === "rtl" ? color : "",
-                }}
-              >
-                {rtl}
-              </span>
-              <span className="label">RTL</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item className="menu-item-header" key="5">
-            Tài Khoản
-          </Menu.Item>
-          <Menu.Item key="6">
-            <NavLink to="/profile">
-              <span
-                className="icon"
-                style={{
-                  background: page === "profile" ? color : "",
-                }}
-              >
-                {profile}
-              </span>
-              <span className="label">Thông Tin Cá Nhân</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="9">
-            <NavLink to="/log-out">
-              <span className="icon">{signup}</span>
-              <span className="label">Đăng Xuất</span>
             </NavLink>
           </Menu.Item>
         </Menu>

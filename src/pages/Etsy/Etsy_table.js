@@ -190,7 +190,7 @@ const Etsy_table = () => {
         return a.etsy_class?.localeCompare(b.etsy_class);
       },
       ...getColumnSearchProps("etsy_class"),
-      responsive: ["md"],
+      
     },
     {
       title: "TIẾN TRÌNH",
@@ -411,35 +411,47 @@ const searchEtsy = async (value) => {
             key="1"
           >
             <Card type="inner">
-              <Table
-               onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    history.push(`table/${encodeURIComponent(record.etsy_id)}`);
-                  },
-                };
-              }}
-                columns={columns}
-                dataSource={etsys}
-                rowSelection={rowSelection}
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "200",
-                    "300",
-                    "500",
-                    "1000",
-                    "2000",
-                  ],
-                  position: ["bottomRight", "topRight"],
-                  showSizeChanger: true,
-                  defaultPageSize: 100,
-                }}
-              ></Table>
+
+            <Row gutter={[24, 0]}>
+            <Col xs={24} xl={24} className="mb-24">
+              <div className="table-responsive">
+                <Table
+                  width="100%"
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        history.push(`table/${encodeURIComponent(record.etsy_id)}`);
+                      },
+                    };
+                  }}
+                    columns={columns}
+                    dataSource={etsys}
+                    rowSelection={rowSelection}
+                  bordered
+                  size="small"
+                  pagination={{
+                    pageSizeOptions: [
+                      "100",
+                      "200",
+                      "300",
+                      "500",
+                      "1000",
+                      "2000",
+                    ],
+                    position: ["bottomRight"],
+                    size: "small",
+                    showSizeChanger: true,
+                    defaultPageSize: 100,
+                  }}
+                  className="ant-border-space"
+                />
+              </div>
+            </Col>
+          </Row>
+
+
+
+
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="HƯỚNG DẪN" key="2">

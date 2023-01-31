@@ -713,7 +713,7 @@ const Paypal_class = () => {
                 return {
                   onClick: (event) => {
                     history.push(
-                      `sim_paypal/table?class=${encodeURIComponent(
+                      `paypal_class/table?class=${encodeURIComponent(
                         text.class
                       )}`
                     );

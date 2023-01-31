@@ -18,6 +18,7 @@ const Users_table = () => {
       title: "STT",
       key: "index",
       render: (text, record, index) => index + 1,
+      responsive: ["md"],
     },
 
     {
@@ -30,26 +31,31 @@ const Users_table = () => {
       title: "Giới tính",
       dataIndex: "users_sex",
       key: "users_sex",
+      responsive: ["md"],
     },
     {
       title: "CCCD",
       dataIndex: "users_passport",
       key: "users_passport",
+      responsive: ["md"],
     },
     {
       title: "Số Bank",
       dataIndex: "users_banknumber",
       key: "users_banknumber",
+      responsive: ["md"],
     },
     {
       title: "Ngày sinh",
       dataIndex: "usersdate_birthday",
       key: "usersdate_birthday",
+      
     },
     {
       title: "Ngày vào làm",
       dataIndex: "usersdate_begin",
       key: "usersdate_begin",
+      responsive: ["md"],
     },
     {
       title: "Điện thoại",
@@ -60,11 +66,13 @@ const Users_table = () => {
       title: "Trình độ ",
       dataIndex: "users_level",
       key: "users_level",
+      responsive: ["md"],
     },
     {
       title: "Chức vụ",
       dataIndex: "users_function",
       key: "users_function",
+      responsive: ["md"],
     },
   ];
 

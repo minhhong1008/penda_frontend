@@ -623,7 +623,7 @@ const Bank_info = () => {
                       color: "#1890FD",
                     }}
                   >
-                    THÔNG TIN ETSY
+                    THÔNG TIN BANK
                   </strong>
                 }
               >

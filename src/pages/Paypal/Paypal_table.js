@@ -299,6 +299,11 @@ const rowSelection = {
             key="1"
           >
             <Card type="inner">
+
+
+
+
+              
               <Table
                onRow={(record, rowIndex) => {
                 return {

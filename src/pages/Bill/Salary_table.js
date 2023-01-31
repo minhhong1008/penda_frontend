@@ -1,5 +1,15 @@
 //import React from 'react'
-import { Card, DatePicker, Form, Space, Table, Tag, TreeSelect } from "antd";
+import {
+  Card,
+  Col,
+  DatePicker,
+  Form,
+  Row,
+  Space,
+  Table,
+  Tag,
+  TreeSelect,
+} from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +39,7 @@ const Salary_table = () => {
       fixed: "left",
       width: 7,
       render: (text, record, index) => index + 1,
+      responsive: ["md"],
     },
     {
       title: "Họ tên",
@@ -36,34 +47,22 @@ const Salary_table = () => {
       key: "users_name",
       fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_name - b.users_name,
     },
     {
       title: "Chức vụ",
       dataIndex: "users_function",
       key: "users_function",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
-      filters: [
-        {
-          text: "Nhân viên",
-          value: "Nhân viêne",
-        },
-        {
-          text: "Tập sự",
-          value: "Tập sự",
-        },
-      ],
-      onFilter: (value, record) => record.name.indexOf(value) === 0,
+      sorter: (a, b) => a.users_function - b.users_function,
+      responsive: ["md"],
     },
     {
       title: "Lương chính",
       dataIndex: "users_salary",
       key: "users_salary",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_salary - b.users_salary,
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
@@ -71,9 +70,8 @@ const Salary_table = () => {
       title: "Hoa hồng",
       dataIndex: "users_bonus",
       key: "users_bonus",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_bonus - b.users_bonus,
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
@@ -81,28 +79,25 @@ const Salary_table = () => {
       title: "Phụ cấp",
       dataIndex: "users_allowance",
       key: "users_allowance",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_allowance - b.users_allowance,
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-      },
+    },
 
     {
       title: "Công hiện tại",
       dataIndex: "users_days",
       key: "users_days",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_days - b.users_days,
     },
 
     {
       title: "Lương hiện tại",
       dataIndex: "users_now_salary",
       key: "users_now_salary",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_now_salary - b.users_now_salary,
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
@@ -110,18 +105,17 @@ const Salary_table = () => {
       title: "Đã ứng",
       dataIndex: "users_advance",
       key: "users_advance",
-      fixed: "left",
       width: 25,
+      responsive: ["md"],
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_advance - b.users_advance,
     },
     {
       title: "Thực nhận",
       dataIndex: "users_true_salary",
       key: "users_true_salary",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_true_salary - b.users_true_salary,
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
     },
 
@@ -129,9 +123,8 @@ const Salary_table = () => {
       title: "Dự kiến công",
       dataIndex: "users_expected_days",
       key: "users_expected_days",
-      fixed: "left",
       width: 25,
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.users_expected_days - b.users_expected_days,
     },
 
     {
@@ -139,6 +132,7 @@ const Salary_table = () => {
       dataIndex: "users_expected_salary",
       key: "users_expected_salary",
       width: 20,
+
       render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
       fixed: "right",
     },
@@ -284,11 +278,11 @@ const Salary_table = () => {
       month: dateString.split("-")[1],
     });
     const { data } = response;
-    if(data.length > 0){
-      console.log(JSON.parse(data[0].value))
-      setData(JSON.parse(data[0].value))
+    if (data.length > 0) {
+      console.log(JSON.parse(data[0].value));
+      setData(JSON.parse(data[0].value));
     } else {
-      setData([])
+      setData([]);
     }
   };
 
@@ -302,16 +296,8 @@ const Salary_table = () => {
 
   return (
     <div>
-      {[
-        "Trưởng phòng",
-        "Phó phòng",
-        "Tổ trưởng",
-        "Tổ phó",
-        "Chuyên viên",
-        "Nhân viên",
-        "Tập sự",
-        "Thử việc",
-      ].indexOf(users_function) == -1 ? (
+      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      -1 ? (
         <Card
           type="inner"
           extra={
@@ -326,15 +312,34 @@ const Salary_table = () => {
             />
           }
         >
-          <Table
-            columns={columns}
-            dataSource={data}
-            bordered
-            size="small"
-            pagination={{
-              defaultPageSize: 50,
-            }}
-          />
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={24} className="mb-24">
+              <div className="table-responsive">
+                <Table
+                  width="100%"
+                  columns={columns}
+                  dataSource={data}
+                  bordered
+                  size="small"
+                  pagination={{
+                    pageSizeOptions: [
+                      "100",
+                      "200",
+                      "300",
+                      "500",
+                      "1000",
+                      "2000",
+                    ],
+                    position: ["bottomRight"],
+                    size: "small",
+                    showSizeChanger: true,
+                    defaultPageSize: 100,
+                  }}
+                  className="ant-border-space"
+                />
+              </div>
+            </Col>
+          </Row>
         </Card>
       ) : null}
     </div>

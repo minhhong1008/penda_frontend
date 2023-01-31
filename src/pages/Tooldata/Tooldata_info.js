@@ -12,6 +12,7 @@ import {
   Avatar,
   List,
 } from "antd";
+import * as XLSX from "xlsx";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 // gửi dữ liệu lên và nhận về từ Back_end
@@ -35,7 +36,9 @@ import {
 const Tooldata_info = () => {
   // Khai báo các kho dữ liệu
   const [form] = Form.useForm();
+  const [formExcel] = Form.useForm();
   const { users_function } = useSelector((state) => state.auth);
+  const [open, setOpen] = useState(false);
   const [noteValue, setNoteValue] = useState("");
   const [
     selectList_create_collection,
@@ -131,6 +134,32 @@ const Tooldata_info = () => {
     });
   };
 
+  const onImportExcel = (e) => {
+    e.preventDefault();
+
+    var files = e.target.files,
+      f = files[0];
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var data = e.target.result;
+      let readedData = XLSX.read(data, { type: "binary" });
+      const wsname = readedData.SheetNames[0];
+      const ws = readedData.Sheets[wsname];
+      const dataParse = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      let newData = "";
+      dataParse?.map((row) => {
+        let text = "";
+        row?.map((item) => {
+          text = text + item + "|";
+        });
+        text += "\n";
+        newData += text;
+      });
+      form.setFieldValue("list_rowdata", newData);
+    };
+    reader.readAsBinaryString(f);
+  };
+
   return (
     <div>
       {[
@@ -169,12 +198,12 @@ const Tooldata_info = () => {
                       onFinish={onFinish}
                       autoComplete="off"
                       size="large"
-                      initialValues={{
-                        //bill_date: dayjs(),
-                        //create_collection: ["UPDATE","EBAY"],
-                        
-                      }}
-
+                      initialValues={
+                        {
+                          //bill_date: dayjs(),
+                          //create_collection: ["UPDATE","EBAY"],
+                        }
+                      }
                     >
                       <Form.Item
                         label="Tạo collection"
@@ -413,7 +442,10 @@ const Tooldata_info = () => {
                   </Card>
                 </Col>
                 <Col span={12}>
-                  <Card title="NHẬP DỮ LIỆU">
+                  <Card
+                    title="NHẬP DỮ LIỆU"
+                    extra={<Button onClick={() => setOpen(true)}>Nhập</Button>}
+                  >
                     <Form
                       form={form}
                       name="form-create"
@@ -485,6 +517,29 @@ const Tooldata_info = () => {
           </Tabs>
         </Card>
       ) : null}
+      <Modal
+        open={open}
+        onCancel={() => setOpen(false)}
+        title="Nhập giá trị hàng, cột"
+      >
+        <Form form={formExcel}>
+          <Form.Item name="ky_tu">
+            <Input placeholder="Ký tự ( |, B, C, F)" />
+          </Form.Item>
+          <Form.Item name="col">
+            <Input placeholder="Số cột ( A, B, C, F)" />
+          </Form.Item>
+          <Form.Item name="row">
+            <Input placeholder="Số hàng ( 1, 2, 5, 8)" />
+          </Form.Item>
+          <input
+            type="file"
+            name="excel_file"
+            accept=".xlsx, .xls"
+            onChange={onImportExcel}
+          />
+        </Form>
+      </Modal>
     </div>
   );
 };

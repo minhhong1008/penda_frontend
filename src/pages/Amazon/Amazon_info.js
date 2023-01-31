@@ -620,7 +620,7 @@ const Amazon_info = () => {
                       color: "#1890FD",
                     }}
                   >
-                    THÔNG TIN ETSY
+                    THÔNG TIN AMAZON
                   </strong>
                 }>
                 <Form

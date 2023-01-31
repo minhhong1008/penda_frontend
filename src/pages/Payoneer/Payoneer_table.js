@@ -37,7 +37,11 @@ const Payoneer_table = () => {
   };
   const columns = [
     {
-      title:<Tag color="#2db7f5" onClick={copyId}>Copy</Tag>,
+      title: (
+        <Tag color="#2db7f5" onClick={copyId}>
+          Copy
+        </Tag>
+      ),
       key: "index",
       fixed: "left",
       width: 1,
@@ -48,19 +52,16 @@ const Payoneer_table = () => {
       dataIndex: "payoneer_id",
       key: "payoneer_id",
       render: (text, record) => (
-        
-        <a 
-        style={{
-          borderRadius: "6px",
-          padding: "8px 8px",
-          background: "#1c84c6",
-          color: "white",
-        }}
-        
+        <a
+          style={{
+            borderRadius: "6px",
+            padding: "8px 8px",
+            background: "#1c84c6",
+            color: "white",
+          }}
         >
           {text}
         </a>
-        
       ),
       sorter: (a, b) => {
         return a.payoneer_id?.localeCompare(b.payoneer_id);
@@ -151,11 +152,10 @@ const Payoneer_table = () => {
       dataIndex: "payoneer_error",
       key: "payoneer_error",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -186,11 +186,10 @@ const Payoneer_table = () => {
       dataIndex: "payoneer_employee",
       key: "payoneer_employee",
       render: (record) => {
-        if (!record){
-         
-          return
+        if (!record) {
+          return;
         }
-       
+
         let list = record?.split(",");
         return (
           <div style={{ display: "flex", gap: "8px" }}>
@@ -246,15 +245,15 @@ const Payoneer_table = () => {
   useEffect(() => {
     getListPayoneer();
   }, [class_name]);
-// nut checked copy cái này trong ant.design
-const onSelectChange = (newSelectedRowKeys) => {
-  setSelectedRowKeys(newSelectedRowKeys);
-};
-const rowSelection = {
-  selectedRowKeys,
-  onChange: onSelectChange,
-};
-//--------
+  // nut checked copy cái này trong ant.design
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  //--------
   return (
     <div>
       <Card>
@@ -298,35 +297,46 @@ const rowSelection = {
             key="1"
           >
             <Card type="inner">
-              <Table
-               onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    history.push(`table/${encodeURIComponent(record.payoneer_id)}`);
-                  },
-                };
-              }}
-                columns={columns}
-                dataSource={payoneers}
-                rowSelection={rowSelection}
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "200",
-                    "300",
-                    "500",
-                    "1000",
-                    "2000",
-                  ],
-                  position: ["bottomRight", "topRight"],
-                  showSizeChanger: true,
-                  defaultPageSize: 100,
-                }}
-              ></Table>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={24} className="mb-24">
+                  <div className="table-responsive">
+                    <Table
+                      width="100%"
+                      onRow={(record, rowIndex) => {
+                        return {
+                          onClick: (event) => {
+                            history.push(
+                              `table/${encodeURIComponent(record.payoneer_id)}`
+                            );
+                          },
+                        };
+                      }}
+                      columns={columns}
+                      dataSource={payoneers}
+                      rowSelection={rowSelection}
+                      bordered
+                      size="small"
+                      pagination={{
+                        pageSizeOptions: [
+                          "100",
+                          "200",
+                          "300",
+                          "500",
+                          "1000",
+                          "2000",
+                        ],
+                        position: ["bottomRight"],
+                        size: "small",
+                        showSizeChanger: true,
+                        defaultPageSize: 100,
+                      }}
+                      className="ant-border-space"
+                    />
+                  </div>
+                </Col>
+              </Row>
+
+              
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="HƯỚNG DẪN" key="2">

@@ -31,7 +31,6 @@ const Etsy_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-     
     },
     {
       title: (
@@ -724,38 +723,45 @@ const Etsy_class = () => {
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="BẢNG TÀI KHOẢN THEO LỚP" key="1">
             <Card type="inner">
-              <Table
-                onRow={(text, rowIndex) => {
-                  return {
-                    onClick: (event) => {
-                      history.push(
-                        `etsy_class/table?class=${encodeURIComponent(
-                          text.class
-                        )}`
-                      );
-                    },
-                  };
-                }}
-                columns={columns}
-                dataSource={dataClass}
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "0",
-                    "300",
-                    "500",
-                    "1000",
-                    "00",
-                  ],
-                  position: ["bottomRight", "topRight"],
-                  showSizeChanger: true,
-                  defaultPageSize: 19,
-                }}
-              ></Table>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={24} className="mb-24">
+                  <div className="table-responsive">
+                    <Table
+                      width="100%"
+                      onRow={(text, rowIndex) => {
+                        return {
+                          onClick: (event) => {
+                            history.push(
+                              `etsy_class/table?class=${encodeURIComponent(
+                                text.class
+                              )}`
+                            );
+                          },
+                        };
+                      }}
+                      columns={columns}
+                      dataSource={dataClass}
+                      bordered
+                      size="small"
+                      pagination={{
+                        pageSizeOptions: [
+                          "100",
+                          "200",
+                          "300",
+                          "500",
+                          "1000",
+                          "2000",
+                        ],
+                        position: ["bottomRight"],
+                        size: "small",
+                        showSizeChanger: true,
+                        defaultPageSize: 100,
+                      }}
+                      className="ant-border-space"
+                    />
+                  </div>
+                </Col>
+              </Row>
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab="HƯỚNG DẪN" key="2">

@@ -616,7 +616,7 @@ const Tiktok_info = () => {
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
           <Row gutter={16}>
             <Col span={12}>
-              <Card title="THÔNG TIN ETSY">
+              <Card title="THÔNG TIN TIKTOK">
                 <Form
                   form={form}
                   name="basic"

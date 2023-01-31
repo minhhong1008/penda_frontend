@@ -653,7 +653,7 @@ const Ebay_info = () => {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-          <Row gutter={[24, 0]}>
+          <Row gutter={[24, 4]}>
             <Col xs={24} xl={12} className="mb-24">
               <Card
                 title={
@@ -674,7 +674,7 @@ const Ebay_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-                  <Row gutter={[24, 0]}>
+                  <Row gutter={[24, 24]}>
                     <Col xs={12} xl={6} className="mb-24">
                       <Form.Item
                         label="eBay id"

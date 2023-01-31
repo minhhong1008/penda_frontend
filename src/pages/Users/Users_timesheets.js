@@ -265,8 +265,8 @@ const Users_timesheets = () => {
         newData.push(session_obj);
         newData.push(verify_obj);
       });
-
-      setData_Timesheets_table(newData.sort((a, b) => a.index - b.index));
+      console.log(newData);
+      setData_Timesheets_table(newData);
     } else {
       showError("Có lỗi xảy ra");
     }
@@ -291,7 +291,7 @@ const Users_timesheets = () => {
       title: "STT",
       key: "index",
       fixed: "left",
-      width: 5,
+
       render: (text, record, index) => {
         if (index % 2 == 0) {
           let text = index + 1;
@@ -309,7 +309,6 @@ const Users_timesheets = () => {
       key: "users_name",
       fixed: "left",
       width: "100%",
-      sorter: (a, b) => a.age - b.age,
     },
     {
       title: "NGÀY TRONG THÁNG" + "-" + filter_date_start?.month,
@@ -322,7 +321,6 @@ const Users_timesheets = () => {
         filter_date_start?.month
       ),
       width: "100%",
-      sorter: (a, b) => a.age - b.age,
     },
     {
       title: "Total",
@@ -375,32 +373,35 @@ const Users_timesheets = () => {
               style={{
                 width: "100%",
               }}
-             
-              // 
+
+              //
             >
               <Row gutter={[24, 0]}>
                 <Col xs={24} xl={24} className="mb-24">
-                  <Table
-                    width="100%"
-                    columns={columns}
-                    dataSource={data_table_timesheets}
-                    bordered
-                    size="small"
-                    pagination={{
-                      pageSizeOptions: [
-                        "100",
-                        "200",
-                        "300",
-                        "500",
-                        "1000",
-                        "2000",
-                      ],
-                      position: ["bottomRight"],
-                      size: "small",
-                      showSizeChanger: true,
-                      defaultPageSize: 100,
-                    }}
-                  />
+                  <div className="table-responsive">
+                    <Table
+                      width="100%"
+                      columns={columns}
+                      dataSource={data_table_timesheets}
+                      bordered
+                      size="small"
+                      pagination={{
+                        pageSizeOptions: [
+                          "100",
+                          "200",
+                          "300",
+                          "500",
+                          "1000",
+                          "2000",
+                        ],
+                        position: ["bottomRight"],
+                        size: "small",
+                        showSizeChanger: true,
+                        defaultPageSize: 100,
+                      }}
+                      className="ant-border-space"
+                    />
+                  </div>
                 </Col>
               </Row>
             </Card>

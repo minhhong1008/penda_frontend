@@ -330,7 +330,6 @@ function Header({
       {
         users_name: users_name,
         working_date: dayjs().format("YYYY-MM-DD"),
-
         working_session: "",
         working_check_late: "",
         working_check_soon: "",
@@ -345,7 +344,7 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bs";
           post_working_session(values);
-          success(
+          warning(
             users_name +
               ": Bạn đi làm đúng giờ 8h-8h15.Nếu bạn đã chấm công bắt đầu ca bạn nhớ chấm công ra ca sáng 12h - 12h15"
           );
@@ -364,7 +363,7 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "S";
           post_working_session(values);
-          success("Chấm công hoàn thành ca sáng");
+          warning("Chấm công hoàn thành ca sáng");
         }
         return;
       }
@@ -379,7 +378,7 @@ function Header({
         if (dayjs().minute() <= 15) {
           values[0].working_verify = "Bc";
           post_working_session(values);
-          success(
+          warning(
             users_name +
               ": Bạn đi làm đúng giờ 14h-14h15. Nếu bạn đã chấm công bắt đầu ca thì bạn nhớ chấm công ra ca chiều 18h - 18h15"
           );
@@ -397,7 +396,7 @@ function Header({
       if (dayjs().hour() == 18 && dayjs().minute() <= 15) {
         values[0].working_verify = "C";
         post_working_session(values);
-        success("Chấm công hoàn thành ca");
+        warning("Chấm công hoàn thành ca");
         return;
       }
 
@@ -409,7 +408,7 @@ function Header({
         values[0].working_session = "T";
         values[0].working_verify = "Bt";
         post_working_session(values);
-        success(
+        warning(
           users_name +
             ": Bạn đi làm đúng giờ 18h30-18h45. Bạn nhớ chấm công ra ca tối 22h30 - 22h45"
         );
@@ -432,7 +431,7 @@ function Header({
       values[0].working_session = "T";
       values[0].working_verify = "T";
       post_working_session(values);
-      success("Chấm công hoàn thành ca");
+      warning("Chấm công hoàn thành ca");
       return;
     }
 
@@ -500,18 +499,22 @@ function Header({
           <Breadcrumb>{renderBrecrums()}</Breadcrumb>
         </Col> */}
         <Col xs={14} xl={14} className="mb-24">
-        <Tooltip title="HomePage" color="pink" key="pink">
-            <Link to="/HomePage">
+          <Tooltip title="Menu" color="pink" key="pink">
+            <Button
+              type="link"
+              className="sidebar-toggler"
+              onClick={() => onPress()}
+            >
               <HomeTwoTone
                 style={{ fontSize: "30px" }}
                 twoToneColor="#eb2f96"
               />
-            </Link>
+            </Button>
           </Tooltip>
           <Tooltip title="Products" color="green" key="green">
             <Link to="/products/ebay_class">
               <AppleOutlined
-                style={{ fontSize: "30px", paddingLeft: "20px", color: "#08c" }}
+                style={{ fontSize: "30px", color: "#08c" }}
               />
             </Link>
           </Tooltip>
@@ -531,17 +534,16 @@ function Header({
               />
             </Link>
           </Tooltip>
+          
         </Col>
         <Col xs={10} xl={10} className="mb-24">
-        
           <Tooltip title="TimeSheets" color="gold" key="gold">
             <Link to="/personnel/users_timesheets">
               <Spin
                 size="large"
                 onClick={Timesheets}
-                style={{ fontSize: "30px"}}
+                style={{ fontSize: "30px" }}
               />
-             
             </Link>
           </Tooltip>
 
@@ -550,16 +552,14 @@ function Header({
               to="/Log-out"
               className="btn-sign-in"
               style={{ float: "right" }}
-            >{user.profile ? user.profile.users_name : ""}
+            >
+              {user.profile ? user.profile.users_name : ""}
               <HeartTwoTone
-                style={{ fontSize: "30px",  }}
+                style={{ fontSize: "30px" }}
                 twoToneColor="orange"
               />
-               
             </Link>
           </Tooltip>
-
-          
         </Col>
 
         <Col xs={24} xl={16} className="header-control">
@@ -574,16 +574,11 @@ function Header({
               </a>
             </Dropdown>}
           </Badge> */}
+
           {/*  <Button type="link" onClick={showDrawer}>
             {logsetting}
           </Button>
-          <Button
-            type="link"
-            className="sidebar-toggler"
-            onClick={() => onPress()}
-          >
-            {toggler}
-          </Button>
+          
           <Drawer
             className="settings-drawer"
             mask={true}
