@@ -55,18 +55,18 @@ import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
 const Bill_table = () => {
   // Khai báo kho dữ liệu của andt.desin đầu tiên
   const { Option } = Select;
-  
+
   const { RangePicker } = DatePicker;
   const month = dayjs().format("MM");
   const year = dayjs().format("YYYY");
   const countDay_last = dayjs(
-    year + "-" + (parseInt(month) -1) + "-" + "01"
+    year + "-" + (parseInt(month) - 1) + "-" + "01"
   ).daysInMonth();
   const countDay = dayjs().daysInMonth();
   const countDay_next = dayjs(
     year + "-" + (parseInt(month) + 1) + "-" + "01"
   ).daysInMonth();
-  
+
   let { status } = useParams();
   // Khai báo kho dữ liệu lấy từ file dùng chung
   const dispatch = useDispatch();
@@ -269,12 +269,12 @@ const Bill_table = () => {
       render: (text, record, index) => {
         return index + 1;
       },
-      responsive: ["md"],
+      
     },
     {
       title: "Ngày tháng",
       dataIndex: "bill_date",
-      responsive: ["md"],
+      fixed: "left",
     },
     {
       title: "Phòng ban",
@@ -284,30 +284,30 @@ const Bill_table = () => {
     {
       title: "Công việc",
       dataIndex: "bill_work",
-      ellipsis: true,
+      
     },
     {
       title: "Nội dung",
       dataIndex: "bill_content",
-      responsive: ["md"],
-      ellipsis: true,
+      fixed: "left",
+      
     },
     {
       title: "Số lượng",
       dataIndex: "bill_number",
-      responsive: ["md"],
+      
     },
     {
       title: "Giá tiền",
       dataIndex: "bill_price",
       render: (text) => VND.format(text),
-      responsive: ["md"],
+    
     },
     {
       title: "Thành tiền",
       dataIndex: "bill_total",
       render: (text) => VND.format(text),
-      ellipsis: true,
+      fixed: "right",
     },
     {
       title: "Công nợ",
@@ -318,7 +318,7 @@ const Bill_table = () => {
     {
       title: "Thời hạn",
       dataIndex: "bill_expiry_date",
-      responsive: ["md"],
+     
     },
     {
       title: "Tính năng",
@@ -350,7 +350,7 @@ const Bill_table = () => {
           </Button>
         </div>
       ),
-      ellipsis: true,
+      
     },
   ];
   // Upload ảnh là mục khó nhớ nên để vào 1 chỗ: để upload ảnh cần copy 4 chỗ
@@ -388,13 +388,12 @@ const Bill_table = () => {
   );
   return (
     <div>
-      {["Giám đốc","Phó Giám đốc","Trưởng phòng"].indexOf(
-        users_function
-      ) !== -1 ? (
+      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      -1 ? (
         <Card>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="BÁO CÁO CHI TIẾT" key="1">
-              <Row  gutter={[24, 0]}>
+              <Row gutter={[24, 0]}>
                 <Col xs={24} xl={24} className="mb-24">
                   <Card
                     title={
@@ -410,7 +409,7 @@ const Bill_table = () => {
                     }
                     extra={
                       <>
-                        <Row  gutter={[24, 0]}>
+                        <Row gutter={[24, 0]}>
                           <Col xs={16} xl={16} className="mb-24">
                             <RangePicker
                               size="large"
@@ -437,7 +436,34 @@ const Bill_table = () => {
                       </>
                     }
                   >
-                    <Table columns={columns} dataSource={data_Bill_table} />
+                    <Row gutter={[24, 0]}>
+                      <Col xs={24} xl={24} className="mb-24">
+                        <div className="table-responsive">
+                          <Table
+                            width="100%"
+                            columns={columns}
+                            dataSource={data_Bill_table}
+                            bordered
+                            size="small"
+                            pagination={{
+                              pageSizeOptions: [
+                                "100",
+                                "200",
+                                "300",
+                                "500",
+                                "1000",
+                                "2000",
+                              ],
+                              position: ["bottomRight"],
+                              size: "small",
+                              showSizeChanger: true,
+                              defaultPageSize: 100,
+                            }}
+                            className="ant-border-space"
+                          />
+                        </div>
+                      </Col>
+                    </Row>
                   </Card>
                 </Col>
               </Row>
@@ -458,7 +484,7 @@ const Bill_table = () => {
             onCancel={onClose}
             onOk={() => form.submit()}
           >
-            <Row  gutter={[24, 0]} >
+            <Row gutter={[24, 0]}>
               <Col xs={24} xl={12} className="mb-24">
                 <Card
                   title={
@@ -479,7 +505,7 @@ const Bill_table = () => {
                     onFinish={onFinish}
                     initialValues={data_Bill_info}
                   >
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Ngày tháng" name="bill_date">
                           <DatePicker style={{ float: "right" }} />
@@ -521,7 +547,7 @@ const Bill_table = () => {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Phòng ban" name="bill_owner">
                           <Select optionlabelprop="label">
@@ -564,7 +590,7 @@ const Bill_table = () => {
                       </Col>
                     </Row>
 
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col xs={12} xl={8} className="mb-24">
                         <Form.Item label="Điện thoại" name="bill_contact_phone">
                           <Input placeholder="antidetect.online" />
@@ -614,14 +640,14 @@ const Bill_table = () => {
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col span={24}>
                         <Form.Item label="Ghi chú" name="bill_note">
                           <Input placeholder="input here" />
                         </Form.Item>
                       </Col>
                     </Row>
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Form.Item name="bill_image_url">
                         <Upload
                           multiple
@@ -657,7 +683,7 @@ const Bill_table = () => {
                     autoComplete="off"
                     size="large"
                   >
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col xs={24} xl={12} className="mb-24">
                         <Form.Item label="Công việc" name="bill_work">
                           <Select optionlabelprop="label">
@@ -680,7 +706,7 @@ const Bill_table = () => {
                       </Col>
                     </Row>
 
-                    <Row  gutter={[24, 0]}>
+                    <Row gutter={[24, 0]}>
                       <Col xs={12} xl={6} className="mb-24">
                         <Form.Item label="Số lượng" name="bill_number">
                           <InputNumber

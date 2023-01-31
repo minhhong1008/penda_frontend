@@ -118,7 +118,6 @@ const Project_table = () => {
           }}
         />
         <Space>
-          
           <Button
             type="link"
             size="small"
@@ -183,14 +182,14 @@ const Project_table = () => {
       key: "index",
       width: 1,
       render: (text, record, index) => index + 1,
-      responsive: ["md"],
+     
     },
     {
       title: "HẠNG MỤC",
       dataIndex: "project_work_item",
       key: "project_work_item",
       width: 1,
-      responsive: ["md"],
+     
       render: (text) => {
         if (text == "Kế hoạch") {
           return (
@@ -220,12 +219,13 @@ const Project_table = () => {
       title: "CÔNG VIỆC",
       dataIndex: "project_work",
       key: "project_work",
+      fixed: "left",
       width: 1,
       sorter: (a, b) => {
         return a.project_work?.localeCompare(b.project_work);
       },
       ...getColumnSearchProps("project_work"),
-      responsive: ["md"],
+     
     },
 
     {
@@ -233,7 +233,7 @@ const Project_table = () => {
       dataIndex: "project_content",
       key: "project_content",
       width: 3,
-      
+
       sorter: (a, b) => {
         return a.project_content?.localeCompare(b.project_content);
       },
@@ -246,7 +246,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_number?.localeCompare(b.project_number);
       },
-      responsive: ["md"],
+     
     },
     {
       title: "PHÂN LOẠI",
@@ -307,7 +307,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_type?.localeCompare(b.project_type);
       },
-      responsive: ["md"],
+     
     },
     {
       title: "TIẾN TRÌNH",
@@ -382,7 +382,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_processing?.localeCompare(b.project_processing);
       },
-      responsive: ["md"],
+     
     },
 
     {
@@ -399,11 +399,12 @@ const Project_table = () => {
       title: "KẾT THÚC",
       dataIndex: "project_date_end",
       key: "project_date_end",
+      fixed: "right",
       width: 1,
       sorter: (a, b) => {
         return a.project_date_end?.localeCompare(b.project_date_end);
       },
-      responsive: ["md"],
+     
     },
 
     {
@@ -431,7 +432,7 @@ const Project_table = () => {
       sorter: (a, b) => {
         return a.project_status?.localeCompare(b.project_status);
       },
-      responsive: ["md"],
+     
     },
   ];
 
@@ -622,50 +623,49 @@ const Project_table = () => {
           </div>
         }
       >
-        <Table
-          // Hiện thêm 1 dòng note khi click vào đấu + của từng dòng
-          expandable={{
-            expandedRowRender: (record) => (
-              <p
-                style={{
-                  margin: 0,
+        <Row gutter={[24, 0]}>
+          <Col xs={24} xl={24} className="mb-24">
+            <div className="table-responsive">
+              <Table
+                width="100%"
+                // Hiện thêm 1 dòng note khi click vào đấu + của từng dòng
+                expandable={{
+                  expandedRowRender: (record) => (
+                    <p
+                      style={{
+                        margin: 0,
+                      }}
+                    >
+                      {record.project_note}
+                    </p>
+                  ),
+                  rowExpandable: (record) =>
+                    record.project_id !== "Not Expandable",
                 }}
-              >
-                {record.project_note}
-              </p>
-            ),
-            rowExpandable: (record) => record.project_id !== "Not Expandable",
-          }}
-          // click row sẽ chuyển đến ebay_info
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                history.push(`table/${encodeURIComponent(record._id)}`);
-              },
-            };
-          }}
-          columns={columns}
-          dataSource={data}
-          size="small"
-          bordered
-          pagination={{
-            pageSizeOptions: [
-              "10",
-              "20",
-              "30",
-              "50",
-              "100",
-              "200",
-              "300",
-              "500",
-              "1000",
-              "2000",
-            ],
-            position: ["bottomRight"],
-            showSizeChanger: true,
-            defaultPageSize: 100,
-          }}
-        ></Table>
+                // click row sẽ chuyển đến ebay_info
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(`table/${encodeURIComponent(record._id)}`);
+                    },
+                  };
+                }}
+                columns={columns}
+                dataSource={data}
+                bordered
+                size="small"
+                pagination={{
+                  pageSizeOptions: ["100", "200", "300", "500", "1000", "2000"],
+                  position: ["bottomRight"],
+                  size: "small",
+                  showSizeChanger: true,
+                  defaultPageSize: 100,
+                }}
+                className="ant-border-space"
+              />
+            </div>
+          </Col>
+        </Row>
       </Card>
     </div>
   );

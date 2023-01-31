@@ -170,7 +170,7 @@ const Ebay_table = () => {
         </Tag>
       ),
       key: "index",
-      fixed: "left",
+     
       width: 1,
 
       render: (text, record, index) => (
@@ -194,7 +194,7 @@ const Ebay_table = () => {
           <div>{index + 1}</div>
         </div>
       ),
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -204,6 +204,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_id",
       key: "ebay_id",
+      fixed: "left",
       width: 1,
       sorter: (a, b) => {
         return a.ebay_id?.localeCompare(b.ebay_id);
@@ -224,7 +225,7 @@ const Ebay_table = () => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
       ...getColumnSearchProps("ebay_user"),
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -325,7 +326,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -363,7 +364,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -402,7 +403,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_employee?.localeCompare(b.ebay_employee);
       },
-      responsive: ["md"],
+      
     },
     {
       title: (
@@ -458,7 +459,7 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_note?.localeCompare(b.ebay_note);
       },
-      responsive: ["md"],
+      
     },
   ];
 
@@ -579,37 +580,47 @@ const Ebay_table = () => {
             key="1"
           >
             <Card type="inner">
-              <Table
-                onRow={(record, rowIndex) => {
-                  return {
-                    onClick: (event) => {
-                      history.push(
-                        `table/${encodeURIComponent(record.ebay_id)}`
-                      );
-                    }, // click row vào ebay_info
-                  };
-                }}
-                columns={columns}
-                dataSource={ebays}
-                rowSelection={rowSelection}
-                pagination={{
-                  pageSizeOptions: [
-                    "10",
-                    "20",
-                    "30",
-                    "50",
-                    "100",
-                    "200",
-                    "300",
-                    "500",
-                    "1000",
-                    "2000",
-                  ],
-                  position: ["bottomRight", "topRight"],
-                  showSizeChanger: true,
-                  defaultPageSize: 100,
-                }}
-              ></Table>
+
+            <Row gutter={[24, 0]}>
+            <Col xs={24} xl={24} className="mb-24">
+              <div className="table-responsive">
+                <Table
+                  width="100%"
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        history.push(
+                          `table/${encodeURIComponent(record.ebay_id)}`
+                        );
+                      }, // click row vào ebay_info
+                    };
+                  }}
+                  columns={columns}
+                  dataSource={ebays}
+                  rowSelection={rowSelection}
+                  bordered
+                  size="small"
+                  pagination={{
+                    pageSizeOptions: [
+                      "100",
+                      "200",
+                      "300",
+                      "500",
+                      "1000",
+                      "2000",
+                    ],
+                    position: ["bottomRight"],
+                    size: "small",
+                    showSizeChanger: true,
+                    defaultPageSize: 100,
+                  }}
+                  className="ant-border-space"
+                />
+              </div>
+            </Col>
+          </Row>
+
+              
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + ebays.length} key="2">
