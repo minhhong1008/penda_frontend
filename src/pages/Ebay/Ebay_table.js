@@ -170,7 +170,7 @@ const Ebay_table = () => {
         </Tag>
       ),
       key: "index",
-     
+
       width: 1,
 
       render: (text, record, index) => (
@@ -194,7 +194,6 @@ const Ebay_table = () => {
           <div>{index + 1}</div>
         </div>
       ),
-      
     },
     {
       title: (
@@ -225,7 +224,6 @@ const Ebay_table = () => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
       ...getColumnSearchProps("ebay_user"),
-      
     },
     {
       title: (
@@ -260,7 +258,6 @@ const Ebay_table = () => {
             style={{
               display: "flex",
               gap: "8px",
-              
             }}
           >
             {list?.map((item) => {
@@ -277,7 +274,13 @@ const Ebay_table = () => {
                     {item}
                   </div>
                 );
-              } else if (item == "Verify Full" || item == "Verify Bank" || item == "Verify phone" || item == "Verify mail"|| item == "Verify address") {
+              } else if (
+                item == "Verify Full" ||
+                item == "Verify Bank" ||
+                item == "Verify phone" ||
+                item == "Verify mail" ||
+                item == "Verify address"
+              ) {
                 return (
                   <div
                     style={{
@@ -326,7 +329,6 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_processing?.localeCompare(b.ebay_processing);
       },
-      
     },
     {
       title: (
@@ -364,7 +366,6 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_error?.localeCompare(b.ebay_error);
       },
-      
     },
     {
       title: (
@@ -403,7 +404,6 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_employee?.localeCompare(b.ebay_employee);
       },
-      
     },
     {
       title: (
@@ -414,7 +414,6 @@ const Ebay_table = () => {
       dataIndex: "ebay_note",
       key: "ebay_note",
       width: 2,
-     
 
       render: (text, record, index) => (
         <div>
@@ -459,7 +458,6 @@ const Ebay_table = () => {
       sorter: (a, b) => {
         return a.ebay_note?.localeCompare(b.ebay_note);
       },
-      
     },
   ];
 
@@ -580,47 +578,44 @@ const Ebay_table = () => {
             key="1"
           >
             <Card type="inner">
-
-            <Row gutter={[24, 0]}>
-            <Col xs={24} xl={24} className="mb-24">
-              <div className="table-responsive">
-                <Table
-                  width="100%"
-                  onRow={(record, rowIndex) => {
-                    return {
-                      onClick: (event) => {
-                        history.push(
-                          `table/${encodeURIComponent(record.ebay_id)}`
-                        );
-                      }, // click row vào ebay_info
-                    };
-                  }}
-                  columns={columns}
-                  dataSource={ebays}
-                  rowSelection={rowSelection}
-                  bordered
-                  size="small"
-                  pagination={{
-                    pageSizeOptions: [
-                      "100",
-                      "200",
-                      "300",
-                      "500",
-                      "1000",
-                      "2000",
-                    ],
-                    position: ["bottomRight"],
-                    size: "small",
-                    showSizeChanger: true,
-                    defaultPageSize: 100,
-                  }}
-                  className="ant-border-space"
-                />
-              </div>
-            </Col>
-          </Row>
-
-              
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={24} className="mb-24">
+                  <div className="table-responsive">
+                    <Table
+                      width="100%"
+                      onRow={(record, rowIndex) => {
+                        return {
+                          onClick: (event) => {
+                            history.push(
+                              `table/${encodeURIComponent(record.ebay_id)}`
+                            );
+                          }, // click row vào ebay_info
+                        };
+                      }}
+                      columns={columns}
+                      dataSource={ebays}
+                      rowSelection={rowSelection}
+                      bordered
+                      size="small"
+                      pagination={{
+                        pageSizeOptions: [
+                          "100",
+                          "200",
+                          "300",
+                          "500",
+                          "1000",
+                          "2000",
+                        ],
+                        position: ["bottomRight"],
+                        size: "small",
+                        showSizeChanger: true,
+                        defaultPageSize: 100,
+                      }}
+                      className="ant-border-space"
+                    />
+                  </div>
+                </Col>
+              </Row>
             </Card>
           </Tabs.TabPane>
           <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + ebays.length} key="2">
@@ -628,6 +623,7 @@ const Ebay_table = () => {
           </Tabs.TabPane>
         </Tabs>
       </Card>
+      
     </div>
   );
 };

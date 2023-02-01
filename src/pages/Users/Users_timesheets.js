@@ -202,7 +202,7 @@ const Users_timesheets = () => {
         session_obj["users_name"] = userss?.filter(
           (session_obj) => session_obj.users_name == item._id
         )[0]?.users_name;
-
+           
         verify_obj["users_name"] = "Chấm công";
         item?.sessions.map((session, index) => {
           if (session_obj[session?.day]) {
@@ -265,7 +265,7 @@ const Users_timesheets = () => {
         newData.push(session_obj);
         newData.push(verify_obj);
       });
-      console.log(newData);
+      
       setData_Timesheets_table(newData);
     } else {
       showError("Có lỗi xảy ra");
@@ -294,12 +294,7 @@ const Users_timesheets = () => {
 
       render: (text, record, index) => {
         if (index % 2 == 0) {
-          let text = index + 1;
-          if (text % 2 !== 0) {
-            return text;
-          } else {
-            return text - 1;
-          }
+          return index / 2 + 1;
         }
       },
     },
@@ -543,7 +538,7 @@ const handleDateTime = (countDays, year, month) => {
     let dataIndex = i;
     arrDate.push({
       title: i,
-      //responsive: ['md'],
+     
       children: [
         {
           title: dayjs(
@@ -553,7 +548,7 @@ const handleDateTime = (countDays, year, month) => {
           dataIndex: i,
           key: i,
           width: "100%",
-          //responsive: ['md'],
+          
           render: (text) => {
             return (
               <div

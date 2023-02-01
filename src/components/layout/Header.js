@@ -22,6 +22,7 @@ import {
   Typography,
   message,
   Tooltip,
+  FloatButton,
 } from "antd";
 import React, { useEffect, useState } from "react";
 
@@ -490,9 +491,10 @@ function Header({
     <>
       {contextHolder}
       {/*  Cái này chính là nut setting Configurator */}
-      <div className="setting-drwer" onClick={showDrawer}>
+      {/* <div className="setting-drwer" onClick={showDrawer}>
         {setting}
-      </div>
+      </div> */}
+      <FloatButton.BackTop type="primary"/>
       <Row gutter={[24, 0]}>
         {/*  Hiển thị link */}
         {/* <Col span={24} md={6}>

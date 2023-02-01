@@ -15,7 +15,11 @@ import {
   Tooltip,
   List,
   Upload,
+  Affix,
 } from "antd";
+import { useMemo } from 'react';
+
+
 import { PlusOutlined, CopyOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
@@ -51,6 +55,12 @@ const getBase64 = (file) =>
   });
 
 const Ebay_info = () => {
+  
+        <Button onClick={() => form.submit()} type="primary">
+          Lưu thông tin
+        </Button>
+      
+  const operations =<Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}><Button onClick={() => form.submit()} type="primary">Lưu thông tin</Button></Affix> ;
   const { Option } = Select;
   const { users_function } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -645,14 +655,17 @@ const Ebay_info = () => {
   return (
     <Card
       title={id + " | " + (info?._id ? info?._id : "")}
-      extra={
+      /* extra={
+        
+        <Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}>
         <Button onClick={() => form.submit()} type="primary">
           Lưu thông tin
         </Button>
-      }
+      </Affix>
+      } */
     >
-      <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
+      <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
+        <Tabs.TabPane tab={"THÔNG TIN TÀI KHOẢN: " + id} key="1" >
           <Row gutter={[24, 4]}>
             <Col xs={24} xl={12} className="mb-24">
               <Card
