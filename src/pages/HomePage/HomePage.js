@@ -14,13 +14,13 @@ const HomePage = () => {
   };
   return (
     <div>
-      <Row gutter={[24, 0]} >
+      <Row gutter={[24, 0]}>
         <Col xs={12} xl={6} className="mb-24">
           <div>
             <Card
               onClick={() => handleClick("/company")}
               hoverable
-              style={{  width: "100%" }}
+              style={{ width: "100%" }}
               cover={
                 <img
                   alt="example"
@@ -42,7 +42,7 @@ const HomePage = () => {
               <Card
                 onClick={() => handleClick("/products")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -60,12 +60,12 @@ const HomePage = () => {
         ) : null}
 
         {new_users_owner?.indexOf("Phòng Kinh doanh") !== -1 ? (
-          <Col xs={12} xl={6} className="mb-24" >
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
                 onClick={() => handleClick("/business")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -82,13 +82,12 @@ const HomePage = () => {
           </Col>
         ) : null}
         {new_users_owner?.indexOf("Phòng hành chính nhân sự") !== -1 ? (
-          <Col xs={12} xl={6} className="mb-24" >
+          <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
-              
-                onClick={() =>  handleClick("/personnel")}
+                onClick={() => handleClick("/personnel")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -113,9 +112,9 @@ const HomePage = () => {
           <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
-               onClick={() =>  handleClick("/finance")}
+                onClick={() => handleClick("/finance")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -135,9 +134,9 @@ const HomePage = () => {
           <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
-              onClick={() =>  handleClick("/control")}
+                onClick={() => handleClick("/control")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -157,9 +156,9 @@ const HomePage = () => {
           <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
-              onClick={() =>  handleClick("/plan")}
+                onClick={() => handleClick("/plan")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -179,9 +178,9 @@ const HomePage = () => {
           <Col xs={12} xl={6} className="mb-24">
             <div>
               <Card
-              onClick={() =>  handleClick("/repair")}
+                onClick={() => handleClick("/repair")}
                 hoverable
-                style={{  width: "100%" }}
+                style={{ width: "100%" }}
                 cover={
                   <img
                     alt="example"
@@ -197,6 +196,26 @@ const HomePage = () => {
             </div>
           </Col>
         ) : null}
+        <Col xs={12} xl={6} className="mb-24">
+          <div>
+            <Card
+              onClick={() => handleClick("/crawl")}
+              hoverable
+              style={{ width: "100%" }}
+              cover={
+                <img
+                  alt="example"
+                  src="https://gw.alipayobjects.com/zos/basement_prod/048ee28f-2c80-4d15-9aa3-4f5ddac50465.svg"
+                />
+              }
+            >
+              <Meta
+                title="Quét data"
+                description="www.matbiec.penda.vn"
+              />
+            </Card>
+          </div>
+        </Col>
       </Row>
     </div>
   );

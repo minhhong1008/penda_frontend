@@ -137,6 +137,14 @@ const Salary_table = () => {
     },
   ];
 
+  const getListusers = () => {
+    dispatch(
+      getListusers_timesheetsActions({
+        users_status: "Active",
+      })
+    );
+  };
+
   const renderData = (timeSheet) => {
     let newData = [];
     let data_index = 0;
@@ -187,14 +195,6 @@ const Salary_table = () => {
       });
     });
     setData(final_data);
-  };
-
-  const getListusers = () => {
-    dispatch(
-      getListusers_timesheetsActions({
-        users_status: "Active",
-      })
-    );
   };
 
   const getData_Timesheets_table = async (filter_date_start) => {
@@ -278,7 +278,7 @@ const Salary_table = () => {
     });
     const { data } = response;
     if (data.length > 0) {
-      console.log(JSON.parse(data[0].value));
+      
       setData(JSON.parse(data[0].value));
     } else {
       setData([]);

@@ -9,6 +9,7 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import Main from "./components/layout/Main.js";
 import Billing from "./pages/Billing";
+import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Rtl from "./pages/Rtl";
 import SignIn from "./pages/SignIn";
@@ -143,6 +144,7 @@ import Customer_class from "./pages/Customer/Customer_class";
 import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
 import Company from "./pages/Company/Company";
+import Crawl from "./pages/Crawl/Crawl";
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -172,6 +174,7 @@ const App = () => {
           <Route exact path="/HomePage" component={HomePage} />
           <Route exact path="/tables" component={Tables} />
           <Route exact path="/billing" component={Billing} />
+          <Route exact path="/home" component={Home} />
           <Route
             path="/personnel-management"
             exact
@@ -540,7 +543,7 @@ const App = () => {
           />
 
           <Route path="/company" exact component={Company} />
-
+          <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />
         </Main>
