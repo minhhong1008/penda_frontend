@@ -143,8 +143,10 @@ import Salary_table from "./pages/Bill/Salary_table";
 import Customer_class from "./pages/Customer/Customer_class";
 import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
-import Company from "./pages/Company/Company";
+import Company from "./pages/HomePage/Company";
 import Crawl from "./pages/Crawl/Crawl";
+import Blog_info from "./pages/Blog/Blog_info";
+import Home_content from "./pages/HomePage/Home_content";
 
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
@@ -542,7 +544,21 @@ const App = () => {
             component={Customer_info}
           />
 
-          <Route path="/company" exact component={Company} />
+          <Route
+            path="/personnel/blog_info"
+            exact
+            component={Blog_info}
+          />
+
+          
+
+          <Route
+            path="/home_content/:id"
+            exact
+            component={Home_content}
+          />
+
+          <Route path="/homepage/company" exact component={Company} />
           <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />

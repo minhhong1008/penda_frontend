@@ -18,7 +18,7 @@ const HomePage = () => {
         <Col xs={12} xl={6} className="mb-24">
           <div>
             <Card
-              onClick={() => handleClick("/company")}
+              onClick={() => handleClick("/homepage/company")}
               hoverable
               style={{ width: "100%" }}
               cover={

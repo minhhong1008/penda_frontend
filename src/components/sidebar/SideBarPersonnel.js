@@ -139,7 +139,19 @@ const SideBarpersonnel = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          
+          <Menu.Item key="6">
+            <NavLink to="/personnel/blog_info">
+              <span
+                className="icon"
+                style={{
+                  background: page === "/personnel/blog_info" ? color : "",
+                }}
+              >
+                {dashboard}
+              </span>
+              <span className="label">Blog</span>
+            </NavLink>
+          </Menu.Item>
 
           
         </Menu>

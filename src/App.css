@@ -6,6 +6,12 @@
   text-align: center;
 }
 
+@media only screen and (min-width: 1080px) {
+  .blog {
+    padding: 0 20%;
+  }
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

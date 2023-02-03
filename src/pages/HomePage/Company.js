@@ -3,11 +3,12 @@ import {
   EditOutlined,
   EllipsisOutlined,
   SettingOutlined,
+  AntDesignOutlined
 } from "@ant-design/icons";
 import { Row, Col, Card, Avatar } from "antd";
 import { listBlog } from "../../api/blog";
-import Meta from "antd/es/card/Meta";
 import { useHistory } from "react-router-dom";
+import dayjs from "dayjs";
 
 const Company = () => {
   const history = useHistory();
@@ -15,7 +16,7 @@ const Company = () => {
   const { Meta } = Card;
 
   const getListBlog = async () => {
-    let response = await listBlog();
+    let response = await listBlog({blog_page:"company"});
     let data = response.data;
     if (data.length > 0) {
       setData(data);
@@ -27,31 +28,42 @@ const Company = () => {
   }, []);
 
   return (
-    <div className="blog">
+    <div >
       <Row gutter={[24, 0]}>
         {data?.map((item, index) => {
           return (
             <Col xs={12} xl={6} className="mb-24" key={index}>
               <Card
                 cover={<img alt="example" src={item.blog_thumbnail} style={{ height: 200 }} onClick={() => {
-                  history.push(`blog/${item._id}`);
+                  history.push(`/home_content/${item._id}`);
                 }} />}
                 actions={[
-                  <SettingOutlined key="setting" onClick={() => {
-                    history.push(`blog/${item._id}`);
-                  }} />,
+                  
+                  <div className="demo-option-label-item">{dayjs(item.blog_date).format("YYYY-MM-DD")}</div>,
+                  <div className="demo-option-label-item">{item.blog_sort}</div>,
                   <EditOutlined key="edit" />,
-                  <EllipsisOutlined key="ellipsis" />,
+                  
                 ]}
                 
               >
                 <Meta
-                  avatar={<Avatar src="https://joeschmoe.io/api/v1/random" >{item.blog_employee}</Avatar>}
-                  title={item.blog_title}
+                  avatar={<Avatar 
+                    style={{
+                        backgroundColor: "#7265e6",
+                        verticalAlign: 'middle',
+                      }}
+
+                    size={{
+                    xs: 40,
+                    sm: 40,
+                    md: 40,
+                    lg: 80,
+                   
+                  }}>{item.blog_employee}   </Avatar>}
+                  title={item.blog_title + "(" +item.blog_sort+ ")"}
                   description={item.blog_description}
-                  onClick={() => {
-                    history.push(`blog/${item._id}`);
-                  }}
+                  style={{ height: 100 }}
+                  
                 />
               </Card>
             </Col>

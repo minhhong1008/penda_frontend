@@ -72,7 +72,7 @@ function Main({ children }) {
           </Sider>
         </Layout>
       </Drawer>
-      {pathname == "HomePage" || pathname == "company" ? null : (
+      {pathname == "HomePage" || pathname == "HomePage/company" ? null : (
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -103,7 +103,7 @@ function Main({ children }) {
       )}
       <Layout
         style={
-          pathname == "HomePage" || pathname == "company"
+          pathname == "HomePage" || pathname == "HomePage/company"
             ? { marginLeft: 0 }
             : {}
         }
