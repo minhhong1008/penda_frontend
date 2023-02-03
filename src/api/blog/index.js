@@ -7,6 +7,11 @@ export const createBlog = (blog) => {
   return axiosClient.post(url, blog);
 };
 
+export const updateBlog = (blog) => {
+  const url = `/blog/update`;
+  return axiosClient.post(url, blog);
+};
+
 export const listBlog = (payload) => {
   const url = `/blog/list?${genQueryString(payload)}`;
   return axiosClient.get(url);

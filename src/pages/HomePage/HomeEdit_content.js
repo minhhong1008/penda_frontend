@@ -12,23 +12,31 @@ import {
   Select,
   InputNumber,
 } from "antd";
-import { createBlog } from "../../api/blog";
-import React from "react";
+import { updateBlog, detailBlog } from "../../api/blog";
+import React, { useEffect, useState } from "react";
 import { showError, showSuccess } from "../../utils";
 import dayjs from "dayjs";
+import { useParams } from "react-router-dom";
 
-const Blog_info = () => {
+const HomeEdit_content = () => {
+  // Khai báo các kho dữ liệu
+  let { id } = useParams();
+  const [projectData, setprojectData] = useState({});
   const [formContent] = Form.useForm();
+
   const onFinish_content = async (values) => {
-    if (
-      values.blog_date == null ||
-      values.blog_employee === "undefined" ||
-      values.blog_page === "undefined"
-    ) {
-      return showError("Lỗi ngày tháng - Nhân viên" + values.blog_employee);
-    }
-    values.blog_date = dayjs(values.blog_date).format("YYYY-MM-DD");
-    const response = await createBlog(values);
+    if(values.blog_date == null){
+        return showError("Lỗi ngày tháng");
+      }
+
+    values.blog_date = dayjs(values.blog_date).format(
+        "YYYY-MM-DD"
+      );
+
+    const response = await updateBlog({
+      values: values,
+      id: id,
+    });
     if (response.status == 200) {
       showSuccess("Thêm thành công");
     } else {
@@ -36,15 +44,34 @@ const Blog_info = () => {
     }
   };
 
+  // Hàm gọi dữ liệu về từ database
+  const getContent = async () => {
+    let response = await detailBlog(id);
+    let data = response.data;
+    const newData = {
+        ...data,
+        blog_date: data?.blog_date
+        ? dayjs(data.blog_date)
+        : "",
+      };
+    
+    formContent.setFieldsValue(newData);
+    setprojectData(newData);
+  };
+  //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
+  useEffect(() => {
+    getContent();
+  }, []);
+
   return (
     <Card
       title="Blog"
-      extra={<Button onClick={() => formContent.submit()}>Tạo bài viết</Button>}
+      extra={<Button onClick={() => formContent.submit()}>Lưu bài viết</Button>}
     >
       <Form
         form={formContent}
         onFinish={onFinish_content}
-        initialValues={{ blog_employee: "Minh Hồng", blog_page: "train_class", blog_star:"3" , blog_sort:"1", blog_date: dayjs() }}
+        initialValues={projectData}
       >
         <Row gutter={[24, 0]}>
           <Col xs={24} xl={12} className="mb-24">
@@ -131,7 +158,7 @@ const Blog_info = () => {
         <Form.Item name="blog_content" label="Bài viết">
           <CKEditor
             editor={ClassicEditor}
-            data="<p>Hello from CKEditor 5!</p>"
+            data={projectData.blog_content}
             config={{
               ckfinder: {
                 uploadUrl: "http://backend.penda.vn/api/files",
@@ -148,4 +175,4 @@ const Blog_info = () => {
   );
 };
 
-export default Blog_info;
+export default HomeEdit_content;

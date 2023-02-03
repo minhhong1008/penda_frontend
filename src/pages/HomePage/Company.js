@@ -41,7 +41,9 @@ const Company = () => {
                   
                   <div className="demo-option-label-item">{dayjs(item.blog_date).format("YYYY-MM-DD")}</div>,
                   <div className="demo-option-label-item">{item.blog_sort}</div>,
-                  <EditOutlined key="edit" />,
+                  <EditOutlined key="edit" onClick={() => {
+                    history.push(`/homeedit_content/${item._id}`);
+                  }} />,
                   
                 ]}
                 
