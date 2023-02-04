@@ -379,32 +379,32 @@ const Shopee_info = () => {
       let new_shopee_class = form.getFieldValue("shopee_class");
       if (values == "Error") {
         (new_shopee_class = "Lớp 20"),
-          dateForm.setFieldValue("shopeedate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("shopeedate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          shopeedate_error: dayjs(now()),
-          shopeedate_nextclass: dayjs(now()),
+          shopeedate_error: dayjs(),
+          shopeedate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_shopee_class = "Lớp 23"),
-          dateForm.setFieldValue("shopeedate_restrict", dayjs(now()));
-        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("shopeedate_restrict", dayjs());
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          shopeedate_restrict: dayjs(now()),
-          shopeedate_nextclass: dayjs(now()),
+          shopeedate_restrict: dayjs(),
+          shopeedate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_shopee_class = "Lớp 26"),
-          dateForm.setFieldValue("shopeedate_suspended", dayjs(now()));
-        dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("shopeedate_suspended", dayjs());
+        dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          shopeedate_suspended: dayjs(now()),
-          shopeedate_nextclass: dayjs(now()),
+          shopeedate_suspended: dayjs(),
+          shopeedate_nextclass: dayjs(),
         });
       }
 
@@ -420,61 +420,61 @@ const Shopee_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("shopee_class", "Lớp 4");
-      dateForm.setFieldValue("shopeedate_start", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_start", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_start: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_start: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("shopee_class", "Lớp 6");
-      dateForm.setFieldValue("shopeedate_verify", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_verify", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_verify: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_verify: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("shopee_class", "Lớp 9");
-      dateForm.setFieldValue("shopeedate_seller", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_seller", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_seller: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_seller: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("shopee_class", "Lớp 10");
-      dateForm.setFieldValue("shopeedate_list1", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_list1", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_list1: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_list1: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("shopee_class", "Lớp 12");
-      dateForm.setFieldValue("shopeedate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_moveroom", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_moveroom: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_moveroom: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("shopeedate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      shopeedate_nextclass: dayjs(now()),
+      shopeedate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Shopee_info = () => {
         shopee_type: new_shopee_type,
       });
 
-      dateForm.setFieldValue("shopeedate_seller", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_seller", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_seller: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_seller: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
 
@@ -536,12 +536,12 @@ const Shopee_info = () => {
         shopee_type: new_shopee_type,
       });
 
-      dateForm.setFieldValue("shopeedate_start", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_start", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_start: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_start: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
 
@@ -574,12 +574,12 @@ const Shopee_info = () => {
         shopee_owner: new_shopee_owner,
       });
 
-      dateForm.setFieldValue("shopeedate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("shopeedate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("shopeedate_moveroom", dayjs());
+      dateForm.setFieldValue("shopeedate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        shopeedate_moveroom: dayjs(now()),
-        shopeedate_nextclass: dayjs(now()),
+        shopeedate_moveroom: dayjs(),
+        shopeedate_nextclass: dayjs(),
       });
     }
   };

@@ -379,32 +379,32 @@ const Facebook_info = () => {
       let new_facebook_class = form.getFieldValue("facebook_class");
       if (values == "Error") {
         (new_facebook_class = "Lớp 20"),
-          dateForm.setFieldValue("facebookdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("facebookdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          facebookdate_error: dayjs(now()),
-          facebookdate_nextclass: dayjs(now()),
+          facebookdate_error: dayjs(),
+          facebookdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_facebook_class = "Lớp 23"),
-          dateForm.setFieldValue("facebookdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("facebookdate_restrict", dayjs());
+        dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          facebookdate_restrict: dayjs(now()),
-          facebookdate_nextclass: dayjs(now()),
+          facebookdate_restrict: dayjs(),
+          facebookdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_facebook_class = "Lớp 26"),
-          dateForm.setFieldValue("facebookdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("facebookdate_suspended", dayjs());
+        dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          facebookdate_suspended: dayjs(now()),
-          facebookdate_nextclass: dayjs(now()),
+          facebookdate_suspended: dayjs(),
+          facebookdate_nextclass: dayjs(),
         });
       }
 
@@ -420,61 +420,61 @@ const Facebook_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("facebook_class", "Lớp 4");
-      dateForm.setFieldValue("facebookdate_start", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_start", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_start: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_start: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("facebook_class", "Lớp 6");
-      dateForm.setFieldValue("facebookdate_verify", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_verify", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_verify: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_verify: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("facebook_class", "Lớp 9");
-      dateForm.setFieldValue("facebookdate_seller", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_seller", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_seller: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_seller: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("facebook_class", "Lớp 10");
-      dateForm.setFieldValue("facebookdate_list1", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_list1", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_list1: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_list1: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("facebook_class", "Lớp 12");
-      dateForm.setFieldValue("facebookdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_moveroom", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_moveroom: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_moveroom: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("facebookdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      facebookdate_nextclass: dayjs(now()),
+      facebookdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Facebook_info = () => {
         facebook_type: new_facebook_type,
       });
 
-      dateForm.setFieldValue("facebookdate_seller", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_seller", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_seller: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_seller: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
 
@@ -536,12 +536,12 @@ const Facebook_info = () => {
         facebook_type: new_facebook_type,
       });
 
-      dateForm.setFieldValue("facebookdate_start", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_start", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_start: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_start: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
 
@@ -574,12 +574,12 @@ const Facebook_info = () => {
         facebook_owner: new_facebook_owner,
       });
 
-      dateForm.setFieldValue("facebookdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("facebookdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("facebookdate_moveroom", dayjs());
+      dateForm.setFieldValue("facebookdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        facebookdate_moveroom: dayjs(now()),
-        facebookdate_nextclass: dayjs(now()),
+        facebookdate_moveroom: dayjs(),
+        facebookdate_nextclass: dayjs(),
       });
     }
   };

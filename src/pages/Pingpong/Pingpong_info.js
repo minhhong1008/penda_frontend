@@ -379,32 +379,32 @@ const Pingpong_info = () => {
       let new_pingpong_class = form.getFieldValue("pingpong_class");
       if (values == "Error") {
         (new_pingpong_class = "Lớp 20"),
-          dateForm.setFieldValue("pingpongdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("pingpongdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          pingpongdate_error: dayjs(now()),
-          pingpongdate_nextclass: dayjs(now()),
+          pingpongdate_error: dayjs(),
+          pingpongdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_pingpong_class = "Lớp 23"),
-          dateForm.setFieldValue("pingpongdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("pingpongdate_restrict", dayjs());
+        dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          pingpongdate_restrict: dayjs(now()),
-          pingpongdate_nextclass: dayjs(now()),
+          pingpongdate_restrict: dayjs(),
+          pingpongdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_pingpong_class = "Lớp 26"),
-          dateForm.setFieldValue("pingpongdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("pingpongdate_suspended", dayjs());
+        dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          pingpongdate_suspended: dayjs(now()),
-          pingpongdate_nextclass: dayjs(now()),
+          pingpongdate_suspended: dayjs(),
+          pingpongdate_nextclass: dayjs(),
         });
       }
 
@@ -420,61 +420,61 @@ const Pingpong_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("pingpong_class", "Lớp 4");
-      dateForm.setFieldValue("pingpongdate_start", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_start", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_start: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_start: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("pingpong_class", "Lớp 6");
-      dateForm.setFieldValue("pingpongdate_verify", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_verify", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_verify: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_verify: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("pingpong_class", "Lớp 9");
-      dateForm.setFieldValue("pingpongdate_seller", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_seller", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_seller: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_seller: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("pingpong_class", "Lớp 10");
-      dateForm.setFieldValue("pingpongdate_list1", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_list1", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_list1: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_list1: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("pingpong_class", "Lớp 12");
-      dateForm.setFieldValue("pingpongdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_moveroom", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_moveroom: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_moveroom: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      pingpongdate_nextclass: dayjs(now()),
+      pingpongdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Pingpong_info = () => {
         pingpong_type: new_pingpong_type,
       });
 
-      dateForm.setFieldValue("pingpongdate_seller", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_seller", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_seller: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_seller: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
 
@@ -536,12 +536,12 @@ const Pingpong_info = () => {
         pingpong_type: new_pingpong_type,
       });
 
-      dateForm.setFieldValue("pingpongdate_start", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_start", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_start: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_start: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
 
@@ -574,12 +574,12 @@ const Pingpong_info = () => {
         pingpong_owner: new_pingpong_owner,
       });
 
-      dateForm.setFieldValue("pingpongdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("pingpongdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("pingpongdate_moveroom", dayjs());
+      dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        pingpongdate_moveroom: dayjs(now()),
-        pingpongdate_nextclass: dayjs(now()),
+        pingpongdate_moveroom: dayjs(),
+        pingpongdate_nextclass: dayjs(),
       });
     }
   };

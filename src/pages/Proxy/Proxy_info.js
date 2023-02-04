@@ -378,32 +378,32 @@ const Proxy_info = () => {
       let new_proxy_class = form.getFieldValue("proxy_class");
       if (values == "Error") {
         (new_proxy_class = "Lớp 20"),
-          dateForm.setFieldValue("proxydate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("proxydate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("proxydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          proxydate_error: dayjs(now()),
-          proxydate_nextclass: dayjs(now()),
+          proxydate_error: dayjs(),
+          proxydate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_proxy_class = "Lớp 23"),
-          dateForm.setFieldValue("proxydate_restrict", dayjs(now()));
-        dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("proxydate_restrict", dayjs());
+        dateForm.setFieldValue("proxydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          proxydate_restrict: dayjs(now()),
-          proxydate_nextclass: dayjs(now()),
+          proxydate_restrict: dayjs(),
+          proxydate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_proxy_class = "Lớp 26"),
-          dateForm.setFieldValue("proxydate_suspended", dayjs(now()));
-        dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("proxydate_suspended", dayjs());
+        dateForm.setFieldValue("proxydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          proxydate_suspended: dayjs(now()),
-          proxydate_nextclass: dayjs(now()),
+          proxydate_suspended: dayjs(),
+          proxydate_nextclass: dayjs(),
         });
       }
 
@@ -419,61 +419,61 @@ const Proxy_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("proxy_class", "Lớp 4");
-      dateForm.setFieldValue("proxydate_start", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_start", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_start: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_start: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("proxy_class", "Lớp 6");
-      dateForm.setFieldValue("proxydate_verify", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_verify", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_verify: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_verify: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("proxy_class", "Lớp 9");
-      dateForm.setFieldValue("proxydate_seller", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_seller", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_seller: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_seller: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("proxy_class", "Lớp 10");
-      dateForm.setFieldValue("proxydate_list1", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_list1", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_list1: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_list1: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("proxy_class", "Lớp 12");
-      dateForm.setFieldValue("proxydate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_moveroom", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_moveroom: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_moveroom: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("proxydate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      proxydate_nextclass: dayjs(now()),
+      proxydate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -500,12 +500,12 @@ const Proxy_info = () => {
         proxy_type: new_proxy_type,
       });
 
-      dateForm.setFieldValue("proxydate_seller", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_seller", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_seller: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_seller: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
 
@@ -535,12 +535,12 @@ const Proxy_info = () => {
         proxy_type: new_proxy_type,
       });
 
-      dateForm.setFieldValue("proxydate_start", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_start", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_start: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_start: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
 
@@ -573,12 +573,12 @@ const Proxy_info = () => {
         proxy_owner: new_proxy_owner,
       });
 
-      dateForm.setFieldValue("proxydate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("proxydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("proxydate_moveroom", dayjs());
+      dateForm.setFieldValue("proxydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        proxydate_moveroom: dayjs(now()),
-        proxydate_nextclass: dayjs(now()),
+        proxydate_moveroom: dayjs(),
+        proxydate_nextclass: dayjs(),
       });
     }
   };

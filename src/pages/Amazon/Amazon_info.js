@@ -379,32 +379,32 @@ const Amazon_info = () => {
       let new_amazon_class = form.getFieldValue("amazon_class");
       if (values == "Error") {
         (new_amazon_class = "Lớp 20"),
-          dateForm.setFieldValue("amazondate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("amazondate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          amazondate_error: dayjs(now()),
-          amazondate_nextclass: dayjs(now()),
+          amazondate_error: dayjs(),
+          amazondate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_amazon_class = "Lớp 23"),
-          dateForm.setFieldValue("amazondate_restrict", dayjs(now()));
-        dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("amazondate_restrict", dayjs());
+        dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          amazondate_restrict: dayjs(now()),
-          amazondate_nextclass: dayjs(now()),
+          amazondate_restrict: dayjs(),
+          amazondate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_amazon_class = "Lớp 26"),
-          dateForm.setFieldValue("amazondate_suspended", dayjs(now()));
-        dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("amazondate_suspended", dayjs());
+        dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          amazondate_suspended: dayjs(now()),
-          amazondate_nextclass: dayjs(now()),
+          amazondate_suspended: dayjs(),
+          amazondate_nextclass: dayjs(),
         });
       }
 
@@ -420,61 +420,61 @@ const Amazon_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("amazon_class", "Lớp 4");
-      dateForm.setFieldValue("amazondate_start", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_start", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_start: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_start: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("amazon_class", "Lớp 6");
-      dateForm.setFieldValue("amazondate_verify", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_verify", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_verify: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_verify: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("amazon_class", "Lớp 9");
-      dateForm.setFieldValue("amazondate_seller", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_seller", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_seller: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_seller: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("amazon_class", "Lớp 10");
-      dateForm.setFieldValue("amazondate_list1", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_list1", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_list1: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_list1: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("amazon_class", "Lớp 12");
-      dateForm.setFieldValue("amazondate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_moveroom", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_moveroom: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_moveroom: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("amazondate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      amazondate_nextclass: dayjs(now()),
+      amazondate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Amazon_info = () => {
         amazon_type: new_amazon_type,
       });
 
-      dateForm.setFieldValue("amazondate_seller", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_seller", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_seller: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_seller: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
 
@@ -536,12 +536,12 @@ const Amazon_info = () => {
         amazon_type: new_amazon_type,
       });
 
-      dateForm.setFieldValue("amazondate_start", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_start", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_start: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_start: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
 
@@ -574,12 +574,12 @@ const Amazon_info = () => {
         amazon_owner: new_amazon_owner,
       });
 
-      dateForm.setFieldValue("amazondate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("amazondate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("amazondate_moveroom", dayjs());
+      dateForm.setFieldValue("amazondate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        amazondate_moveroom: dayjs(now()),
-        amazondate_nextclass: dayjs(now()),
+        amazondate_moveroom: dayjs(),
+        amazondate_nextclass: dayjs(),
       });
     }
   };

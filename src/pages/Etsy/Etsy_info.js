@@ -375,32 +375,32 @@ const Etsy_info = () => {
       let new_etsy_class = form.getFieldValue("etsy_class");
       if (values == "Error") {
         (new_etsy_class = "Lớp 20"),
-          dateForm.setFieldValue("etsydate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("etsydate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          etsydate_error: dayjs(now()),
-          etsydate_nextclass: dayjs(now()),
+          etsydate_error: dayjs(),
+          etsydate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_etsy_class = "Lớp 23"),
-          dateForm.setFieldValue("etsydate_restrict", dayjs(now()));
-        dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("etsydate_restrict", dayjs());
+        dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          etsydate_restrict: dayjs(now()),
-          etsydate_nextclass: dayjs(now()),
+          etsydate_restrict: dayjs(),
+          etsydate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_etsy_class = "Lớp 26"),
-          dateForm.setFieldValue("etsydate_suspended", dayjs(now()));
-        dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("etsydate_suspended", dayjs());
+        dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          etsydate_suspended: dayjs(now()),
-          etsydate_nextclass: dayjs(now()),
+          etsydate_suspended: dayjs(),
+          etsydate_nextclass: dayjs(),
         });
       }
 
@@ -416,61 +416,61 @@ const Etsy_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("etsy_class", "Lớp 4");
-      dateForm.setFieldValue("etsydate_start", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_start", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_start: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_start: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("etsy_class", "Lớp 6");
-      dateForm.setFieldValue("etsydate_verify", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_verify", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_verify: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_verify: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("etsy_class", "Lớp 9");
-      dateForm.setFieldValue("etsydate_seller", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_seller", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_seller: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_seller: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("etsy_class", "Lớp 10");
-      dateForm.setFieldValue("etsydate_list1", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_list1", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_list1: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_list1: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("etsy_class", "Lớp 12");
-      dateForm.setFieldValue("etsydate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_moveroom", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_moveroom: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_moveroom: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("etsydate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      etsydate_nextclass: dayjs(now()),
+      etsydate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -497,12 +497,12 @@ const Etsy_info = () => {
         etsy_type: new_etsy_type,
       });
 
-      dateForm.setFieldValue("etsydate_seller", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_seller", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_seller: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_seller: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
 
@@ -532,12 +532,12 @@ const Etsy_info = () => {
         etsy_type: new_etsy_type,
       });
 
-      dateForm.setFieldValue("etsydate_start", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_start", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_start: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_start: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
 
@@ -570,12 +570,12 @@ const Etsy_info = () => {
         etsy_owner: new_etsy_owner,
       });
 
-      dateForm.setFieldValue("etsydate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("etsydate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("etsydate_moveroom", dayjs());
+      dateForm.setFieldValue("etsydate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        etsydate_moveroom: dayjs(now()),
-        etsydate_nextclass: dayjs(now()),
+        etsydate_moveroom: dayjs(),
+        etsydate_nextclass: dayjs(),
       });
     }
   };

@@ -392,32 +392,32 @@ const Payoneer_info = () => {
       let new_payoneer_class = form.getFieldValue("payoneer_class");
       if (values == "Error") {
         (new_payoneer_class = "Lớp 20"),
-          dateForm.setFieldValue("payoneerdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("payoneerdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          payoneerdate_error: dayjs(now()),
-          payoneerdate_nextclass: dayjs(now()),
+          payoneerdate_error: dayjs(),
+          payoneerdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_payoneer_class = "Lớp 23"),
-          dateForm.setFieldValue("payoneerdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("payoneerdate_restrict", dayjs());
+        dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          payoneerdate_restrict: dayjs(now()),
-          payoneerdate_nextclass: dayjs(now()),
+          payoneerdate_restrict: dayjs(),
+          payoneerdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_payoneer_class = "Lớp 26"),
-          dateForm.setFieldValue("payoneerdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("payoneerdate_suspended", dayjs());
+        dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          payoneerdate_suspended: dayjs(now()),
-          payoneerdate_nextclass: dayjs(now()),
+          payoneerdate_suspended: dayjs(),
+          payoneerdate_nextclass: dayjs(),
         });
       }
 
@@ -433,61 +433,61 @@ const Payoneer_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("payoneer_class", "Lớp 4");
-      dateForm.setFieldValue("payoneerdate_start", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_start", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_start: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_start: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("payoneer_class", "Lớp 6");
-      dateForm.setFieldValue("payoneerdate_verify", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_verify", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_verify: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_verify: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("payoneer_class", "Lớp 9");
-      dateForm.setFieldValue("payoneerdate_seller", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_seller", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_seller: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_seller: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("payoneer_class", "Lớp 10");
-      dateForm.setFieldValue("payoneerdate_list1", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_list1", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_list1: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_list1: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("payoneer_class", "Lớp 12");
-      dateForm.setFieldValue("payoneerdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_moveroom", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_moveroom: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_moveroom: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      payoneerdate_nextclass: dayjs(now()),
+      payoneerdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -514,12 +514,12 @@ const Payoneer_info = () => {
         payoneer_type: new_payoneer_type,
       });
 
-      dateForm.setFieldValue("payoneerdate_seller", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_seller", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_seller: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_seller: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
 
@@ -549,12 +549,12 @@ const Payoneer_info = () => {
         payoneer_type: new_payoneer_type,
       });
 
-      dateForm.setFieldValue("payoneerdate_start", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_start", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_start: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_start: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
 
@@ -587,12 +587,12 @@ const Payoneer_info = () => {
         payoneer_owner: new_payoneer_owner,
       });
 
-      dateForm.setFieldValue("payoneerdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("payoneerdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("payoneerdate_moveroom", dayjs());
+      dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        payoneerdate_moveroom: dayjs(now()),
-        payoneerdate_nextclass: dayjs(now()),
+        payoneerdate_moveroom: dayjs(),
+        payoneerdate_nextclass: dayjs(),
       });
     }
   };

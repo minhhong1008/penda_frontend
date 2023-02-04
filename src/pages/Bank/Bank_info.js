@@ -381,32 +381,32 @@ const Bank_info = () => {
       let new_bank_class = form.getFieldValue("bank_class");
       if (values == "Error") {
         (new_bank_class = "Lớp 20"),
-          dateForm.setFieldValue("bankdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("bankdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          bankdate_error: dayjs(now()),
-          bankdate_nextclass: dayjs(now()),
+          bankdate_error: dayjs(),
+          bankdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_bank_class = "Lớp 23"),
-          dateForm.setFieldValue("bankdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("bankdate_restrict", dayjs());
+        dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          bankdate_restrict: dayjs(now()),
-          bankdate_nextclass: dayjs(now()),
+          bankdate_restrict: dayjs(),
+          bankdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_bank_class = "Lớp 26"),
-          dateForm.setFieldValue("bankdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("bankdate_suspended", dayjs());
+        dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          bankdate_suspended: dayjs(now()),
-          bankdate_nextclass: dayjs(now()),
+          bankdate_suspended: dayjs(),
+          bankdate_nextclass: dayjs(),
         });
       }
 
@@ -422,61 +422,61 @@ const Bank_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("bank_class", "Lớp 4");
-      dateForm.setFieldValue("bankdate_start", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_start", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_start: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_start: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("bank_class", "Lớp 6");
-      dateForm.setFieldValue("bankdate_verify", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_verify", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_verify: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_verify: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("bank_class", "Lớp 9");
-      dateForm.setFieldValue("bankdate_seller", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_seller", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_seller: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_seller: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("bank_class", "Lớp 10");
-      dateForm.setFieldValue("bankdate_list1", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_list1", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_list1: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_list1: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("bank_class", "Lớp 12");
-      dateForm.setFieldValue("bankdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_moveroom", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_moveroom: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_moveroom: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("bankdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      bankdate_nextclass: dayjs(now()),
+      bankdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -503,12 +503,12 @@ const Bank_info = () => {
         bank_type: new_bank_type,
       });
 
-      dateForm.setFieldValue("bankdate_seller", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_seller", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_seller: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_seller: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
 
@@ -538,12 +538,12 @@ const Bank_info = () => {
         bank_type: new_bank_type,
       });
 
-      dateForm.setFieldValue("bankdate_start", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_start", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_start: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_start: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
 
@@ -576,12 +576,12 @@ const Bank_info = () => {
         bank_owner: new_bank_owner,
       });
 
-      dateForm.setFieldValue("bankdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("bankdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("bankdate_moveroom", dayjs());
+      dateForm.setFieldValue("bankdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        bankdate_moveroom: dayjs(now()),
-        bankdate_nextclass: dayjs(now()),
+        bankdate_moveroom: dayjs(),
+        bankdate_nextclass: dayjs(),
       });
     }
   };

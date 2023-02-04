@@ -380,32 +380,32 @@ const Info_info = () => {
       let new_info_class = form.getFieldValue("info_class");
       if (values == "Error") {
         (new_info_class = "Lớp 20"),
-          dateForm.setFieldValue("infodate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("infodate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          infodate_error: dayjs(now()),
-          infodate_nextclass: dayjs(now()),
+          infodate_error: dayjs(),
+          infodate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_info_class = "Lớp 23"),
-          dateForm.setFieldValue("infodate_restrict", dayjs(now()));
-        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("infodate_restrict", dayjs());
+        dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          infodate_restrict: dayjs(now()),
-          infodate_nextclass: dayjs(now()),
+          infodate_restrict: dayjs(),
+          infodate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_info_class = "Lớp 26"),
-          dateForm.setFieldValue("infodate_suspended", dayjs(now()));
-        dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("infodate_suspended", dayjs());
+        dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          infodate_suspended: dayjs(now()),
-          infodate_nextclass: dayjs(now()),
+          infodate_suspended: dayjs(),
+          infodate_nextclass: dayjs(),
         });
       }
 
@@ -421,61 +421,61 @@ const Info_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("info_class", "Lớp 4");
-      dateForm.setFieldValue("infodate_start", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_start", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_start: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_start: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("info_class", "Lớp 6");
-      dateForm.setFieldValue("infodate_verify", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_verify", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_verify: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_verify: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("info_class", "Lớp 9");
-      dateForm.setFieldValue("infodate_seller", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_seller", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_seller: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_seller: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("info_class", "Lớp 10");
-      dateForm.setFieldValue("infodate_list1", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_list1", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_list1: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_list1: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("info_class", "Lớp 12");
-      dateForm.setFieldValue("infodate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_moveroom", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_moveroom: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_moveroom: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("infodate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      infodate_nextclass: dayjs(now()),
+      infodate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -502,12 +502,12 @@ const Info_info = () => {
         info_type: new_info_type,
       });
 
-      dateForm.setFieldValue("infodate_seller", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_seller", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_seller: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_seller: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
 
@@ -537,12 +537,12 @@ const Info_info = () => {
         info_type: new_info_type,
       });
 
-      dateForm.setFieldValue("infodate_start", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_start", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_start: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_start: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
 
@@ -575,12 +575,12 @@ const Info_info = () => {
         info_owner: new_info_owner,
       });
 
-      dateForm.setFieldValue("infodate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("infodate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("infodate_moveroom", dayjs());
+      dateForm.setFieldValue("infodate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        infodate_moveroom: dayjs(now()),
-        infodate_nextclass: dayjs(now()),
+        infodate_moveroom: dayjs(),
+        infodate_nextclass: dayjs(),
       });
     }
   };

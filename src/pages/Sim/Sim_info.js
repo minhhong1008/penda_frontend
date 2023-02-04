@@ -377,32 +377,32 @@ const Sim_info = () => {
       let new_sim_class = form.getFieldValue("sim_class");
       if (values == "Error") {
         (new_sim_class = "Lớp 20"),
-          dateForm.setFieldValue("simdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("simdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          simdate_error: dayjs(now()),
-          simdate_nextclass: dayjs(now()),
+          simdate_error: dayjs(),
+          simdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_sim_class = "Lớp 23"),
-          dateForm.setFieldValue("simdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("simdate_restrict", dayjs());
+        dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          simdate_restrict: dayjs(now()),
-          simdate_nextclass: dayjs(now()),
+          simdate_restrict: dayjs(),
+          simdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_sim_class = "Lớp 26"),
-          dateForm.setFieldValue("simdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("simdate_suspended", dayjs());
+        dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          simdate_suspended: dayjs(now()),
-          simdate_nextclass: dayjs(now()),
+          simdate_suspended: dayjs(),
+          simdate_nextclass: dayjs(),
         });
       }
 
@@ -418,61 +418,61 @@ const Sim_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("sim_class", "Lớp 4");
-      dateForm.setFieldValue("simdate_start", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_start", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_start: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_start: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("sim_class", "Lớp 6");
-      dateForm.setFieldValue("simdate_verify", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_verify", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_verify: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_verify: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("sim_class", "Lớp 9");
-      dateForm.setFieldValue("simdate_seller", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_seller", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_seller: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_seller: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("sim_class", "Lớp 10");
-      dateForm.setFieldValue("simdate_list1", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_list1", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_list1: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_list1: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("sim_class", "Lớp 12");
-      dateForm.setFieldValue("simdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_moveroom", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_moveroom: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_moveroom: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("simdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      simdate_nextclass: dayjs(now()),
+      simdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -499,12 +499,12 @@ const Sim_info = () => {
         sim_type: new_sim_type,
       });
 
-      dateForm.setFieldValue("simdate_seller", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_seller", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_seller: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_seller: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
 
@@ -534,12 +534,12 @@ const Sim_info = () => {
         sim_type: new_sim_type,
       });
 
-      dateForm.setFieldValue("simdate_start", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_start", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_start: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_start: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
 
@@ -572,12 +572,12 @@ const Sim_info = () => {
         sim_owner: new_sim_owner,
       });
 
-      dateForm.setFieldValue("simdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("simdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("simdate_moveroom", dayjs());
+      dateForm.setFieldValue("simdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        simdate_moveroom: dayjs(now()),
-        simdate_nextclass: dayjs(now()),
+        simdate_moveroom: dayjs(),
+        simdate_nextclass: dayjs(),
       });
     }
   };

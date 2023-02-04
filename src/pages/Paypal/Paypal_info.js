@@ -379,32 +379,32 @@ const Paypal_info = () => {
       let new_paypal_class = form.getFieldValue("paypal_class");
       if (values == "Error") {
         (new_paypal_class = "Lớp 20"),
-          dateForm.setFieldValue("paypaldate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("paypaldate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          paypaldate_error: dayjs(now()),
-          paypaldate_nextclass: dayjs(now()),
+          paypaldate_error: dayjs(),
+          paypaldate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_paypal_class = "Lớp 23"),
-          dateForm.setFieldValue("paypaldate_restrict", dayjs(now()));
-        dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("paypaldate_restrict", dayjs());
+        dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          paypaldate_restrict: dayjs(now()),
-          paypaldate_nextclass: dayjs(now()),
+          paypaldate_restrict: dayjs(),
+          paypaldate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_paypal_class = "Lớp 26"),
-          dateForm.setFieldValue("paypaldate_suspended", dayjs(now()));
-        dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("paypaldate_suspended", dayjs());
+        dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          paypaldate_suspended: dayjs(now()),
-          paypaldate_nextclass: dayjs(now()),
+          paypaldate_suspended: dayjs(),
+          paypaldate_nextclass: dayjs(),
         });
       }
 
@@ -420,61 +420,61 @@ const Paypal_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("paypal_class", "Lớp 4");
-      dateForm.setFieldValue("paypaldate_start", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_start", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_start: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_start: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("paypal_class", "Lớp 6");
-      dateForm.setFieldValue("paypaldate_verify", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_verify", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_verify: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_verify: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("paypal_class", "Lớp 9");
-      dateForm.setFieldValue("paypaldate_seller", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_seller", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_seller: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_seller: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("paypal_class", "Lớp 10");
-      dateForm.setFieldValue("paypaldate_list1", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_list1", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_list1: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_list1: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("paypal_class", "Lớp 12");
-      dateForm.setFieldValue("paypaldate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_moveroom", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_moveroom: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_moveroom: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("paypaldate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      paypaldate_nextclass: dayjs(now()),
+      paypaldate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -501,12 +501,12 @@ const Paypal_info = () => {
         paypal_type: new_paypal_type,
       });
 
-      dateForm.setFieldValue("paypaldate_seller", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_seller", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_seller: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_seller: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
 
@@ -536,12 +536,12 @@ const Paypal_info = () => {
         paypal_type: new_paypal_type,
       });
 
-      dateForm.setFieldValue("paypaldate_start", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_start", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_start: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_start: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
 
@@ -574,12 +574,12 @@ const Paypal_info = () => {
         paypal_owner: new_paypal_owner,
       });
 
-      dateForm.setFieldValue("paypaldate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("paypaldate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("paypaldate_moveroom", dayjs());
+      dateForm.setFieldValue("paypaldate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        paypaldate_moveroom: dayjs(now()),
-        paypaldate_nextclass: dayjs(now()),
+        paypaldate_moveroom: dayjs(),
+        paypaldate_nextclass: dayjs(),
       });
     }
   };

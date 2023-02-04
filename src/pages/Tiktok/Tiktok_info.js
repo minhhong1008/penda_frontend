@@ -383,32 +383,32 @@ const Tiktok_info = () => {
       let new_tiktok_class = form.getFieldValue("tiktok_class");
       if (values == "Error") {
         (new_tiktok_class = "Lớp 20"),
-          dateForm.setFieldValue("tiktokdate_error", dayjs(now())); // Hiển thị ra màn hình
-        dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("tiktokdate_error", dayjs()); // Hiển thị ra màn hình
+        dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          tiktokdate_error: dayjs(now()),
-          tiktokdate_nextclass: dayjs(now()),
+          tiktokdate_error: dayjs(),
+          tiktokdate_nextclass: dayjs(),
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
         (new_tiktok_class = "Lớp 23"),
-          dateForm.setFieldValue("tiktokdate_restrict", dayjs(now()));
-        dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("tiktokdate_restrict", dayjs());
+        dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          tiktokdate_restrict: dayjs(now()),
-          tiktokdate_nextclass: dayjs(now()),
+          tiktokdate_restrict: dayjs(),
+          tiktokdate_nextclass: dayjs(),
         });
       }
       if (values == "Suspended") {
         (new_tiktok_class = "Lớp 26"),
-          dateForm.setFieldValue("tiktokdate_suspended", dayjs(now()));
-        dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+          dateForm.setFieldValue("tiktokdate_suspended", dayjs());
+        dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({
           ...dateData,
-          tiktokdate_suspended: dayjs(now()),
-          tiktokdate_nextclass: dayjs(now()),
+          tiktokdate_suspended: dayjs(),
+          tiktokdate_nextclass: dayjs(),
         });
       }
 
@@ -424,61 +424,61 @@ const Tiktok_info = () => {
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("tiktok_class", "Lớp 4");
-      dateForm.setFieldValue("tiktokdate_start", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_start", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_start: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_start: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Verify Full") {
       form.setFieldValue("tiktok_class", "Lớp 6");
-      dateForm.setFieldValue("tiktokdate_verify", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_verify", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_verify: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_verify: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Seller") {
       form.setFieldValue("tiktok_class", "Lớp 9");
-      dateForm.setFieldValue("tiktokdate_seller", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_seller", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_seller: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_seller: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "List") {
       form.setFieldValue("tiktok_class", "Lớp 10");
-      dateForm.setFieldValue("tiktokdate_list1", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_list1", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_list1: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_list1: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
     if (values[values.length - 1] == "Move room") {
       form.setFieldValue("tiktok_class", "Lớp 12");
-      dateForm.setFieldValue("tiktokdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_moveroom", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_moveroom: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_moveroom: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
   };
 
   const onChange_Class = async (values) => {
-    dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+    dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
     setDateData({
       ...dateData,
-      tiktokdate_nextclass: dayjs(now()),
+      tiktokdate_nextclass: dayjs(),
     });
 
     if (values == "Lớp 9") {
@@ -505,12 +505,12 @@ const Tiktok_info = () => {
         tiktok_type: new_tiktok_type,
       });
 
-      dateForm.setFieldValue("tiktokdate_seller", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_seller", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_seller: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_seller: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
 
@@ -540,12 +540,12 @@ const Tiktok_info = () => {
         tiktok_type: new_tiktok_type,
       });
 
-      dateForm.setFieldValue("tiktokdate_start", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_start", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_start: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_start: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
 
@@ -578,12 +578,12 @@ const Tiktok_info = () => {
         tiktok_owner: new_tiktok_owner,
       });
 
-      dateForm.setFieldValue("tiktokdate_moveroom", dayjs(now()));
-      dateForm.setFieldValue("tiktokdate_nextclass", dayjs(now()));
+      dateForm.setFieldValue("tiktokdate_moveroom", dayjs());
+      dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
       setDateData({
         ...dateData,
-        tiktokdate_moveroom: dayjs(now()),
-        tiktokdate_nextclass: dayjs(now()),
+        tiktokdate_moveroom: dayjs(),
+        tiktokdate_nextclass: dayjs(),
       });
     }
   };
