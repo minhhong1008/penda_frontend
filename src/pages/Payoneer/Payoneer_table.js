@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { getListpayoneerActions } from "../../actions/payoneerActions";
 import { HuongDanPayoneer_table } from "./Payoneer_list";
+import dayjs from "dayjs";
 const Payoneer_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -74,6 +75,24 @@ const Payoneer_table = () => {
       key: "payoneer_user",
       sorter: (a, b) => {
         return a.payoneer_user?.localeCompare(b.payoneer_user);
+      },
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "payoneerdate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.payoneerdate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
       },
     },
     {

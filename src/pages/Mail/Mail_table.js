@@ -24,6 +24,7 @@ import { HuongDanMail_table } from "./Mail_list";
 import { searchMailInfo, updatemailInfo } from "../../api/mail";
 // search trên table
 import { SearchOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const Mail_table = () => {
   const queryString = window.location.search;
@@ -217,6 +218,24 @@ const Mail_table = () => {
       },
       ...getColumnSearchProps("mail_class"),
       responsive: ["md"],
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "maildate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.maildate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
+      },
     },
     {
       title: "TIẾN TRÌNH",

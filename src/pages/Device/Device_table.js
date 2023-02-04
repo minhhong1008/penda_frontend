@@ -24,6 +24,7 @@ import { HuongDanDevice_table } from "./Device_list";
 import { searchDeviceInfo, updatedeviceInfo } from "../../api/device";
 // search trên table
 import { SearchOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const Device_table = () => {
   const queryString = window.location.search;
@@ -199,6 +200,24 @@ const Device_table = () => {
         return a.device_user?.localeCompare(b.device_user);
       },
       ...getColumnSearchProps("device_user"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "devicedate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.devicedate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
+      },
     },
     {
       title: (

@@ -27,6 +27,7 @@ import { HuongDanInfo_table } from "./Info_list";
 import { searchInfoInfo, updateinfoInfo } from "../../api/info";
 // search trên table
 import { SearchOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const Info_table = () => {
   const queryString = window.location.search;
@@ -201,6 +202,24 @@ const Info_table = () => {
         return a.info_user?.localeCompare(b.info_user);
       },
       ...getColumnSearchProps("info_user"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "infodate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.infodate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
+      },
     },
     {
       title: (

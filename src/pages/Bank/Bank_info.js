@@ -49,6 +49,7 @@ import {
 // dùng update các field trong bảng bank_info
 import { updateListView } from "../../api/update";
 
+//upload ảnh
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -128,6 +129,17 @@ const Bank_info = () => {
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    //upload ảnh
+    let bank_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      bank_file.push(fileUrl);
+    });
     let dateValue = {};
     tablelist_bank_Date.map((item) => {
       dateValue[item.value] = dayjs(dateData[item.value]).format(
@@ -137,6 +149,7 @@ const Bank_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+      bank_image_url: bank_file.length > 0 ? bank_file.join(",") : "",
       bank_plan: values?.bank_plan ? values.bank_plan.join(",") : "",
       bank_block: values?.bank_block ? values.bank_block.join(",") : "",
       bank_error: values?.bank_error ? values.bank_error.join(",") : "",
@@ -304,6 +317,20 @@ const Bank_info = () => {
     tablelist_bank_Date.map((item) => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
+    //upload ảnh
+    if (data?.bank_image_url) {
+      let dataImage = [];
+      let imageArr = data.bank_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
     //console.log(dateValue);
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
@@ -563,14 +590,7 @@ const Bank_info = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "../asset/",
-    },
-  ]);
+  const [fileList, setFileList] = useState([]);
 
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
@@ -1010,8 +1030,8 @@ const Bank_info = () => {
                     <Form.Item name="bank_image_url">
                       <Upload
                         action="https://backend.penda.vn/api/files"
-                         multiple
-                          listType="picture-card"
+                        multiple
+                        listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

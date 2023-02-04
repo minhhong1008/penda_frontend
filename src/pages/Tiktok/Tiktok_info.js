@@ -47,6 +47,7 @@ import {
 // dùng update các field trong bảng tiktok_info
 import { updateListView } from "../../api/update";
 
+//upload ảnh
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -126,6 +127,18 @@ const Tiktok_info = () => {
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    //upload ảnh
+    let tiktok_file = [];
+    fileList?.map((item) => {
+      let fileUrl = "";
+      if (item?.xhr?.response) {
+        fileUrl = JSON.parse(item.xhr.response).url;
+      } else {
+        fileUrl = item.url;
+      }
+      tiktok_file.push(fileUrl);
+    });
+
     let dateValue = {};
     tablelist_tiktok_Date.map((item) => {
       dateValue[item.value] = dayjs(dateData[item.value]).format(
@@ -135,6 +148,8 @@ const Tiktok_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+      //upload ảnh
+      tiktok_image_url: tiktok_file.length > 0 ? tiktok_file.join(",") : "",
       tiktok_plan: values?.tiktok_plan ? values.tiktok_plan.join(",") : "",
       tiktok_block: values?.tiktok_block ? values.tiktok_block.join(",") : "",
       tiktok_error: values?.tiktok_error ? values.tiktok_error.join(",") : "",
@@ -304,6 +319,20 @@ const Tiktok_info = () => {
     tablelist_tiktok_Date.map((item) => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
+    //upload ảnh
+    if (data?.tiktok_image_url) {
+      let dataImage = [];
+      let imageArr = data.tiktok_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
     //console.log(dateValue);
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
@@ -644,21 +673,17 @@ const Tiktok_info = () => {
                           copyToClipboard(form.getFieldValue("_id"))
                         }
                       >
-                        <Input
-                          disabled={true}
-                          
-                          placeholder="input here"
-                        />
+                        <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={10}>
                       <Form.Item label="Tiktok User" name="tiktok_user">
-                        <Input  placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                     <Col span={8}>
                       <Form.Item label="Tiktok Pass" name="tiktok_password">
-                        <Input  placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -666,7 +691,7 @@ const Tiktok_info = () => {
                   <Row gutter={16}>
                     <Col span={24}>
                       <Form.Item label="Tiktok chi tiết" name="tiktok_detail">
-                        <Input  placeholder="input here" />
+                        <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -674,22 +699,22 @@ const Tiktok_info = () => {
                   <Row gutter={16}>
                     <Col span={6}>
                       <Form.Item label="Tiktok limit" name="tiktok_limit">
-                        <Input  placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok items" name="tiktok_item">
-                        <Input  placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok Sold" name="tiktok_sold">
-                        <Input  placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                     <Col span={6}>
                       <Form.Item label="Tiktok Fb" name="tiktok_feedback">
-                        <Input  placeholder="0" />
+                        <Input placeholder="0" />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -1004,8 +1029,8 @@ const Tiktok_info = () => {
                     <Form.Item name="tiktok_image_url">
                       <Upload
                         action="https://backend.penda.vn/api/files"
-                         multiple
-                          listType="picture-card"
+                        multiple
+                        listType="picture-card"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

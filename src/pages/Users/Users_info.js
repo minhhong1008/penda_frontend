@@ -225,7 +225,7 @@ const Users_info = () => {
     ];
 
     return (
-      <Col span={24}>
+      <Col xs={24} xl={24} className="mb-24">
         <Timeline mode={mode}>
           {arr.map((item, index) => {
             return (
@@ -297,8 +297,8 @@ const Users_info = () => {
         >
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-              <Row gutter={16}>
-                <Col span={12}>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card
                     title="THÔNG TIN USER"
                     extra={
@@ -314,8 +314,8 @@ const Users_info = () => {
                       initialValues={usersData}
                       autoComplete="off"
                     >
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item
                             label="Users id"
                             name="users_id"
@@ -329,12 +329,12 @@ const Users_info = () => {
                             <Input disabled={true} placeholder="I_1000" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Giới tính" name="users_sex">
                             <Input placeholder="Nam" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item
                             label="Ngày sinh"
                             name="usersdate_birthday"
@@ -344,38 +344,38 @@ const Users_info = () => {
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Họ tên" name="users_fullname">
                             <Input placeholder="Thế Minh Hồng" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Passport" name="users_passport">
                             <Input placeholder="028094999999" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="SSN" name="users_ssn">
                             <Input placeholder="028094999999" />
                           </Form.Item>
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={18}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={18} className="mb-24">
                           <Form.Item label="Quê quán" name="users_origin">
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col xs={12} xl={6} className="mb-24">
                           <Form.Item label="code" name="users_code">
                             <Input />
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row gutter={16}>
-                        <Col span={24}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={24} xl={24} className="mb-24">
                           <Form.Item
                             label="Nơi thường trú"
                             name="users_residence"
@@ -385,8 +385,8 @@ const Users_info = () => {
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item
                             label="Có giá trị đến"
                             name="usersdate_expiry"
@@ -394,12 +394,12 @@ const Users_info = () => {
                             <Input placeholder="25/7/2041" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Ngày CCCD" name="usersdate_start">
                             <Input placeholder="29/4/2021" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item
                             label="Ngày vào làm"
                             name="usersdate_begin"
@@ -409,50 +409,50 @@ const Users_info = () => {
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Users" name="users_name">
                             <Input placeholder="nguyenhoai" />
                           </Form.Item>
                         </Col>
 
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Password" name="users_passwords">
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Biệt danh" name="users_aliases">
                             <Input placeholder="Nguyễn Hoài" />
                           </Form.Item>
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={8}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Điện thoại" name="users_phone">
                             <Input placeholder="0994238888" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Facebook" name="users_fb">
                             <Input placeholder="fb.com/theminhhong1008a" />
                           </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Mail" name="users_mail">
                             <Input placeholder="" />
                           </Form.Item>
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={9}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={12} xl={9} className="mb-24">
                           <Form.Item label="Ngân hàng" name="users_bank">
                             <Input placeholder="ACB" />
                           </Form.Item>
                         </Col>
-                        <Col span={10}>
+                        <Col xs={12} xl={10} className="mb-24">
                           <Form.Item
                             label="Số tài khoản"
                             name="users_banknumber"
@@ -460,15 +460,15 @@ const Users_info = () => {
                             <Input placeholder="76668888" />
                           </Form.Item>
                         </Col>
-                        <Col span={5}>
+                        <Col  xs={12} xl={5} className="mb-24">
                           <Form.Item label="Sắp xếp" name="users_sort">
                             <Input placeholder="" />
                           </Form.Item>
                         </Col>
                       </Row>
 
-                      <Row gutter={16}>
-                        <Col span={12}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Trình độ" name="users_level">
                             <Select
                               //mode="multiple"
@@ -511,7 +511,7 @@ const Users_info = () => {
                             </Select>
                           </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Chuyên ngành" name="users_major">
                             <Select
                               //mode="multiple"
@@ -745,8 +745,8 @@ const Users_info = () => {
                         </Select>
                       </Form.Item>
 
-                      <Row gutter={16}>
-                        <Col span={12}>
+                      <Row gutter={[24, 0]}>
+                        <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Trạng thái" name="users_status">
                             <Select
                               //mode="multiple"
@@ -777,7 +777,7 @@ const Users_info = () => {
                             </Select>
                           </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Lương" name="users_salary">
                             <Select
                               //mode="multiple"
@@ -875,27 +875,27 @@ const Users_info = () => {
                         </Col>
                       </Row>
                       <Row>
-                      <Col span={12}>
+                      <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Trợ cấp" name="users_subsidize">
                              <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Hoa hồng" name="users_comission">
                             <Input />
                           </Form.Item>
                         </Col>
                       </Row>
                       <Row>
-                      <Col span={12}>
+                      <Col xs={24} xl={12} className="mb-24">
                           <Form.Item label="Ứng lương" name="users_salary_advance">
                              <Input />
                           </Form.Item>
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} xl={12} className="mb-24">
                         </Col>
                       </Row>
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         <Form.Item name="users_image_url">
                           <Upload
                             multiple
@@ -913,9 +913,9 @@ const Users_info = () => {
                   </Card>
                 </Col>
 
-                <Col span={12}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card title="CHỨC NĂNG NHIỆM VỤ">
-                    <Col span={24}>
+                    <Col xs={24} xl={24} className="mb-24">
                       <Space
                         direction="vertical"
                         style={{
@@ -952,8 +952,8 @@ const Users_info = () => {
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="LỊCH SỬ" key="2">
-              <Row gutter={16}>
-                <Col span={12}>
+              <Row gutter={[24, 0]}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card title="THỜI GIAN">
                     <Form
                       form={dateForm}
@@ -961,10 +961,10 @@ const Users_info = () => {
                       name="date"
                       initialValues={dateData}
                     >
-                      <Row gutter={16}>
+                      <Row gutter={[24, 0]}>
                         {listDate.map((item, index) => {
                           return (
-                            <Col span={8} key={index}>
+                            <Col xs={12} xl={8} className="mb-24" key={index}>
                               <Form.Item label={item.title} name={item.value}>
                                 <DatePicker
                                   format="YYYY-MM-DD"
@@ -979,10 +979,10 @@ const Users_info = () => {
                   </Card>
                 </Col>
 
-                <Col span={12}>
+                <Col xs={24} xl={12} className="mb-24">
                   <Card title="LỊCH SỬ">
                     <Row>
-                      <Col span={24}>
+                      <Col xs={24} xl={24} className="mb-24">
                         <Input.TextArea
                           value={noteValue}
                           rows={4}

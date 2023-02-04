@@ -17,8 +17,7 @@ import {
   Upload,
   Affix,
 } from "antd";
-import { useMemo } from 'react';
-
+import { useMemo } from "react";
 
 import { PlusOutlined, CopyOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
@@ -55,30 +54,28 @@ const getBase64 = (file) =>
   });
 
 const Ebay_info = () => {
-  
-        <Button onClick={() => form.submit()} type="primary">
-          Lưu thông tin
-        </Button>
-      
-  const operations =<Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}><Button onClick={() => form.submit()} type="primary">Lưu thông tin</Button></Affix> ;
+  const operations = (
+    <Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}>
+      <Button onClick={() => form.submit()} type="primary">
+        Lưu thông tin
+      </Button>
+    </Affix>
+  );
   const { Option } = Select;
   const { users_function } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
   let { id } = useParams();
-  // Khai báo các kho dữ liệu
+  // Khai báo kho dữ liệu của các form
+  const [form] = Form.useForm();
+  const [infoForm] = Form.useForm();
+  const [dateForm] = Form.useForm();
+  // Tạo state để nhận dữ liệu của listview
   const [ebayData, setebayData] = useState({});
   const [dateData, setDateData] = useState();
   const [info, setInfo] = useState();
   const [selectListInfo, setSelectListInfo] = useState([]);
   const [noteValue, setNoteValue] = useState("");
-  // Khai báo kho dữ liệu của các form
-  const [form] = Form.useForm();
-  const [infoForm] = Form.useForm();
-  const [dateForm] = Form.useForm();
   const [listselect_ebay_employee, setListebay_employee] = useState();
-
-  // Tạo state để nhận dữ liệu của listview
-
   const [listViewData, setListViewData] = useState();
   const [modalListView, setModalListView] = useState(false);
   const [viewData, setViewData] = useState();
@@ -153,6 +150,7 @@ const Ebay_info = () => {
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+    //upload ảnh
     let ebay_file = [];
     fileList?.map((item) => {
       let fileUrl = "";
@@ -163,6 +161,7 @@ const Ebay_info = () => {
       }
       ebay_file.push(fileUrl);
     });
+
     let dateValue = {};
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = dayjs(dateData[item.value]).format(
@@ -172,6 +171,7 @@ const Ebay_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+        //upload ảnh
       ebay_image_url: ebay_file.length > 0 ? ebay_file.join(",") : "",
       ebay_plan: values?.ebay_plan ? values.ebay_plan.join(",") : "",
       ebay_block: values?.ebay_block ? values.ebay_block.join(",") : "",
@@ -352,6 +352,7 @@ const Ebay_info = () => {
     tablelist_ebay_Date.map((item) => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
+    //upload ảnh
     if (data?.ebay_image_url) {
       let dataImage = [];
       let imageArr = data.ebay_image_url.split(",");
@@ -365,6 +366,7 @@ const Ebay_info = () => {
       });
       setFileList(dataImage);
     }
+
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
     setNoteValue(data.ebay_note);
@@ -619,12 +621,11 @@ const Ebay_info = () => {
     }
   };
 
-  // Upload ảnh
+  //upload ảnh
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState();
-
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -665,7 +666,7 @@ const Ebay_info = () => {
       } */
     >
       <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
-        <Tabs.TabPane tab={"THÔNG TIN TÀI KHOẢN: " + id} key="1" >
+        <Tabs.TabPane tab={"THÔNG TIN TÀI KHOẢN: " + id} key="1">
           <Row gutter={[24, 4]}>
             <Col xs={24} xl={12} className="mb-24">
               <Card
@@ -1054,7 +1055,7 @@ const Ebay_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
-
+                  {/*  //upload ảnh */}
                   <Row gutter={[24, 0]}>
                     <Form.Item name="ebay_image_url">
                       <Upload
@@ -1136,7 +1137,7 @@ const Ebay_info = () => {
                               <div className="meta_data">
                                 <Avatar
                                   style={{ cursor: "pointer" }}
-                                  size={30}
+                                  size={40}
                                   onClick={() =>
                                     viewInfo(
                                       item.title.toLocaleLowerCase(),

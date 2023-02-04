@@ -46,7 +46,7 @@ import {
 } from "../../api/amazon/index";
 // dùng update các field trong bảng amazon_info
 import { updateListView } from "../../api/update";
-
+    //upload ảnh
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -126,6 +126,17 @@ const Amazon_info = () => {
 
   // Hàm để gửi dữ liệu đi
   const onFinish = async (values) => {
+     //upload ảnh
+     let amazon_file = [];
+     fileList?.map((item) => {
+       let fileUrl = "";
+       if (item?.xhr?.response) {
+         fileUrl = JSON.parse(item.xhr.response).url;
+       } else {
+         fileUrl = item.url;
+       }
+       amazon_file.push(fileUrl);
+     });
     let dateValue = {};
     tablelist_amazon_Date.map((item) => {
       dateValue[item.value] = dayjs(dateData[item.value]).format(
@@ -135,6 +146,8 @@ const Amazon_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
+      //upload ảnh
+      amazon_image_url: amazon_file.length > 0 ? amazon_file.join(",") : "",
       amazon_plan: values?.amazon_plan ? values.amazon_plan.join(",") : "",
       amazon_block: values?.amazon_block ? values.amazon_block.join(",") : "",
       amazon_error: values?.amazon_error ? values.amazon_error.join(",") : "",
@@ -302,6 +315,20 @@ const Amazon_info = () => {
     tablelist_amazon_Date.map((item) => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
+      //upload ảnh
+      if (data?.amazon_image_url) {
+        let dataImage = [];
+        let imageArr = data.amazon_image_url.split(",");
+        imageArr.map((item, index) => {
+          dataImage.push({
+            uid: index,
+            name: item,
+            status: "done",
+            url: item,
+          });
+        });
+        setFileList(dataImage);
+      }
     //console.log(dateValue);
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
@@ -557,19 +584,11 @@ const Amazon_info = () => {
     }
   };
 
-  // Upload ảnh
+  //upload ảnh
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "../asset/",
-    },
-  ]);
-
+  const [fileList, setFileList] = useState();
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -581,7 +600,9 @@ const Amazon_info = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = async ({ fileList }) => setFileList(fileList);
+  const handleChange = async ({ fileList }) => {
+    setFileList(fileList);
+  };
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -1017,7 +1038,7 @@ const Amazon_info = () => {
                       </Form.Item>
                     </Col>
                   </Row>
-
+                  {/* //upload ảnh */}
                   <Row gutter={16}>
                     <Form.Item name="amazon_image_url">
                       <Upload
@@ -1028,7 +1049,7 @@ const Amazon_info = () => {
                         onPreview={handlePreview}
                         onChange={handleChange}
                       >
-                        {fileList.length >= 8 ? null : uploadButton}
+                         {uploadButton}
                       </Upload>
                     </Form.Item>
                   </Row>

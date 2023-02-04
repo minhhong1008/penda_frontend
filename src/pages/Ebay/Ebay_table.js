@@ -244,20 +244,25 @@ const Ebay_table = () => {
     {
       title: (
         <div>
-          <strong style={{ width: "100%", color: "#1677ff" }}>Ngày</strong>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
         </div>
       ),
+      
       key: "ebaydate_nextclass",
       width: 1,
       render: (record) => {
         let now = dayjs().unix();
         let next_class = record?.ebaydate_nextclass;
+        let start_class = record?.ebaydate_start;
         let data = ""
-        if(next_class){
-           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        if(next_class && start_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400) +"/"+ Math.floor((now - dayjs(start_class).unix()) / 86400);
         }
         return data
-      }
+      },
+      
+      
+      
     },
     {
       title: (

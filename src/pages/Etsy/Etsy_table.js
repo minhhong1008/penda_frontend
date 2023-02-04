@@ -24,6 +24,7 @@ import { HuongDanEtsy_table } from "./Etsy_list";
 import { searchEtsyInfo } from "../../api/etsy";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import dayjs from "dayjs";
 
 
 const Etsy_table = () => {
@@ -192,6 +193,24 @@ const Etsy_table = () => {
       },
       ...getColumnSearchProps("etsy_class"),
       
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "etsydate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.etsydate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
+      },
     },
     {
       title: "TIẾN TRÌNH",

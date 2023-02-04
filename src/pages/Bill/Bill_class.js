@@ -34,6 +34,7 @@ import {
   getListBill,
   get_Bill_employee,
 } from "../../api/bill";
+import { PlusOutlined } from "@ant-design/icons";
 /* // Liên quan mention
 const onChange = (value) => {
   console.log("Change:", value);
@@ -46,7 +47,7 @@ const MOCK_DATA = {
   "#": ["1.0", "2.0", "3.0"],
 };
 // Liên quan upload ảnh
-import { PlusOutlined } from "@ant-design/icons";
+
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -193,6 +194,8 @@ const Bill_class = () => {
 
     let productValues = formProduct.getFieldsValue();
     // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
+    
+    
     let newData = {
       ...values,
       ...productValues,
@@ -217,6 +220,20 @@ const Bill_class = () => {
     const res = await get_Bill_employee();
     let data = res.data;
     setlistselect_employee(data);
+    //upload ảnh
+    if (data?.ebay_image_url) {
+      let dataImage = [];
+      let imageArr = data.ebay_image_url.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
   };
 
   //---------------Bảng-------------------

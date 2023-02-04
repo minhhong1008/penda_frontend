@@ -15,6 +15,7 @@ import {
   TreeSelect,
   Tag,
 } from "antd";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -69,6 +70,24 @@ const Amazon_table = () => {
       key: "amazon_user",
       sorter: (a, b) => {
         return a.amazon_user?.localeCompare(b.amazon_user);
+      },
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
+        </div>
+      ),
+      key: "amazondate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.amazondate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
       },
     },
     {
