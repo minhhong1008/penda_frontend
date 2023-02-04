@@ -647,8 +647,8 @@ const Payoneer_info = () => {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card
                 title={
                   <strong
@@ -668,8 +668,8 @@ const Payoneer_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-                  <Row gutter={16}>
-                    <Col span={6}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item
                         label="Payoneer id"
                         name="payoneer_id"
@@ -687,20 +687,20 @@ const Payoneer_info = () => {
                         <Input disabled={true} placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={10}>
+                    <Col xs={12} xl={10} className="mb-24">
                       <Form.Item label="Payoneer User" name="payoneer_user">
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Payoneer Pass" name="payoneer_password">
                         <Input placeholder="input here" />
                       </Form.Item>
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={24}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={24} xl={24} className="mb-24">
                       <Form.Item
                         label="Payoneer chi tiết"
                         name="payoneer_detail"
@@ -710,23 +710,23 @@ const Payoneer_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
-                    <Col span={6}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="Payoneer limit" name="payoneer_limit">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="Payoneer items" name="payoneer_item">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="Payoneer Sold" name="payoneer_sold">
                         <Input placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col xs={12} xl={6} className="mb-24">
                       <Form.Item label="Payoneer Fb" name="payoneer_feedback">
                         <Input placeholder="0" />
                       </Form.Item>
@@ -959,8 +959,8 @@ const Payoneer_info = () => {
                     </Form.Item>
                   ) : null}
 
-                  <Row gutter={16}>
-                    <Col span={8}>
+                  <Row gutter={[24, 0]}>
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Trạng thái" name="payoneer_status">
                         <Select
                           //mode="multiple"
@@ -994,7 +994,7 @@ const Payoneer_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Lớp Payoneer" name="payoneer_class">
                         <Select
                           //mode="multiple"
@@ -1018,7 +1018,7 @@ const Payoneer_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col span={8}>
+                    <Col xs={12} xl={8} className="mb-24">
                       <Form.Item label="Hỗ trợ" name="payoneer_support">
                         <Select
                           style={{ width: "100%" }}
@@ -1039,7 +1039,7 @@ const Payoneer_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={16}>
+                  <Row gutter={[24, 0]}>
                     <Form.Item name="payoneer_image_url">
                       <Upload
                          multiple
@@ -1057,7 +1057,7 @@ const Payoneer_info = () => {
               </Card>
             </Col>
 
-            <Col span={12}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title={
                   <strong
                     style={{
@@ -1143,8 +1143,8 @@ const Payoneer_info = () => {
                                 </a>
                               </div>
 
-                              <Row gutter={16} style={{ width: "100%" }}>
-                                <Col span={4}>
+                              <Row gutter={[24, 0]} style={{ width: "100%" }}>
+                                <Col xs={12} xl={4} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       openModalListView(
@@ -1160,7 +1160,7 @@ const Payoneer_info = () => {
                                     <Input disabled />
                                   </Form.Item>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={12} xl={6} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1182,7 +1182,7 @@ const Payoneer_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col span={6}>
+                                <Col xs={0} xl={6} className="mb-24">
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1204,7 +1204,7 @@ const Payoneer_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col span={4}>
+                                <Col xs={0} xl={4} className="mb-24">
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1243,7 +1243,7 @@ const Payoneer_info = () => {
                                     )}
                                   </Select>
                                 </Col>
-                                <Col span={4}>
+                                <Col xs={0} xl={4} className="mb-24">
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1297,8 +1297,8 @@ const Payoneer_info = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
-          <Row gutter={16}>
-            <Col span={12}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
@@ -1307,10 +1307,10 @@ const Payoneer_info = () => {
                   initialValues={dateData}
                   size="large"
                 >
-                  <Row gutter={16}>
+                  <Row gutter={[24, 0]}>
                     {tablelist_payoneer_Date.map((item, index) => {
                       return (
-                        <Col key={index} span={8}>
+                        <Col key={index} xs={12} xl={8} className="mb-24">
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
@@ -1326,10 +1326,10 @@ const Payoneer_info = () => {
               </Card>
             </Col>
 
-            <Col span={12}>
+            <Col xs={24} xl={12} className="mb-24">
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col span={24}>
+                  <Col xs={24} xl={24} className="mb-24">
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
