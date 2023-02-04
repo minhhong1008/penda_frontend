@@ -94,7 +94,7 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_device_error = ["Lỗi Win", "Sai pass","Lỗi PC","Lỗi brower", "thiếu dung lượng"];
+export const listselect_device_error = ["Xong","Lỗi Win", "Sai pass","Lỗi PC","Lỗi brower", "thiếu dung lượng"];
 
 export const listselect_device_processing = [
   "Setup info",

@@ -95,6 +95,7 @@ export const listselect_view_acc = [
 ];
 
 export const listselect_sim_error = [
+  "Xong",
   "Không gửi code",
   "Không nhận code",
   "Không có sóng",
@@ -220,6 +221,7 @@ export const listselect_sim_status = [
   "Error",
   "Restrict",
   "Suspended",
+  "Die",
 ];
 
 export const listselect_sim_class = [
@@ -743,18 +745,3 @@ const ContentSim = () => (
   </>
 );
 export default ContentSim;
-/*   const listTest1 = () => {
-    let listTest = [];
-    for (var i = 0; i < 10; i++) {
-      listTest.push({
-        title: "Ngày " + i,
-        value: "Số " + i
-      })
-    }
-    return listTest;
-  };
-
-  let a = listTest1();
-
-  console.log(a.map());
-  console.log('hahaha'); */

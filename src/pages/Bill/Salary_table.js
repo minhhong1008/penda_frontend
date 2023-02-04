@@ -20,122 +20,21 @@ import { get_Timesheets_table } from "../../api/timeSheet";
 
 const Salary_table = () => {
   const { users_function } = useSelector((state) => state.auth);
+  const { userss } = useSelector((state) => state.users);
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const status_name = urlParams.get("timesheets");
-  const [data, setData] = useState();
-  const { userss } = useSelector((state) => state.users);
+  const [dataSource, setData] = useState();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [filter_date_start, setFilter_date_start] = useState({
     month: dayjs().format("MM"),
     year: dayjs().format("YYYY"),
   });
-  const dispatch = useDispatch();
-  const history = useHistory();
 
-  const columns = [
-    {
-      title: "STT",
-      key: "index",
-      width: 7,
-      render: (text, record, index) => index + 1,
-      responsive: ["md"],
-    },
-    {
-      title: "Họ tên",
-      dataIndex: "users_name",
-      key: "users_name",
-      fixed: "left",
-      width: 25,
-      sorter: (a, b) => a.users_name - b.users_name,
-    },
-    {
-      title: "Chức vụ",
-      dataIndex: "users_function",
-      key: "users_function",
-      width: 25,
-      sorter: (a, b) => a.users_function - b.users_function,
-      responsive: ["md"],
-    },
-    {
-      title: "Lương chính",
-      dataIndex: "users_salary",
-      key: "users_salary",
-      width: 25,
-      sorter: (a, b) => a.users_salary - b.users_salary,
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-    },
 
-    {
-      title: "Hoa hồng",
-      dataIndex: "users_bonus",
-      key: "users_bonus",
-      width: 25,
-      sorter: (a, b) => a.users_bonus - b.users_bonus,
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-    },
 
-    {
-      title: "Phụ cấp",
-      dataIndex: "users_allowance",
-      key: "users_allowance",
-      width: 25,
-      sorter: (a, b) => a.users_allowance - b.users_allowance,
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-    },
-
-    {
-      title: "Công hiện tại",
-      dataIndex: "users_days",
-      key: "users_days",
-      width: 25,
-      sorter: (a, b) => a.users_days - b.users_days,
-    },
-
-    {
-      title: "Lương hiện tại",
-      dataIndex: "users_now_salary",
-      key: "users_now_salary",
-      width: 25,
-      sorter: (a, b) => a.users_now_salary - b.users_now_salary,
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-    },
-
-    {
-      title: "Đã ứng",
-      dataIndex: "users_advance",
-      key: "users_advance",
-      width: 25,
-      responsive: ["md"],
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-      sorter: (a, b) => a.users_advance - b.users_advance,
-    },
-    {
-      title: "Thực nhận",
-      dataIndex: "users_true_salary",
-      key: "users_true_salary",
-      width: 25,
-      sorter: (a, b) => a.users_true_salary - b.users_true_salary,
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-    },
-
-    {
-      title: "Dự kiến công",
-      dataIndex: "users_expected_days",
-      key: "users_expected_days",
-      width: 25,
-      sorter: (a, b) => a.users_expected_days - b.users_expected_days,
-    },
-
-    {
-      title: "Dự kiến lương",
-      dataIndex: "users_expected_salary",
-      key: "users_expected_salary",
-      width: 20,
-
-      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-      fixed: "right",
-    },
-  ];
 
   const getListusers = () => {
     dispatch(
@@ -148,6 +47,7 @@ const Salary_table = () => {
   const renderData = (timeSheet) => {
     let newData = [];
     let data_index = 0;
+    
     timeSheet.forEach((user_time, index) => {
       if (index % 2 == 0) {
         newData.push({
@@ -293,6 +193,111 @@ const Salary_table = () => {
     getData_Timesheets_table(filter_date_start);
   }, [userss]);
 
+  const columns = [
+    {
+      title: "STT",
+      key: "index",
+      width: 7,
+      render: (text, record, index) => index + 1,
+      responsive: ["md"],
+    },
+    {
+      title: "Họ tên",
+      dataIndex: "users_name",
+      key: "users_name",
+      fixed: "left",
+      width: 25,
+      sorter: (a, b) => a.users_name - b.users_name,
+    },
+    {
+      title: "Chức vụ",
+      dataIndex: "users_function",
+      key: "users_function",
+      width: 25,
+      sorter: (a, b) => a.users_function - b.users_function,
+      responsive: ["md"],
+    },
+    {
+      title: "Lương chính",
+      dataIndex: "users_salary",
+      key: "users_salary",
+      width: 25,
+      sorter: (a, b) => a.users_salary - b.users_salary,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    },
+
+    {
+      title: "Hoa hồng",
+      dataIndex: "users_bonus",
+      key: "users_bonus",
+      width: 25,
+      sorter: (a, b) => a.users_bonus - b.users_bonus,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    },
+
+    {
+      title: "Phụ cấp",
+      dataIndex: "users_allowance",
+      key: "users_allowance",
+      width: 25,
+      sorter: (a, b) => a.users_allowance - b.users_allowance,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    },
+
+    {
+      title: "Công hiện tại",
+      dataIndex: "users_days",
+      key: "users_days",
+      width: 25,
+      sorter: (a, b) => a.users_days - b.users_days,
+    },
+
+    {
+      title: "Lương hiện tại",
+      dataIndex: "users_now_salary",
+      key: "users_now_salary",
+      width: 25,
+      sorter: (a, b) => a.users_now_salary - b.users_now_salary,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    },
+
+    {
+      title: "Đã ứng",
+      dataIndex: "users_advance",
+      key: "users_advance",
+      width: 25,
+      responsive: ["md"],
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+      sorter: (a, b) => a.users_advance - b.users_advance,
+    },
+    {
+      title: "Thực nhận",
+      dataIndex: "users_true_salary",
+      key: "users_true_salary",
+      width: 25,
+      sorter: (a, b) => a.users_true_salary - b.users_true_salary,
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    },
+
+    {
+      title: "Dự kiến công",
+      dataIndex: "users_expected_days",
+      key: "users_expected_days",
+      width: 25,
+      sorter: (a, b) => a.users_expected_days - b.users_expected_days,
+    },
+
+    {
+      title: "Dự kiến lương",
+      dataIndex: "users_expected_salary",
+      key: "users_expected_salary",
+      width: 20,
+
+      render: (text) => text?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+      fixed: "right",
+    },
+  ];
+
   return (
     <div>
       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
@@ -316,8 +321,9 @@ const Salary_table = () => {
               <div className="table-responsive">
                 <Table
                   width="100%"
+                  
                   columns={columns}
-                  dataSource={data}
+                  dataSource={dataSource}
                   bordered
                   size="small"
                   pagination={{

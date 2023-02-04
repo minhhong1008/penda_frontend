@@ -76,26 +76,7 @@ const Sim_table = () => {
             }}
           />
           <Space>
-            {/* <Button
-              type="primary"
-              onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-              icon={<SearchOutlined />}
-              size="small"
-              style={{
-                width: 90,
-              }}
-            >
-              Search
-            </Button>
-            <Button
-              onClick={() => clearFilters && handleReset(clearFilters)}
-              size="small"
-              style={{
-                width: 90,
-              }}
-            >
-              Reset
-            </Button> */}
+            
             <Button
               type="link"
               size="small"
@@ -203,76 +184,31 @@ const Sim_table = () => {
       ...getColumnSearchProps("sim_user"),
     },
     {
-      title: "TIẾN TRÌNH",
-      dataIndex: "sim_processing",
-      key: "sim_processing",
-      render: (record) => {
-        let list = record?.split(",");
-        return (
-          <div style={{ display: "flex", gap: "8px" }}>
-            {list?.map((item) => {
-              if (item == "Buyer" || item == "Seller") {
-                return (
-                  <div
-                    style={{
-                      borderRadius: "6px",
-                      padding: "2px 2px",
-                      background: "#1c84c6",
-                      color: "white",
-                    }}
-                  >
-                    {item}
-                  </div>
-                );
-              } else if (item == "Verify Full" || item == "Verify Bank") {
-                return (
-                  <div
-                    style={{
-                      borderRadius: "6px",
-                      padding: "2px 6px",
-                      background: "#1ab394",
-                      color: "white",
-                    }}
-                  >
-                    {item}
-                  </div>
-                );
-              } else if (item == "Restrict" || item == "Suspended") {
-                return (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      borderRadius: "6px",
-                      padding: "2px 6px",
-                      background: "#ed5565",
-                      color: "white",
-                    }}
-                  >
-                    {item}
-                  </div>
-                );
-              } else {
-                return (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      borderRadius: "6px",
-                      padding: "2px 2px",
-                      background: "#23c6c8",
-                      color: "white",
-                    }}
-                  >
-                    {item}
-                  </div>
-                );
-              }
-            })}
-          </div>
-        );
-      },
+      title: "SỐ TIỀN",
+      dataIndex: "sim_limit",
+      key: "sim_limit",
       sorter: (a, b) => {
-        return a.sim_processing?.localeCompare(b.sim_processing);
+        return a.sim_limit?.localeCompare(b.sim_limit);
       },
+      ...getColumnSearchProps("sim_limit"),
+    },
+    {
+      title: "KHÓA 1 CHIỀU",
+      dataIndex: "sim_item",
+      key: "sim_item",
+      sorter: (a, b) => {
+        return a.sim_item?.localeCompare(b.sim_item);
+      },
+      ...getColumnSearchProps("sim_item"),
+    },
+    {
+      title: "KHÓA 2 CHIỀU",
+      dataIndex: "sim_sold",
+      key: "sim_sold",
+      sorter: (a, b) => {
+        return a.sim_sold?.localeCompare(b.sim_sold);
+      },
+      ...getColumnSearchProps("sim_sold"),
     },
     {
       title: "PHÁT SINH",

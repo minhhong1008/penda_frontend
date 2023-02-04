@@ -1136,6 +1136,7 @@ const Ebay_info = () => {
                               <div className="meta_data">
                                 <Avatar
                                   style={{ cursor: "pointer" }}
+                                  size={30}
                                   onClick={() =>
                                     viewInfo(
                                       item.title.toLocaleLowerCase(),

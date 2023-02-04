@@ -95,6 +95,7 @@ export const listselect_view_acc = [
 ];
 
 export const listselect_mail_error = [
+  "Xong",
   "error login",
   "Sai pass",
   "error code",

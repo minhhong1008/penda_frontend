@@ -13,8 +13,8 @@ import icontiktok from "../../assets/images/iconSocial/icontiktok.png";
 import iconpayoneer from "../../assets/images/iconSocial/iconpayoneer.png";
 import iconpaypal from "../../assets/images/iconSocial/iconpaypal.png";
 import iconpingpong from "../../assets/images/iconSocial/iconpingpong.jpg";
-import React from 'react';
-import { Divider } from 'antd';
+import React from "react";
+import { Divider } from "antd";
 
 export const listselect_view_acc = [
   {
@@ -94,7 +94,14 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_paypal_error = ["error login", "Sai pass","error code","Không thấy sim","error verify"];
+export const listselect_paypal_error = [
+  "Xong",
+  "error login",
+  "Sai pass",
+  "error code",
+  "Không thấy sim",
+  "error verify",
+];
 
 export const listselect_paypal_processing = [
   "Login mail",
@@ -191,7 +198,6 @@ export const listselect_paypal_type = [
   "Top Rate",
   "Bán acc",
   "Bán hàng",
-
 ];
 
 export const listselect_paypal_sell_status = [
@@ -213,7 +219,7 @@ export const listselect_paypal_owner = [
 ];
 
 export const listselect_paypal_status = [
-    "Null",
+  "Null",
   "Live",
   "Active",
   "Error",
@@ -467,7 +473,6 @@ export const tablelist_paypal_Date = [
 
 export const listselect_paypal_fields = [];
 
-
 export const HuongDanPaypal_info = () => {
   return (
     <div>
@@ -699,42 +704,46 @@ export const HuongDanPaypal_class = () => {
   );
 };
 
-
-
 const ContentPaypal = () => (
   <>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider>Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left">Left Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right">Right Text</Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="left" orientationMargin="0">
       Left Text with 0 orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
     <Divider orientation="right" orientationMargin={50}>
       Right Text with 50px orientationMargin
     </Divider>
     <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-      probare, quae sunt a te dicta? Refert tamen, quo modo.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne
+      merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen,
+      quo modo.
     </p>
   </>
 );

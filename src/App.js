@@ -145,6 +145,7 @@ import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
 
 // HomePage Process_class
+import Blogs from "./pages/HomePage/Blog";
 import Company from "./pages/HomePage/Company";
 import Process_class from "./pages/HomePage/Process_class";
 import Science_class from "./pages/HomePage/Science_class";
@@ -317,11 +318,7 @@ const App = () => {
           />
 
           {/* project */}
-          <Route
-            path="/blog/project_class"
-            exact
-            component={Project_class}
-          />
+          <Route path="/blog/project_class" exact component={Project_class} />
           <Route
             path="/blog/project_class/table"
             exact
@@ -551,25 +548,15 @@ const App = () => {
             component={Customer_info}
           />
 
-          <Route
-            path="/blog/blog_info"
-            exact
-            component={Blog_info}
-          />
+          <Route path="/blog/blog_info" exact component={Blog_info} />
 
-          
-
-          <Route
-            path="/blog/home_content/:id"
-            exact
-            component={Home_content}
-          />
+          <Route path="/blog/home_content/:id" exact component={Home_content} />
           <Route
             path="/blog/homeedit_content/:id"
             exact
             component={HomeEdit_content}
           />
-
+          <Route path="/blog" exact component={Blogs} />
           <Route path="/blog/company" exact component={Company} />
           <Route path="/blog/process_class" exact component={Process_class} />
           <Route path="/blog/science_class" exact component={Science_class} />

@@ -101,6 +101,7 @@ export const listselect_view_acc = [
 ];
 
 export const listselect_ebay_error = [
+  "Xong",
   "Không login",
   "Sai pass",
   "Không về code",

@@ -95,6 +95,7 @@ export const listselect_view_acc = [
 ];
 
 export const listselect_etsy_error = [
+  "Xong",
   "Không login",
   "Sai pass",
   "Không về code",

@@ -28,7 +28,7 @@ const Process_class = () => {
   }, []);
 
   return (
-    <div>
+    <div >
       <Row gutter={[24, 0]}>
         {data?.map((item, index) => {
           return (

@@ -94,7 +94,7 @@ export const listselect_view_acc = [
   },
 ];
 
-export const listselect_shopee_error = ["Không login", "Sai pass","Không về code","Không thấy sim"];
+export const listselect_shopee_error = ["Xong","Không login", "Sai pass","Không về code","Không thấy sim"];
 
 export const listselect_shopee_processing = [
   "Login mail",

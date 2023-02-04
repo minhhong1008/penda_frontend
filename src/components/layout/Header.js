@@ -521,7 +521,7 @@ function Header({
             </Link>
           </Tooltip>
           <Tooltip title="Project" color="blue" key="blue">
-            <Link to="/personnel/project_class">
+            <Link to="/blog/project_class">
               <ProjectTwoTone
                 style={{ fontSize: "30px", paddingLeft: "20px" }}
                 twoToneColor="blue"
