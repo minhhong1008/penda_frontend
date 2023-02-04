@@ -632,8 +632,8 @@ const Sim_info = () => {
     >
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="THÔNG TIN TÀI KHOẢN" key="1">
-          <Row gutter={[24, 0]}>
-            <Col xs={24} xl={12} className="mb-24">
+          <Row gutter={16}>
+            <Col span={12}>
               <Card title={
                   <strong
                     style={{
@@ -651,8 +651,8 @@ const Sim_info = () => {
                   autoComplete="off"
                   size="large"
                 >
-                  <Row gutter={[24, 0]}>
-                    <Col xs={12} xl={6} className="mb-24">
+                  <Row gutter={16}>
+                    <Col span={6}>
                       <Form.Item
                         label="Sim id"
                         name="sim_id"
@@ -674,7 +674,7 @@ const Sim_info = () => {
                         />
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={10} className="mb-24">
+                    <Col span={10}>
                       <Form.Item
                         label="Sim User"
                         name="sim_user"
@@ -682,7 +682,7 @@ const Sim_info = () => {
                         <Input  placeholder="input here" />
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={8} className="mb-24">
+                    <Col span={8}>
                       <Form.Item
                         label="Sim Pass"
                         name="sim_password"
@@ -692,8 +692,8 @@ const Sim_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={[24, 0]}>
-                    <Col xs={24} xl={24} className="mb-24">
+                  <Row gutter={16}>
+                    <Col span={24}>
                       <Form.Item
                         label="Sim chi tiết"
                         name="sim_detail"
@@ -703,23 +703,23 @@ const Sim_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={[24, 0]}>
-                    <Col xs={12} xl={12} className="mb-24">
+                  <Row gutter={16}>
+                    <Col span={8}>
                       <Form.Item label="Sim Số tiền" name="sim_limit">
                         <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={12} className="mb-24">
+                    <Col span={8}>
                       <Form.Item label="Sim khóa 1 chiều" name="sim_item">
                         <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={12} className="mb-24">
+                    <Col span={8}>
                       <Form.Item label="Sim khóa 2 chiều" name="sim_sold">
                         <Input  placeholder="0" />
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={12} className="mb-24">
+                    <Col span={8}>
                       <Form.Item label="Sim Fb" name="sim_feedback">
                         <Input  placeholder="0" />
                       </Form.Item>
@@ -952,8 +952,8 @@ const Sim_info = () => {
                     </Form.Item>
                   ) : null}
 
-                  <Row gutter={[24, 0]}>
-                    <Col xs={12} xl={8} className="mb-24">
+                  <Row gutter={16}>
+                    <Col span={8}>
                       <Form.Item label="Trạng thái" name="sim_status">
                         <Select
                           //mode="multiple"
@@ -987,7 +987,7 @@ const Sim_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={8} className="mb-24">
+                    <Col span={8}>
                       <Form.Item label="Lớp Sim" name="sim_class">
                         <Select
                           //mode="multiple"
@@ -1011,7 +1011,7 @@ const Sim_info = () => {
                         </Select>
                       </Form.Item>
                     </Col>
-                    <Col xs={12} xl={8} className="mb-24">
+                    <Col span={8}>
                       <Form.Item label="Hỗ trợ" name="sim_support">
                         <Select
                           style={{ width: "100%" }}
@@ -1032,7 +1032,7 @@ const Sim_info = () => {
                     </Col>
                   </Row>
 
-                  <Row gutter={[24, 0]}>
+                  <Row gutter={16}>
                     <Form.Item name="sim_image_url">
                       <Upload
                          multiple
@@ -1050,7 +1050,7 @@ const Sim_info = () => {
               </Card>
             </Col>
 
-            <Col xs={24} xl={12} className="mb-24">
+            <Col span={12}>
               <Card title={
                   <strong
                     style={{
@@ -1136,8 +1136,8 @@ const Sim_info = () => {
                                 </a>
                               </div>
 
-                              <Row gutter={[24, 0]} style={{ width: "100%" }}>
-                                <Col xs={12} xl={4} className="mb-24">
+                              <Row gutter={16} style={{ width: "100%" }}>
+                                <Col span={4}>
                                   <Form.Item
                                     onClick={() =>
                                       openModalListView(
@@ -1153,7 +1153,7 @@ const Sim_info = () => {
                                     <Input disabled />
                                   </Form.Item>
                                 </Col>
-                                <Col xs={12} xl={6} className="mb-24">
+                                <Col span={6}>
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1175,7 +1175,7 @@ const Sim_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col xs={0} xl={6} className="mb-24">
+                                <Col span={6}>
                                   <Form.Item
                                     onClick={() =>
                                       copyToClipboard(
@@ -1197,7 +1197,7 @@ const Sim_info = () => {
                                     />
                                   </Form.Item>
                                 </Col>
-                                <Col xs={0} xl={4} className="mb-24">
+                                <Col span={4}>
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1236,7 +1236,7 @@ const Sim_info = () => {
                                     )}
                                   </Select>
                                 </Col>
-                                <Col xs={0} xl={4} className="mb-24">
+                                <Col span={4}>
                                   <Select
                                     //mode="multiple"
                                     style={{ width: "100%" }}
@@ -1290,8 +1290,8 @@ const Sim_info = () => {
         </Tabs.TabPane>
 
         <Tabs.TabPane tab="LỊCH SỬ" key="2">
-          <Row gutter={[24, 0]}>
-            <Col xs={24} xl={12} className="mb-24">
+          <Row gutter={16}>
+            <Col span={12}>
               <Card title="THỜI GIAN: YYYY-MM-DD">
                 <Form
                   form={dateForm}
@@ -1300,10 +1300,10 @@ const Sim_info = () => {
                   initialValues={dateData}
                   size="large"
                 >
-                  <Row gutter={[24, 0]}>
+                  <Row gutter={16}>
                     {tablelist_sim_Date.map((item, index) => {
                       return (
-                        <Col key={index} xs={12} xl={12} className="mb-24">
+                        <Col key={index} span={8}>
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}
@@ -1319,10 +1319,10 @@ const Sim_info = () => {
               </Card>
             </Col>
 
-            <Col xs={24} xl={12} className="mb-24">
+            <Col span={12}>
               <Card title="LỊCH SỬ">
                 <Row>
-                  <Col xs={24} xl={24} className="mb-24">
+                  <Col span={24}>
                     <Input.TextArea
                       value={noteValue}
                       rows={4}
