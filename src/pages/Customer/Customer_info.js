@@ -509,7 +509,7 @@ const Customer_info = () => {
                   <Row gutter={16}>
                     <Form.Item name="customer_image_url">
                       <Upload
-                        action="http://backend.penda.vn/api/files"
+                        action="https://backend.penda.vn/api/files"
                          multiple
                           listType="picture-card"
                         fileList={fileList}

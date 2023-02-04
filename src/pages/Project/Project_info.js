@@ -625,7 +625,7 @@ const Project_info = () => {
                   <Row gutter={[24, 0]}>
                     <Form.Item name="project_image_url">
                       <Upload
-                        action="http://backend.penda.vn/api/files"
+                        action="https://backend.penda.vn/api/files"
                         multiple
                         listType="picture-card"
                         fileList={fileList}

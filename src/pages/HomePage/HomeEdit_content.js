@@ -194,7 +194,7 @@ const HomeEdit_content = () => {
             data={projectData.blog_content}
             config={{
               ckfinder: {
-                uploadUrl: "http://backend.penda.vn/api/files",
+                uploadUrl: "https://backend.penda.vn/api/files",
               },
             }}
             onChange={(event, editor) => {

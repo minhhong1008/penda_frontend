@@ -1118,7 +1118,7 @@ const Bill_class = () => {
                           <Upload
                             multiple
                             listType="picture-card"
-                            action="http://backend.penda.vn/api/files"
+                            action="https://backend.penda.vn/api/files"
                             fileList={fileList}
                             onPreview={handlePreview}
                             onChange={handleChange}
@@ -1243,7 +1243,7 @@ const Bill_class = () => {
                 editor={ClassicEditor}
                 data="<p>Hello from CKEditor 5!</p>"
                 config={{ckfinder: {
-                  uploadUrl: 'http://backend.penda.vn/api/files'
+                  uploadUrl: 'https://backend.penda.vn/api/files'
                 }}}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.

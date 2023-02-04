@@ -1031,7 +1031,7 @@ const Pingpong_info = () => {
                       <Upload
                          multiple
                           listType="picture-card"
-                        action="http://backend.penda.vn/api/files"
+                        action="https://backend.penda.vn/api/files"
                         fileList={fileList}
                         onPreview={handlePreview}
                         onChange={handleChange}

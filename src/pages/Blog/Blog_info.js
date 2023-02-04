@@ -169,7 +169,7 @@ const Blog_info = () => {
             data="<p>Hello from CKEditor 5!</p>"
             config={{
               ckfinder: {
-                uploadUrl: "http://backend.penda.vn/api/files",
+                uploadUrl: "https://backend.penda.vn/api/files",
               },
             }}
             onChange={(event, editor) => {
