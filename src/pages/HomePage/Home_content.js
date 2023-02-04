@@ -19,8 +19,8 @@ const Home_content = () => {
   }, []);
 
   return (
-    <div>
-      <h3>{title}</h3>
+    <div className="blog_content" >
+      <div className="title">{title}</div>
       <div dangerouslySetInnerHTML={{__html: content}}></div>
     </div>
   );
