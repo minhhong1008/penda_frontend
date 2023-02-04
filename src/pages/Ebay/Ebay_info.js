@@ -1330,7 +1330,7 @@ const Ebay_info = () => {
                   <Row gutter={[24, 0]}>
                     {tablelist_ebay_Date.map((item, index) => {
                       return (
-                        <Col key={index} xs={8} xl={8} className="mb-24">
+                        <Col key={index} xs={12} xl={12} className="mb-24">
                           <Form.Item label={item.title} name={item.value}>
                             <DatePicker
                               style={{ float: "right" }}

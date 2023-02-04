@@ -324,11 +324,11 @@ function Billing() {
                 <div className="card-footer">
                   <div className="mr-30">
                     <p>Card Holder</p>
-                    <h6>Jack Peterson</h6>
+                    <h6>THE MINH HONG</h6>
                   </div>
                   <div className="mr-30">
                     <p>Expires</p>
-                    <h6>11/22</h6>
+                    <h6>11/27</h6>
                   </div>
                   <div className="card-footer-col col-logo ml-auto">
                     <img src={mastercard} alt="mastercard" />
