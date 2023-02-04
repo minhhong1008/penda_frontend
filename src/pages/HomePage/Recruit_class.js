@@ -40,7 +40,7 @@ const Recruit_class = () => {
                     src={item.blog_thumbnail}
                     style={{ height: 200 }}
                     onClick={() => {
-                      history.push(`/home_content/${item._id}`);
+                      history.push(`/blog/home_content/${item._id}`);
                     }}
                   />
                 }
@@ -54,7 +54,7 @@ const Recruit_class = () => {
                   <EditOutlined
                     key="edit"
                     onClick={() => {
-                      history.push(`/homeedit_content/${item._id}`);
+                      history.push(`/blog/homeedit_content/${item._id}`);
                     }}
                   />,
                 ]}

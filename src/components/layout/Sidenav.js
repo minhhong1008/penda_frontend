@@ -149,7 +149,7 @@ function Sidenav({ color }) {
   ];
   return (
     <>
-      {page == "HomePage" ? null : (
+      {page == "" ? null : (
         <Menu theme="light" mode="inline">
           <Menu.Item key="1">
             <NavLink to="/HomePage">

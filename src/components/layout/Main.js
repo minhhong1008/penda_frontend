@@ -6,6 +6,7 @@ import Sidenav from "./Sidenav";
 import SideBarProduct from "../sidebar/SideBarProducts";
 import SideBarBussiness from "../sidebar/SideBarBusiness";
 import SideBarPersonnel from "../sidebar/SideBarPersonnel";
+import SideBarBlog from "../sidebar/SideBarBlog";
 import SideBarFinance from "../sidebar/SideBarFinance";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -72,7 +73,7 @@ function Main({ children }) {
           </Sider>
         </Layout>
       </Drawer>
-      {pathname == "HomePage" || pathname == "HomePage/company" ? null : (
+      {pathname == "HomePage" ? null : (
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
@@ -96,6 +97,9 @@ function Main({ children }) {
           {pathname.split("/")[0] == "personnel" ? (
             <SideBarPersonnel color={sidenavColor}></SideBarPersonnel>
           ) : null}
+          {pathname.split("/")[0] == "blog" ? (
+            <SideBarBlog color={sidenavColor}></SideBarBlog>
+          ) : null}
           {pathname.split("/")[0] == "finance" ? (
             <SideBarFinance color={sidenavColor}></SideBarFinance>
           ) : null}
@@ -103,7 +107,7 @@ function Main({ children }) {
       )}
       <Layout
         style={
-          pathname == "HomePage" || pathname == "HomePage/company"
+          pathname == "HomePage"
             ? { marginLeft: 0 }
             : {}
         }

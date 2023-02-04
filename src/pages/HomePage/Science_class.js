@@ -10,13 +10,13 @@ import { listBlog } from "../../api/blog";
 import { useHistory } from "react-router-dom";
 import dayjs from "dayjs";
 
-const Train_class = () => {
+const Science_class = () => {
   const history = useHistory();
   const [data, setData] = useState();
   const { Meta } = Card;
 
   const getListBlog = async () => {
-    let response = await listBlog({ blog_page: "train_class" });
+    let response = await listBlog({ blog_page: "science_class" });
     let data = response.data;
     if (data.length > 0) {
       setData(data);
@@ -84,4 +84,4 @@ const Train_class = () => {
   );
 };
 
-export default Train_class;
+export default Science_class;

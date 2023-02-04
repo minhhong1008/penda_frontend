@@ -84,11 +84,11 @@ const SideBarpersonnel = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="65">
-            <NavLink to="/personnel/project_class">
+            <NavLink to="/blog/project_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "personnel/project_class" ? color : "",
+                  background: page === "blog/project_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -98,11 +98,11 @@ const SideBarpersonnel = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="3">
-            <NavLink to="/personnel/review_class">
+            <NavLink to="/blog/review_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "personnel/review_class" ? color : "",
+                  background: page === "blog/review_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -112,11 +112,11 @@ const SideBarpersonnel = ({ color }) => {
           </Menu.Item>
           
           <Menu.Item key="4">
-            <NavLink to="/homepage/recruit_class">
+            <NavLink to="/blog/recruit_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "homepage/recruit_class" ? color : "",
+                  background: page === "blog/recruit_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -126,11 +126,11 @@ const SideBarpersonnel = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="5">
-            <NavLink to="/homepage/train_class">
+            <NavLink to="/blog/train_class">
               <span
                 className="icon"
                 style={{
-                  background: page === "homepage/train_class" ? color : "",
+                  background: page === "blog/train_class" ? color : "",
                 }}
               >
                 {dashboard}
@@ -140,11 +140,11 @@ const SideBarpersonnel = ({ color }) => {
           </Menu.Item>
 
           <Menu.Item key="6">
-            <NavLink to="/personnel/blog_info">
+            <NavLink to="/blog/blog_info">
               <span
                 className="icon"
                 style={{
-                  background: page === "/personnel/blog_info" ? color : "",
+                  background: page === "/blog/blog_info" ? color : "",
                 }}
               >
                 {dashboard}

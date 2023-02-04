@@ -144,8 +144,10 @@ import Customer_class from "./pages/Customer/Customer_class";
 import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
 
-// HomePage
+// HomePage Process_class
 import Company from "./pages/HomePage/Company";
+import Process_class from "./pages/HomePage/Process_class";
+import Science_class from "./pages/HomePage/Science_class";
 import Train_class from "./pages/HomePage/Train_class";
 import Recruit_class from "./pages/HomePage/Recruit_class";
 
@@ -316,17 +318,17 @@ const App = () => {
 
           {/* project */}
           <Route
-            path="/personnel/project_class"
+            path="/blog/project_class"
             exact
             component={Project_class}
           />
           <Route
-            path="/personnel/project_class/table"
+            path="/blog/project_class/table"
             exact
             component={Project_table}
           />
           <Route
-            path="/personnel/project_class/table/:id"
+            path="/blog/project_class/table/:id"
             exact
             component={Project_info}
           />
@@ -550,7 +552,7 @@ const App = () => {
           />
 
           <Route
-            path="/personnel/blog_info"
+            path="/blog/blog_info"
             exact
             component={Blog_info}
           />
@@ -558,19 +560,21 @@ const App = () => {
           
 
           <Route
-            path="/home_content/:id"
+            path="/blog/home_content/:id"
             exact
             component={Home_content}
           />
           <Route
-            path="/homeedit_content/:id"
+            path="/blog/homeedit_content/:id"
             exact
             component={HomeEdit_content}
           />
 
-          <Route path="/homepage/company" exact component={Company} />
-          <Route path="/homepage/train_class" exact component={Train_class} />
-          <Route path="/homepage/recruit_class" exact component={Recruit_class} />
+          <Route path="/blog/company" exact component={Company} />
+          <Route path="/blog/process_class" exact component={Process_class} />
+          <Route path="/blog/science_class" exact component={Science_class} />
+          <Route path="/blog/train_class" exact component={Train_class} />
+          <Route path="/blog/recruit_class" exact component={Recruit_class} />
           <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />

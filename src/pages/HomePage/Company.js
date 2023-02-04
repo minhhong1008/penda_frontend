@@ -35,14 +35,14 @@ const Company = () => {
             <Col xs={12} xl={6} className="mb-24" key={index}>
               <Card
                 cover={<img alt="example" src={item.blog_thumbnail} style={{ height: 200 }} onClick={() => {
-                  history.push(`/home_content/${item._id}`);
+                  history.push(`/blog/home_content/${item._id}`);
                 }} />}
                 actions={[
                   
                   <div className="demo-option-label-item">{dayjs(item.blog_date).format("YYYY-MM-DD")}</div>,
                   <div className="demo-option-label-item">{item.blog_sort}</div>,
                   <EditOutlined key="edit" onClick={() => {
-                    history.push(`/homeedit_content/${item._id}`);
+                    history.push(`/blog/homeedit_content/${item._id}`);
                   }} />,
                   
                 ]}
