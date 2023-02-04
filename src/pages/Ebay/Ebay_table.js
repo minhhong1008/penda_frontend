@@ -27,6 +27,7 @@ import { HuongDanEbay_table } from "./Ebay_list";
 import { searchEbayInfo, updateebayInfo } from "../../api/ebay";
 // search trên table
 import { SearchOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const Ebay_table = () => {
   const queryString = window.location.search;
@@ -239,6 +240,24 @@ const Ebay_table = () => {
         return a.ebay_class?.localeCompare(b.ebay_class);
       },
       ...getColumnSearchProps("ebay_class"),
+    },
+    {
+      title: (
+        <div>
+          <strong style={{ width: "100%", color: "#1677ff" }}>Ngày</strong>
+        </div>
+      ),
+      key: "ebaydate_nextclass",
+      width: 1,
+      render: (record) => {
+        let now = dayjs().unix();
+        let next_class = record?.ebaydate_nextclass;
+        let data = ""
+        if(next_class){
+           data = Math.floor((now - dayjs(next_class).unix()) / 86400);
+        }
+        return data
+      }
     },
     {
       title: (
