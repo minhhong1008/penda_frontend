@@ -1,5 +1,4 @@
 // phím tắt để đóng mở region : ctrl K + ctrl 0; ctrl K + ctrl J ; ctrl K + ctrl ] ; ctrl K + ctrl [ ; ctrl shifft [ ; ctrl shifft ]
-
 import {
   Button,
   Card,
@@ -12,19 +11,16 @@ import {
   Select,
   Modal,
   Avatar,
-  Tooltip,
   List,
   Upload,
   Affix,
 } from "antd";
-import { useMemo } from "react";
-
 import { PlusOutlined, CopyOutlined } from "@ant-design/icons";
 import { showError, showSuccess } from "../../utils";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { copyToClipboard } from "../../utils/index";
-import dayjs, { now } from "dayjs";
+import dayjs from "dayjs";
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -44,23 +40,10 @@ import {
 
 import { getebayInfo, updateebayInfo } from "../../api/ebay/index";
 import { updateListView } from "../../api/update";
-//upload ảnh
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
 
 const Ebay_info = () => {
-  const operations = (
-    <Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}>
-      <Button onClick={() => form.submit()} type="primary">
-        Lưu thông tin
-      </Button>
-    </Affix>
-  );
+  const type_item = "ebay";
+
   const { Option } = Select;
   const { users_function } = useSelector((state) => state.auth);
   // Lấy ID từ trên param url
@@ -82,16 +65,13 @@ const Ebay_info = () => {
   const [valueInput, setValueInput] = useState();
 
   // Xử lý dữ liệu Modal List view tài khoản khác bằng id
-
   const setValueView = (e) => {
     setValueInput(e.target.value);
   };
-
   const openModalListView = (name) => {
     setViewData(name);
     setModalListView(true);
   };
-
   const submitModalListView = async () => {
     let payload = {};
     payload[viewData] = valueInput;
@@ -103,7 +83,6 @@ const Ebay_info = () => {
     window.location.reload();
     showSuccess("Thành công");
   };
-
   const cancelListView = () => {
     setModalListView(false);
     setValueInput("");
@@ -171,7 +150,7 @@ const Ebay_info = () => {
     const newValue = {
       ...values,
       ...dateValue,
-        //upload ảnh
+      //upload ảnh
       ebay_image_url: ebay_file.length > 0 ? ebay_file.join(",") : "",
       ebay_plan: values?.ebay_plan ? values.ebay_plan.join(",") : "",
       ebay_block: values?.ebay_block ? values.ebay_block.join(",") : "",
@@ -353,20 +332,7 @@ const Ebay_info = () => {
       dateValue[item.value] = dayjs(data[item.value]);
     });
     //upload ảnh
-    if (data?.ebay_image_url) {
-      let dataImage = [];
-      let imageArr = data.ebay_image_url.split(",");
-      imageArr.map((item, index) => {
-        dataImage.push({
-          uid: index,
-          name: item,
-          status: "done",
-          url: item,
-        });
-      });
-      setFileList(dataImage);
-    }
-
+    setFilepicture(data?.ebay_image_url);
     dateForm.setFieldsValue(dateValue);
     setDateData(data);
     setNoteValue(data.ebay_note);
@@ -453,7 +419,6 @@ const Ebay_info = () => {
       }); // Dùng hàm này set lại để lưu vào db
     }
   };
-
   const onChange_Processing = (values) => {
     if (values[values.length - 1] == "Buyer") {
       form.setFieldValue("ebay_class", "Lớp 4");
@@ -465,7 +430,11 @@ const Ebay_info = () => {
         ebaydate_nextclass: dayjs(),
       });
     }
-    if (values[values.length - 1] == "Verify phone" || values[values.length - 1] == "Verify mail"  || values[values.length - 1] == "Verify address") {
+    if (
+      values[values.length - 1] == "Verify phone" ||
+      values[values.length - 1] == "Verify mail" ||
+      values[values.length - 1] == "Verify address"
+    ) {
       form.setFieldValue("ebay_class", "Lớp 6");
       dateForm.setFieldValue("ebaydate_verify", dayjs());
       dateForm.setFieldValue("ebaydate_nextclass", dayjs());
@@ -506,7 +475,6 @@ const Ebay_info = () => {
       });
     }
   };
-
   const onChange_Class = async (values) => {
     dateForm.setFieldValue("ebaydate_nextclass", dayjs());
     setDateData({
@@ -622,6 +590,13 @@ const Ebay_info = () => {
   };
 
   //upload ảnh
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -653,18 +628,32 @@ const Ebay_info = () => {
     </div>
   );
 
+  const setFilepicture = (values) => {
+    //upload ảnh
+    if (values) {
+      let dataImage = [];
+      let imageArr = values.split(",");
+      imageArr.map((item, index) => {
+        dataImage.push({
+          uid: index,
+          name: item,
+          status: "done",
+          url: item,
+        });
+      });
+      setFileList(dataImage);
+    }
+  };
+  // HTML
+  const operations = (
+    <Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}>
+      <Button onClick={() => form.submit()} type="primary">
+        Lưu thông tin
+      </Button>
+    </Affix>
+  );
   return (
-    <Card
-      title={id + " | " + (info?._id ? info?._id : "")}
-      /* extra={
-        
-        <Affix offsetTop={20} onChange={(affixed) => console.log(affixed)}>
-        <Button onClick={() => form.submit()} type="primary">
-          Lưu thông tin
-        </Button>
-      </Affix>
-      } */
-    >
+    <Card title={id + " | " + (info?._id ? info?._id : "")}>
       <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
         <Tabs.TabPane tab={"THÔNG TIN TÀI KHOẢN: " + id} key="1">
           <Row gutter={[24, 4]}>
@@ -1380,6 +1369,7 @@ const Ebay_info = () => {
       >
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
+
       <Modal
         title={"Thay tài khoản khác: " + (viewData ? viewData : "")}
         open={modalListView}

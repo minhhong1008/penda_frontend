@@ -291,7 +291,14 @@ const Ebay_table = () => {
       key: "ebay_processing",
 
       render: (record) => {
-        let list = record?.split(",");
+        let list = [];
+        let processing = record?.split(",");
+        if(processing?.length > 5){
+          list = processing?.slice(processing?.length -5, processing?.length);
+        }else{
+          list = record?.split(",");
+        }
+        
         return (
           <div
             style={{
@@ -314,11 +321,7 @@ const Ebay_table = () => {
                   </div>
                 );
               } else if (
-                item == "Verify Full" ||
-                item == "Verify Bank" ||
-                item == "Verify phone" ||
-                item == "Verify mail" ||
-                item == "Verify address"
+                item?.split(" ")?.indexOf("Verify") !== -1
               ) {
                 return (
                   <div
