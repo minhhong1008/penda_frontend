@@ -102,10 +102,12 @@ export const listselect_view_acc = [
 
 export const listselect_ebay_error = [
   "Xong",
-  "Không login",
+  "Syn mail error",
   "Sai pass",
   "Không về code",
   "Không thấy sim",
+  "Request call",
+  "Error login khác",
 ];
 
 export const listselect_ebay_processing = [
@@ -241,6 +243,7 @@ export const listselect_ebay_status = [
   "Error",
   "Restrict",
   "Suspended",
+  "Die",
 ];
 
 export const listselect_ebay_class = [

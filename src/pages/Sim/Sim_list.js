@@ -102,6 +102,7 @@ export const listselect_sim_error = [
   "Yêu cầu verify",
   "khóa 1 chiều",
   "khóa 2 chiều",
+  "Không thấy sim",
 ];
 
 export const listselect_sim_processing = [

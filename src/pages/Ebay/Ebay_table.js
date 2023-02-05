@@ -247,22 +247,28 @@ const Ebay_table = () => {
           <strong style={{ width: "100%", color: "#1677ff" }}>NGÀY</strong>
         </div>
       ),
-      
+
       key: "ebaydate_nextclass",
       width: 1,
       render: (record) => {
         let now = dayjs().unix();
         let next_class = record?.ebaydate_nextclass;
         let start_class = record?.ebaydate_start;
-        let data = ""
-        if(next_class && start_class){
-           data = Math.floor((now - dayjs(next_class).unix()) / 86400) +"/"+ Math.floor((now - dayjs(start_class).unix()) / 86400);
+        let verify_class = record?.ebaydate_verify;
+        let seller_class = record?.ebaydate_seller;
+        let data = "";
+        if (next_class && start_class) {
+          data =
+            Math.floor((now - dayjs(next_class).unix()) / 86400) +
+            "/" +
+            Math.floor((now - dayjs(start_class).unix()) / 86400) +
+            "/" +
+            Math.floor((now - dayjs(verify_class).unix()) / 86400);
+            "/" +
+            Math.floor((now - dayjs(seller_class).unix()) / 86400);
         }
-        return data
+        return data;
       },
-      
-      
-      
     },
     {
       title: (
@@ -647,7 +653,6 @@ const Ebay_table = () => {
           </Tabs.TabPane>
         </Tabs>
       </Card>
-      
     </div>
   );
 };
