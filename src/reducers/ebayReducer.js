@@ -8,6 +8,7 @@ const initialState = {
 function ebayReducer(state = initialState, action) {
   switch (action.type) {
     case GET_LIST_EBAY_SUCCESS: {
+      // thêm ebay_id vào ebays
       let newEbay = [];
       action?.payload?.map((item) => {
         newEbay.push({

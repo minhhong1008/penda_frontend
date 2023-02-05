@@ -21,8 +21,9 @@ import React, { useEffect, useState } from "react";
 import { copyToClipboard } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { getListpayoneerActions } from "../../actions/payoneerActions";
+import { getListpayoneerActions,GET_LIST_PAYONEER_SUCCESS } from "../../actions/payoneerActions";
 import { HuongDanPayoneer_table } from "./Payoneer_list";
+import { searchPayoneerInfo } from "../../api/payoneer";
 import dayjs from "dayjs";
 const Payoneer_table = () => {
   const queryString = window.location.search;
@@ -273,44 +274,36 @@ const Payoneer_table = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
+  // Hàm search
+
+  const searchPayoneer = async (value) => {
+    const response = await searchPayoneerInfo({
+      query: value,
+    });
+    if (response.status == 200) {
+      let { data } = response;
+
+      dispatch({
+        type: GET_LIST_PAYONEER_SUCCESS,
+        payload: data,
+      });
+    } else {
+    }
+  };
   //--------
   return (
     <div>
       <Card>
-        <Form.Item label="Lọc eBay">
-          <TreeSelect
-            mode="multiple"
-            onChange={handleChangeFilter}
-            multiple
-            optionlabelprop="label"
-            treeData={[
-              {
-                title: "Lớp",
-                value: "payoneer_class",
-                children: [
-                  { title: "Lớp 1", value: "Lớp 1" },
-                  { title: "Lớp 2", value: "Lớp 2" },
-                ],
-              },
-              {
-                title: "Thiết bị",
-                value: "payoneer_device",
-                children: [
-                  { title: "PC06", value: "PC06" },
-                  { title: "PC07", value: "PC07" },
-                ],
-              },
-              {
-                title: "Nhân viên",
-                value: "payoneer_employee",
-                children: [
-                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                  { title: "Khắc Liêm", value: "Khắc Liêm" },
-                ],
-              },
-            ]}
-          />
-        </Form.Item>
+      <Row gutter={16}>
+          <Col span={16}>
+            <Input
+              placeholder="Search theo điều kiện hoặc"
+              onPressEnter={(e) => {
+                searchPayoneer(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG LỚP PAYONEER : " + class_name.toUpperCase()}

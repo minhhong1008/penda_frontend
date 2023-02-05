@@ -32,15 +32,6 @@ const Ebay_class = () => {
       ),
       dataIndex: "class",
       key: "class",
-      /*  render: (text) => (
-        <a
-          onClick={() =>
-            history.push(`ebay_class/table?class=${encodeURIComponent(text)}`)
-          }
-        >
-          {text}
-        </a>
-      ), */
     },
     {
       title: (
@@ -725,20 +716,13 @@ const Ebay_class = () => {
   const countEbay = async () => {
     let { data } = await getCountEbay();
     let total = 0;
-    let total_buyer = 0;
-    let total_seller = 0;
     data?.data?.forEach((data) => {
       total = parseInt(total) + parseInt(data?.count);
-      
     });
     
     baseData.forEach((item) => {
-     
      if(item.class == "Tổng"){item.ebay_count = total.toString()}
-
-
-      data?.data?.forEach((data) => {
-        
+      data?.data?.forEach((data) => { 
         if (data._id == item.class) {
           item.ebay_count = data.count.toString();
         }

@@ -1,19 +1,6 @@
 //import React from 'react'
-import {
-  Button,
-  Card,
-  Table,
-  Tabs,
-  Form,
-  Input,
-  Space,
-  TreeSelect,
-  Checkbox,
-  Tag,
-  Tooltip,
-  Col,
-  Row,
-} from "antd";
+import { Button, Card, Table, Tabs } from "antd";
+import { Input, Space, Tag, Tooltip, Col, Row } from "antd";
 import Highlighter from "react-highlight-words";
 import React, { useEffect, useRef, useState } from "react";
 import { copyToClipboard, showError, showSuccess } from "../../utils";
@@ -23,22 +10,22 @@ import {
   getListebayActions,
   GET_LIST_EBAY_SUCCESS,
 } from "../../actions/ebayActions";
-import { HuongDanEbay_table } from "./Ebay_list";
 import { searchEbayInfo, updateebayInfo } from "../../api/ebay";
-// search trên table
+import { HuongDanEbay_table } from "./Ebay_list";
 import { SearchOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
+/*----------*----------*/
 const Ebay_table = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  // Gọi dữ liệu trong state ở reducer ( trong file ebayReducer )
-  const { ebays } = useSelector((state) => state.ebay);
   const class_name = urlParams.get("class");
+  const { ebays } = useSelector((state) => state.ebay); // Gọi ebays từ ebayReducer
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedNote, setSelectedNote] = useState();
-  // Các hàm nut search trên table của ant.desgn
+
+  /*----------Các hàm nut search trên table của ant.desgn----------*/
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -47,18 +34,8 @@ const Ebay_table = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, close }) => (
       <div
         style={{
           padding: 8,
@@ -79,26 +56,6 @@ const Ebay_table = () => {
           }}
         />
         <Space>
-          {/* <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Reset
-          </Button> */}
           <Button
             type="link"
             size="small"
@@ -156,13 +113,66 @@ const Ebay_table = () => {
         text
       ),
   });
-  //-------------------------------
-  // nut checked, sửa cả trong file ebayReducer
+
+  /*----------nut checked, sửa cả trong file ebayReducer----------*/
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const copyId = () => {
+  function copyId() {
     copyToClipboard(selectedRowKeys.join("\n"));
+  }
+
+
+
+  const handleChangeNote = async (id, value) => {
+    const response = await updateebayInfo(
+      {
+        ebay_note: value,
+      },
+      id
+    );
+    if (response.status == 200) {
+      showSuccess("Update thành công");
+    } else {
+      showError("Có lỗi");
+    }
+    setSelectedNote();
   };
 
+  // nut checked copy cái này trong ant.design
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  //--------
+
+  // Hàm search
+  const searchEbay = async (value) => {
+    const response = await searchEbayInfo({
+      query: value,
+    });
+    if (response.status == 200) {
+      let { data } = response;
+      dispatch({
+        type: GET_LIST_EBAY_SUCCESS,
+        payload: data,
+      });
+    } else {
+    }
+  };
+
+  const getListEbay = () => {
+    dispatch(
+      getListebayActions({
+        ebay_class: class_name,
+      })
+    );
+  };
+  /*----------HTML----------*/
+  useEffect(() => {
+    getListEbay();
+  }, [class_name]);
   const columns = [
     {
       title: (
@@ -264,8 +274,7 @@ const Ebay_table = () => {
             Math.floor((now - dayjs(start_class).unix()) / 86400) +
             "/" +
             Math.floor((now - dayjs(verify_class).unix()) / 86400);
-            "/" +
-            Math.floor((now - dayjs(seller_class).unix()) / 86400);
+          "/" + Math.floor((now - dayjs(seller_class).unix()) / 86400);
         }
         return data;
       },
@@ -490,70 +499,6 @@ const Ebay_table = () => {
       },
     },
   ];
-
-  const handleChangeNote = async (id, value) => {
-    const response = await updateebayInfo(
-      {
-        ebay_note: value,
-      },
-      id
-    );
-    if (response.status == 200) {
-      showSuccess("Update thanh cong");
-    } else {
-      showError("Loi roi");
-    }
-    setSelectedNote();
-  };
-
-  const handleChangeFilter = (values) => {
-    let newValue = values.join(",");
-    dispatch(
-      getListebayActions({
-        ebay_employee: newValue,
-      })
-    );
-  };
-
-  const getListEbay = () => {
-    dispatch(
-      getListebayActions({
-        ebay_class: class_name,
-      })
-    );
-  };
-
-  useEffect(() => {
-    getListEbay();
-  }, [class_name]);
-
-  // nut checked copy cái này trong ant.design
-  const onSelectChange = (newSelectedRowKeys) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-  //--------
-
-  // Hàm search
-
-  const searchEbay = async (value) => {
-    const response = await searchEbayInfo({
-      query: value,
-    });
-    if (response.status == 200) {
-      let { data } = response;
-
-      dispatch({
-        type: GET_LIST_EBAY_SUCCESS,
-        payload: data,
-      });
-    } else {
-    }
-  };
-
   return (
     <div>
       <Card>
@@ -567,41 +512,6 @@ const Ebay_table = () => {
             />
           </Col>
         </Row>
-
-        {/* <Form.Item label="Lọc eBay">
-          <TreeSelect
-            mode="multiple"
-            onChange={handleChangeFilter}
-            multiple
-            optionlabelprop="label"
-            treeData={[
-              {
-                title: "Lớp",
-                value: "ebay_class",
-                item: [
-                  { title: "Lớp 1", value: "Lớp 1" },
-                  { title: "Lớp 2", value: "Lớp 2" },
-                ],
-              },
-              {
-                title: "Thiết bị",
-                value: "ebay_device",
-                item: [
-                  { title: "PC06", value: "PC06" },
-                  { title: "PC07", value: "PC07" },
-                ],
-              },
-              {
-                title: "Nhân viên",
-                value: "ebay_employee",
-                item: [
-                  { title: "Nguyễn Hoài", value: "Nguyễn Hoài" },
-                  { title: "Khắc Liêm", value: "Khắc Liêm" },
-                ],
-              },
-            ]}
-          />
-        </Form.Item> */}
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane
             tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase()}

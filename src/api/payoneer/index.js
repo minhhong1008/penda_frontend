@@ -28,6 +28,11 @@ export const getCountPayoneer = () => {
   return axiosClient.get(url);
 }
 
+export const searchPayoneerInfo = (text) => {
+  const url = `/payoneer/search?${genQueryString(text)}`;
+  return axiosClient.get(url);
+}
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)

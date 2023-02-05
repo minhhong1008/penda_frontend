@@ -1,5 +1,4 @@
 import Swal from "sweetalert2";
-
 export const randomStr = (l) => {
   var text = "";
   var char_list =
@@ -68,6 +67,8 @@ export const showError = (message) => {
     title: message,
   });
 };
+
+
 
 export const setToken = (value) => {
   localStorage.setItem("token", value);
