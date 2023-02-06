@@ -102,11 +102,9 @@ const Project_class = () => {
     let newdata = data.data;
     newdata.forEach((item, index) => {
       newdata[index].users_name = item._id.users_name;
-      userss?.forEach((user, index) => {
-        if (user.users_name == item._id.users_name) {
-          newdata[index].users_fb = user.users_fb;
-        }
-      });
+      newdata[index].users_fb = userss?.filter(
+        (user) => user.users_name == item._id.users_name
+      )[0]?.users_fb;
     });
 
     setData(newdata);
