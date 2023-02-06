@@ -35,7 +35,7 @@ function Main({ children }) {
     }
   }, [pathname]);
 
-  console.log(pathname);
+
 
   return (
     <Layout

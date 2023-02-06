@@ -25,11 +25,12 @@ const { Title } = Typography;
 const Project_class = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const { userss } = useSelector((state) => state.users);
   const status_name = urlParams.get("status");
+  const { userss } = useSelector((state) => state.users);
   const [newdata, setData] = useState();
   const dispatch = useDispatch();
   const history = useHistory();
+
   const columns = [
     {
       title: "STT",
@@ -45,7 +46,7 @@ const Project_class = () => {
       ),
       dataIndex: "users_name",
       key: "users_name",
-     
+
       render: (text, record, index) => (
         <Avatar.Group
           onClick={(e) => {
@@ -83,7 +84,7 @@ const Project_class = () => {
       key: "count",
       width: 1,
     },
-    
+
     {
       title: (
         <div>
@@ -98,19 +99,27 @@ const Project_class = () => {
 
   const countProject = async () => {
     let { data } = await getCountProject();
-    console.log(data)
     let newdata = data.data;
-    newdata.forEach((item,index) => {
+    newdata.forEach((item, index) => {
       newdata[index].users_name = item._id.users_name;
-      newdata[index].users_fb = item._id.users_fb;
-      console.log(newdata[index])
+      userss?.forEach((user, index) => {
+        if (user.users_name == item._id.users_name) {
+          newdata[index].users_fb = user.users_fb;
+        }
+      });
     });
-    console.log(newdata)
+
     setData(newdata);
   };
 
+  // Hiển thị giao diện lần đầu khi vào trang
+
   useEffect(() => {
-    //getListusers();
+    dispatch(
+      getListusersActions({
+        users_status: "Active",
+      })
+    );
     countProject();
   }, []);
 
@@ -122,7 +131,9 @@ const Project_class = () => {
             return {
               onClick: (event) => {
                 history.push(
-                  `project_class/table?class=${encodeURIComponent(text.users_name)}`
+                  `project_class/table?class=${encodeURIComponent(
+                    text.users_name
+                  )}`
                 );
               },
             };

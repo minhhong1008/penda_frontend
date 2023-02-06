@@ -341,13 +341,19 @@ const Salary_table = () => {
             <Col xs={24} xl={24} className="mb-24">
               <div className="table-responsive">
                 <Table
-                onRow={(record, rowIndex) => {
-                  return {
-                    onClick: (event) => {
-                      history.push(`personnel/users_class/table/${encodeURIComponent(record.users_id)}`.replace("finance/",""));
-                    },
-                  };
-                }}
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        window.open(
+                          `${
+                            process.env.REACT_APP_URL
+                          }/personnel/users_class/table/${encodeURIComponent(
+                            record.users_id
+                          )}`
+                        );
+                      },
+                    };
+                  }}
                   width="100%"
                   columns={columns}
                   dataSource={dataSource}
