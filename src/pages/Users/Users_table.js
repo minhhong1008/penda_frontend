@@ -1,14 +1,5 @@
 //import React from 'react'
-import {
-  Avatar,
-  Card,
-  Form,
-  Space,
-  Table,
-  Tag,
-  TreeSelect,
-  Typography,
-} from "antd";
+import { Avatar, Card, Form, Space, Table, Tag, TreeSelect, Typography } from "antd";
 
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -46,21 +37,20 @@ const Users_table = () => {
           }}
         >
           <Avatar
-            className="shape-avatar"
-            shape="square"
-            size={40}
-            src={
-              "https://graph.facebook.com/" +
-              record.users_fb?.replace("fb.com/", "") +
-              "/picture?height=100&width=100&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662"
-            } //100025410873707
-          ></Avatar>
-          <div className="avatar-info">
-            <Title level={5}>{record.users_name}</Title>
-            <p>{record.users_function}</p>
-          </div>
+              className="shape-avatar"
+              shape="square"
+              size={40}
+              src={
+                "https://graph.facebook.com/"+record.users_fb?.replace("fb.com/","")+"/picture?height=100&width=100&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662"
+              } //100025410873707
+            ></Avatar>
+          <div className="avatar-info" >
+          <Title level={5}>{record.users_name}</Title>
+          <p>{record.users_function}</p>
+            </div>
         </Avatar.Group>
       ),
+      
     },
     {
       title: "Giới tính",
@@ -84,6 +74,7 @@ const Users_table = () => {
       title: "Ngày sinh",
       dataIndex: "usersdate_birthday",
       key: "usersdate_birthday",
+      
     },
     {
       title: "Ngày vào làm",
@@ -102,6 +93,7 @@ const Users_table = () => {
       key: "users_level",
       responsive: ["md"],
     },
+    
   ];
 
   const getListusers = () => {
@@ -118,6 +110,7 @@ const Users_table = () => {
 
   return (
     <div>
+      
       {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
       -1 ? (
         <Card type="inner">

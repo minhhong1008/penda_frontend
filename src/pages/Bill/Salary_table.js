@@ -1,5 +1,6 @@
 //import React from 'react'
 import {
+  Avatar,
   Card,
   Col,
   DatePicker,
@@ -9,6 +10,7 @@ import {
   Table,
   Tag,
   TreeSelect,
+  Typography,
 } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
@@ -17,7 +19,7 @@ import { useHistory } from "react-router-dom";
 import { getListusers_timesheetsActions } from "../../actions/usersActions";
 import { getSalary } from "../../api/salary";
 import { get_Timesheets_table } from "../../api/timeSheet";
-
+const { Title } = Typography;
 const Salary_table = () => {
   const { users_function } = useSelector((state) => state.auth);
   const { userss } = useSelector((state) => state.users);
@@ -33,9 +35,6 @@ const Salary_table = () => {
     year: dayjs().format("YYYY"),
   });
 
-
-
-
   const getListusers = () => {
     dispatch(
       getListusers_timesheetsActions({
@@ -47,7 +46,7 @@ const Salary_table = () => {
   const renderData = (timeSheet) => {
     let newData = [];
     let data_index = 0;
-    
+
     timeSheet.forEach((user_time, index) => {
       if (index % 2 == 0) {
         newData.push({
@@ -90,6 +89,8 @@ const Salary_table = () => {
             users_expected_salary: users_expected_salary,
             users_advance: user?.users_salary_advance,
             users_true_salary: users_true_salary,
+            users_fb: user?.users_fb,
+            users_id: user?.users_id,
           });
         }
       });
@@ -118,6 +119,9 @@ const Salary_table = () => {
         session_obj["users_name"] = userss?.filter(
           (session_obj) => session_obj.users_name == item._id
         )[0]?.users_name;
+        session_obj["users_fb"] = userss?.filter(
+          (session_obj) => session_obj.users_name == item._id
+        )[0]?.users_fb;
 
         verify_obj["users_name"] = "Chấm công";
         item?.sessions.map((session, index) => {
@@ -178,7 +182,6 @@ const Salary_table = () => {
     });
     const { data } = response;
     if (data.length > 0) {
-      
       setData(JSON.parse(data[0].value));
     } else {
       setData([]);
@@ -207,15 +210,33 @@ const Salary_table = () => {
       key: "users_name",
       fixed: "left",
       width: 25,
+      render: (text, record, index) => (
+        <Avatar.Group
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(
+              `table/${encodeURIComponent(record.users_id)}`,
+              "_blank"
+            );
+          }}
+        >
+          <Avatar
+            className="shape-avatar"
+            shape="square"
+            size={40}
+            src={
+              "https://graph.facebook.com/" +
+              record.users_fb?.replace("fb.com/", "") +
+              "/picture?height=100&width=100&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662"
+            } //100025410873707
+          ></Avatar>
+          <div className="avatar-info">
+            <Title level={5}>{record.users_name}</Title>
+            <p>{record.users_function}</p>
+          </div>
+        </Avatar.Group>
+      ),
       sorter: (a, b) => a.users_name - b.users_name,
-    },
-    {
-      title: "Chức vụ",
-      dataIndex: "users_function",
-      key: "users_function",
-      width: 25,
-      sorter: (a, b) => a.users_function - b.users_function,
-      responsive: ["md"],
     },
     {
       title: "Lương chính",
@@ -320,8 +341,14 @@ const Salary_table = () => {
             <Col xs={24} xl={24} className="mb-24">
               <div className="table-responsive">
                 <Table
+                onRow={(record, rowIndex) => {
+                  return {
+                    onClick: (event) => {
+                      history.push(`personnel/users_class/table/${encodeURIComponent(record.users_id)}`.replace("finance/",""));
+                    },
+                  };
+                }}
                   width="100%"
-                  
                   columns={columns}
                   dataSource={dataSource}
                   bordered

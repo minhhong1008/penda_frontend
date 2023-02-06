@@ -205,7 +205,12 @@ const Users_timesheets = () => {
           (session_obj) => session_obj.users_name == item._id
         )[0]?.users_name;
 
+        session_obj["users_fb"] = userss?.filter(
+          (session_obj) => session_obj.users_name == item._id
+        )[0]?.users_fb;
+
         verify_obj["users_name"] = "Chấm công";
+
         item?.sessions.map((session, index) => {
           if (session_obj[session?.day]) {
             session_obj[session?.day] =
@@ -309,10 +314,21 @@ const Users_timesheets = () => {
       render: (text, record, index) => {
         if (index % 2 == 0) {
           return (
-            <div className="avatar-info">
-              <Title level={5}>{record.users_name}</Title>
-              <p>{record.users_function}</p>
-            </div>
+            <Avatar.Group>
+              <Avatar
+                className="shape-avatar"
+                shape="square"
+                size={30}
+                src={
+                  "https://graph.facebook.com/" +
+                  record.users_fb?.replace("fb.com/", "") +
+                  "/picture?height=100&width=100&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662"
+                }
+              ></Avatar>
+              <div className="avatar-info">
+                <Title level={5}>{record.users_name}</Title>
+              </div>
+            </Avatar.Group>
           );
         } else {
           return <p>{record.users_name}</p>;
