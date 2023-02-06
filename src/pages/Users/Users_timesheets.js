@@ -1,5 +1,6 @@
 //import React from 'react'
 import {
+  Avatar,
   Button,
   Card,
   Col,
@@ -13,6 +14,7 @@ import {
   Tabs,
   Tag,
   TreeSelect,
+  Typography,
 } from "antd";
 //import từ ant.desgin và React
 import dayjs from "dayjs";
@@ -28,7 +30,7 @@ import {
   HuongDanUsers_timesheets,
   listselect_working_session,
 } from "./Users_list";
-
+const { Title } = Typography;
 // HÀM CHÍNH TRONG TRANG
 const Users_timesheets = () => {
   // Khai báo các kho dữ liệu của andt.desin đầu tiên
@@ -202,7 +204,7 @@ const Users_timesheets = () => {
         session_obj["users_name"] = userss?.filter(
           (session_obj) => session_obj.users_name == item._id
         )[0]?.users_name;
-           
+
         verify_obj["users_name"] = "Chấm công";
         item?.sessions.map((session, index) => {
           if (session_obj[session?.day]) {
@@ -265,7 +267,7 @@ const Users_timesheets = () => {
         newData.push(session_obj);
         newData.push(verify_obj);
       });
-      
+
       setData_Timesheets_table(newData);
     } else {
       showError("Có lỗi xảy ra");
@@ -304,6 +306,18 @@ const Users_timesheets = () => {
       key: "users_name",
       fixed: "left",
       width: "100%",
+      render: (text, record, index) => {
+        if (index % 2 == 0) {
+          return (
+            <div className="avatar-info">
+              <Title level={5}>{record.users_name}</Title>
+              <p>{record.users_function}</p>
+            </div>
+          );
+        } else {
+          return <p>{record.users_name}</p>;
+        }
+      },
     },
     {
       title: "NGÀY TRONG THÁNG" + "-" + filter_date_start?.month,
@@ -538,7 +552,7 @@ const handleDateTime = (countDays, year, month) => {
     let dataIndex = i;
     arrDate.push({
       title: i,
-     
+
       children: [
         {
           title: dayjs(
@@ -548,7 +562,7 @@ const handleDateTime = (countDays, year, month) => {
           dataIndex: i,
           key: i,
           width: "100%",
-          
+
           render: (text) => {
             return (
               <div

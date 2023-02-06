@@ -34,16 +34,7 @@ const Recruit_class = () => {
           return (
             <Col xs={12} xl={6} className="mb-24" key={index}>
               <Card
-                cover={
-                  <img
-                    alt="example"
-                    src={item.blog_thumbnail}
-                    style={{ height: 200 }}
-                    onClick={() => {
-                      history.push(`/blog/home_content/${item._id}`);
-                    }}
-                  />
-                }
+              
                 actions={[
                   <div className="demo-option-label-item">
                     {dayjs(item.blog_date).format("YYYY-MM-DD")}
@@ -52,6 +43,7 @@ const Recruit_class = () => {
                     {item.blog_sort}
                   </div>,
                   <EditOutlined
+                  hoverable
                     key="edit"
                     onClick={() => {
                       history.push(`/blog/homeedit_content/${item._id}`);
@@ -60,6 +52,7 @@ const Recruit_class = () => {
                 ]}
               >
                 <Meta
+                 
                   avatar={
                     <Avatar
                       style={{
@@ -72,8 +65,21 @@ const Recruit_class = () => {
                     </Avatar>
                   }
                   title={item.blog_title}
-                  description={item.blog_description}
-                  style={{ height: 100 }}
+                  description={item.blog_date}
+                  style={{ height: 80 }}
+                />
+                <div className="demo-option-label-item">
+                  {item.blog_description}
+                </div>
+
+                <img
+                 
+                  alt="example"
+                  src={item.blog_thumbnail}
+                  style={{ height: 240, width:600 }}
+                  onClick={() => {
+                    history.push(`/blog/home_content/${item._id}`);
+                  }}
                 />
               </Card>
             </Col>

@@ -363,12 +363,12 @@ const Users_info = () => {
                       </Row>
 
                       <Row gutter={[24, 0]}>
-                        <Col xs={12} xl={18} className="mb-24">
+                        <Col xs={24} xl={18} className="mb-24">
                           <Form.Item label="Quê quán" name="users_origin">
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col xs={12} xl={6} className="mb-24">
+                        <Col xs={0} xl={6} className="mb-24">
                           <Form.Item label="code" name="users_code">
                             <Input />
                           </Form.Item>
@@ -412,7 +412,12 @@ const Users_info = () => {
                       <Row gutter={[24, 0]}>
                         <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Users" name="users_name">
-                            <Input placeholder="nguyenhoai" />
+                            <Input placeholder="nguyenhoai" disabled={true} />
+                          </Form.Item>
+                        </Col>
+                        <Col xs={12} xl={8} className="mb-24">
+                          <Form.Item label="Mail" name="users_mail">
+                            <Input placeholder="" />
                           </Form.Item>
                         </Col>
 
@@ -421,11 +426,7 @@ const Users_info = () => {
                             <Input />
                           </Form.Item>
                         </Col>
-                        <Col xs={12} xl={8} className="mb-24">
-                          <Form.Item label="Biệt danh" name="users_aliases">
-                            <Input placeholder="Nguyễn Hoài" />
-                          </Form.Item>
-                        </Col>
+                        
                       </Row>
 
                       <Row gutter={[24, 0]}>
@@ -440,8 +441,8 @@ const Users_info = () => {
                           </Form.Item>
                         </Col>
                         <Col xs={12} xl={8} className="mb-24">
-                          <Form.Item label="Mail" name="users_mail">
-                            <Input placeholder="" />
+                          <Form.Item label="Biệt danh" name="users_aliases">
+                            <Input placeholder="Nguyễn Hoài" />
                           </Form.Item>
                         </Col>
                       </Row>
@@ -874,27 +875,24 @@ const Users_info = () => {
                           </Form.Item>
                         </Col>
                       </Row>
-                      <Row>
-                      <Col xs={24} xl={12} className="mb-24">
+                      <Row gutter={[24, 0]}>
+                      <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Trợ cấp" name="users_subsidize">
                              <Input />
                           </Form.Item>
                         </Col>
-                        <Col xs={24} xl={12} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Hoa hồng" name="users_comission">
                             <Input />
                           </Form.Item>
                         </Col>
-                      </Row>
-                      <Row>
-                      <Col xs={24} xl={12} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Ứng lương" name="users_salary_advance">
                              <Input />
                           </Form.Item>
                         </Col>
-                        <Col xs={24} xl={12} className="mb-24">
-                        </Col>
                       </Row>
+                      
                       <Row gutter={[24, 0]}>
                         <Form.Item name="users_image_url">
                           <Upload

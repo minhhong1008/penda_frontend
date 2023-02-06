@@ -53,27 +53,37 @@ const formProps = {
 // table code start
 const columns = [
   {
-    title: "AUTHOR",
+    title: "NHÂN VIÊN",
     dataIndex: "name",
     key: "name",
     width: "32%",
   },
-  {
-    title: "FUNCTION",
-    dataIndex: "function",
-    key: "function",
-  },
-
   {
     title: "STATUS",
     key: "status",
     dataIndex: "status",
   },
   {
-    title: "EMPLOYED",
-    key: "employed",
-    dataIndex: "employed",
+    title: "EBAY",
+    key: "ebay",
+    dataIndex: "ebay",
   },
+  {
+    title: "ETSY",
+    key: "etsy",
+    dataIndex: "etsy",
+  },
+  {
+    title: "PAYONEER",
+    key: "payoneer",
+    dataIndex: "payoneer",
+  },
+  {
+    title: "MAIL",
+    key: "mail",
+    dataIndex: "mail",
+  },
+  
 ];
 
 const data = [
@@ -86,81 +96,50 @@ const data = [
             className="shape-avatar"
             shape="square"
             size={40}
-            src={face2}
+            src={"https://i.imgur.com/yOEZwDP.jpg"}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Michael John</Title>
-            <p>michael@mail.com</p>
+            <Title level={5}>Nguyễn Hoài</Title>
+            
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Manager</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
+   
 
     status: (
       <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
+         <Title level={5}>Online</Title>
       </>
     ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/04/18</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
   },
 
   {
     key: "2",
     name: (
-      <>
+      <div>
         <Avatar.Group>
           <Avatar
             className="shape-avatar"
             shape="square"
             size={40}
-            src={face3}
+            src={"https://graph.facebook.com/100025410873707/picture?height=100&width=100&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662"}  //100025410873707
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Alexa Liras</Title>
-            <p>alexa@mail.com</p>
+            <Title level={5}>Khắc Liêm</Title>
           </div>
-        </Avatar.Group>{" "}
-      </>
+        </Avatar.Group>
+      </div>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Programator</Title>
-          <p>Developer</p>
-        </div>
-      </>
-    ),
+    
 
     status: (
       <>
-        <Button className="tag-badge">ONLINE</Button>
+        <Title level={5}>Online</Title>
       </>
     ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/12/20</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
   },
 
   {
@@ -172,39 +151,18 @@ const data = [
             className="shape-avatar"
             shape="square"
             size={40}
-            src={face}
+            src={"https://i.imgur.com/yOEZwDP.jpg"}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Laure Perrier</Title>
+            <Title level={5}>Thái Sơn</Title>
             <p>laure@mail.com</p>
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Executive</Title>
-          <p>Projects</p>
-        </div>
-      </>
-    ),
-
-    status: (
-      <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
-      </>
-    ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>03/04/21</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
+    
+    
   },
   {
     key: "4",
@@ -215,39 +173,23 @@ const data = [
             className="shape-avatar"
             shape="square"
             size={40}
-            src={face4}
+            src={"https://i.imgur.com/yOEZwDP.jpg"}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Miriam Eric</Title>
+            <Title level={5}>Như Quỳnh</Title>
             <p>miriam@mail.com</p>
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Marketing</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
+    
 
     status: (
       <>
-        <Button type="primary" className="tag-primary">
-          ONLINE
-        </Button>
+        <Title level={5}>Online</Title>
       </>
     ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>03/04/21</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
   },
   {
     key: "5",
@@ -258,37 +200,23 @@ const data = [
             className="shape-avatar"
             shape="square"
             size={40}
-            src={face5}
+            src={"https://i.imgur.com/yOEZwDP.jpg"}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>Richard Gran</Title>
-            <p>richard@mail.com</p>
+            <Title level={5}>Quốc Tuấn</Title>
+            
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Manager</Title>
-          <p>Organization</p>
-        </div>
-      </>
-    ),
+    
 
     status: (
       <>
-        <Button className="tag-badge">ONLINE</Button>
+        <Title level={5}>Online</Title>
       </>
     ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>23/03/20</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
   },
 
   {
@@ -303,34 +231,20 @@ const data = [
             src={face6}
           ></Avatar>
           <div className="avatar-info">
-            <Title level={5}>John Levi</Title>
+            <Title level={5}>Văn Hiệp</Title>
             <p>john@mail.com</p>
           </div>
         </Avatar.Group>{" "}
       </>
     ),
-    function: (
-      <>
-        <div className="author-info">
-          <Title level={5}>Tester</Title>
-          <p>Developer</p>
-        </div>
-      </>
-    ),
+    
 
     status: (
       <>
-        <Button className="tag-badge">ONLINE</Button>
+        <Title level={5}>Online</Title>
       </>
     ),
-    employed: (
-      <>
-        <div className="ant-employed">
-          <span>14/04/17</span>
-          <a href="#pablo">Edit</a>
-        </div>
-      </>
-    ),
+    
   },
 ];
 // project table start
@@ -341,15 +255,15 @@ const project = [
     width: "32%",
   },
   {
-    title: "BUDGET",
+    title: "BUYER",
     dataIndex: "age",
   },
   {
-    title: "STATUS",
+    title: "VERIFY BUYER",
     dataIndex: "address",
   },
   {
-    title: "COMPLETION",
+    title: "SELLER",
     dataIndex: "completion",
   },
 ];
@@ -362,7 +276,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava1} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}>Spotify Version</Title>
+            <Title level={5}>EBAY</Title>
           </div>
         </Avatar.Group>
       </>
@@ -398,7 +312,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava2} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}>Progress Track</Title>
+            <Title level={5}>ETSY</Title>
           </div>
         </Avatar.Group>
       </>
@@ -434,7 +348,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava3} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}> Jira Platform Errors</Title>
+            <Title level={5}> PAYONEER</Title>
           </div>
         </Avatar.Group>
       </>
@@ -470,7 +384,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava5} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}> Launch new Mobile App</Title>
+            <Title level={5}> MAIL</Title>
           </div>
         </Avatar.Group>
       </>
@@ -511,7 +425,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava5} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}>Web Dev</Title>
+            <Title level={5}>SIM</Title>
           </div>
         </Avatar.Group>
       </>
@@ -547,7 +461,7 @@ const dataproject = [
         <Avatar.Group>
           <Avatar className="shape-avatar" src={ava6} size={25} alt="" />
           <div className="avatar-info">
-            <Title level={5}>Redesign Online Store</Title>
+            <Title level={5}>PAYPAL</Title>
           </div>
         </Avatar.Group>
       </>
@@ -592,8 +506,9 @@ function Tables() {
               extra={
                 <>
                   <Radio.Group onChange={onChange} defaultValue="a">
-                    <Radio.Button value="a">All</Radio.Button>
-                    <Radio.Button value="b">ONLINE</Radio.Button>
+                    <Radio.Button value="s">S</Radio.Button>
+                    <Radio.Button value="c">C</Radio.Button>
+                    <Radio.Button value="t">T</Radio.Button>
                   </Radio.Group>
                 </>
               }
@@ -615,9 +530,9 @@ function Tables() {
               extra={
                 <>
                   <Radio.Group onChange={onChange} defaultValue="all">
-                    <Radio.Button value="all">All</Radio.Button>
-                    <Radio.Button value="online">ONLINE</Radio.Button>
-                    <Radio.Button value="store">STORES</Radio.Button>
+                    <Radio.Button value="all">Live</Radio.Button>
+                    <Radio.Button value="online">Restrict</Radio.Button>
+                    <Radio.Button value="store">Suspened</Radio.Button>
                   </Radio.Group>
                 </>
               }

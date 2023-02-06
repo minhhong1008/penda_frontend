@@ -940,6 +940,7 @@ const Bill_class = () => {
                       onFinish={onFinish}
                       initialValues={{
                         bill_date: dayjs(),
+                        bill_expiry_date:dayjs(),
                         bill_type: "Phiếu chi",
                         bill_action: "Đề xuất",
                         bill_owner: "Phòng sản xuất",
@@ -954,7 +955,6 @@ const Bill_class = () => {
                             <DatePicker
                               style={{ float: "right" }}
                               format="YYYY-MM-DD"
-                              defaultValue={dayjs()}
                             />
                           </Form.Item>
                         </Col>
@@ -1118,7 +1118,6 @@ const Bill_class = () => {
                             <DatePicker
                               style={{ float: "right" }}
                               format="YYYY-MM-DD"
-                              defaultValue={dayjs()}
                             />
                           </Form.Item>
                         </Col>
