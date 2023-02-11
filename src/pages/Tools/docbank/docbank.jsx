@@ -35,11 +35,11 @@ function App() {
     a.click();
   };
   const onFinish = (values) => {
+
     setValues(values.row)
   };
 
   const handleFinish = (values) => {
-    console.log(values,321123123);
     setData(values)
   }
 
@@ -75,9 +75,10 @@ function App() {
     if (values.length > 0) {
       let so_du = 0;
       values?.map((item) => {
-        so_du += item.so_du ?? 0;
+        so_du += parseInt(item.so_du) ?? 0;
       })
-      return (parseInt(data.so_du_dau) - so_du)?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00" ?? "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
+      
+      return (parseInt(data.so_du_dau) - parseInt(so_du))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00" ?? "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
     } else {
       return "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
     }
@@ -88,7 +89,7 @@ function App() {
       <Form onFinish={handleFinish}>
         <Row gutter={16}>
           <Col span={6}>
-            <Form.Item
+            <Form.Item 
               name="chi_nhanh"
             >
               <Input placeholder="Chi nhánh" />
@@ -96,6 +97,7 @@ function App() {
           </Col>
           <Col span={6}>
             <Form.Item
+            
               name="stk"
             >
               <Input placeholder="Số tài khoản" />

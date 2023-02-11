@@ -9,10 +9,6 @@ import {
   Input,
   DatePicker,
   Select,
-  message,
-  Collapse,
-  Space,
-  TreeSelect,
   Divider,
   Modal,
   InputNumber,
@@ -65,7 +61,7 @@ const Bill_class = () => {
   const month = dayjs().format("MM");
   const year = dayjs().format("YYYY");
   const countDay_last = dayjs(
-    year + "-" + (parseInt(month) -1) + "-" + "01"
+    year + "-" + (parseInt(month) - 1) + "-" + "01"
   ).daysInMonth();
   const countDay = dayjs().daysInMonth();
   const countDay_next = dayjs(
@@ -125,7 +121,6 @@ const Bill_class = () => {
   // có 2 form : TẠO HÓA ĐƠN THU CHI và CHI TIẾT HÀNG HÓA nên tạo
   const [form] = Form.useForm();
   const [formProduct] = Form.useForm();
-
   const [listselect_employee, setlistselect_employee] = useState();
 
   // AUTO trong html:
@@ -194,8 +189,7 @@ const Bill_class = () => {
 
     let productValues = formProduct.getFieldsValue();
     // Ghép nối dữ liệu từ các form và gửi toàn bộ lên server thông qua 1 object newData
-    
-    
+
     let newData = {
       ...values,
       ...productValues,
@@ -241,7 +235,7 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
-     width: 30,
+      width: 30,
     },
     {
       title: "Công việc",
@@ -312,7 +306,7 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
-     width: 30,
+      width: 30,
     },
     {
       title: "Công việc",
@@ -348,7 +342,7 @@ const Bill_class = () => {
     {
       title: "Stt",
       dataIndex: "Stt",
-     width: 30,
+      width: 30,
     },
     {
       title: "Công việc",
@@ -468,7 +462,8 @@ const Bill_class = () => {
             bill_total_pay: bill_total_pay,
             bill_density_pay: bill_density_pay,
           });
-
+          bill_density_suggest_pay =
+            bill_work_suggest_pay / bill_total_suggest_pay;
           arrSuggestPay.push({
             key: index + 2,
             Stt: index + 2,
@@ -578,10 +573,10 @@ const Bill_class = () => {
   const getDataBill = async () => {
     let filter = [
       dayjs()
-        .add(-30, "d")
+        .add(-60, "d")
         .format("YYYY-MM-DD"),
       dayjs()
-        .add(+30, "d")
+        .add(+60, "d")
         .format("YYYY-MM-DD"),
     ];
     setFilterDate({
@@ -642,7 +637,7 @@ const Bill_class = () => {
               }
             }
           });
-
+          //bill_density_pay= parseInt(bill_total_pay/totalMoney_suggest_pay);
           arrPay.push({
             key: index + 2,
             Stt: index + 2,
@@ -751,6 +746,7 @@ const Bill_class = () => {
         bill_total_suggest_collect: totalMoney_suggest_collect,
         bill_density_suggest_collect: "100%",
       });
+
       arrSuggestCollect.result_suggest_pay =
         parseInt(totalMoney_suggest_pay) - parseInt(totalMoney_suggest_collect);
       setDataSuggestCollect(arrSuggestCollect);
@@ -810,7 +806,6 @@ const Bill_class = () => {
         <Card>
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="BÁO CÁO THU CHI" key="1">
-
               <Row gutter={[24, 0]}>
                 <Col xs={24} xl={12} className="mb-24">
                   <Card
@@ -940,7 +935,7 @@ const Bill_class = () => {
                       onFinish={onFinish}
                       initialValues={{
                         bill_date: dayjs(),
-                        bill_expiry_date:dayjs(),
+                        bill_expiry_date: dayjs(),
                         bill_type: "Phiếu chi",
                         bill_action: "Đề xuất",
                         bill_owner: "Phòng sản xuất",
@@ -950,7 +945,7 @@ const Bill_class = () => {
                       }}
                     >
                       <Row gutter={[24, 0]}>
-                        <Col  xs={12} xl={8} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Ngày tháng" name="bill_date">
                             <DatePicker
                               style={{ float: "right" }}
@@ -1194,7 +1189,7 @@ const Bill_class = () => {
                       </Row>
 
                       <Row gutter={[24, 0]}>
-                        <Col  xs={12} xl={8} className="mb-24">
+                        <Col xs={12} xl={8} className="mb-24">
                           <Form.Item label="Số lượng" name="bill_number">
                             <InputNumber
                               style={{
@@ -1258,9 +1253,11 @@ const Bill_class = () => {
               <CKEditor
                 editor={ClassicEditor}
                 data="<p>Hello from CKEditor 5!</p>"
-                config={{ckfinder: {
-                  uploadUrl: 'https://backend.penda.vn/api/files'
-                }}}
+                config={{
+                  ckfinder: {
+                    uploadUrl: "https://backend.penda.vn/api/files",
+                  },
+                }}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                   console.log("Editor is ready to use!", editor);
@@ -1277,8 +1274,7 @@ const Bill_class = () => {
                   console.log("Focus.", editor);
                 }}
               />
-            <div dangerouslySetInnerHTML={{__html: content}}></div>
-
+              <div dangerouslySetInnerHTML={{ __html: content }}></div>
             </Tabs.TabPane>
           </Tabs>
           <Modal
@@ -1286,7 +1282,6 @@ const Bill_class = () => {
             title={previewTitle}
             footer={null}
             onCancel={handleCancel}
-           
           >
             <img alt="example" style={{ width: "100%" }} src={previewImage} />
           </Modal>

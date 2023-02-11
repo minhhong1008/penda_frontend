@@ -1,3 +1,4 @@
+import { Card } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { detailBlog } from "../../api/blog";
@@ -19,10 +20,12 @@ const Home_content = () => {
   }, []);
 
   return (
-    <div className="blog_content" >
-      <div className="title">{title}</div>
-      <div dangerouslySetInnerHTML={{__html: content}}></div>
-    </div>
+    <Card>
+      <div className="blog_content">
+        <div className="title">{title}</div>
+        <div dangerouslySetInnerHTML={{ __html: content }}></div>
+      </div>
+    </Card>
   );
 };
 
