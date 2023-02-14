@@ -9,7 +9,6 @@ import { showError } from "../utils";
 function* getListmailSaga({ payload }) {
   try {
     const response = yield call(getListmail, payload);
-    console.log(response);
     const { data } = response;
     yield put({ type: GET_LIST_MAIL_SUCCESS, payload: data });
   } catch (res) {

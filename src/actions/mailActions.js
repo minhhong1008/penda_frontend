@@ -8,3 +8,10 @@ export const getListmailActions = (payload) => {
         payload: payload
     }
 }
+
+export const getListmailWorkActions = (payload) => {
+    return {
+        type: GET_LIST_MAIL,
+        payload: payload
+    }
+}

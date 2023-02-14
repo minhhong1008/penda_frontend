@@ -9,6 +9,7 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import Main from "./components/layout/Main.js";
 import Billing from "./pages/Billing";
+
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Rtl from "./pages/Rtl";
@@ -145,6 +146,7 @@ import Customer_table from "./pages/Customer/Customer_table";
 import Customer_info from "./pages/Customer/Customer_info";
 
 // HomePage Process_class
+import Fast_Work from "./pages/HomePage/FastWork";
 import Blogs from "./pages/HomePage/Blog";
 import Company from "./pages/HomePage/Company";
 import Process_class from "./pages/HomePage/Process_class";
@@ -556,6 +558,7 @@ const App = () => {
             exact
             component={HomeEdit_content}
           />
+          <Route path="/products/fast_work" exact component={Fast_Work} />
           <Route path="/blog" exact component={Blogs} />
           <Route path="/blog/company" exact component={Company} />
           <Route path="/blog/process_class" exact component={Process_class} />

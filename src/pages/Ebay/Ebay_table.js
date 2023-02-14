@@ -173,6 +173,8 @@ const Ebay_table = () => {
   useEffect(() => {
     getListEbay();
   }, [class_name]);
+
+  
   const columns = [
     {
       title: (

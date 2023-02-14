@@ -16,7 +16,6 @@ function App() {
     type: "image/jpeg",
     quality: 1.0
   });
-  console.log(image);
   const [values, setValues] = useState([]);
   const [data, setData] = useState({
     chi_nhanh: "215 NHTM DT&PTVN-CN CAU GIAY",
@@ -73,12 +72,8 @@ function App() {
 
   const renderTong = () => {
     if (values.length > 0) {
-      let so_du = 0;
-      values?.map((item) => {
-        so_du += parseInt(item.so_du) ?? 0;
-      })
-      
-      return (parseInt(data.so_du_dau) - parseInt(so_du))?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00" ?? "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
+      let so_du = values[values.length -1]?.so_du;
+      return parseInt(so_du)?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00" ?? "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
     } else {
       return "0".replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".00";
     }
@@ -268,7 +263,7 @@ function App() {
             </tr>
             <tr>
               <td></td>
-              <td>SD DAU</td>
+              <td>SO DU DAU</td>
               <td></td>
               <td></td>
               <td></td>

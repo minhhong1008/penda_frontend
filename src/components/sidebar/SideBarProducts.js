@@ -518,6 +518,20 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
+          <Menu.Item key="944">
+            <NavLink to="/products/fast_work">
+              <span
+                className="icon"
+                style={{
+                  background: page === "products/fast_work" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Fast Work</span>
+            </NavLink>
+          </Menu.Item>
+
           
         </Menu>
       )}

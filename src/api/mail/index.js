@@ -22,6 +22,17 @@ export const updatemailInfo = (payload, id) => {
   return axiosClient.put(url, payload);
 }
 
+export const updatmailWork = (payload) => {
+  const url = `/mail/updatmailWork`;
+  return axiosClient.put(url, payload);
+}
+
+export const getListmailWork = (payload) => {
+  let queryString = genQueryString(payload);
+  const url = `/mail/listmailWork?${queryString}`;
+  return axiosClient.get(url);
+}
+
 
 export const getCountMail = () => {
   const url = `/getmail/count`;

@@ -63,6 +63,11 @@ const Salary_table = () => {
       }
     });
     const final_data = [];
+    let total_users_true_salary = "";
+    let total_users_expected_salary ="";
+    let total_users_now_salary ="";
+    let total_users_salary_advance ="";
+    
     userss.forEach((user, index) => {
       newData.forEach((data) => {
         if (user.users_name == data.users_name) {
@@ -79,6 +84,8 @@ const Salary_table = () => {
           let users_true_salary = Math.round(
             users_now_salary - parseInt(user?.users_salary_advance)
           );
+
+
           final_data.push({
             ...data,
             users_function: user?.users_function,
@@ -94,6 +101,30 @@ const Salary_table = () => {
           });
         }
       });
+    });
+
+    final_data.forEach((item, index) => {
+      total_users_true_salary = Math.round(
+        total_users_true_salary + parseInt(item?.users_true_salary)
+      );
+      total_users_expected_salary = Math.round(
+        total_users_expected_salary + parseInt(item?.users_expected_salary)
+      );
+
+      total_users_now_salary = Math.round(
+        total_users_now_salary + parseInt(item?.users_now_salary)
+      );
+      total_users_salary_advance = Math.round(
+        total_users_salary_advance + parseInt(item?.users_advance)
+      );
+    });
+
+    final_data.push({
+      users_name: "Tổng",
+      users_true_salary: total_users_true_salary,
+      users_expected_salary: total_users_expected_salary,
+      users_now_salary: total_users_now_salary,
+      users_advance: total_users_salary_advance,
     });
     setData(final_data);
   };
