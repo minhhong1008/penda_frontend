@@ -196,12 +196,12 @@ const Info_table = () => {
     },
     {
       title: "TÀI KHOẢN",
-      dataIndex: "info_user",
-      key: "info_user",
+      dataIndex: "info_fullname",
+      key: "info_fullname",
       sorter: (a, b) => {
-        return a.info_user?.localeCompare(b.info_user);
+        return a.info_fullname?.localeCompare(b.info_fullname);
       },
-      ...getColumnSearchProps("info_user"),
+      ...getColumnSearchProps("info_fullname"),
     },
     {
       title: (
@@ -343,9 +343,9 @@ const Info_table = () => {
     },
 
     {
-      title: "NHÂN VIÊN",
-      dataIndex: "info_employee",
-      key: "info_employee",
+      title: "LOẠI INFO",
+      dataIndex: "info_type",
+      key: "info_type",
       render: (record) => {
         if (!record) {
           return;
@@ -372,7 +372,7 @@ const Info_table = () => {
         );
       },
       sorter: (a, b) => {
-        return a.info_employee?.localeCompare(b.info_employee);
+        return a.info_type?.localeCompare(b.info_type);
       },
     },
 

@@ -9,7 +9,6 @@ import { showError } from "../utils";
 function* getListshopeeSaga({ payload }) {
   try {
     const response = yield call(getListshopee, payload);
-    console.log(response);
     const { data } = response;
     yield put({ type: GET_LIST_SHOPEE_SUCCESS, payload: data });
   } catch (res) {

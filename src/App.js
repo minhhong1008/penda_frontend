@@ -147,6 +147,7 @@ import Customer_info from "./pages/Customer/Customer_info";
 
 // HomePage Process_class
 import Fast_Work from "./pages/HomePage/FastWork";
+import Random_info from "./pages/HomePage/RandomInfo";
 import Blogs from "./pages/HomePage/Blog";
 import Company from "./pages/HomePage/Company";
 import Process_class from "./pages/HomePage/Process_class";
@@ -559,6 +560,7 @@ const App = () => {
             component={HomeEdit_content}
           />
           <Route path="/products/fast_work" exact component={Fast_Work} />
+          <Route path="/products/random_info" exact component={Random_info} />
           <Route path="/blog" exact component={Blogs} />
           <Route path="/blog/company" exact component={Company} />
           <Route path="/blog/process_class" exact component={Process_class} />

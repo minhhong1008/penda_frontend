@@ -37,6 +37,10 @@ import {
   listInfo,
   listselect_view_field,
 } from "./Tooldata_list";
+
+import { list_address } from "./List_address";
+import { list_full_name } from "./List_fullname";
+
 import dayjs from "dayjs";
 
 const Tooldata_info = () => {
@@ -178,6 +182,106 @@ const Tooldata_info = () => {
       form.setFieldValue("list_rowdata", newData);
     };
     reader.readAsBinaryString(f);
+  };
+
+  const setGenInfo = () => {
+    let Gen_info = noteValue?.toString().split("\n");
+
+    let newNoteValue = "";
+    Gen_info.forEach((item) => {
+      // Lấy full_name và gender, sau đó tạo CCCD
+      let full_list_info =
+        list_full_name[Math.floor(Math.random() * (list_full_name.length - 1))];
+      let full_name = full_list_info.split("|")[2];
+      let gender = full_list_info.split("|")[6];
+      // Tạo ngày sinh
+      let day = Math.floor(Math.random() * (30 - 1)) + 1;
+      let mon = Math.floor(Math.random() * (12 - 1)) + 1;
+      let year = Math.floor(Math.random() * (1999 - 1979)) + 1979;
+      if (day < 10) {
+        day = "0" + day;
+      }
+      if (mon < 10) {
+        mon = "0" + mon;
+      }
+      let birthday = year + "/" + mon + "/" + day;
+
+      // Tạo địa chỉ
+      let index = Math.floor(Math.random() * (list_address.length - 1));
+      let full_list_address =
+        list_address[index];
+      let street_village = full_list_address.split("|")[2];
+      let commune_ward = full_list_address.split("|")[4];
+      let district_town = full_list_address.split("|")[6];
+      let province_city = full_list_address.split("|")[8];
+      let province_city_zipcode = full_list_address.split("|")[9];
+      let full_address =
+        street_village +
+        "- " +
+        commune_ward +
+        "- " +
+        district_town +
+        "- " +
+        province_city;
+
+      // Tạo CCCD
+      let citizen_id = full_list_address.split("|")[10];
+
+      if (gender == "female") {
+        citizen_id = citizen_id + "1" + year.toString().slice(2, 4);
+        for (let index = 0; index < 6; index++) {
+          citizen_id = citizen_id + Math.floor(Math.random() * 10);
+        }
+      } else {
+        citizen_id = citizen_id + "0" + year.toString().slice(2, 4);
+        for (let index = 0; index < 6; index++) {
+          citizen_id = citizen_id + Math.floor(Math.random() * 10);
+        }
+      }
+
+      // Tạo địa chỉ
+      let full_list_address2 =
+        list_address[index + Math.floor(Math.random() *20)];
+      let street_village2 = full_list_address2.split("|")[2];
+      let commune_ward2 = full_list_address2.split("|")[4];
+      let district_town2 = full_list_address2.split("|")[6];
+      let province_city2 = full_list_address2.split("|")[8];
+      let province_city_zipcode2 = full_list_address2.split("|")[9];
+      let full_address2 =
+      street_village2 +
+        "- " +
+        commune_ward2 +
+        "- " +
+        district_town2 +
+        "- " +
+        province_city2;
+
+
+      // Gép nối dữ liệu phù hợp matbiec.penda.vn
+      let upload_info =
+        item +
+        "|" +
+        gender +
+        "|" +
+        birthday +
+        "|" +
+        full_name +
+        "|" +
+        citizen_id +
+        "|" +
+        citizen_id +
+        "|" +
+        full_address +
+        "|" +
+        full_address2 +
+        "|" +
+        province_city_zipcode2 +
+        "\n";
+
+      newNoteValue = newNoteValue + upload_info;
+    });
+    setNoteValue(newNoteValue);
+    form.setFieldValue("list_rowdata", newNoteValue);
   };
 
   return (
@@ -464,7 +568,12 @@ const Tooldata_info = () => {
                 <Col span={12}>
                   <Card
                     title="NHẬP DỮ LIỆU"
-                    extra={<Button onClick={() => setOpen(true)}>Nhập</Button>}
+                    extra={
+                      <>
+                        <Button onClick={() => setOpen(true)}>Nhập</Button>
+                        <Button onClick={() => setGenInfo()}>Gen Info</Button>
+                      </>
+                    }
                   >
                     <Form
                       form={form}

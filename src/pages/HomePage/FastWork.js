@@ -8,6 +8,7 @@ import {
 import { updatmailWork, getListmailWork } from "../../api/mail";
 import { showError, showSuccess } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
+
 function Fast_Work() {
   const { mails } = useSelector((state) => state.mail); // Gọi mails từ mailReducer
   let Mail_work = mails.slice(0, 3);
