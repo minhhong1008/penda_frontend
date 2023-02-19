@@ -58,7 +58,7 @@ const SideBarProducts = ({ color }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1000}
     >
       <path
         d="M9 2C8.44772 2 8 2.44772 8 3C8 3.55228 8.44772 4 9 4H11C11.5523 4 12 3.55228 12 3C12 2.44772 11.5523 2 11 2H9Z"
@@ -80,7 +80,7 @@ const SideBarProducts = ({ color }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1005}
     >
       <path
         d="M4 4C2.89543 4 2 4.89543 2 6V7H18V6C18 4.89543 17.1046 4 16 4H4Z"
@@ -102,7 +102,7 @@ const SideBarProducts = ({ color }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1010}
     >
       <path
         fillRule="evenodd"
@@ -120,7 +120,7 @@ const SideBarProducts = ({ color }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1015}
     >
       <path
         fillRule="evenodd"
@@ -138,7 +138,7 @@ const SideBarProducts = ({ color }) => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      key={1020}
     >
       <path
         fillRule="evenodd"
@@ -155,7 +155,7 @@ const SideBarProducts = ({ color }) => {
       width="14"
       height="14"
       viewBox="0 0 14 14"
-      key={0}
+      key={1025}
     >
       <path
         d="M0,2A2,2,0,0,1,2,0H8a2,2,0,0,1,2,2V8a2,2,0,0,1-2,2H2A2,2,0,0,1,0,8Z"
@@ -210,7 +210,7 @@ const SideBarProducts = ({ color }) => {
   const showSidebar_taikhoan = () => {
     return (
       <>
-        <Menu.Item key="4">
+        <Menu.Item key="1030">
           <NavLink to="/products/shopee_class">
             <span
               className="icon"
@@ -223,7 +223,7 @@ const SideBarProducts = ({ color }) => {
             <span className="label">Shopee</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="3">
+        <Menu.Item key="1035">
           <NavLink to="/products/amazon_class">
             <span
               className="icon"
@@ -236,7 +236,7 @@ const SideBarProducts = ({ color }) => {
             <span className="label">Amazon</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="5">
+        <Menu.Item key="1040">
           <NavLink to="/products/facebook_class">
             <span
               className="icon"
@@ -249,7 +249,7 @@ const SideBarProducts = ({ color }) => {
             <span className="label">Facebook</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="6">
+        <Menu.Item key="1045">
           <NavLink to="/products/tiktok_class">
             <span
               className="icon"
@@ -262,7 +262,7 @@ const SideBarProducts = ({ color }) => {
             <span className="label">Tiktok</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="7">
+        <Menu.Item key="1050">
           <NavLink to="/products/other_class">
             <span
               className="icon"
@@ -282,7 +282,7 @@ const SideBarProducts = ({ color }) => {
   const showSidebar_method_pay = () => {
     return (
       <>
-        <Menu.Item key="32">
+        <Menu.Item key="1055">
           <NavLink to="/products/paypal_class">
             <span
               className="icon"
@@ -296,7 +296,7 @@ const SideBarProducts = ({ color }) => {
           </NavLink>
         </Menu.Item>
 
-        <Menu.Item key="33">
+        <Menu.Item key="1060">
           <NavLink to="/products/pingpong_class">
             <span
               className="icon"
@@ -315,7 +315,7 @@ const SideBarProducts = ({ color }) => {
   const showSidebar_tainguyen = () => {
     return (
       <>
-        <Menu.Item key="62">
+        <Menu.Item key="1065">
           <NavLink to="/products/mail_class">
             <span
               className="icon"
@@ -329,7 +329,7 @@ const SideBarProducts = ({ color }) => {
           </NavLink>
         </Menu.Item>
 
-        <Menu.Item key="63">
+        <Menu.Item key="1070">
           <NavLink to="/products/sim_class">
             <span
               className="icon"
@@ -342,7 +342,7 @@ const SideBarProducts = ({ color }) => {
             <span className="label">Sim</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="65">
+        <Menu.Item key="1075">
           <NavLink to="/products/proxy_class">
             <span
               className="icon"
@@ -393,13 +393,13 @@ const SideBarProducts = ({ color }) => {
         <Menu theme="light" mode="inline">
           <Menu.Item
             className="menu-item-header"
-            key="100"
+            key="1080"
             onClick={shows_taikhoan}
           >
             Tài Khoản
           </Menu.Item>
 
-          <Menu.Item key="1">
+          <Menu.Item key="1085">
             <NavLink to="/products/ebay_class">
               <span
                 className="icon"
@@ -413,7 +413,7 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="2">
+          <Menu.Item key="1090">
             <NavLink to="/products/etsy_class">
               <span
                 className="icon"
@@ -430,13 +430,13 @@ const SideBarProducts = ({ color }) => {
 
           <Menu.Item
             className="menu-item-header"
-            key="30"
+            key="1095"
             onClick={shows_monthod_pay}
           >
             Phương thức thanh toán
           </Menu.Item>
 
-          <Menu.Item key="31">
+          <Menu.Item key="1100">
             <NavLink to="/products/payoneer_class">
               <span
                 className="icon"
@@ -450,7 +450,7 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="34">
+          <Menu.Item key="1105">
             <NavLink to="/products/bank_class">
               <span
                 className="icon"
@@ -472,7 +472,7 @@ const SideBarProducts = ({ color }) => {
             Tài nguyên
           </Menu.Item>
 
-          <Menu.Item key="61">
+          <Menu.Item key="1110">
             <NavLink to="/products/info_class">
               <span
                 className="icon"
@@ -486,7 +486,7 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="64">
+          <Menu.Item key="1115">
             <NavLink to="/products/device_class">
               <span
                 className="icon"
@@ -504,7 +504,7 @@ const SideBarProducts = ({ color }) => {
             Công cụ
           </Menu.Item>
 
-          <Menu.Item key="92">
+          <Menu.Item key="1120">
             <NavLink to="/products/tools">
               <span
                 className="icon"
@@ -518,7 +518,7 @@ const SideBarProducts = ({ color }) => {
             </NavLink>
           </Menu.Item>
 
-          <Menu.Item key="944">
+          <Menu.Item key="1125">
             <NavLink to="/products/fast_work">
               <span
                 className="icon"

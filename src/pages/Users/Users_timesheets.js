@@ -195,6 +195,7 @@ const Users_timesheets = () => {
         let total_check = 0;
         let total_verrify = 0;
         let total_n = 0;
+
         session_obj["index"] = parseInt(
           userss?.filter(
             (session_obj) => session_obj?.users_name == item._id
@@ -259,10 +260,12 @@ const Users_timesheets = () => {
           if (
             dayjs(session?.working_date).format("YYYY-MM-DD") <
               dayjs().format("YYYY-MM-DD") &&
-            session?.working_session != "" &&
-            session?.working_verify == ""
+            session?.working_session != ""
           ) {
-            total_n++;
+            if (!session?.working_verify || session?.working_verify == "") {
+              total_n++;
+            } else {
+            }
           }
         });
 

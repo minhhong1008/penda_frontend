@@ -1,6 +1,7 @@
 import "./cccd.css";
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import "antd/dist/reset.css";
+// import thư viện ảnh
 import img1 from "./assets/mat_truoc.jpg";
 import img2 from "./assets/mat_sau.jpg";
 import img3 from "./assets/finger/van-tay-1.png";
@@ -18,22 +19,24 @@ function CCCD({ info }) {
   const [form] = Form.useForm();
   const inRef = createRef(null);
   const outRef = createRef(null);
-  const [background, setBackground] = useState();
-  const [finger1, setFinger1] = useState();
-  const [finger2, setFinger2] = useState();
 
+
+
+  // set hình nền
+  const [background, setBackground] = useState();
   const renderBackground = () => {
     const arr = [nen1, nen2, nen3];
     var rand = arr[Math.floor(Math.random() * arr.length)];
     setBackground(rand);
   };
-
+  // set vân tay
+  const [finger1, setFinger1] = useState();
   const renderFinger1 = () => {
     const arr = [img3, img4];
     var rand = arr[Math.floor(Math.random() * arr.length)];
     setFinger1(rand);
   };
-
+  const [finger2, setFinger2] = useState();
   const renderFinger2 = () => {
     const arr = [img3, img4];
     var rand = arr[Math.floor(Math.random() * arr.length)];
@@ -60,6 +63,7 @@ function CCCD({ info }) {
     quality: 1.0,
   });
   const [fileUrl, setFileUrl] = useState("");
+  
   const onFinish = (values) => {
     // let expiry = values.expiry.split("/");
     // console.log(expiry);
@@ -220,16 +224,26 @@ function CCCD({ info }) {
   useEffect(() => {
     let newValue = {
       card_id: info?.info_passport ? info.info_passport : "004183886158",
-      name: info?.info_fullname ? info.info_fullname.toUpperCase() : "PHUNG VAN MINH",
-      birth_date: info?.infodate_birthday ? info.infodate_birthday : "10/05/2000",
+      name: info?.info_fullname
+        ? info.info_fullname.toUpperCase()
+        : "PHUNG VAN MINH",
+      birth_date: info?.infodate_birthday
+        ? info.infodate_birthday
+        : "10/05/2000",
       date: info?.infodate_start ? info.infodate_start : "27/04/2021",
-      expiry: info?.infodate_expiry ? info.infodate_expiry :  "10/05/2025",
+      expiry: info?.infodate_expiry ? info.infodate_expiry : "10/05/2025",
       id:
         "IDVNM0810028357026081042835<<98105026M4105028VNM<<<<<<<<<<<6CU<<TUAN<<ANH<<<<<<<<<<<<<<<<<",
-      identification: info?.info_identifying ? info.info_identifying : "Sẹo chấm cánh mũi trái",
+      identification: info?.info_identifying
+        ? info.info_identifying
+        : "Sẹo chấm cánh mũi trái",
       nationality: "Việt Nam",
-      origin: info?.info_origin ? info.info_origin : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
-      residence: info?.info_residence ? info.info_residence : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
+      origin: info?.info_origin
+        ? info.info_origin
+        : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
+      residence: info?.info_residence
+        ? info.info_residence
+        : "Cầu Diễn, Bắc Từ Liêm, Hà Nội",
       gender: info?.info_sex ? info.info_sex : "Nam",
       img: "",
     };

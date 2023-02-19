@@ -197,7 +197,7 @@ function projectelManager() {
         <Modal
           className="filter-export"
           centered
-          visible={modalVisible}
+          open={modalVisible}
           title="Chọn những trường xuất file"
           onOk={onOk}
           onCancel={onCancel}

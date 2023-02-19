@@ -183,7 +183,7 @@ const Tooldata_info = () => {
     };
     reader.readAsBinaryString(f);
   };
-
+  // tạo random info
   const setGenInfo = () => {
     let Gen_info = noteValue?.toString().split("\n");
 
@@ -208,8 +208,7 @@ const Tooldata_info = () => {
 
       // Tạo địa chỉ
       let index = Math.floor(Math.random() * (list_address.length - 1));
-      let full_list_address =
-        list_address[index];
+      let full_list_address = list_address[index];
       let street_village = full_list_address.split("|")[2];
       let commune_ward = full_list_address.split("|")[4];
       let district_town = full_list_address.split("|")[6];
@@ -241,21 +240,20 @@ const Tooldata_info = () => {
 
       // Tạo địa chỉ
       let full_list_address2 =
-        list_address[index + Math.floor(Math.random() *20)];
+        list_address[index + Math.floor(Math.random() * 20)];
       let street_village2 = full_list_address2.split("|")[2];
       let commune_ward2 = full_list_address2.split("|")[4];
       let district_town2 = full_list_address2.split("|")[6];
       let province_city2 = full_list_address2.split("|")[8];
       let province_city_zipcode2 = full_list_address2.split("|")[9];
       let full_address2 =
-      street_village2 +
+        street_village2 +
         "- " +
         commune_ward2 +
         "- " +
         district_town2 +
         "- " +
         province_city2;
-
 
       // Gép nối dữ liệu phù hợp matbiec.penda.vn
       let upload_info =
@@ -283,6 +281,7 @@ const Tooldata_info = () => {
     setNoteValue(newNoteValue);
     form.setFieldValue("list_rowdata", newNoteValue);
   };
+
 
   return (
     <div>
@@ -322,12 +321,6 @@ const Tooldata_info = () => {
                       onFinish={onFinish}
                       autoComplete="off"
                       size="large"
-                      initialValues={
-                        {
-                          //bill_date: dayjs(),
-                          //create_collection: ["UPDATE","EBAY"],
-                        }
-                      }
                     >
                       <Form.Item
                         label="Tạo collection"
@@ -427,7 +420,9 @@ const Tooldata_info = () => {
                           optionlabelprop="label"
                           size="large"
                         >
-                          {listselect_processing.map((item, index) => {
+                          { 
+                          
+                          listselect_processing.map((item, index) => {
                             return (
                               <Option value={item} label={item} key={index}>
                                 <div className="demo-option-label-item">

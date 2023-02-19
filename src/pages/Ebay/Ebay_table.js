@@ -1,5 +1,5 @@
 //import React from 'react'
-import { Button, Card, Table, Tabs } from "antd";
+import { Button, Card, Form, Table, Tabs } from "antd";
 import { Input, Space, Tag, Tooltip, Col, Row } from "antd";
 import Highlighter from "react-highlight-words";
 import React, { useEffect, useRef, useState } from "react";
@@ -24,7 +24,7 @@ const Ebay_table = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [selectedNote, setSelectedNote] = useState();
-
+  const [formSearch] = Form.useForm();
   /*----------Các hàm nut search trên table của ant.desgn----------*/
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -120,8 +120,6 @@ const Ebay_table = () => {
     copyToClipboard(selectedRowKeys.join("\n"));
   }
 
-
-
   const handleChangeNote = async (id, value) => {
     const response = await updateebayInfo(
       {
@@ -162,6 +160,12 @@ const Ebay_table = () => {
     }
   };
 
+  const genText = () => {
+    let values = formSearch.getFieldValue("item_search");
+    let data = values?.split(" ").join(",");
+    formSearch.setFieldValue("item_search", data);
+  };
+
   const getListEbay = () => {
     dispatch(
       getListebayActions({
@@ -174,7 +178,6 @@ const Ebay_table = () => {
     getListEbay();
   }, [class_name]);
 
-  
   const columns = [
     {
       title: (
@@ -183,7 +186,7 @@ const Ebay_table = () => {
         </Tag>
       ),
       key: "index",
-
+      fixed: "left",
       width: 1,
 
       render: (text, record, index) => (
@@ -232,7 +235,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_user",
       key: "ebay_user",
       width: 1,
-
+      fixed: "left",
       sorter: (a, b) => {
         return a.ebay_user?.localeCompare(b.ebay_user);
       },
@@ -247,7 +250,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_class",
       key: "ebay_class",
       width: 1,
-
+      fixed: "left",
       sorter: (a, b) => {
         return a.ebay_class?.localeCompare(b.ebay_class);
       },
@@ -262,6 +265,7 @@ const Ebay_table = () => {
 
       key: "ebaydate_nextclass",
       width: 1,
+      fixed: "left",
       render: (record) => {
         let now = dayjs().unix();
         let next_class = record?.ebaydate_nextclass;
@@ -291,16 +295,16 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_processing",
       key: "ebay_processing",
-
+      fixed: "left",
       render: (record) => {
         let list = [];
         let processing = record?.split(",");
-        if(processing?.length > 5){
-          list = processing?.slice(processing?.length -5, processing?.length);
-        }else{
+        if (processing?.length > 5) {
+          list = processing?.slice(processing?.length - 5, processing?.length);
+        } else {
           list = record?.split(",");
         }
-        
+
         return (
           <div
             style={{
@@ -322,9 +326,7 @@ const Ebay_table = () => {
                     {item}
                   </div>
                 );
-              } else if (
-                item?.split(" ")?.indexOf("Verify") !== -1
-              ) {
+              } else if (item?.split(" ")?.indexOf("Verify") !== -1) {
                 return (
                   <div
                     style={{
@@ -382,6 +384,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_error",
       key: "ebay_error",
+      fixed: "left",
       render: (record) => {
         if (!record) {
           return;
@@ -419,7 +422,7 @@ const Ebay_table = () => {
       ),
       dataIndex: "ebay_employee",
       key: "ebay_employee",
-
+      fixed: "left",
       render: (record) => {
         if (!record) {
           return;
@@ -458,7 +461,7 @@ const Ebay_table = () => {
       dataIndex: "ebay_note",
       key: "ebay_note",
       width: 2,
-
+      fixed: "left",
       render: (text, record, index) => (
         <div>
           {selectedNote == record._id ? (
@@ -504,69 +507,96 @@ const Ebay_table = () => {
       },
     },
   ];
+  const onChange = (key) => {
+    console.log(key);
+  };
+
+  const items = [
+    {
+      key: "tabs1",
+      label: "BẢNG LỚP EBAY : " + class_name.toUpperCase(),
+      children: (
+        <>
+          <Card type="inner">
+            <Row gutter={[24, 0]}>
+              <Col xs={24} xl={24} className="mb-24">
+                <div className="table-responsive">
+                  <Table
+                    width="100%"
+                    onRow={(record, rowIndex) => {
+                      return {
+                        onClick: (event) => {
+                          history.push(
+                            `table/${encodeURIComponent(record.ebay_id)}`
+                          );
+                        }, // click row vào ebay_info
+                      };
+                    }}
+                    columns={columns}
+                    dataSource={ebays}
+                    rowSelection={rowSelection}
+                    bordered
+                    size="small"
+                    pagination={{
+                      pageSizeOptions: [
+                        "100",
+                        "200",
+                        "300",
+                        "500",
+                        "1000",
+                        "2000",
+                      ],
+                      position: ["bottomRight"],
+                      size: "small",
+                      showSizeChanger: true,
+                      defaultPageSize: 100,
+                    }}
+                    className="ant-border-space"
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Card>
+        </>
+      ),
+    },
+    {
+      key: "tabs2",
+      label: "HƯỚNG DẪN " + ": " + ebays.length,
+      children: (
+        <>
+          <HuongDanEbay_table />
+        </>
+      ),
+    },
+  ];
+
   return (
     <div>
       <Card>
-        <Row gutter={16}>
-          <Col span={16}>
-            <Input
-              placeholder="Search theo điều kiện hoặc"
-              onPressEnter={(e) => {
-                searchEbay(e.target.value);
-              }}
-            />
-          </Col>
-        </Row>
-        <Tabs defaultActiveKey="1">
-          <Tabs.TabPane
-            tab={"BẢNG LỚP EBAY : " + class_name.toUpperCase()}
-            key="1"
-          >
-            <Card type="inner">
-              <Row gutter={[24, 0]}>
-                <Col xs={24} xl={24} className="mb-24">
-                  <div className="table-responsive">
-                    <Table
-                      width="100%"
-                      onRow={(record, rowIndex) => {
-                        return {
-                          onClick: (event) => {
-                            history.push(
-                              `table/${encodeURIComponent(record.ebay_id)}`
-                            );
-                          }, // click row vào ebay_info
-                        };
-                      }}
-                      columns={columns}
-                      dataSource={ebays}
-                      rowSelection={rowSelection}
-                      bordered
-                      size="small"
-                      pagination={{
-                        pageSizeOptions: [
-                          "100",
-                          "200",
-                          "300",
-                          "500",
-                          "1000",
-                          "2000",
-                        ],
-                        position: ["bottomRight"],
-                        size: "small",
-                        showSizeChanger: true,
-                        defaultPageSize: 100,
-                      }}
-                      className="ant-border-space"
-                    />
-                  </div>
-                </Col>
-              </Row>
-            </Card>
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={"HƯỚNG DẪN " + ": " + ebays.length} key="2">
-            <HuongDanEbay_table />
-          </Tabs.TabPane>
-        </Tabs>
+        <Form form={formSearch}>
+          <Row gutter={[24, 0]}>
+            <Col xs={24} xl={16} className="mb-24">
+              <Form.Item label="Search" name="item_search">
+                <Input
+                  placeholder="input here"
+                  onPressEnter={(e) => {
+                    searchEbay(e.target.value);
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} xl={8} className="mb-24">
+              <Button onClick={genText}>gen</Button>
+            </Col>
+          </Row>
+        </Form>
+
+        <Tabs
+          defaultActiveKey="tabs1"
+          items={items}
+          onChange={onChange}
+        ></Tabs>
       </Card>
     </div>
   );

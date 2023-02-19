@@ -4,6 +4,9 @@ import { createRef, useState } from 'react';
 import dau from './assets/dau.png';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { useScreenshot, createFileName } from "use-react-screenshot";
+import nen1 from "./assets/background/nen_1.jpg";
+import nen2 from "./assets/background/nen_2.jpg";
+import nen3 from "./assets/background/nen_3.jpg";
 
 function App() {
   const ref = createRef(null);
@@ -12,6 +15,14 @@ function App() {
     currency: 'USD',
     minimumFractionDigits: 2
   })
+
+    // set hình nền
+    const [background, setBackground] = useState();
+    const renderBackground = () => {
+      const arr = [nen1, nen2, nen3];
+      var rand = arr[Math.floor(Math.random() * arr.length)];
+      setBackground(rand);
+    };
   const [image, takeScreenShot] = useScreenshot({
     type: "image/jpeg",
     quality: 1.0
