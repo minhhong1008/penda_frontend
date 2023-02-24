@@ -184,8 +184,6 @@ function App() {
     title.forEach(tt => tt.style.fontSize = `${values.target.value}px`);
   }
 
-  console.log(data);
-
   const randomDateByDayPlus = (startDate) => {
     const returnDate = startDate;
     returnDate.setDate(startDate.getDate() + betweenRandomNumber(1,9));
