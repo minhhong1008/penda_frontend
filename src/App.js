@@ -100,7 +100,6 @@ import Create from "./pages/Create/Create";
 import Tooldata_info from "./pages/Tooldata/Tooldata_info";
 import Tools_list from "./pages/Tools/tools_list";
 import CCCD from "./pages/Tools/cccd/cccd";
-import DOCKBANK from "./pages/Tools/docbank/docbank";
 
 // User
 import Users_class from "./pages/Users/Users_class";
@@ -159,7 +158,7 @@ import Crawl from "./pages/Crawl/Crawl";
 import Blog_info from "./pages/Blog/Blog_info";
 import Home_content from "./pages/HomePage/Home_content";
 import HomeEdit_content from "./pages/HomePage/HomeEdit_content";
-import {Testing} from './pages/Tools/Tesing';
+import Docbank from './pages/Tools/docbank/docbank';
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
 // Quay lại file vừa tạo để sửa giao diện
@@ -430,8 +429,6 @@ const App = () => {
 
           <Route path="/products/cccd" exact component={CCCD} />
 
-          <Route path="/products/docbank" exact component={DOCKBANK} />
-
           <Route
             path="/products/report_overview"
             exact
@@ -571,7 +568,7 @@ const App = () => {
           <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />
-          <Route path="/products/testing" exact component={Testing} />
+          <Route path="/products/docbank" exact component={Docbank} />
         </Main>
       </Switch>
     </div>

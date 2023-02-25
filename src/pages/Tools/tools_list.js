@@ -92,23 +92,6 @@ const Tools_list = () => {
               </Card>
             </div>
           </Col>
-          <Col className="gutter-row" span={6}>
-            <div>
-              <Card
-                onClick={() => handleClick("/products/testing")}
-                hoverable
-                style={{ width: 240 }}
-                cover={
-                  <img
-                    alt="example"
-                    src="https://gw.alipayobjects.com/zos/basement_prod/c0c3852c-d245-4330-886b-cb02ef49eb6d.svg"
-                  />
-                }
-              >
-                <Meta title="Thử nghiệm" description="www.matbiec.penda.vn" />
-              </Card>
-            </div>
-          </Col>
         </Row>
       ) : null}
       <br></br>
