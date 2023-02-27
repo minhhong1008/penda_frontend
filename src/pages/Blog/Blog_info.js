@@ -16,9 +16,6 @@ import { createBlog } from "../../api/blog";
 import React from "react";
 import { showError, showSuccess } from "../../utils";
 import dayjs from "dayjs";
-import SunEditor, { buttonList } from 'suneditor-react';
-import 'suneditor/dist/css/suneditor.min.css';
-import plugins from 'suneditor/src/plugins'
 
 const Blog_info = () => {
   const [formContent] = Form.useForm();
@@ -83,7 +80,7 @@ const Blog_info = () => {
             </Form.Item>
           </Col>
           <Col xs={12} xl={4} className="mb-24">
-            <Form.Item name="blog_employee" label="Nhân viên" style={{height: "100%"}}>
+            <Form.Item name="blog_employee" label="Nhân viên">
               <Select
                 style={{ width: "100%" }}
                 placeholder="select one item"
@@ -167,7 +164,7 @@ const Blog_info = () => {
         </Row>
 
         <Form.Item name="blog_content" label="Bài viết">
-          {/* <CKEditor
+          <CKEditor
             editor={ClassicEditor}
             data="<p>Hello from CKEditor 5!</p>"
             config={{
@@ -179,30 +176,7 @@ const Blog_info = () => {
               const data_CKEditor = editor.getData();
               formContent.setFieldValue("blog_content", data_CKEditor);
             }}
-          /> */}
-          <SunEditor 
-            lang="en" 
-            name="panda-editor" 
-            defaultValue="<b>Chào mừng bạn đến với Panda.vn</b>"
-            setOptions={{
-              plugins: plugins,
-              buttonList: [
-                ['undo', 'redo'],
-                ['font', 'fontSize', 'formatBlock'],
-                ['paragraphStyle', 'blockquote'],
-                ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-                ['fontColor', 'hiliteColor', 'textStyle'],
-                ['removeFormat'],
-                '/', // đây là ký tự xuống dòng, khi muốn xuống dòng giữa các cụm thanh công cụ, thêm ký tự này vào là trên thanh công cụ các nút sẽ xuống dòng
-                ['outdent', 'indent'],
-                ['align', 'horizontalRule', 'list', 'lineHeight'],
-                ['table', 'link', 'image', 'video', 'audio'],
-                ['fullScreen', 'showBlocks', 'codeView'],
-                ['preview', 'print'],
-                ['save', 'template']
-              ]
-            }}
-            />
+          />
         </Form.Item>
       </Form>
     </Card>
