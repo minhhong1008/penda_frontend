@@ -92,7 +92,6 @@ const Tools_list = () => {
               </Card>
             </div>
           </Col>
-          
         </Row>
       ) : null}
       <br></br>
