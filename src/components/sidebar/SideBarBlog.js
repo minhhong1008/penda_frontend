@@ -116,6 +116,19 @@ const SideBarblog = ({ color }) => {
             <span className="label">Đào tạo</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="51">
+          <NavLink to="/blog/english_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "blog/english_class" ? color : "",
+              }}
+            >
+              {dashboard}
+            </span>
+            <span className="label">English</span>
+          </NavLink>
+        </Menu.Item>
 
         <Menu.Item key="6">
           <NavLink to="/blog/project_class">

@@ -2,6 +2,7 @@ import { Card } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { detailBlog } from "../../api/blog";
+import './home_content.css'
 
 const Home_content = () => {
   let { id } = useParams();

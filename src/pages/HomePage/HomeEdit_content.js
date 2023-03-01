@@ -17,6 +17,11 @@ import React, { useEffect, useState } from "react";
 import { showError, showSuccess } from "../../utils";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
+import "./home_content.css";
+import SunEditor, { buttonList } from "suneditor-react";
+import SunEditorCore from "suneditor/src/lib/core";
+import "suneditor/dist/css/suneditor.min.css";
+import plugins from "suneditor/src/plugins";
 
 const HomeEdit_content = () => {
   // Khai báo các kho dữ liệu
@@ -25,13 +30,11 @@ const HomeEdit_content = () => {
   const [formContent] = Form.useForm();
 
   const onFinish_content = async (values) => {
-    if(values.blog_date == null){
-        return showError("Lỗi ngày tháng");
-      }
+    if (values.blog_date == null) {
+      return showError("Lỗi ngày tháng");
+    }
 
-    values.blog_date = dayjs(values.blog_date).format(
-        "YYYY-MM-DD"
-      );
+    values.blog_date = dayjs(values.blog_date).format("YYYY-MM-DD");
 
     const response = await updateBlog({
       values: values,
@@ -49,12 +52,10 @@ const HomeEdit_content = () => {
     let response = await detailBlog(id);
     let data = response.data;
     const newData = {
-        ...data,
-        blog_date: data?.blog_date
-        ? dayjs(data.blog_date)
-        : "",
-      };
-    
+      ...data,
+      blog_date: data?.blog_date ? dayjs(data.blog_date) : "",
+    };
+
     formContent.setFieldsValue(newData);
     setprojectData(newData);
   };
@@ -143,6 +144,9 @@ const HomeEdit_content = () => {
                 <Option value="train_class" label="Đào tạo">
                   <div className="demo-option-label-item">Đào tạo</div>
                 </Option>
+                <Option value="english_class" label="English">
+                  <div className="demo-option-label-item">English</div>
+                </Option>
                 <Option value="recruit_class" label="Tuyển dụng">
                   <div className="demo-option-label-item">Tuyển dụng</div>
                 </Option>
@@ -169,10 +173,12 @@ const HomeEdit_content = () => {
                 <Option value="Kiến thức" label="Kiến thức">
                   <div className="demo-option-label-item">Kiến thức</div>
                 </Option>
+                <Option value="English" label="English">
+                  <div className="demo-option-label-item">English</div>
+                </Option>
                 <Option value="Chức vụ" label="Chức vụ">
                   <div className="demo-option-label-item">Chức vụ</div>
                 </Option>
-                
               </Select>
             </Form.Item>
           </Col>
@@ -189,7 +195,7 @@ const HomeEdit_content = () => {
         </Row>
 
         <Form.Item name="blog_content" label="Bài viết">
-          <CKEditor
+          {/* <CKEditor
             editor={ClassicEditor}
             data={projectData.blog_content}
             config={{
@@ -201,6 +207,42 @@ const HomeEdit_content = () => {
               const data_CKEditor = editor.getData();
               formContent.setFieldValue("blog_content", data_CKEditor);
             }}
+          /> */}
+
+          <SunEditor
+            lang="en"
+            name="panda-editor"
+            setContents= {projectData.blog_content}
+            height="600px"
+            editor={SunEditorCore}
+            //defaultValue = {projectData.blog_content}
+            data={projectData.blog_content}
+            setOptions={{
+              plugins: plugins,
+              buttonList: [
+                ["undo", "redo"],
+                ["font", "fontSize", "formatBlock"],
+                ["paragraphStyle", "blockquote"],
+                [
+                  "bold",
+                  "underline",
+                  "italic",
+                  "strike",
+                  "subscript",
+                  "superscript",
+                ],
+                ["fontColor", "hiliteColor", "textStyle"],
+                ["removeFormat"],
+                "/", // đây là ký tự xuống dòng, khi muốn xuống dòng giữa các cụm thanh công cụ, thêm ký tự này vào là trên thanh công cụ các nút sẽ xuống dòng
+                ["outdent", "indent"],
+                ["align", "horizontalRule", "list", "lineHeight"],
+                ["table", "link", "image", "video", "audio"],
+                ["fullScreen", "showBlocks", "codeView"],
+                ["preview", "print"],
+                ["save", "template"],
+              ],
+            }}
+            onChange={(content) => {formContent.setFieldValue("blog_content", content);}}
           />
         </Form.Item>
       </Form>

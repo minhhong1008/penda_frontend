@@ -122,6 +122,9 @@ const Blog_info = () => {
                 <Option value="train_class" label="Đào tạo">
                   <div className="demo-option-label-item">Đào tạo</div>
                 </Option>
+                <Option value="english_class" label="English">
+                  <div className="demo-option-label-item">English</div>
+                </Option>
                 <Option value="recruit_class" label="Tuyển dụng">
                   <div className="demo-option-label-item">Tuyển dụng</div>
                 </Option>
@@ -147,6 +150,9 @@ const Blog_info = () => {
                 </Option>
                 <Option value="Kiến thức" label="Kiến thức">
                   <div className="demo-option-label-item">Kiến thức</div>
+                </Option>
+                <Option value="English" label="English">
+                  <div className="demo-option-label-item">English</div>
                 </Option>
                 <Option value="Chức vụ" label="Chức vụ">
                   <div className="demo-option-label-item">Chức vụ</div>

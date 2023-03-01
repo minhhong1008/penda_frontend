@@ -152,6 +152,7 @@ import Company from "./pages/HomePage/Company";
 import Process_class from "./pages/HomePage/Process_class";
 import Science_class from "./pages/HomePage/Science_class";
 import Train_class from "./pages/HomePage/Train_class";
+import English_class from "./pages/HomePage/English_class";
 import Recruit_class from "./pages/HomePage/Recruit_class";
 
 import Crawl from "./pages/Crawl/Crawl";
@@ -564,6 +565,7 @@ const App = () => {
           <Route path="/blog/process_class" exact component={Process_class} />
           <Route path="/blog/science_class" exact component={Science_class} />
           <Route path="/blog/train_class" exact component={Train_class} />
+          <Route path="/blog/english_class" exact component={English_class} />
           <Route path="/blog/recruit_class" exact component={Recruit_class} />
           <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />

@@ -4,8 +4,38 @@ import { createRef, useEffect, useState } from 'react';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { createFileName } from "use-react-screenshot";
 import { useImageSize, getImageSize } from 'react-image-size';
-import backgroundTemplate from './assets/bank-template.jpg';
-import backgroundTemplate1 from './assets/bank-template1.jpg';
+import backgroundTemplate1 from './assets/docbank1.jpg';
+import backgroundTemplate2 from './assets/docbank2.jpg';
+import backgroundTemplate3 from './assets/docbank3.jpg';
+import backgroundTemplate4 from './assets/docbank4.jpg';
+import backgroundTemplate5 from './assets/docbank5.jpg';
+import backgroundTemplate6 from './assets/docbank6.jpg';
+import backgroundTemplate7 from './assets/docbank7.jpg';
+import backgroundTemplate8 from './assets/docbank8.jpg';
+import backgroundTemplate9 from './assets/docbank9.jpg';
+import backgroundTemplate10 from './assets/docbank10.jpg';
+import backgroundTemplate11 from './assets/docbank11.jpg';
+import backgroundTemplate12 from './assets/docbank12.jpg';
+import backgroundTemplate13 from './assets/docbank13.jpg';
+import backgroundTemplate14 from './assets/docbank14.jpg';
+import backgroundTemplate15 from './assets/docbank15.jpg';
+import backgroundTemplate16 from './assets/docbank16.jpg';
+import backgroundTemplate17 from './assets/docbank17.jpg';
+import backgroundTemplate18 from './assets/docbank18.jpg';
+import backgroundTemplate19 from './assets/docbank19.jpg';
+import backgroundTemplate20 from './assets/docbank20.jpg';
+import backgroundTemplate21 from './assets/docbank21.jpg';
+import backgroundTemplate22 from './assets/docbank22.jpg';
+import backgroundTemplate23 from './assets/docbank23.jpg';
+import backgroundTemplate24 from './assets/docbank24.jpg';
+import backgroundTemplate25 from './assets/docbank25.jpg';
+import backgroundTemplate26 from './assets/docbank26.jpg';
+import backgroundTemplate27 from './assets/docbank27.jpg';
+import backgroundTemplate28 from './assets/docbank28.jpg';
+import backgroundTemplate29 from './assets/docbank29.jpg';
+import backgroundTemplate30 from './assets/docbank30.jpg';
+import backgroundTemplate31 from './assets/docbank31.jpg';
+
 
 import dau_tpbank from './assets/dau-tpbank.png';
 import dau_tm from './assets/dau-tm.png';
@@ -16,7 +46,7 @@ import * as htmlToImage from "html-to-image";
 function Docbank() {
   const [noHoacCo, setNoHoacCo] = useState(false);
   const [nganhang, setNganHang] = useState(1);
-  const [anhnen, setAnhNen] = useState(backgroundTemplate);
+  const [anhnen, setAnhNen] = useState(backgroundTemplate1);
   const [condau, setCondau] = useState(dau_tm);
   const [defaultSize, setDefault] = useState({
     x: 500,
@@ -89,13 +119,130 @@ function Docbank() {
 
   const anhnens = [
     {
-      value: backgroundTemplate,
+      value: backgroundTemplate1,
       label: "Ảnh nền 1",
     },
     {
-      value: backgroundTemplate1,
+      value: backgroundTemplate2,
       label: "Ảnh nền 2",
+    },
+    {
+      value: backgroundTemplate3,
+      label: "Ảnh nền 3",
+    },
+    {
+      value: backgroundTemplate4,
+      label: "Ảnh nền 4",
+    },
+    {
+      value: backgroundTemplate5,
+      label: "Ảnh nền 5",
+    },
+    {
+      value: backgroundTemplate6,
+      label: "Ảnh nền 6",
+    },
+    {
+      value: backgroundTemplate7,
+      label: "Ảnh nền 7",
+    },
+    {
+      value: backgroundTemplate8,
+      label: "Ảnh nền 8",
+    },
+    {
+      value: backgroundTemplate9,
+      label: "Ảnh nền 9",
+    },
+    {
+      value: backgroundTemplate10,
+      label: "Ảnh nền 10",
+    },
+    {
+      value: backgroundTemplate11,
+      label: "Ảnh nền 11",
+    },
+    {
+      value: backgroundTemplate12,
+      label: "Ảnh nền 12",
+    },
+    {
+      value: backgroundTemplate13,
+      label: "Ảnh nền 13",
+    },
+    {
+      value: backgroundTemplate14,
+      label: "Ảnh nền 14",
+    },
+    {
+      value: backgroundTemplate15,
+      label: "Ảnh nền 15",
+    },
+    {
+      value: backgroundTemplate16,
+      label: "Ảnh nền 16",
+    },
+    {
+      value: backgroundTemplate17,
+      label: "Ảnh nền 17",
+    },
+    {
+      value: backgroundTemplate18,
+      label: "Ảnh nền 18",
+    },
+    {
+      value: backgroundTemplate19,
+      label: "Ảnh nền 19",
+    },
+    {
+      value: backgroundTemplate20,
+      label: "Ảnh nền 20",
+    },
+    {
+      value: backgroundTemplate21,
+      label: "Ảnh nền 21",
+    },
+    {
+      value: backgroundTemplate22,
+      label: "Ảnh nền 22",
+    },
+    {
+      value: backgroundTemplate23,
+      label: "Ảnh nền 23",
+    },
+    {
+      value: backgroundTemplate24,
+      label: "Ảnh nền 24",
+    },
+    {
+      value: backgroundTemplate25,
+      label: "Ảnh nền 25",
+    },
+    {
+      value: backgroundTemplate26,
+      label: "Ảnh nền 26",
+    },
+    {
+      value: backgroundTemplate27,
+      label: "Ảnh nền 27",
+    },
+    {
+      value: backgroundTemplate28,
+      label: "Ảnh nền 28",
+    },
+    {
+      value: backgroundTemplate29,
+      label: "Ảnh nền 29",
+    },
+    {
+      value: backgroundTemplate30,
+      label: "Ảnh nền 30",
+    },
+    {
+      value: backgroundTemplate31,
+      label: "Ảnh nền 31",
     }
+    
   ];
 
   const condaus = [
@@ -242,12 +389,12 @@ function Docbank() {
       const sixMonthsago = new Date(`${new Date().getMonth()}/${new Date().getDate()}/${new Date().getFullYear()}`);
       sixMonthsago.setMonth(sixMonthsago.getMonth() - 2);
       sixMonthsago.setDate(sixMonthsago.getDate() - betweenRandomNumber(1,9));
-      const newRow = createNewRow(sixMonthsago, Math.floor(1000 + Math.random() * 9000), null, noHoacCo === false ? betweenRandomNumber(50000, 1000000) : null, noHoacCo === true ? betweenRandomNumber(50000, 1000000) : null, null, "nothing");
+      const newRow = createNewRow(sixMonthsago, Math.floor(1000 + Math.random() * 9000), null, noHoacCo === false ? betweenRandomNumber(50000, 1000000) : null, noHoacCo === true ? betweenRandomNumber(50000, 1000000) : null, null, "");
       setValues((values) => ([...values, newRow]));
     } else {
       const newDate = new Date(values[values.length - 1].ngay);
       const soduCuoi = values[values.length - 1].sodu;
-      const newRow = createNewRow(randomDateByDayPlus(newDate), Math.floor(1000 + Math.random() * 9000), null, noHoacCo === false ? betweenRandomNumber(50000, 1000000) : null, noHoacCo === true ? betweenRandomNumber(50000, 1000000) : null, soduCuoi, "nothing");
+      const newRow = createNewRow(randomDateByDayPlus(newDate), Math.floor(1000 + Math.random() * 9000), null, noHoacCo === false ? betweenRandomNumber(50000, 1000000) : null, noHoacCo === true ? betweenRandomNumber(50000, 1000000) : null, soduCuoi, "");
       setValues((values) => ([...values, newRow]));
     }
     add();
