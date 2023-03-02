@@ -113,6 +113,9 @@ const Blog_info = () => {
                 <Option value="company" label="company">
                   <div className="demo-option-label-item">company</div>
                 </Option>
+                <Option value="target_class" label="Mục tiêu & Kế hoạch">
+                  <div className="demo-option-label-item">Mục tiêu & Kế hoạch</div>
+                </Option>
                 <Option value="process_class" label="Quy trình">
                   <div className="demo-option-label-item">Quy trình</div>
                 </Option>
@@ -141,6 +144,12 @@ const Blog_info = () => {
               >
                 <Option value="Bài báo" label="Bài báo">
                   <div className="demo-option-label-item">Bài báo</div>
+                </Option>
+                <Option value="Mục tiêu" label="Mục tiêu">
+                  <div className="demo-option-label-item">Mục tiêu</div>
+                </Option>
+                <Option value="Kế hoạch" label="Kế hoạch">
+                  <div className="demo-option-label-item">Kế hoạch</div>
                 </Option>
                 <Option value="Quy trình" label="Quy trình">
                   <div className="demo-option-label-item">Quy trình</div>

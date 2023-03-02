@@ -64,6 +64,19 @@ const SideBarblog = ({ color }) => {
             <span className="label">Company</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="211">
+          <NavLink to="/blog/target_class">
+            <span
+              className="icon"
+              style={{
+                background: page === "blog/target_class" ? color : "",
+              }}
+            >
+              {dashboard}
+            </span>
+            <span className="label">Mục tiêu & Kế Hoạch</span>
+          </NavLink>
+        </Menu.Item>
         <Menu.Item key="2">
           <NavLink to="/blog/process_class">
             <span
@@ -140,7 +153,7 @@ const SideBarblog = ({ color }) => {
             >
               {dashboard}
             </span>
-            <span className="label">Kế hoạch</span>
+            <span className="label">Giao việc</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="7">

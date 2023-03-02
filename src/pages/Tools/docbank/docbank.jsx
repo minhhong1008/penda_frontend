@@ -49,8 +49,8 @@ function Docbank() {
   const [anhnen, setAnhNen] = useState(backgroundTemplate1);
   const [condau, setCondau] = useState(dau_tm);
   const [defaultSize, setDefault] = useState({
-    x: 500,
-    y: 500,
+    x: 300,
+    y: 300,
     width: 0,
     height: 0
   });
@@ -64,7 +64,7 @@ function Docbank() {
   const nganhangs = [
     {
       value: 1,
-      label: "Ngân hàng TMCP DT&PT VIET NAM",
+      label: "NGÂN HÀNG TMCP DT&PT VIET NAM",
     },
     {
       value: 2,
