@@ -23,7 +23,7 @@ const Home_content = () => {
   return (
     <Card>
       <div className="blog_content">
-        <div className="title">{title}</div>
+        <div>{title}</div>
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
       </div>
     </Card>
