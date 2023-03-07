@@ -199,6 +199,8 @@ const Blog_info = () => {
             lang="en" 
             name="panda-editor" 
             defaultValue="<b>Chào mừng bạn đến với Panda.vn</b>"
+            /* defaultStyle= "font-size:22px;" */
+            autoFocus={true}
             height="600px"
             setOptions={{
               plugins: plugins,

@@ -121,6 +121,9 @@ const HomeEdit_content = () => {
                 <Option value="Nguyễn Hoài" label="Nguyễn Hoài">
                   <div className="demo-option-label-item">Nguyễn Hoài</div>
                 </Option>
+                <Option value="Tuấn Anh" label="Tuấn Anh">
+                  <div className="demo-option-label-item">Tuấn Anh</div>
+                </Option>
               </Select>
             </Form.Item>
           </Col>

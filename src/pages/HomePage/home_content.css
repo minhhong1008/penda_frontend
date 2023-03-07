@@ -1,3 +1,32 @@
-table tr td {
+/* table tr td {
     border: 1px solid rgb(216, 211, 211);
+} */
+
+
+
+.blog_content tr {
+    border: 1px solid rgb(216, 211, 211);
+    font-family: Verdana; 
+    font-size: 16px;
+    margin-left: 20px
+}
+
+.blog_content td {
+    border: 1px solid rgb(216, 211, 211);
+    font-family: Verdana; 
+    font-size: 16px;
+    margin-left: 20px
+}
+
+.blog_content table {
+    border: 1px solid rgb(216, 211, 211);
+    font-family: Verdana; 
+    font-size: 16px;
+    margin-left: 25px
+}
+
+.blog_content {
+    font-family: Verdana; 
+    font-size: 16px;
+    margin-left: 10px
 }
