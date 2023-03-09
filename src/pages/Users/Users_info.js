@@ -289,7 +289,7 @@ const Users_info = () => {
 
   return (
     <div>
-      {["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !==
+      {["Giám đốc"].indexOf(users_function) !==
       -1 ? (
         <Card
           title={id}

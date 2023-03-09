@@ -17,6 +17,11 @@ export const getListebay = (payload) => {
 }
 
 
+export const getGologincare = () => {
+  const url = `/ebay/Gologincare`;
+  return axiosClient.get(url);
+}
+
 export const updateebayInfo = (payload, id) => {
   const url = `/ebay/update?id=${id}`;
   return axiosClient.put(url, payload);
@@ -32,6 +37,9 @@ export const searchEbayInfo = (text) => {
   const url = `/ebay/search?${genQueryString(text)}`;
   return axiosClient.get(url);
 }
+
+
+
 
 const genQueryString = function(obj) {
   var str = [];

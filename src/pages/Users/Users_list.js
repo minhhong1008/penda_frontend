@@ -145,7 +145,7 @@ export const HuongDanUsers_timesheets = () => {
               gian chấm kết thúc ca : 18h00 - 18h15.
             </p>
             <p>
-              - Ca tối : 18h30 -22h30, thời gian chấm công từ 18h00-18hh45. Thời
+              - Ca tối : 18h30 -22h30, thời gian chấm công từ 18h16-18hh45. Thời
               gian chấm kết thúc ca : 22h30 - 22h45.
             </p>
             <p>- Đi muộn sẽ bị trừ 1/4 ca, về sớm bị trừ 1/4 ca.</p>

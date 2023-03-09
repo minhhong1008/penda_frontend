@@ -14,6 +14,8 @@ import { UserOutlined } from '@ant-design/icons';
 const ebayitem_info = () => {
   const { Option } = Select;
 
+
+  
   return (
     <Card title={"SẢN PHẨM"}>
       <Tabs>

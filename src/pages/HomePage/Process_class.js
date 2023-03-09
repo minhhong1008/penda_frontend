@@ -9,12 +9,13 @@ import { Row, Col, Card, Avatar } from "antd";
 import { listBlog } from "../../api/blog";
 import { useHistory } from "react-router-dom";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const Process_class = () => {
   const history = useHistory();
   const [data, setData] = useState();
   const { Meta } = Card;
-
+  const { users_function } = useSelector((state) => state.auth);
   const getListBlog = async () => {
     let response = await listBlog({ blog_page: "process_class" });
     let data = response.data;
@@ -29,7 +30,10 @@ const Process_class = () => {
 
   return (
     <div >
-      <Row gutter={[24, 0]}>
+
+{["Giám đốc", "Phó Giám đốc", "Trưởng phòng"].indexOf(users_function) !=
+      -1 ? (
+        <Row gutter={[24, 0]}>
         {data?.map((item, index) => {
           return (
             <Col xs={12} xl={6} className="mb-24" key={index}>
@@ -80,6 +84,9 @@ const Process_class = () => {
           );
         })}
       </Row>
+      ) : null}
+
+      
     </div>
   );
 };

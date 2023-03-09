@@ -22,12 +22,14 @@ import SunEditor, { buttonList } from "suneditor-react";
 import SunEditorCore from "suneditor/src/lib/core";
 import "suneditor/dist/css/suneditor.min.css";
 import plugins from "suneditor/src/plugins";
+import { useSelector } from "react-redux";
 
 const HomeEdit_content = () => {
   // Khai báo các kho dữ liệu
   let { id } = useParams();
   const [projectData, setprojectData] = useState({});
   const [formContent] = Form.useForm();
+  const { users_function } = useSelector((state) => state.auth);
 
   const onFinish_content = async (values) => {
     if (values.blog_date == null) {
@@ -51,13 +53,18 @@ const HomeEdit_content = () => {
   const getContent = async () => {
     let response = await detailBlog(id);
     let data = response.data;
-    const newData = {
-      ...data,
-      blog_date: data?.blog_date ? dayjs(data.blog_date) : "",
-    };
 
-    formContent.setFieldsValue(newData);
-    setprojectData(newData);
+    if (data.blog_view == "Privacy" && users_function != "Giám đốc") {
+      return;
+    } else {
+      const newData = {
+        ...data,
+        blog_date: data?.blog_date ? dayjs(data.blog_date) : "",
+      };
+
+      formContent.setFieldsValue(newData);
+      setprojectData(newData);
+    }
   };
   //  Những hàm được gọi trong useEffect sẽ được chạy lần đầu khi vào trang
   useEffect(() => {
@@ -92,6 +99,28 @@ const HomeEdit_content = () => {
               <Input placeholder="description" maxLength={80} />
             </Form.Item>
           </Col>
+
+          {["Giám đốc"].indexOf(
+            users_function
+          ) != -1 ? (
+            <Col xs={24} xl={4} className="mb-24">
+              <Form.Item name="blog_view" label="Hiển thị">
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder="select one item"
+                  optionlabelprop="label"
+                  size="large"
+                >
+                  <Option value="Public" label="Public">
+                    <div className="demo-option-label-item">Public</div>
+                  </Option>
+                  <Option value="Privacy" label="Privacy">
+                    <div className="demo-option-label-item">Privacy</div>
+                  </Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          ) : null}
         </Row>
         <Row gutter={[24, 0]}>
           <Col xs={12} xl={4} className="mb-24">
@@ -139,7 +168,9 @@ const HomeEdit_content = () => {
                   <div className="demo-option-label-item">company</div>
                 </Option>
                 <Option value="target_class" label="company">
-                  <div className="demo-option-label-item">Mục Tiêu & Kế Hoạch</div>
+                  <div className="demo-option-label-item">
+                    Mục Tiêu & Kế Hoạch
+                  </div>
                 </Option>
                 <Option value="process_class" label="Quy trình">
                   <div className="demo-option-label-item">Quy trình</div>
@@ -206,7 +237,7 @@ const HomeEdit_content = () => {
           </Col>
         </Row>
 
-        <Form.Item name="blog_content" label="Bài viết">
+        <Form.Item name="blog_content" label="Bài viết" id="summernote">
           {/* <CKEditor
             editor={ClassicEditor}
             data={projectData.blog_content}
@@ -224,11 +255,11 @@ const HomeEdit_content = () => {
           <SunEditor
             lang="en"
             name="panda-editor"
-            setContents= {projectData.blog_content}
+            setContents={projectData.blog_content}
             height="600px"
             editor={SunEditorCore}
             //defaultValue = {projectData.blog_content}
-            data={projectData.blog_content}
+            //data={projectData.blog_content}
             setOptions={{
               plugins: plugins,
               buttonList: [
@@ -245,16 +276,18 @@ const HomeEdit_content = () => {
                 ],
                 ["fontColor", "hiliteColor", "textStyle"],
                 ["removeFormat"],
-                "/", // đây là ký tự xuống dòng, khi muốn xuống dòng giữa các cụm thanh công cụ, thêm ký tự này vào là trên thanh công cụ các nút sẽ xuống dòng
+                // "/",  đây là ký tự xuống dòng, khi muốn xuống dòng giữa các cụm thanh công cụ, thêm ký tự này vào là trên thanh công cụ các nút sẽ xuống dòng
                 ["outdent", "indent"],
                 ["align", "horizontalRule", "list", "lineHeight"],
                 ["table", "link", "image", "video", "audio"],
                 ["fullScreen", "showBlocks", "codeView"],
-                ["preview", "print"],
-                ["save", "template"],
+                ["preview"],
+                ["save"],
               ],
             }}
-            onChange={(content) => {formContent.setFieldValue("blog_content", content);}}
+            onChange={(content) => {
+              formContent.setFieldValue("blog_content", content);
+            }}
           />
         </Form.Item>
       </Form>

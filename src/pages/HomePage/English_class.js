@@ -9,13 +9,19 @@ import { Row, Col, Card, Avatar } from "antd";
 import { listBlog } from "../../api/blog";
 import { useHistory } from "react-router-dom";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const English_class = () => {
   const history = useHistory();
   const [data, setData] = useState();
   const { Meta } = Card;
+  const { users_function } = useSelector((state) => state.auth);
 
   const getListBlog = async () => {
+
+    if(users_function !="Giám đốc"){
+      return;
+    }
     let response = await listBlog({ blog_page: "english_class" });
     let data = response.data;
     if (data.length > 0) {

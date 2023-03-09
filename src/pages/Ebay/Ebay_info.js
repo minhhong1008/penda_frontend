@@ -41,6 +41,7 @@ import {
 import { getebayInfo, updateebayInfo } from "../../api/ebay/index";
 import { updateListView } from "../../api/update";
 
+
 const Ebay_info = () => {
   const type_item = "ebay";
 
@@ -652,6 +653,7 @@ const Ebay_info = () => {
       </Button>
     </Affix>
   );
+
   return (
     <Card title={id + " | " + (info?._id ? info?._id : "")}>
       <Tabs defaultActiveKey="1" tabBarExtraContent={operations}>
