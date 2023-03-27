@@ -160,6 +160,9 @@ export const HuongDanUsers_timesheets = () => {
               công khi không có mặt ở công ty, nhờ người khác chấm công hộ) Thì
               người chấm công bị trừ 10 ca.
             </p>
+            <p>
+              - Nhân viên 1 tháng phải đảm bảo tối thiểu được 30 ca, nêu không đạt 30 ca sẽ tính theo lương thử việc.
+            </p>
           </>
         }
         type="info"

@@ -22,6 +22,11 @@ export const getGologincare = () => {
   return axiosClient.get(url);
 }
 
+/* export const get_api_account = (id) => {
+  const url = `/ebay/Gologincare/${id}`;
+  return axiosClient.get(url);
+} */
+
 export const updateebayInfo = (payload, id) => {
   const url = `/ebay/update?id=${id}`;
   return axiosClient.put(url, payload);
