@@ -6,6 +6,11 @@ export const getGologincare = () => {
   return axiosClient.get(url);
 }
 
+export const getGologinreg = () => {
+    const url = `/Auto/Gologinreg`;
+    return axiosClient.get(url);
+  }
+
 const genQueryString = function(obj) {
   var str = [];
   for (var p in obj)
