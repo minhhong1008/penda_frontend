@@ -1,5 +1,5 @@
-import { bankStatementBackGrounds, bankSeals } from './assets';
-import { Select, Button, Form, Input, DatePicker, TimePicker, Space, Col, Row, message, InputNumber } from 'antd';
+import { bankStatementBackGrounds, bankSeals, ggvs } from './assets';
+import { Select, Button, Form, Input, DatePicker, TimePicker, Space, Col, Row, message, InputNumber, Slider } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { createFileName } from "use-react-screenshot";
 import { useEffect, useState, createRef } from 'react';
@@ -19,6 +19,17 @@ const MainTool = () => {
 
     const [mainSealSize, setMainSealSize] = useState({
         x: 500,
+        y: 500,
+        width: 0,
+        height: 0
+    });
+
+    const [backgroundScaleValue, setBackgroundScaleValue] = useState(1);
+
+    const [ggv, setGgv] = useState(ggvs[0]);
+
+    const [ggvSize, setGgvSize] = useState({
+        x: 100,
         y: 500,
         width: 0,
         height: 0
@@ -48,6 +59,13 @@ const MainTool = () => {
         cacGD: []
     });
     const [bank, setBank] = useState(ListBanks[0]);
+
+    const giaoDichViens = ggvs.map(b => {
+        return {
+            value: b,
+            label: b.replace("/static/media/", "").replace(/\..+$/, "")
+        }
+    });
 
     const seals = bankSeals.map(b => {
         return {
@@ -86,10 +104,17 @@ const MainTool = () => {
     }
 
     const handleChangeBankSeal = (value) => {
-        getImageSize(seal).then(({ width, height }) => {
+        getImageSize(value).then(({ width, height }) => {
             setMainSealSize({ ...mainSealSize, width: width, height: height });
         });
         setSeal(value);
+    }
+
+    const handleChangeGgv = (value) => {
+        getImageSize(value).then(({ width, height }) => {
+            setGgvSize({ ...ggvSize, width: width, height: height });
+        });
+        setGgv(value);
     }
 
     const onFinish = (values) => {
@@ -161,6 +186,18 @@ const MainTool = () => {
             download(canvas);
         });
     }
+
+    const backgroundScaleValueChange = (value) => {
+        if (isNaN(value)) {
+            return;
+        }
+        setBackgroundScaleValue(value);
+        getImageSize(mainBackGround).then(({ width, height }) => {
+            const newWidth = width * value;
+            const newHeight = height * value;
+            setMainBackgroundSize({ ...mainBackgroundSize, width: newWidth, height: newHeight });
+        });
+    };
 
     return (
         <div>
@@ -453,6 +490,23 @@ const MainTool = () => {
                                 placeholder="Chọn con dấu"
                             />
                         </Col>
+                        <Col className="gutter-row" span={6}>
+                            <Select
+                                size='large'
+                                style={{
+                                    width: '100%',
+                                }}
+                                onChange={handleChangeGgv}
+                                options={giaoDichViens}
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) => (option?.label.toLowerCase() ?? '').includes(input.toLowerCase())}
+                                filterSort={(optionA, optionB) =>
+                                    (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                }
+                                placeholder="Chọn chữ ký của giao dịch viên"
+                            />
+                        </Col>
                         <Col className="gutter-row" span={1.5}>
                             <Button type="primary" onClick={downloadScreenshot}>
                                 Lưu Lại
@@ -461,15 +515,47 @@ const MainTool = () => {
                     </Row>
                 </Form.Item>
             </Form>
+            <Row style={{ marginBottom: "20px" }}>
+                <Col span={6}>
+                    <div style={{
+                        fontWeight: "bolder",
+                        margin: "5px 10px"
+
+                    }}>
+                    Thay đổi kích cỡ ảnh nền bằng cách kéo thanh trượt
+                    </div>
+                </Col>
+                <Col span={12}>
+                    <Slider
+                        min={0}
+                        max={3}
+                        onChange={backgroundScaleValueChange}
+                        value={typeof backgroundScaleValue === 'number' ? backgroundScaleValue : 1}
+                        step={0.1}
+                    />
+                </Col>
+                <Col span={4}>
+                    <InputNumber
+                        min={0}
+                        max={3}
+                        style={{
+                            margin: '0 16px',
+                        }}
+                        step={0.1}
+                        value={backgroundScaleValue}
+                        onChange={backgroundScaleValueChange}
+                    />
+                </Col>
+            </Row>
             <div id='main-background-container' ref={ref} style={{
                 width: mainBackgroundSize.width,
                 height: mainBackgroundSize.height,
-                background: `url("${mainBackGround}") round`
+                background: `url("${mainBackGround}") 0% 0% / contain no-repeat`
             }}>
                 {<bank.value bankStatement={data} />}
                 <Rnd
                     bounds="parent"
-                    style={{ background: `url("${seal}") round` }}
+                    style={{ background: `url("${seal}")  0% 0% / contain no-repeat` }}
                     className='dragTable'
                     default={mainSealSize}
                     lockAspectRatio={true}
@@ -479,6 +565,20 @@ const MainTool = () => {
                     }}
                     onResize={(e, direction, ref, delta, position) => {
                         setMainSealSize({ ...mainSealSize, width: ref.offsetWidth, height: ref.offsetHeight });
+                    }}
+                />
+                <Rnd
+                    bounds="parent"
+                    style={{ background: `url("${ggv}")  0% 0% / contain no-repeat` }}
+                    className='dragTable'
+                    default={ggvSize}
+                    lockAspectRatio={true}
+                    size={{
+                        width: ggvSize.width,
+                        height: ggvSize.height
+                    }}
+                    onResize={(e, direction, ref, delta, position) => {
+                        setGgvSize({ ...ggvSize, width: ref.offsetWidth, height: ref.offsetHeight });
                     }}
                 />
             </div>

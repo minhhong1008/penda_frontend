@@ -1,7 +1,7 @@
 import { Rnd } from "react-rnd";
 import * as helpers from '../helpers/helpers';
 import './vietinbank..css';
-import logo from '../assets/logo-vietinbank.png';
+import logo from '../assets/logo/logo-vietinbank.png';
 
 const VietinBank = (props) => {
   const { bankStatement } = props
@@ -126,6 +126,41 @@ const VietinBank = (props) => {
           <td style={{textAlign: "right", paddingRight: "5px"}}><b>{helpers.formatNumber(bankStatement.soDuCuoiKy)}</b></td>
         </tr>
       </table>
+      <div style={{
+        display: "flex",
+        width: "100%",
+        height: "200px",
+        marginTop: "50px"
+      }}>
+        <div style={{
+          width: "70%"
+        }}>
+          <b>Giao dịch viên</b>
+          <p className="note" style={{
+            marginTop: "-10px"
+          }}>Teller</p>
+        </div>
+        <div style={{
+          textAlign: "center",
+          width: "100%",
+          paddingRight: "10%",
+          alignSelf: "center"
+        }}>
+          <p style={{
+            marginBottom: "-10px"
+          }}>Thank you please Visit us again_VI</p>
+          <p>Cảm ơn Qúy KH đã sử dụng DV của VietinBank</p>
+        </div>
+        <div style={{
+          width: "50%",
+          textAlign: "left"
+        }}>
+        <b>Kiểm soát viên</b>
+          <p className="note" style={{
+            marginTop: "-10px"
+          }}>Supervisor</p>
+        </div>
+      </div>
     </Rnd>
   );
 }
