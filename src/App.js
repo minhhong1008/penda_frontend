@@ -160,7 +160,7 @@ import Crawl from "./pages/Crawl/Crawl";
 import Blog_info from "./pages/Blog/Blog_info";
 import Home_content from "./pages/HomePage/Home_content";
 import HomeEdit_content from "./pages/HomePage/HomeEdit_content";
-import Docbank from './pages/Tools/docbank/docbank';
+import BankStatementTool from './pages/Tools/docbank/main-tool';
 // Copy 1 cái thẻ <Route /> rồi sửa phần component={tên cái vừa import}
 // Sửa phần path="Đường dẫn của link vừa tạo"
 // Quay lại file vừa tạo để sửa giao diện
@@ -572,7 +572,7 @@ const App = () => {
           <Route path="/crawl" exact component={Crawl} />
           <Route exact path="/rtl" component={Rtl} />
           <Route exact path="/profile" component={Profile} />
-          <Route path="/products/docbank" exact component={Docbank} />
+          <Route path="/products/bank-statement-tool" exact component={BankStatementTool} />
         </Main>
       </Switch>
     </div>

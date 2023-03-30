@@ -43,7 +43,7 @@ const Tools_list = () => {
               <Card
                 onClick={() => handleClick("/products/cccd")}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 340 }}
                 cover={
                   <img
                     alt="example"
@@ -51,7 +51,7 @@ const Tools_list = () => {
                   />
                 }
               >
-                <Meta title="CCCD" description="www.matbiec.penda.vn" />
+                <Meta title="Công cụ tạo căn cước công dân" description="www.matbiec.penda.vn" />
               </Card>
             </div>
           </Col>
@@ -69,26 +69,6 @@ const Tools_list = () => {
                 }
               >
                 <Meta title="Doc Bank" description="www.matbiec.penda.vn" />
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" span={6}>
-            <div>
-              <Card
-                onClick={() => handleClick("/")}
-                hoverable
-                style={{ width: 240 }}
-                cover={
-                  <img
-                    alt="example"
-                    src="https://gw.alipayobjects.com/zos/basement_prod/d475d063-2754-4442-b9db-5d164e06acc9.svg"
-                  />
-                }
-              >
-                <Meta
-                  title="Xử lý dữ liệu"
-                  description="www.matbiec.penda.vn"
-                />
               </Card>
             </div>
           </Col>
@@ -126,26 +106,9 @@ const Tools_list = () => {
           <Col className="gutter-row" span={6}>
             <div>
               <Card
-                onClick={() => handleClick("/products/cccd")}
+                onClick={() => handleClick("/products/bank-statement-tool")}
                 hoverable
-                style={{ width: 240 }}
-                cover={
-                  <img
-                    alt="example"
-                    src="https://gw.alipayobjects.com/zos/basement_prod/048ee28f-2c80-4d15-9aa3-4f5ddac50465.svg"
-                  />
-                }
-              >
-                <Meta title="CCCD" description="www.matbiec.penda.vn" />
-              </Card>
-            </div>
-          </Col>
-          <Col className="gutter-row" span={6}>
-            <div>
-              <Card
-                onClick={() => handleClick("/products/tools/docbank")}
-                hoverable
-                style={{ width: 240 }}
+                style={{ width: 340 }}
                 cover={
                   <img
                     alt="example"
@@ -153,31 +116,10 @@ const Tools_list = () => {
                   />
                 }
               >
-                <Meta title="Doc Bank" description="www.matbiec.penda.vn" />
+                <Meta title="Công cụ tạo sao kê ngân hàng" description="www.matbiec.penda.vn" />
               </Card>
             </div>
           </Col>
-          <Col className="gutter-row" span={6}>
-            <div>
-              <Card
-                onClick={() => handleClick("/")}
-                hoverable
-                style={{ width: 240 }}
-                cover={
-                  <img
-                    alt="example"
-                    src="https://gw.alipayobjects.com/zos/basement_prod/d475d063-2754-4442-b9db-5d164e06acc9.svg"
-                  />
-                }
-              >
-                <Meta
-                  title="Xử lý dữ liệu"
-                  description="www.matbiec.penda.vn"
-                />
-              </Card>
-            </div>
-          </Col>
-          
         </Row>
       ) : null}
     </div>

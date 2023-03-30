@@ -1,0 +1,12 @@
+.note {
+    font-size: 10.5px;
+}
+
+.statement {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.statement tr td {
+    border: 1px solid #000000;
+}

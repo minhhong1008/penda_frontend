@@ -1,0 +1,58 @@
+.tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.tg td {
+
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    overflow: hidden;
+    padding: 3px 3px;
+    word-break: normal;
+}
+
+.tg th {
+
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    overflow: hidden;
+    padding: 3px 3px;
+    word-break: normal;
+}
+
+.tg .tg-i7zr {
+    font-family: Arial, Helvetica, sans-serif !important;
+    text-align: left;
+    vertical-align: top
+}
+
+.tg .tg-m58p {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 16px;
+    text-align: left;
+    vertical-align: top
+}
+
+.tg .tg-3mwn {
+    font-family: Arial, Helvetica, sans-serif !important;
+    text-align: left;
+    vertical-align: middle
+}
+
+.tg .tg-pjqy {
+    border-color: #000000;
+    font-family: Arial, Helvetica, sans-serif !important;
+    text-align: left;
+    vertical-align: top
+}
+
+.preview {
+    width: 100%;
+}
+
+.preview tr td {
+    border: 1px solid black;
+}

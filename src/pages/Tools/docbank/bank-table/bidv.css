@@ -1,0 +1,12 @@
+.table-preview {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 0 auto;
+    z-index: 1;
+    text-shadow: #3b3b3b 0 0 1.9px;
+}
+
+.dragTable:hover {
+    border: #111 2px solid;
+}
