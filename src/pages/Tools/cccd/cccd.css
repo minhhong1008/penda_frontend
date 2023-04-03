@@ -1,18 +1,14 @@
 #mat-truoc {
     margin-bottom: 20px;
-}
-
-.dynamic-text {
-    position: absolute;
-    left: 0;
-    top: 0;
-    line-height: 0;
-    width: 100%;
-    height: 100%;
-    fill: #333;
-}
-
-#mat-truoc {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     color: black;
+}
+
+#mat-sau {
+    font-family: Arial;
+    color: black;
+}
+
+.dragTable:hover {
+    border: 1px solid black;
 }

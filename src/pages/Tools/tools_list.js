@@ -43,7 +43,7 @@ const Tools_list = () => {
               <Card
                 onClick={() => handleClick("/products/cccd")}
                 hoverable
-                style={{ width: 340 }}
+                style={{ width: 240 }}
                 cover={
                   <img
                     alt="example"
@@ -108,7 +108,7 @@ const Tools_list = () => {
               <Card
                 onClick={() => handleClick("/products/bank-statement-tool")}
                 hoverable
-                style={{ width: 340 }}
+                style={{ width: 240 }}
                 cover={
                   <img
                     alt="example"
