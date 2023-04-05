@@ -66,3 +66,8 @@
 .custom_info_item > .ant-form-item {
   width: 100% !important;
 }
+
+@font-face {
+  font-family: 'idfont';
+  src: url('../public/OCRB-Regular.ttf')  format('truetype');
+}

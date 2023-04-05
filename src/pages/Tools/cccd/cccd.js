@@ -19,6 +19,7 @@ import html2canvas from 'html2canvas';
 import { createFileName } from "use-react-screenshot";
 import { Rnd } from "react-rnd";
 import * as helpers from '../docbank/helpers/helpers';
+import QRCode from "react-qr-code";
 
 const CCCD = () => {
     const [cccdData, setCCCĐata] = useState({
@@ -38,6 +39,10 @@ const CCCD = () => {
         idMatSau2: "",
         quocTich: "Việt Nam"
     });
+
+    const [fontWeightID, setFontWeightID] = useState(800);
+    const [fontWeight, setFontWeight] = useState(550);
+    const [fontColorAlpha, setFontColorAlpha] = useState(1);
 
     const [matTruoc, setMatTruoc] = useState(matTruocs[0]);
     const [matSau, setMatSau] = useState(matSaus[0]);
@@ -117,10 +122,15 @@ const CCCD = () => {
 
     const hoanThanh = (values) => {
         const newValues = values;
-        newValues.ngayGD = newValues.ngaySinh?.toString();
-        newValues.gioGD = newValues.coGiaTriDen?.toString();
-        newValues.tuNgay = newValues.ngayTao.toString();
+        newValues.ngaySinh = newValues.ngaySinh ? newValues.ngaySinh.toISOString(): "";
+        newValues.coGiaTriDen = newValues.coGiaTriDen ? newValues.coGiaTriDen.toISOString(): "";
+        newValues.ngayTao = newValues.ngayTao ? newValues.ngayTao.toISOString() : "";
         newValues.gioiTinh = newValues.gioiTinh ? "Nữ" : "Nam";
+        if (newValues.ten && newValues.ngaySinh && newValues.so) {
+            newValues.idMatSau = `IDVNM${newValues.so.slice(3)}${Math.floor(Math.random() * 10)}${newValues.so}<<${Math.floor(Math.random() * 10)}`;
+            newValues.idMatSau1 = `${helpers.revertDate(newValues.ngaySinh)}${Math.floor(Math.random() * 10)}${newValues.gioiTinh === "Nam" ? "M" : "F"}${helpers.revertDate(newValues.coGiaTriDen)}${Math.floor(Math.random() * 10)}VNM<<<<<<<<<<<${Math.floor(Math.random() * 10)}`;
+            newValues.idMatSau2 = `${helpers.generateCCCDIDName(newValues.ten)}<<<<<<<<<<<<`;
+        }
         setCCCĐata(newValues);
     }
 
@@ -173,12 +183,9 @@ const CCCD = () => {
                             span: 4,
                         }}
                         wrapperCol={{
-                            span: 14,
+                            span: 28,
                         }}
                         layout="horizontal"
-                        style={{
-                            maxWidth: 600,
-                        }}
                     >
                         <Form.Item name={["so"]} label="Số CCCD" initialValue={""}>
                             <Input defaultValue={""} />
@@ -213,17 +220,104 @@ const CCCD = () => {
                         <Form.Item name={["ngayTao"]} label="Ngày tạo" initialValue={""}>
                             <DatePicker size='large' style={{ width: "100%" }} />
                         </Form.Item>
-                        <Form.Item name={["idMatSau"]} label="ID phía mặt sau" initialValue={""}>
+                        <Form.Item hidden name={["idMatSau"]} label="ID phía mặt sau" initialValue={""}>
                             <Input defaultValue={""} />
                         </Form.Item>
-                        <Form.Item name={["idMatSau1"]} label="ID phía mặt sau 1" initialValue={""}>
+                        <Form.Item hidden name={["idMatSau1"]} label="ID phía mặt sau 1" initialValue={""}>
                             <Input defaultValue={""} />
                         </Form.Item>
-                        <Form.Item name={["idMatSau2"]} label="ID phía mặt sau 2" initialValue={""}>
+                        <Form.Item hidden name={["idMatSau2"]} label="ID phía mặt sau 2" initialValue={""}>
                             <Input defaultValue={""} />
                         </Form.Item>
                         <Form.Item name={["quocTich"]} initialValue={"Việt Nam"} hidden>
                             <Input defaultValue={"Việt Nam"} />
+                        </Form.Item>
+                        <Form.Item label="Số CCCD">
+                            <Row style={{ marginBottom: "20px" }}>
+                                <Col span={18}>
+                                    <Slider
+                                        marks={{
+                                            0: "Nhạt",
+                                            900: "Đậm"
+                                        }}
+                                        min={0}
+                                        max={900}
+                                        onChange={(value) => setFontWeightID(value)}
+                                        value={typeof fontWeightID === 'number' ? fontWeightID : 800}
+                                        step={50}
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <InputNumber
+                                        min={0}
+                                        max={900}
+                                        style={{
+                                            margin: '0 16px',
+                                        }}
+                                        step={50}
+                                        value={fontWeightID}
+                                        onChange={(value) => setFontWeightID(value)}
+                                    />
+                                </Col>
+                            </Row>
+                        </Form.Item>
+                        <Form.Item label="Phần còn lại">
+                            <Row style={{ marginBottom: "20px" }}>
+                                <Col span={18}>
+                                    <Slider
+                                        marks={{
+                                            0: "Nhạt",
+                                            900: "Đậm"
+                                        }}
+                                        min={0}
+                                        max={900}
+                                        onChange={(value) => setFontWeight(value)}
+                                        value={typeof fontWeight === 'number' ? fontWeight : 550}
+                                        step={50}
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <InputNumber
+                                        min={0}
+                                        max={900}
+                                        style={{
+                                            margin: '0 16px',
+                                        }}
+                                        step={50}
+                                        value={fontWeight}
+                                        onChange={(value) => setFontWeight(value)}
+                                    />
+                                </Col>
+                            </Row>
+                        </Form.Item>
+                        <Form.Item label="Độ trong suốt">
+                            <Row style={{ marginBottom: "20px" }}>
+                                <Col span={18}>
+                                    <Slider
+                                        marks={{
+                                            0: "Trong suốt",
+                                            1: "Nguyên bản"
+                                        }}
+                                        min={0}
+                                        max={1}
+                                        onChange={(value) => setFontColorAlpha(value)}
+                                        value={typeof fontColorAlpha === 'number' ? fontColorAlpha : 1}
+                                        step={0.1}
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <InputNumber
+                                        min={0}
+                                        max={1}
+                                        style={{
+                                            margin: '0 16px',
+                                        }}
+                                        step={0.1}
+                                        value={fontColorAlpha}
+                                        onChange={(value) => setFontColorAlpha(value)}
+                                    />
+                                </Col>
+                            </Row>
                         </Form.Item>
                         <Form.Item>
                             <Button type='primary' htmlType='submit'>Hoàn thành</Button>
@@ -274,9 +368,6 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{
-                                background: `url("${anh}") 0% 0% / contain no-repeat`
-                            }}
                             default={{
                                 width: 138,
                                 height: 184,
@@ -284,11 +375,12 @@ const CCCD = () => {
                                 y: 266
                             }}
                         >
+                            <img src={anh} alt="" width={"100%"} height={"100%"} />
                         </Rnd>
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 800, fontSize: "27px"}}
+                            style={{ fontWeight: fontWeightID, fontSize: "27px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 190,
                                 height: 35,
@@ -304,7 +396,42 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "19px" }}
+                            style={{ fontWeight: 800, fontSize: "27px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
+                            default={{
+                                width: 75,
+                                height: 75,
+                                x: 562,
+                                y: 166
+                            }}
+                            onResize={(e, direction, ref, delta, position) => {
+                                ref.style.fontSize = `${ref.offsetHeight - 8}px`;
+                            }}
+                        >
+                            <QRCode
+                                fillOpacity={0.8}
+                                bgColor={"transparent"}
+                                size={80}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                value={
+                                    cccdData.so +
+                                    "||" +
+                                    helpers.toNonAccentVietnamese(cccdData.ten) +
+                                    "|" +
+                                    helpers.formatDate(cccdData.ngaySinh) +
+                                    "|" +
+                                    helpers.toNonAccentVietnamese(cccdData.gioiTinh) +
+                                    "|" +
+                                    helpers.toNonAccentVietnamese(cccdData.noiThuongTruDuoi) +
+                                    "|" +
+                                    helpers.formatDate(cccdData.ngayTao)
+                                }
+                            />
+                        </Rnd>
+
+                        <Rnd
+                            bounds="parent"
+                            className='dragTable'
+                            style={{ fontWeight: fontWeight, fontSize: "19px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 196,
                                 height: 27,
@@ -320,7 +447,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "17px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 90,
                                 height: 25,
@@ -336,7 +463,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550,fontSize: "17px"}}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 65,
                                 height: 25,
@@ -352,7 +479,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "17px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 90,
                                 height: 25,
@@ -368,7 +495,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "17px"}}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 370,
                                 height: 25,
@@ -384,7 +511,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "17px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 150,
                                 height: 25,
@@ -400,7 +527,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "17px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "17px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 355,
                                 height: 25,
@@ -417,8 +544,9 @@ const CCCD = () => {
                             bounds="parent"
                             className='dragTable'
                             style={{
-                                fontWeight: 550,
-                                fontSize: "14px"
+                                fontWeight: fontWeight,
+                                fontSize: "14px",
+                                color: `rgba(0, 0, 0, ${fontColorAlpha})`
                             }}
                             default={{
                                 width: 80,
@@ -473,7 +601,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "15px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "15px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 80,
                                 height: 23,
@@ -484,12 +612,12 @@ const CCCD = () => {
                                 ref.style.fontSize = `${ref.offsetHeight - 8}px`;
                             }}
                         >
-                           {helpers.formatDate(cccdData.ngayTao)}
+                            {helpers.formatDate(cccdData.ngayTao)}
                         </Rnd>
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "15px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "15px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 200,
                                 height: 23,
@@ -505,7 +633,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "15px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "15px", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 100,
                                 height: 23,
@@ -521,7 +649,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "28px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "33px", fontFamily: "idfont", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 585,
                                 height: 36,
@@ -529,7 +657,7 @@ const CCCD = () => {
                                 y: 1006
                             }}
                             onResize={(e, direction, ref, delta, position) => {
-                                ref.style.fontSize = `${ref.offsetHeight - 8}px`;
+                                ref.style.fontSize = `${ref.offsetHeight - 3}px`;
                             }}
                         >
                             {cccdData.idMatSau}
@@ -537,7 +665,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "28px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "33px", fontFamily: "idfont", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 585,
                                 height: 36,
@@ -545,7 +673,7 @@ const CCCD = () => {
                                 y: 1036
                             }}
                             onResize={(e, direction, ref, delta, position) => {
-                                ref.style.fontSize = `${ref.offsetHeight - 8}px`;
+                                ref.style.fontSize = `${ref.offsetHeight - 3}px`;
                             }}
                         >
                             {cccdData.idMatSau1}
@@ -553,7 +681,7 @@ const CCCD = () => {
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{ fontWeight: 550, fontSize: "28px" }}
+                            style={{ fontWeight: fontWeight, fontSize: "33px", fontFamily: "idfont", color: `rgba(0, 0, 0, ${fontColorAlpha})` }}
                             default={{
                                 width: 585,
                                 height: 36,
@@ -561,17 +689,14 @@ const CCCD = () => {
                                 y: 1066
                             }}
                             onResize={(e, direction, ref, delta, position) => {
-                                ref.style.fontSize = `${ref.offsetHeight - 8}px`;
+                                ref.style.fontSize = `${ref.offsetHeight - 3}px`;
                             }}
                         >
-                           {cccdData.idMatSau2}
+                            {cccdData.idMatSau2}
                         </Rnd>
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{
-                                background: `url("${vantay1}") 0% 0% / contain no-repeat`
-                            }}
                             default={{
                                 width: 144,
                                 height: 169,
@@ -579,13 +704,11 @@ const CCCD = () => {
                                 y: 750
                             }}
                         >
+                            <img src={vantay1} alt="" width={"100%"} height={"100%"} />
                         </Rnd>
                         <Rnd
                             bounds="parent"
                             className='dragTable'
-                            style={{
-                                background: `url("${vantay2}") 0% 0% / contain no-repeat`
-                            }}
                             default={{
                                 width: 144,
                                 height: 169,
@@ -593,6 +716,7 @@ const CCCD = () => {
                                 y: 750
                             }}
                         >
+                            <img src={vantay2} alt="" width={"100%"} height={"100%"} />
                         </Rnd>
                     </div>
                 </Col>
