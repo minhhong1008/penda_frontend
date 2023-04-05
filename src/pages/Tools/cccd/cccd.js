@@ -121,15 +121,18 @@ const CCCD = () => {
     }
 
     const hoanThanh = (values) => {
-        const newValues = values;
+        const newValues = {...values};
         newValues.ngaySinh = newValues.ngaySinh ? newValues.ngaySinh.toISOString(): "";
         newValues.coGiaTriDen = newValues.coGiaTriDen ? newValues.coGiaTriDen.toISOString(): "";
         newValues.ngayTao = newValues.ngayTao ? newValues.ngayTao.toISOString() : "";
         newValues.gioiTinh = newValues.gioiTinh ? "Nữ" : "Nam";
-        if (newValues.ten && newValues.ngaySinh && newValues.so) {
+        if (newValues.ten && newValues.ngaySinh && newValues.so && (newValues.idMatSau === "" || newValues.idMatSau1 === "" || newValues.idMatSau2 === "")) {
             newValues.idMatSau = `IDVNM${newValues.so.slice(3)}${Math.floor(Math.random() * 10)}${newValues.so}<<${Math.floor(Math.random() * 10)}`;
             newValues.idMatSau1 = `${helpers.revertDate(newValues.ngaySinh)}${Math.floor(Math.random() * 10)}${newValues.gioiTinh === "Nam" ? "M" : "F"}${helpers.revertDate(newValues.coGiaTriDen)}${Math.floor(Math.random() * 10)}VNM<<<<<<<<<<<${Math.floor(Math.random() * 10)}`;
             newValues.idMatSau2 = `${helpers.generateCCCDIDName(newValues.ten)}<<<<<<<<<<<<`;
+            form.setFieldValue("idMatSau", newValues.idMatSau)
+            form.setFieldValue("idMatSau1", newValues.idMatSau1)
+            form.setFieldValue("idMatSau2", newValues.idMatSau2)
         }
         setCCCĐata(newValues);
     }
@@ -188,10 +191,10 @@ const CCCD = () => {
                         layout="horizontal"
                     >
                         <Form.Item name={["so"]} label="Số CCCD" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["ten"]} label="Họ và tên" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["ngaySinh"]} label="Ngày sinh" initialValue={""}>
                             <DatePicker size='large' style={{ width: "100%" }} />
@@ -200,37 +203,37 @@ const CCCD = () => {
                             <Switch checkedChildren="Nữ" unCheckedChildren="Nam" defaultChecked={false} checked={false} />
                         </Form.Item>
                         <Form.Item name={["queQuan"]} label="Quê quán" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["noiThuongTruTren"]} label="Nơi thường trú 1" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["noiThuongTruDuoi"]} label="Nơi thường trú 2" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["coGiaTriDen"]} label="Có giá trị đến" initialValue={""}>
                             <DatePicker size='large' style={{ width: "100%" }} />
                         </Form.Item>
                         <Form.Item name={["dacDiemNhanDangTren"]} label="Đđ nhận dạng 1" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["dacDiemNhanDangDuoi"]} label="Đđ nhận dạng 2" initialValue={""}>
-                            <Input defaultValue={""} />
+                            <Input />
                         </Form.Item>
                         <Form.Item name={["ngayTao"]} label="Ngày tạo" initialValue={""}>
                             <DatePicker size='large' style={{ width: "100%" }} />
                         </Form.Item>
-                        <Form.Item hidden name={["idMatSau"]} label="ID phía mặt sau" initialValue={""}>
-                            <Input defaultValue={""} />
+                        <Form.Item name={["idMatSau"]} label="ID phía mặt sau" initialValue={""}>
+                            <Input />
                         </Form.Item>
-                        <Form.Item hidden name={["idMatSau1"]} label="ID phía mặt sau 1" initialValue={""}>
-                            <Input defaultValue={""} />
+                        <Form.Item name={["idMatSau1"]} label="ID phía mặt sau 1" initialValue={""}>
+                            <Input />
                         </Form.Item>
-                        <Form.Item hidden name={["idMatSau2"]} label="ID phía mặt sau 2" initialValue={""}>
-                            <Input defaultValue={""} />
+                        <Form.Item name={["idMatSau2"]} label="ID phía mặt sau 2" initialValue={""}>
+                            <Input />
                         </Form.Item>
-                        <Form.Item name={["quocTich"]} initialValue={"Việt Nam"} hidden>
-                            <Input defaultValue={"Việt Nam"} />
+                        <Form.Item name={["quocTich"]} initialValue={"Việt Nam"} label="Quốc tịch">
+                            <Input />
                         </Form.Item>
                         <Form.Item label="Số CCCD">
                             <Row style={{ marginBottom: "20px" }}>
