@@ -43,6 +43,7 @@ const CCCD = () => {
     const [fontWeightID, setFontWeightID] = useState(800);
     const [fontWeight, setFontWeight] = useState(550);
     const [fontColorAlpha, setFontColorAlpha] = useState(1);
+    const [mainImageAlpha, setMainImageAlpha] = useState(0.8);
 
     const [matTruoc, setMatTruoc] = useState(matTruocs[0]);
     const [matSau, setMatSau] = useState(matSaus[0]);
@@ -322,6 +323,35 @@ const CCCD = () => {
                                 </Col>
                             </Row>
                         </Form.Item>
+                        <Form.Item label="Độ trong suốt">
+                            <Row style={{ marginBottom: "20px" }}>
+                                <Col span={18}>
+                                    <Slider
+                                        marks={{
+                                            0: "Trong suốt",
+                                            1: "Nguyên bản"
+                                        }}
+                                        min={0}
+                                        max={1}
+                                        onChange={(value) => setMainImageAlpha(value)}
+                                        value={typeof mainImageAlpha === 'number' ? mainImageAlpha : 1}
+                                        step={0.1}
+                                    />
+                                </Col>
+                                <Col span={4}>
+                                    <InputNumber
+                                        min={0}
+                                        max={1}
+                                        style={{
+                                            margin: '0 16px',
+                                        }}
+                                        step={0.1}
+                                        value={mainImageAlpha}
+                                        onChange={(value) => setMainImageAlpha(value)}
+                                    />
+                                </Col>
+                            </Row>
+                        </Form.Item>
                         <Form.Item>
                             <Button type='primary' htmlType='submit'>Hoàn thành</Button>
                         </Form.Item>
@@ -378,7 +408,9 @@ const CCCD = () => {
                                 y: 266
                             }}
                         >
-                            <img src={anh} alt="" width={"100%"} height={"100%"} />
+                            <img src={anh} alt="" width={"100%"} height={"100%"} style={{
+                                opacity: mainImageAlpha
+                            }}/>
                         </Rnd>
                         <Rnd
                             bounds="parent"
