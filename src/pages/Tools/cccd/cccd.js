@@ -22,7 +22,7 @@ import * as helpers from '../docbank/helpers/helpers';
 import QRCode from "react-qr-code";
 
 const CCCD = () => {
-    const [cccdData, setCCCĐata] = useState({
+    const [cccdData, setCCCData] = useState({
         so: "",
         ten: "",
         ngaySinh: "",
@@ -135,7 +135,7 @@ const CCCD = () => {
             form.setFieldValue("idMatSau1", newValues.idMatSau1)
             form.setFieldValue("idMatSau2", newValues.idMatSau2)
         }
-        setCCCĐata(newValues);
+        setCCCData(newValues);
     }
 
     return (

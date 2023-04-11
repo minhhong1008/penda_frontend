@@ -771,7 +771,7 @@ const Ebay_class = () => {
                   ],
                   position: ["bottomRight", "topRight"],
                   showSizeChanger: true,
-                  defaultPageSize: 14,
+                  defaultPageSize: 20,
                 }}
               ></Table>
             </Card>
