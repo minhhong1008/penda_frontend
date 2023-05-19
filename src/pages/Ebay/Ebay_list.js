@@ -102,11 +102,20 @@ export const listselect_view_acc = [
 
 export const listselect_ebay_error = [
   "Xong",
-  "Syn mail error",
-  "Sai pass",
-  "Không về code",
-  "Không thấy sim",
-  "Request call",
+  "Syn mail",
+  "Pass",
+  "no code",
+  "sim",
+  "YC call",
+  "YC code",
+  "DV code",
+  "Ver Bank",
+  "Doc Bank",
+  "Doc ID",
+  "DV Doc",
+  "MC999",
+  "Res ngầm",
+  "DV Res ngầm",
   "Error login khác",
 ];
 
@@ -242,6 +251,8 @@ export const listselect_ebay_status = [
   "Active",
   "Error",
   "Restrict",
+  "Restrict MC011",
+  "Restrict MC999",
   "Suspended",
   "Die",
 ];
