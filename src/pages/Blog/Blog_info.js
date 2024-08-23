@@ -220,7 +220,9 @@ const Blog_info = () => {
                 ['save', 'template']
               ]
             }}
-            onChange={(content) => {formContent.setFieldValue("blog_content", content);}}
+            onChange={(content) => {
+              console.log(content);
+            }}
             />
         </Form.Item>
       </Form>

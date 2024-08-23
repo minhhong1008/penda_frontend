@@ -29,7 +29,7 @@ const HomePage = () => {
               }
             >
               <Meta
-                title="Giới thiệu công ty"
+                title="Giới thiệu công ty 1"
                 description="www.matbiec.penda.vn"
               />
             </Card>
