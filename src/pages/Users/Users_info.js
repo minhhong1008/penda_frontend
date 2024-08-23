@@ -189,11 +189,6 @@ const Users_info = () => {
     },
   ];
 
-  // Hàm để thay đổi dữ liệu của select list info
-  const changeSelectListUsers = (values) => {
-    setSelectListUsers(values);
-  };
-
   // Hàm để thay đổi dữ liệu của note
   const handleChangeNote = (e) => {
     setNoteValue(e.target.value);

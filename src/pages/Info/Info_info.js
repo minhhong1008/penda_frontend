@@ -379,7 +379,7 @@ const Info_info = () => {
 
       let new_info_class = form.getFieldValue("info_class");
       if (values == "Error") {
-        (new_info_class = "Lớp 20"),
+        new_info_class = "Lớp 20"
           dateForm.setFieldValue("infodate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({
@@ -389,7 +389,7 @@ const Info_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_info_class = "Lớp 23"),
+        new_info_class = "Lớp 23"
           dateForm.setFieldValue("infodate_restrict", dayjs());
         dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({
@@ -399,7 +399,7 @@ const Info_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_info_class = "Lớp 26"),
+        new_info_class = "Lớp 26"
           dateForm.setFieldValue("infodate_suspended", dayjs());
         dateForm.setFieldValue("infodate_nextclass", dayjs());
         setDateData({

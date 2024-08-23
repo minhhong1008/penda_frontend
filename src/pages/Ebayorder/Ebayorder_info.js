@@ -22,11 +22,10 @@ import {
   } from "../../api/ebayorder/index";
   import { showError, showSuccess } from "../../utils";
   
-  const ebayorder_info = () => {
+  const Ebayorder_info = () => {
     const { Option } = Select;
-  
-    // Lấy ID từ trên param url
     let { id } = useParams();
+    // Lấy ID từ trên param url
     // Khai báo các kho dữ liệu
     const [ebayorderData, setebayorderData] = useState({});
     const [dateData, setDateData] = useState();
@@ -854,5 +853,5 @@ import {
     );
   };
   
-  export default ebayorder_info;
+  export default Ebayorder_info;
   

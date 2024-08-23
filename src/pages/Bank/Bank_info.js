@@ -380,7 +380,7 @@ const Bank_info = () => {
 
       let new_bank_class = form.getFieldValue("bank_class");
       if (values == "Error") {
-        (new_bank_class = "Lớp 20"),
+        new_bank_class = "Lớp 20"
           dateForm.setFieldValue("bankdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({
@@ -390,7 +390,7 @@ const Bank_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_bank_class = "Lớp 23"),
+        new_bank_class = "Lớp 23"
           dateForm.setFieldValue("bankdate_restrict", dayjs());
         dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({
@@ -400,7 +400,7 @@ const Bank_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_bank_class = "Lớp 26"),
+        new_bank_class = "Lớp 26"
           dateForm.setFieldValue("bankdate_suspended", dayjs());
         dateForm.setFieldValue("bankdate_nextclass", dayjs());
         setDateData({

@@ -378,7 +378,7 @@ const Pingpong_info = () => {
 
       let new_pingpong_class = form.getFieldValue("pingpong_class");
       if (values == "Error") {
-        (new_pingpong_class = "Lớp 20"),
+        new_pingpong_class = "Lớp 20"
           dateForm.setFieldValue("pingpongdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Pingpong_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_pingpong_class = "Lớp 23"),
+        new_pingpong_class = "Lớp 23"
           dateForm.setFieldValue("pingpongdate_restrict", dayjs());
         dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Pingpong_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_pingpong_class = "Lớp 26"),
+        new_pingpong_class = "Lớp 26"
           dateForm.setFieldValue("pingpongdate_suspended", dayjs());
         dateForm.setFieldValue("pingpongdate_nextclass", dayjs());
         setDateData({

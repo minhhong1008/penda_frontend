@@ -378,7 +378,7 @@ const Device_info = () => {
 
       let new_device_class = form.getFieldValue("device_class");
       if (values == "Error") {
-        (new_device_class = "Lớp 20"),
+        new_device_class = "Lớp 20"
           dateForm.setFieldValue("devicedate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("devicedate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Device_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_device_class = "Lớp 23"),
+        new_device_class = "Lớp 23"
           dateForm.setFieldValue("devicedate_restrict", dayjs());
         dateForm.setFieldValue("devicedate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Device_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_device_class = "Lớp 26"),
+        new_device_class = "Lớp 26"
           dateForm.setFieldValue("devicedate_suspended", dayjs());
         dateForm.setFieldValue("devicedate_nextclass", dayjs());
         setDateData({

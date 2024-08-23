@@ -6,16 +6,17 @@ import { showError } from "../utils";
 
 
 function* getListbillSaga({ payload }) {
-  try {
-    const response = yield call(getListbill, payload);
-    console.log(response);
-    const { data } = response;
-    yield put({ type: GET_LIST_BILL_SUCCESS, payload: data });
-  } catch (res) {
-    const message = res.response.data.error;
-    showError(message);
-    yield put({ type: GET_LIST_BILL_ERROR, message: message });
-  }
+  return;
+  // try {
+  //   const response = yield call(getListbill, payload);
+  //   console.log(response);
+  //   const { data } = response;
+  //   yield put({ type: GET_LIST_BILL_SUCCESS, payload: data });
+  // } catch (res) {
+  //   const message = res.response.data.error;
+  //   showError(message);
+  //   yield put({ type: GET_LIST_BILL_ERROR, message: message });
+  // }
 
 }
 export default function* billSaga() {

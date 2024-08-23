@@ -22,7 +22,7 @@ import {
   } from "../../api/etsyitem/index";
   import { showError, showSuccess } from "../../utils";
   
-  const etsyitem_info = () => {
+  const Etsyitem_info = () => {
     const { Option } = Select;
   
   // Lấy ID từ trên param url
@@ -807,5 +807,5 @@ import {
     );
   };
   
-  export default etsyitem_info;
+  export default Etsyitem_info;
   

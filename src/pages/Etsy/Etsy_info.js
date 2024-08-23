@@ -374,7 +374,7 @@ const Etsy_info = () => {
 
       let new_etsy_class = form.getFieldValue("etsy_class");
       if (values == "Error") {
-        (new_etsy_class = "Lớp 20"),
+        new_etsy_class = "Lớp 20"
           dateForm.setFieldValue("etsydate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({
@@ -384,7 +384,7 @@ const Etsy_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_etsy_class = "Lớp 23"),
+        new_etsy_class = "Lớp 23"
           dateForm.setFieldValue("etsydate_restrict", dayjs());
         dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({
@@ -394,7 +394,7 @@ const Etsy_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_etsy_class = "Lớp 26"),
+      new_etsy_class = "Lớp 26"
           dateForm.setFieldValue("etsydate_suspended", dayjs());
         dateForm.setFieldValue("etsydate_nextclass", dayjs());
         setDateData({

@@ -24,13 +24,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // Liên quan upload ảnh vẫn của ản.desgin
 import { PlusOutlined } from "@ant-design/icons";
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+
 //import từ api
 import {
   get_Bill_table,
@@ -52,6 +46,15 @@ import { listselect_bill_owner, listselect_bill_work } from "./Bill_list";
 
 */
 // HÀM CHÍNH TRONG TRANG
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
 const Bill_table = () => {
   // Khai báo kho dữ liệu của andt.desin đầu tiên
   const { Option } = Select;

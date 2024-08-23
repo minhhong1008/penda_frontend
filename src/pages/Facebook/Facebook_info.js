@@ -378,7 +378,7 @@ const Facebook_info = () => {
 
       let new_facebook_class = form.getFieldValue("facebook_class");
       if (values == "Error") {
-        (new_facebook_class = "Lớp 20"),
+        new_facebook_class = "Lớp 20"
           dateForm.setFieldValue("facebookdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Facebook_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_facebook_class = "Lớp 23"),
+        new_facebook_class = "Lớp 23"
           dateForm.setFieldValue("facebookdate_restrict", dayjs());
         dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Facebook_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_facebook_class = "Lớp 26"),
+        new_facebook_class = "Lớp 26"
           dateForm.setFieldValue("facebookdate_suspended", dayjs());
         dateForm.setFieldValue("facebookdate_nextclass", dayjs());
         setDateData({

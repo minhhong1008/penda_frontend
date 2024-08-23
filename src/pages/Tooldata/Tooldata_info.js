@@ -42,7 +42,7 @@ import { list_address } from "./List_address";
 import { list_full_name } from "./List_fullname";
 
 import dayjs from "dayjs";
-
+const { Option } = Select;
 const Tooldata_info = () => {
   // Khai báo các kho dữ liệu
   const [form] = Form.useForm();

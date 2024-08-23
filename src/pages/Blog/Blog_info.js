@@ -19,7 +19,7 @@ import dayjs from "dayjs";
 import SunEditor, { buttonList } from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 import plugins from 'suneditor/src/plugins'
-
+const { Option } = Select;
 const Blog_info = () => {
   const [formContent] = Form.useForm();
   const onFinish_content = async (values) => {

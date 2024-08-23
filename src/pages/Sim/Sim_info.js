@@ -376,7 +376,7 @@ const Sim_info = () => {
 
       let new_sim_class = form.getFieldValue("sim_class");
       if (values == "Error") {
-        (new_sim_class = "Lớp 20"),
+        new_sim_class = "Lớp 20"
           dateForm.setFieldValue("simdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({
@@ -386,7 +386,7 @@ const Sim_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_sim_class = "Lớp 23"),
+        new_sim_class = "Lớp 23"
           dateForm.setFieldValue("simdate_restrict", dayjs());
         dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({
@@ -396,7 +396,7 @@ const Sim_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_sim_class = "Lớp 26"),
+        new_sim_class = "Lớp 26"
           dateForm.setFieldValue("simdate_suspended", dayjs());
         dateForm.setFieldValue("simdate_nextclass", dayjs());
         setDateData({

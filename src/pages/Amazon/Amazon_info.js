@@ -378,7 +378,7 @@ const Amazon_info = () => {
 
       let new_amazon_class = form.getFieldValue("amazon_class");
       if (values == "Error") {
-        (new_amazon_class = "Lớp 20"),
+        new_amazon_class = "Lớp 20"
           dateForm.setFieldValue("amazondate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Amazon_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_amazon_class = "Lớp 23"),
+        new_amazon_class = "Lớp 23"
           dateForm.setFieldValue("amazondate_restrict", dayjs());
         dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Amazon_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_amazon_class = "Lớp 26"),
+        new_amazon_class = "Lớp 26"
           dateForm.setFieldValue("amazondate_suspended", dayjs());
         dateForm.setFieldValue("amazondate_nextclass", dayjs());
         setDateData({

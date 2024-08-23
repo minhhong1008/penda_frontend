@@ -22,7 +22,7 @@ import {
   } from "../../api/etsyorder/index";
   import { showError, showSuccess } from "../../utils";
   
-  const etsyorder_info = () => {
+  const Etsyorder_info = () => {
     const { Option } = Select;
   
   // Lấy ID từ trên param url
@@ -805,5 +805,5 @@ import {
     );
   };
   
-  export default etsyorder_info;
+  export default Etsyorder_info;
   

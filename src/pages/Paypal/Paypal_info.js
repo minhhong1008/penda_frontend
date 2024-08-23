@@ -378,7 +378,7 @@ const Paypal_info = () => {
 
       let new_paypal_class = form.getFieldValue("paypal_class");
       if (values == "Error") {
-        (new_paypal_class = "Lớp 20"),
+        new_paypal_class = "Lớp 20"
           dateForm.setFieldValue("paypaldate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Paypal_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_paypal_class = "Lớp 23"),
+        new_paypal_class = "Lớp 23"
           dateForm.setFieldValue("paypaldate_restrict", dayjs());
         dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Paypal_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_paypal_class = "Lớp 26"),
+        new_paypal_class = "Lớp 26"
           dateForm.setFieldValue("paypaldate_suspended", dayjs());
         dateForm.setFieldValue("paypaldate_nextclass", dayjs());
         setDateData({

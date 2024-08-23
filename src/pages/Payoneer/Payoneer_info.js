@@ -391,7 +391,7 @@ const Payoneer_info = () => {
 
       let new_payoneer_class = form.getFieldValue("payoneer_class");
       if (values == "Error") {
-        (new_payoneer_class = "Lớp 20"),
+        new_payoneer_class = "Lớp 20"
           dateForm.setFieldValue("payoneerdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({
@@ -401,7 +401,7 @@ const Payoneer_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_payoneer_class = "Lớp 23"),
+        new_payoneer_class = "Lớp 23"
           dateForm.setFieldValue("payoneerdate_restrict", dayjs());
         dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({
@@ -411,7 +411,7 @@ const Payoneer_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_payoneer_class = "Lớp 26"),
+      new_payoneer_class = "Lớp 26"
           dateForm.setFieldValue("payoneerdate_suspended", dayjs());
         dateForm.setFieldValue("payoneerdate_nextclass", dayjs());
         setDateData({

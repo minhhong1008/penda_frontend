@@ -378,7 +378,7 @@ const Shopee_info = () => {
 
       let new_shopee_class = form.getFieldValue("shopee_class");
       if (values == "Error") {
-        (new_shopee_class = "Lớp 20"),
+        new_shopee_class = "Lớp 20"
           dateForm.setFieldValue("shopeedate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Shopee_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_shopee_class = "Lớp 23"),
+        new_shopee_class = "Lớp 23"
           dateForm.setFieldValue("shopeedate_restrict", dayjs());
         dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Shopee_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_shopee_class = "Lớp 26"),
+        new_shopee_class = "Lớp 26"
           dateForm.setFieldValue("shopeedate_suspended", dayjs());
         dateForm.setFieldValue("shopeedate_nextclass", dayjs());
         setDateData({

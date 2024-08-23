@@ -382,7 +382,7 @@ const Ebay_info = () => {
 
       let new_ebay_class = form.getFieldValue("ebay_class");
       if (values == "Error") {
-        (new_ebay_class = "Lớp 20"),
+      new_ebay_class = "Lớp 20"
           dateForm.setFieldValue("ebaydate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("ebaydate_nextclass", dayjs());
         setDateData({
@@ -392,7 +392,7 @@ const Ebay_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_ebay_class = "Lớp 23"),
+        new_ebay_class = "Lớp 23"
           dateForm.setFieldValue("ebaydate_restrict", dayjs());
         dateForm.setFieldValue("ebaydate_nextclass", dayjs());
         setDateData({
@@ -402,7 +402,7 @@ const Ebay_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_ebay_class = "Lớp 26"),
+        new_ebay_class = "Lớp 26"
           dateForm.setFieldValue("ebaydate_suspended", dayjs());
         dateForm.setFieldValue("ebaydate_nextclass", dayjs());
         setDateData({

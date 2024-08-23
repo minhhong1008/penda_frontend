@@ -23,7 +23,7 @@ import SunEditorCore from "suneditor/src/lib/core";
 import "suneditor/dist/css/suneditor.min.css";
 import plugins from "suneditor/src/plugins";
 import { useSelector } from "react-redux";
-
+const { Option } = Select;
 const HomeEdit_content = () => {
   // Khai báo các kho dữ liệu
   let { id } = useParams();

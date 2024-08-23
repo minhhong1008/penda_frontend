@@ -382,7 +382,7 @@ const Tiktok_info = () => {
 
       let new_tiktok_class = form.getFieldValue("tiktok_class");
       if (values == "Error") {
-        (new_tiktok_class = "Lớp 20"),
+        new_tiktok_class = "Lớp 20"
           dateForm.setFieldValue("tiktokdate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({
@@ -392,7 +392,7 @@ const Tiktok_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_tiktok_class = "Lớp 23"),
+        new_tiktok_class = "Lớp 23"
           dateForm.setFieldValue("tiktokdate_restrict", dayjs());
         dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({
@@ -402,7 +402,7 @@ const Tiktok_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_tiktok_class = "Lớp 26"),
+        new_tiktok_class = "Lớp 26"
           dateForm.setFieldValue("tiktokdate_suspended", dayjs());
         dateForm.setFieldValue("tiktokdate_nextclass", dayjs());
         setDateData({

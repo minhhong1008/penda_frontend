@@ -216,7 +216,7 @@ const Etsy_table = () => {
             "/" +
             Math.floor((now - dayjs(start_class).unix()) / 86400) +
             "/" +
-            Math.floor((now - dayjs(verify_class).unix()) / 86400);
+            Math.floor((now - dayjs(verify_class).unix()) / 86400) +
             "/" +
             Math.floor((now - dayjs(seller_class).unix()) / 86400);
         }

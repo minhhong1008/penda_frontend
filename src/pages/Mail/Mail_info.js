@@ -378,7 +378,7 @@ const Mail_info = () => {
 
       let new_mail_class = form.getFieldValue("mail_class");
       if (values == "Error") {
-        (new_mail_class = "Lớp 20"),
+        new_mail_class = "Lớp 20"
           dateForm.setFieldValue("maildate_error", dayjs()); // Hiển thị ra màn hình
         dateForm.setFieldValue("maildate_nextclass", dayjs());
         setDateData({
@@ -388,7 +388,7 @@ const Mail_info = () => {
         }); // Dùng hàm này set lại date mới lưu đc vào db
       }
       if (values == "Restrict") {
-        (new_mail_class = "Lớp 23"),
+        new_mail_class = "Lớp 23"
           dateForm.setFieldValue("maildate_restrict", dayjs());
         dateForm.setFieldValue("maildate_nextclass", dayjs());
         setDateData({
@@ -398,7 +398,7 @@ const Mail_info = () => {
         });
       }
       if (values == "Suspended") {
-        (new_mail_class = "Lớp 26"),
+        new_mail_class = "Lớp 26"
           dateForm.setFieldValue("maildate_suspended", dayjs());
         dateForm.setFieldValue("maildate_nextclass", dayjs());
         setDateData({

@@ -15,13 +15,15 @@ import {
 } from "antd";
 import Highlighter from "react-highlight-words";
 import React, { useEffect, useRef, useState } from "react";
-import { copyToClipboard, showError } from "../../utils";
+import { copyToClipboard } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import {
   getListsimActions,
   GET_LIST_SIM_SUCCESS,
 } from "../../actions/simActions";
+import { showError, showSuccess } from "../../utils";
+
 import { HuongDanSim_table } from "./Sim_list";
 import { searchSimInfo, updatesimInfo } from "../../api/sim";
 // search trên table
@@ -299,7 +301,6 @@ const Sim_table = () => {
     } else {
       showError("Loi roi");
     }
-    setSelectedNote();
   };
 
   const handleChangeFilter = (values) => {
