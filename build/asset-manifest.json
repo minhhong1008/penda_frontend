@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.65fb563e.css",
-    "main.js": "/static/js/main.954b14c9.js",
+    "main.js": "/static/js/main.d8cf2e2a.js",
     "static/media/mat_truoc_18.png": "/static/media/mat_truoc_18.a21246dc2dea4d49f91b.png",
     "static/media/mat_truoc_17.png": "/static/media/mat_truoc_17.74999bf3fec8379a6566.png",
     "static/media/mat_truoc_13.png": "/static/media/mat_truoc_13.d82b522c50f4a5a06ea3.png",
@@ -559,10 +559,10 @@
     "static/media/logos-facebook.svg": "/static/media/logos-facebook.636d99abf08b3f56f5fa13748601c668.svg",
     "static/media/pencil.svg": "/static/media/pencil.177258577d59e301b13eb12fe99a2223.svg",
     "main.65fb563e.css.map": "/static/css/main.65fb563e.css.map",
-    "main.954b14c9.js.map": "/static/js/main.954b14c9.js.map"
+    "main.d8cf2e2a.js.map": "/static/js/main.d8cf2e2a.js.map"
   },
   "entrypoints": [
     "static/css/main.65fb563e.css",
-    "static/js/main.954b14c9.js"
+    "static/js/main.d8cf2e2a.js"
   ]
 }
